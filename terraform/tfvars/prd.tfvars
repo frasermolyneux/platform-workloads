@@ -104,22 +104,66 @@ azuredevops_projects = [
 ]
 
 workloads = [
-  // Misc Libraries
-  {
-    name = "api-client-abstractions"
-    github = {
-      description = "An abstractions library containing common API client functionality for .NET 7. Contains common interfaces, extensions and models for API clients use in my projects. Build and deployed to NuGet.org using GitHub Actions."
-      topics      = ["nuget", "github-actions", "api-client", "c-sharp", "dot-net-7"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-  },
-
   // Platform Workloads
   {
+    name = "platform-landing-zones"
+    github = {
+      description = "Azure landing zones configuration and deployment for the Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines."
+      topics      = ["azure", "bicep", "azure-devops-pipelines", "azure-landing-zones", "log-analytics-workspace", "subscription-placement"]
+      visibility  = "public"
+    }
+    environments = [
+      {
+        name           = "Production"
+        subscription   = "sub-platform-management"
+        devops_project = "Personal-Public"
+        role_assignments = [
+          {
+            role_definition_name = "Contributor"
+            scope                = "sub-platform-management"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    name = "platform-workload-permissions"
+    github = {
+      description = "Platform workload permissions for Molyneux.IO Azure Platform. Deployed using Terraform and GitHub Actions"
+      topics      = ["azure", "terraform", "github-actions", "role-assignments"]
+      visibility  = "public"
+    }
+    environments = [
+      {
+        name              = "Production"
+        connect_to_github = true
+        subscription      = "sub-platform-strategic"
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-platform-strategic"
+          },
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-platform-connectivity"
+          },
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
+            scope                = "sub-platform-strategic"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator", // Required to be able to read and assign RBAC roles to SPNs
+          "Directory Writers"                // Required to be able to assign users to AAD Groups
+        ]
+      }
+    ]
+  },
+  { // TODO: Delete once replacement 'platform-landing-zones' has been situated
     name = "azure-landing-zones"
     github = {
       description = "Azure landing zones configuration and deployment for the Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines."
@@ -186,7 +230,7 @@ workloads = [
       }
     ]
   },
-  { // TODO: This workload should be renamed to platform-permissions as it is not specific to strategic services
+  { // TODO: Delete once replacement 'platform-workload-permissions' has been situated
     name = "platform-strategic-services-permissions"
     github = {
       description = "Platform strategic services permissions for Molyneux.IO Azure Platform. Deployed using Terraform and GitHub Actions"
@@ -948,6 +992,20 @@ workloads = [
             scope                = "sub-platform-strategic"
           }
         ]
+      },
+
+      // Misc Libraries
+      {
+        name = "api-client-abstractions"
+        github = {
+          description = "An abstractions library containing common API client functionality for .NET 7. Contains common interfaces, extensions and models for API clients use in my projects. Build and deployed to NuGet.org using GitHub Actions."
+          topics      = ["nuget", "github-actions", "api-client", "c-sharp", "dot-net-7"]
+
+          add_sonarcloud_secrets = true
+          add_nuget_environment  = true
+
+          visibility = "public"
+        }
       }
     ]
   }

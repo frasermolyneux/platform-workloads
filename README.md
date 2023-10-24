@@ -21,6 +21,8 @@ The following prerequisites are required to run this code:
 
 * An spn has been created for the GitHub connection (`spn-platform-workloads-production` is current production app registration)
 
+* The spn has been granted `global administrator` within Entra ID.
+
 * A federated credential using the `GitHub Actions deploying Azure resources` scenario has been created under the app registration:
 
 ![image](docs/images/spn-federated-credential.png)
