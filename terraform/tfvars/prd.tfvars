@@ -163,27 +163,6 @@ workloads = [
       }
     ]
   },
-  { // TODO: Delete once replacement 'platform-landing-zones' has been situated
-    name = "azure-landing-zones"
-    github = {
-      description = "Azure landing zones configuration and deployment for the Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines."
-      topics      = ["azure", "bicep", "azure-devops-pipelines", "azure-landing-zones", "log-analytics-workspace", "subscription-placement"]
-      visibility  = "public"
-    }
-    environments = [
-      {
-        name           = "Production"
-        subscription   = "sub-platform-management"
-        devops_project = "Personal-Public"
-        role_assignments = [
-          {
-            role_definition_name = "Contributor"
-            scope                = "sub-platform-management"
-          }
-        ]
-      }
-    ]
-  },
   {
     name = "platform-strategic-services"
     github = {
@@ -226,43 +205,6 @@ workloads = [
         ]
         directory_roles = [
           "Directory Writers" // Required to be able to create SQL AAD Admin Groups
-        ]
-      }
-    ]
-  },
-  { // TODO: Delete once replacement 'platform-workload-permissions' has been situated
-    name = "platform-strategic-services-permissions"
-    github = {
-      description = "Platform strategic services permissions for Molyneux.IO Azure Platform. Deployed using Terraform and GitHub Actions"
-      topics      = ["azure", "terraform", "github-actions", "role-assignments"]
-      visibility  = "public"
-    }
-    environments = [
-      {
-        name              = "Production"
-        connect_to_github = true
-        subscription      = "sub-platform-strategic"
-        role_assignments = [
-          {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-platform-strategic"
-          },
-          {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-platform-connectivity"
-          },
-          {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-platform-strategic"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator", // Required to be able to read and assign RBAC roles to SPNs
-          "Directory Writers"                // Required to be able to assign users to AAD Groups
         ]
       }
     ]
