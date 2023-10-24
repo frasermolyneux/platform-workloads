@@ -993,20 +993,20 @@ workloads = [
           }
         ]
       },
-
-      // Misc Libraries
-      {
-        name = "api-client-abstractions"
-        github = {
-          description = "An abstractions library containing common API client functionality for .NET 7. Contains common interfaces, extensions and models for API clients use in my projects. Build and deployed to NuGet.org using GitHub Actions."
-          topics      = ["nuget", "github-actions", "api-client", "c-sharp", "dot-net-7"]
-
-          add_sonarcloud_secrets = true
-          add_nuget_environment  = true
-
-          visibility = "public"
-        }
-      }
     ]
+  },
+
+  // Misc Libraries
+  {
+    name = "api-client-abstractions"
+    github = {
+      description = "An abstractions library containing common API client functionality for .NET 7. Contains common interfaces, extensions and models for API clients use in my projects. Build and deployed to NuGet.org using GitHub Actions."
+      topics      = ["nuget", "github-actions", "api-client", "c-sharp", "dot-net-7"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
   }
 ]
