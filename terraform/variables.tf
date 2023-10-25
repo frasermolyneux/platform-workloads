@@ -50,7 +50,6 @@ variable "azuredevops_projects" {
 variable "workloads" {
   type = list(object({
     name = string
-
     github = object({
       description = string
       topics      = optional(list(string), [])
@@ -71,8 +70,9 @@ variable "workloads" {
       name         = string
       subscription = string // Index name from the subscriptions variable
 
-      connect_to_github = optional(bool, false)  // If true, the SPN for the environment will be updated with a federated credential for the repository and the secrets will be added to the repository
-      devops_project    = optional(string, null) // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
+      connect_to_github       = optional(bool, false)  // If true, the SPN for the environment will be updated with a federated credential for the repository and the secrets will be added to the repository
+      configure_for_terraform = optional(bool, false)  // If true, a resource group, storage account and permissions will be set per environment for the Terraform state file.
+      devops_project          = optional(string, null) // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
 
       role_assignments = optional(list(object({
         scope                = string
@@ -82,4 +82,12 @@ variable "workloads" {
       directory_roles = optional(list(string), [])
     })), [])
   }))
+}
+
+variable "environment_map" {
+  default = {
+    Development = "dev"
+    Testing     = "tst"
+    Production  = "prd"
+  }
 }

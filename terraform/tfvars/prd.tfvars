@@ -135,9 +135,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Production"
-        connect_to_github = true
-        subscription      = "sub-platform-strategic"
+        name                    = "Production"
+        connect_to_github       = true
+        configure_for_terraform = true
+        subscription            = "sub-platform-strategic"
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -300,9 +301,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Development"
-        subscription      = "sub-visualstudio-enterprise"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -322,9 +324,10 @@ workloads = [
         ]
       },
       {
-        name              = "Production"
-        subscription      = "sub-xi-portal-prd"
-        connect_to_github = true
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -369,9 +372,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Development"
-        subscription      = "sub-visualstudio-enterprise"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -392,9 +396,10 @@ workloads = [
         ]
       },
       {
-        name              = "Production"
-        subscription      = "sub-xi-portal-prd"
-        connect_to_github = true
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -439,9 +444,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Development"
-        subscription      = "sub-visualstudio-enterprise"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -461,9 +467,10 @@ workloads = [
         ]
       },
       {
-        name              = "Production"
-        subscription      = "sub-xi-portal-prd"
-        connect_to_github = true
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -568,9 +575,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Development"
-        subscription      = "sub-visualstudio-enterprise"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -590,9 +598,10 @@ workloads = [
         ]
       },
       {
-        name              = "Production"
-        subscription      = "sub-xi-portal-prd"
-        connect_to_github = true
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -822,9 +831,10 @@ workloads = [
     }
     environments = [
       {
-        name           = "Development"
-        subscription   = "sub-visualstudio-enterprise"
-        devops_project = "Personal-Public"
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        configure_for_terraform = true
+        devops_project          = "Personal-Public"
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -844,9 +854,10 @@ workloads = [
         ]
       },
       {
-        name           = "Production"
-        subscription   = "sub-talkwithtiles-prd"
-        devops_project = "Personal-Public"
+        name                    = "Production"
+        subscription            = "sub-talkwithtiles-prd"
+        configure_for_terraform = true
+        devops_project          = "Personal-Public"
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -881,9 +892,10 @@ workloads = [
     }
     environments = [
       {
-        name              = "Development"
-        subscription      = "sub-visualstudio-enterprise"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -903,9 +915,10 @@ workloads = [
         ]
       },
       {
-        name              = "Production"
-        subscription      = "sub-finances-prd"
-        connect_to_github = true
+        name                    = "Production"
+        subscription            = "sub-finances-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
