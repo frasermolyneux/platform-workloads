@@ -289,6 +289,66 @@ workloads = [
 
   // XtremeIdiots Portal Workloads
   {
+    name = "portal-core"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; creates the application platform. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "api-management", "app-insights", "service-bus", "app-service-plan"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = false
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
+            scope                = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-xi-portal-prd"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-xi-portal-prd"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
+            scope                = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
     name = "portal-event-ingest"
     github = {
       description = "Part of XtremeIdiots Portal solution; event ingest and processing into the service. Deployed using Terraform and GitHub Actions."
