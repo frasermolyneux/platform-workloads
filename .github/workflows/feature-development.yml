@@ -17,6 +17,9 @@ jobs:
     environment: Production
     runs-on: ubuntu-latest
 
+    concurrency:
+      group: ${{ github.repository }}-prd
+
     steps:
       - uses: actions/checkout@v3
 
