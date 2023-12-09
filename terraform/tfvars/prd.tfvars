@@ -405,17 +405,6 @@ workloads = [
         directory_roles = [
           "Cloud application administrator"
         ]
-      },
-      {
-        name              = "ProductionWebApps"
-        subscription      = "sub-platform-strategic"
-        connect_to_github = true
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
-        ]
       }
     ]
   },
@@ -478,17 +467,6 @@ workloads = [
           "Cloud application administrator", // Required to be able to create app registrations
           "Directory Writers"                // Required to be able to create SQL AAD groups
         ]
-      },
-      {
-        name              = "ProductionWebApps"
-        subscription      = "sub-platform-strategic"
-        connect_to_github = true
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
-        ]
       }
     ]
   },
@@ -548,17 +526,6 @@ workloads = [
         directory_roles = [
           "Cloud application administrator"
         ]
-      },
-      {
-        name              = "ProductionWebApps"
-        subscription      = "sub-platform-strategic"
-        connect_to_github = true
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
-        ]
       }
     ]
   },
@@ -608,17 +575,6 @@ workloads = [
         ]
         directory_roles = [
           "Cloud application administrator"
-        ]
-      },
-      {
-        name              = "ProductionWebApps"
-        subscription      = "sub-platform-strategic"
-        connect_to_github = true
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
         ]
       }
     ]
@@ -678,17 +634,6 @@ workloads = [
         ]
         directory_roles = [
           "Cloud application administrator"
-        ]
-      },
-      {
-        name              = "ProductionWebApps"
-        subscription      = "sub-platform-strategic"
-        connect_to_github = true
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
         ]
       }
     ]
@@ -763,17 +708,6 @@ workloads = [
         directory_roles = [
           "Cloud application administrator",
           "Directory Writers" // Required to be able to create SQL AAD groups
-        ]
-      },
-      {
-        name           = "ProductionWebApps"
-        subscription   = "sub-platform-strategic"
-        devops_project = "XtremeIdiots-Public"
-        role_assignments = [
-          {
-            role_definition_name = "Reader" // Reader on the strategic subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
-          }
         ]
       }
     ]
