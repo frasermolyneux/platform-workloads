@@ -1,9 +1,10 @@
 # Platform Workloads
 
-| Stage | Status |
-| ----- | ------ |
-| Feature Development | [![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg?branch=main)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml) |
-| Release To Production | [![Release to Production](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml/badge.svg?branch=main)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml) |
+| Stage                  | Status                                                                                                                                                                                                                                      |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| DevOps Secure Scanning | [![DevOps Secure Scanning](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml) |
+| Feature Development    | [![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)          |
+| Release To Production  | [![Release to Production](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml)    |
 
 ---
 
