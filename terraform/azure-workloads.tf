@@ -27,6 +27,7 @@ locals {
         workload_name           = workload.name
         environment_name        = environment.name
         connect_to_github       = environment.connect_to_github
+        add_legacy_secret       = environment.add_legacy_secret
         configure_for_terraform = environment.configure_for_terraform
         subscription            = environment.subscription
         connect_to_devops       = environment.devops_project != null ? true : false
