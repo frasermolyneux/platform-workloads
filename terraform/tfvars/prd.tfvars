@@ -545,6 +545,7 @@ workloads = [
         name              = "Development"
         subscription      = "sub-visualstudio-enterprise"
         connect_to_github = true
+        add_legacy_secret = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -563,6 +564,7 @@ workloads = [
         name              = "Production"
         subscription      = "sub-xi-portal-prd"
         connect_to_github = true
+        add_legacy_secret = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
