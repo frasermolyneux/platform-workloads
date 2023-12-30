@@ -14,6 +14,6 @@ resource "github_actions_environment_secret" "legacy_secret" {
 
   repository      = github_repository.workload[each.value.workload_name].name
   environment     = github_repository_environment.workload[each.key].environment
-  secret_name     = "AZURE_SECRET"
+  secret_name     = "AZURE_LEGACY_SECRET"
   plaintext_value = azuread_application_password.legacy_workload[each.key].value
 }
