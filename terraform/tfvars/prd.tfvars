@@ -641,6 +641,68 @@ workloads = [
     ]
   },
   {
+    name = "portal-bots"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; b3 bots config and instance management. Deployed using Terraform/PowerShell and GitHub Actions/Azure DevOps Pipelines."
+      topics      = ["azure", "terraform", "github-actions", "azure-pipelines", "powershell", "key-vault", "app-registration"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        devops_project          = "XtremeIdiots-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
+            scope                = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        devops_project          = "XtremeIdiots-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-xi-portal-prd"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-xi-portal-prd"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
+            scope                = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
     name = "b3bot-config-generator"
     github = {
       description = "Part of XtremeIdiots Portal solution; b3bot config generator."
