@@ -25,7 +25,7 @@ resource "azurerm_role_assignment" "workload_managed_identity_operator" {
 
   scope                = azurerm_resource_group.rg.id
   role_definition_name = "Managed Identity Operator"
-  principal_id         = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
+  principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
 
 resource "azurerm_role_assignment" "workload_deploy_script" {
