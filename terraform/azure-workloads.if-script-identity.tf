@@ -9,6 +9,14 @@ resource "azurerm_user_assigned_identity" "workload_deploy_script" {
   name = format("spn-%s-%s-scripts", lower(each.value.workload_name), lower(each.value.environment_name))
 }
 
+resource "azurerm_role_assignment" "workload_managed_identity_operator" {
+  for_each = { for each in local.workload_environments : each.key => each if each.add_deploy_script_identity }
+
+  scope                = azurerm_resource_group.rg.id
+  role_definition_name = "Managed Identity Operator"
+  principal_id         = azuread_service_principal.workload[each.key].object_id
+}
+
 resource "github_actions_environment_secret" "workload_deploy_script_identity" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github && each.add_deploy_script_identity }
 
