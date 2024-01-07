@@ -554,10 +554,6 @@ workloads = [
           {
             role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
             scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Managed Identity Operator" // Required to use deployment scripts and user assigned managed identities within Bicep
-            scope                = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -576,10 +572,6 @@ workloads = [
           },
           {
             role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Managed Identity Operator" // Required to use deployment scripts and user assigned managed identities within Bicep
             scope                = "sub-xi-portal-prd"
           }
         ]
