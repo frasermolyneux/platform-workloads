@@ -2,7 +2,8 @@ locals {
   directory_roles = [
     "Directory Readers",
     "Directory Writers",
-    "Cloud application administrator"
+    "Cloud application administrator",
+    "Managed Identity Operator"
   ]
 }
 
