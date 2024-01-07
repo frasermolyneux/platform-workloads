@@ -20,7 +20,7 @@ resource "azurerm_role_assignment" "workload" {
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
 
-resource "azurerm_role_assignment" "workload" {
+resource "azurerm_role_assignment" "workload_deploy_script" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each if each.add_deploy_script_identity }
 
   scope                = data.azurerm_subscription.subscriptions[each.value.scope].id
