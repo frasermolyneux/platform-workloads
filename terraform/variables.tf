@@ -70,10 +70,10 @@ variable "workloads" {
       name         = string
       subscription = string // Index name from the subscriptions variable
 
-      connect_to_github       = optional(bool, false)  // If true, the SPN for the environment will be updated with a federated credential for the repository and added to the environment for use in GitHub Actions
-      add_legacy_secret       = optional(bool, false)  // If true, a legacy non-OIDC secret will be generated and added to the environment for use in GitHub Actions
-      configure_for_terraform = optional(bool, false)  // If true, a resource group, storage account and permissions will be set per environment for the Terraform state file.
-      devops_project          = optional(string, null) // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
+      connect_to_github          = optional(bool, false)  // If true, the SPN for the environment will be updated with a federated credential for the repository and added to the environment for use in GitHub Actions
+      add_deploy_script_identity = optional(bool, false)  // If true, a deploy script user assigned identity will be created and added to the environment for use in ARM deployments. Will be given same permissions as deploy principal.
+      configure_for_terraform    = optional(bool, false)  // If true, a resource group, storage account and permissions will be set per environment for the Terraform state file
+      devops_project             = optional(string, null) // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
 
       role_assignments = optional(list(object({
         scope                = string

@@ -23,17 +23,17 @@ locals {
   workload_environments = flatten([
     for environment_name, workload in var.workloads : [
       for environment in workload.environments : {
-        key                     = format("%s-%s", workload.name, environment.name)
-        workload_name           = workload.name
-        environment_name        = environment.name
-        connect_to_github       = environment.connect_to_github
-        add_legacy_secret       = environment.add_legacy_secret
-        configure_for_terraform = environment.configure_for_terraform
-        subscription            = environment.subscription
-        connect_to_devops       = environment.devops_project != null ? true : false
-        devops_project          = environment.devops_project
-        role_assignments        = environment.role_assignments
-        directory_roles         = environment.directory_roles
+        key                        = format("%s-%s", workload.name, environment.name)
+        workload_name              = workload.name
+        environment_name           = environment.name
+        connect_to_github          = environment.connect_to_github
+        add_deploy_script_identity = environment.add_deploy_script_identity
+        configure_for_terraform    = environment.configure_for_terraform
+        subscription               = environment.subscription
+        connect_to_devops          = environment.devops_project != null ? true : false
+        devops_project             = environment.devops_project
+        role_assignments           = environment.role_assignments
+        directory_roles            = environment.directory_roles
       }
     ]
   ])
