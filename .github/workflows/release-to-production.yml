@@ -11,15 +11,16 @@ permissions:
   id-token: write # This is required for requesting the JWT
   contents: read  # This is required for actions/checkout
 
-concurrency:
+concurrency: # This is required to prevent multiple runs of the same workflow from running at the same time.
   group: ${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
  terraform-plan-and-apply-prd:
     environment: Production
     runs-on: ubuntu-latest
 
-    concurrency:
+    concurrency: # This is required to prevent multiple GitHub Actions invocations against stateful resources. e.g. Terraform state file / Database / Deployed Apps
       group: ${{ github.repository }}-prd
 
     steps:
