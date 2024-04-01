@@ -827,9 +827,10 @@ workloads = [
     }
     environments = [
       {
-        name           = "Development"
-        subscription   = "sub-visualstudio-enterprise"
-        devops_project = "Personal-Public"
+        name                       = "Development"
+        subscription               = "sub-visualstudio-enterprise"
+        devops_project             = "Personal-Public"
+        add_deploy_script_identity = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
@@ -845,9 +846,10 @@ workloads = [
         ]
       },
       {
-        name           = "Production"
-        subscription   = "sub-fm-geolocation-prd"
-        devops_project = "Personal-Public"
+        name                       = "Production"
+        subscription               = "sub-fm-geolocation-prd"
+        devops_project             = "Personal-Public"
+        add_deploy_script_identity = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
