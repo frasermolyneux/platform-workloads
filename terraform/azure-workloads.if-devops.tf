@@ -63,7 +63,7 @@ resource "azurerm_resource_group" "workload" {
 resource "azurerm_key_vault" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
-  name                = format("kv-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
+  name                = "kv-${random_id.workload_id[each.key].hex}-${var.location}"
   location            = var.location
   resource_group_name = azurerm_resource_group.workload[each.key].name
   tenant_id           = data.azurerm_client_config.current.tenant_id
