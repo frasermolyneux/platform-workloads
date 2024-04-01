@@ -52,7 +52,7 @@ resource "azuredevops_pipeline_authorization" "workload" {
 }
 
 resource "azurerm_resource_group" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   name     = format("rg-ado-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
   location = var.location
@@ -61,7 +61,7 @@ resource "azurerm_resource_group" "workload" {
 }
 
 resource "azurerm_key_vault" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   name                = format("kv-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
   location            = var.location
@@ -83,7 +83,7 @@ resource "azurerm_key_vault" "workload" {
 }
 
 resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   scope                = azurerm_key_vault.workload[each.key].id
   role_definition_name = "Key Vault Secrets Officer"
@@ -91,7 +91,7 @@ resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
 }
 
 resource "azurerm_role_assignment" "deploy_principal_workload_key_vault_secrets_officer" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   scope                = azurerm_key_vault.workload[each.key].id
   role_definition_name = "Key Vault Secrets Officer"
@@ -99,7 +99,7 @@ resource "azurerm_role_assignment" "deploy_principal_workload_key_vault_secrets_
 }
 
 resource "azuredevops_variable_group" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   project_id  = azuredevops_project.project[each.value.devops_project].id
   name        = each.key
@@ -118,7 +118,7 @@ resource "azuredevops_variable_group" "workload" {
 }
 
 resource "azuredevops_pipeline_authorization" "workload_variable_group" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
   project_id  = azuredevops_project.project[each.value.devops_project].id
   resource_id = azuredevops_variable_group.workload[each.key].id
