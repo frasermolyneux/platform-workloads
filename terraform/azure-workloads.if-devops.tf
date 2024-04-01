@@ -109,7 +109,7 @@ resource "azuredevops_variable_group" "workload" {
 
   key_vault {
     name                = azurerm_key_vault.workload[each.key].name
-    service_endpoint_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
+    service_endpoint_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
   }
 
   variable {

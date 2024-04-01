@@ -31,7 +31,7 @@ resource "azurerm_key_vault_secret" "workload_deploy_script_identity_secret" {
 
   name         = "azure-deploy-script-identity"
   value        = azurerm_user_assigned_identity.workload_deploy_script[each.key].id
-  key_vault_id = azurerm_key_vault.workload[each.value.workload_name].id
+  key_vault_id = azurerm_key_vault.workload[each.key].id
 }
 
 // if this is a development environment, also add the secrets as a dependabot secret
