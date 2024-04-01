@@ -29,7 +29,7 @@ resource "github_actions_environment_secret" "workload_deploy_script_identity" {
 resource "azurerm_key_vault_secret" "workload_deploy_script_identity_secret" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops && each.add_deploy_script_identity }
 
-  name         = "AZURE_DEPLOY_SCRIPT_IDENTITY"
+  name         = "azure-deploy-script-identity"
   value        = azurerm_user_assigned_identity.workload_deploy_script[each.key].id
   key_vault_id = azurerm_key_vault.workload[each.value.workload_name].id
 }
