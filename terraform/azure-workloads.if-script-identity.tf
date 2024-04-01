@@ -26,6 +26,14 @@ resource "github_actions_environment_secret" "workload_deploy_script_identity" {
   plaintext_value = azurerm_user_assigned_identity.workload_deploy_script[each.key].id
 }
 
+resource "azurerm_key_vault_secret" "workload_deploy_script_identity_secret" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops && each.add_deploy_script_identity }
+
+  name         = "AZURE_DEPLOY_SCRIPT_IDENTITY"
+  value        = azurerm_user_assigned_identity.workload_deploy_script[each.key].id
+  key_vault_id = azurerm_key_vault.workload[each.value.workload_name].id
+}
+
 // if this is a development environment, also add the secrets as a dependabot secret
 resource "github_dependabot_secret" "workload_deploy_script_identity" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github && each.add_deploy_script_identity && each.environment_name == "Development" }
