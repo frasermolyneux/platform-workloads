@@ -32,7 +32,7 @@ locals {
         subscription                 = environment.subscription
         connect_to_devops            = environment.devops_project != null ? true : false
         devops_project               = environment.devops_project
-        devops_create_variable_group = environment.devops_create_variable_group || (environment.devops_project != null && environment.add_deploy_script_identity) // If we're adding a deploy script identity, we need a variable group
+        devops_create_variable_group = (environment.devops_create_variable_group || (environment.devops_project != null && environment.add_deploy_script_identity)) // If we're adding a deploy script identity, we need a variable group
         role_assignments             = environment.role_assignments
         directory_roles              = environment.directory_roles
       }
