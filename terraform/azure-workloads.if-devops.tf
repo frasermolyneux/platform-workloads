@@ -65,7 +65,7 @@ resource "azurerm_key_vault" "workload" {
 
   name                = format("kv-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
   location            = var.location
-  resource_group_name = azurerm_resource_group.workload_ado[each.key].name
+  resource_group_name = azurerm_resource_group.workload[each.key].name
   tenant_id           = data.azurerm_client_config.current.tenant_id
 
   tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
@@ -108,7 +108,7 @@ resource "azuredevops_variable_group" "workload" {
   allow_access = true
 
   key_vault {
-    name                = azurerm_key_vault.workload_ado[each.key].name
+    name                = azurerm_key_vault.workload[each.key].name
     service_endpoint_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
   }
 
