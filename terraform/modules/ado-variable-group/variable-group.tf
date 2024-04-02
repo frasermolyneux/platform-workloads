@@ -14,8 +14,8 @@ resource "azuredevops_variable_group" "vg" {
     for_each = { for each in var.variables : each.name => each if each.value != null }
 
     content {
-      name  = each.value.name
-      value = each.value.value
+      name  = each.name
+      value = each.value
     }
   }
 
