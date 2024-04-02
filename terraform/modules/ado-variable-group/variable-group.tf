@@ -17,7 +17,7 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   dynamic "variable" {
-    for_each = compact(var.key_vault_variables)
+    for_each = merge("environment-name", compact(var.key_vault_variables))
 
     content {
       name = variable.value
@@ -25,7 +25,8 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   depends_on = [
-    azurerm_role_assignment.workload_key_vault_secrets_officer
+    azurerm_role_assignment.workload_key_vault_secrets_officer,
+    azurerm_key_vault_secret.enviroment_name_secret
   ]
 }
 
