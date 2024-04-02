@@ -11,11 +11,10 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   dynamic "variable" {
-    for_each = { for each in var.variables : each.name => each if each.value != null }
+    for_each = compact(var.key_vault_variables)
 
     content {
-      name  = variable.value["name"]
-      value = variable.value["value"]
+      name = variable.value
     }
   }
 

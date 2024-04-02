@@ -65,9 +65,8 @@ module "ado_variable_group" {
   instance         = var.instance
   tags             = var.tags
 
-  variables = tolist([
-    { name = "environment", value = each.value.environment_tag },
-    each.value.add_deploy_script_identity == true ? { name = "azure-deploy-script-identity" } : {}
+  key_vault_variables = tolist([
+    each.value.add_deploy_script_identity == true ? "azure-deploy-script-identity" : null
   ])
 
   subscriptions        = var.subscriptions

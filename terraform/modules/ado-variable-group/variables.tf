@@ -24,11 +24,8 @@ variable "tags" {
   default = {}
 }
 
-variable "variables" {
-  type = list(object({
-    name  = optional(string)
-    value = optional(string, null)
-  }))
+variable "key_vault_variables" {
+  type = list(optional(string))
 }
 
 // Reference Data
