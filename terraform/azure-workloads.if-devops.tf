@@ -118,7 +118,7 @@ resource "azuredevops_variable_group" "workload" {
   }
 
   depends_on = [
-    azurerm_role_assignment.workload_key_vault_secrets_officer[each.key]
+    azurerm_role_assignment.workload_key_vault_secrets_officer
   ]
 }
 

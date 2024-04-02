@@ -35,7 +35,7 @@ resource "azurerm_key_vault_secret" "workload_deploy_script_identity_secret" {
   key_vault_id = azurerm_key_vault.workload[each.key].id
 
   depends_on = [
-    azurerm_role_assignment.deploy_principal_workload_key_vault_secrets_officer[each.key]
+    azurerm_role_assignment.deploy_principal_workload_key_vault_secrets_officer
   ]
 }
 
