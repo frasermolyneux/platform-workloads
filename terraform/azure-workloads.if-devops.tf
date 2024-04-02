@@ -51,7 +51,6 @@ resource "azuredevops_pipeline_authorization" "workload" {
   type = "endpoint"
 }
 
-// Create a resource group, key vault, and variable group for each workload environment when integrating with Azure DevOps
 module "ado_variable_group" {
   source = "./modules/ado-variable-group"
 
@@ -66,10 +65,10 @@ module "ado_variable_group" {
   instance         = var.instance
   tags             = var.tags
 
-  variables = concat(
+  variables = [
     { name = "environment", value = each.value.environment_tag },
     each.value.add_deploy_script_identity == true ? { name = "azure-deploy-script-identity" } : {}
-  )
+  ]
 
   subscriptions        = var.subscriptions
   azuredevops_projects = var.azuredevops_projects
