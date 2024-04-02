@@ -66,7 +66,7 @@ module "ado_variable_group" {
   instance         = var.instance
   tags             = var.tags
 
-  variables = merge(
+  variables = concat(
     { name = "environment", value = each.value.environment_tag },
     each.value.add_deploy_script_identity == true ? { name = "azure-deploy-script-identity" } : {}
   )
