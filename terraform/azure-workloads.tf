@@ -26,6 +26,7 @@ locals {
         key                          = format("%s-%s", workload.name, environment.name)
         workload_name                = workload.name
         environment_name             = environment.name
+        environment_tag              = var.environment_map[environment.name]
         connect_to_github            = environment.connect_to_github
         add_deploy_script_identity   = environment.add_deploy_script_identity
         configure_for_terraform      = environment.configure_for_terraform

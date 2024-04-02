@@ -58,7 +58,7 @@ module "ado_variable_group" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
   workload_name = each.key
-  environment   = var.environment_map[each.value.environment_name]
+  environment   = each.value.environment_tag
   location      = var.location
   instance      = var.instance
   tags          = var.tags
