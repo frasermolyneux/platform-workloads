@@ -17,7 +17,7 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   dynamic "variable" {
-    for_each = merge("environment-name", compact(var.key_vault_variables))
+    for_each = setunion(["environment-name"], compact(var.key_vault_variables))
 
     content {
       name = variable.value
