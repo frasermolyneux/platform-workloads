@@ -15,7 +15,7 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   dynamic "variable" {
-    for_each = { for each in local.filtered_variables : each.key => each }
+    for_each = { for each in local.filtered_variables : each => each }
 
     content {
       name  = each.name
