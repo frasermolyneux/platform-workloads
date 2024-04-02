@@ -51,6 +51,7 @@ resource "azuredevops_pipeline_authorization" "workload" {
   type = "endpoint"
 }
 
+// Create a resource group, key vault, and variable group for each workload environment when integrating with Azure DevOps
 resource "azurerm_resource_group" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
@@ -115,6 +116,10 @@ resource "azuredevops_variable_group" "workload" {
   variable {
     name = "*"
   }
+
+  depends_on = [
+    azurerm_role_assignment.workload_key_vault_secrets_officer[each.key]
+  ]
 }
 
 resource "azuredevops_pipeline_authorization" "workload_variable_group" {
