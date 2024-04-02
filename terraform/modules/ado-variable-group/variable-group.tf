@@ -10,6 +10,12 @@ resource "azuredevops_variable_group" "vg" {
     service_endpoint_id = azuredevops_serviceendpoint_azurerm.se.id
   }
 
+  // At least one variable is required
+  variable {
+    name  = "ado_key_vault_name"
+    value = azurerm_key_vault.kv.name
+  }
+
   dynamic "variable" {
     for_each = compact(var.key_vault_variables)
 
