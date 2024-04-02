@@ -57,7 +57,7 @@ module "ado_variable_group" {
 
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
-  workload_name    = each.key
+  workload_name    = each.value.workload_name
   environment_name = each.value.environment_name
   environment_tag  = each.value.environment_tag
   devops_project   = each.value.devops_project
