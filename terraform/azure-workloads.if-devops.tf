@@ -53,7 +53,7 @@ resource "azuredevops_pipeline_authorization" "workload" {
 
 // Create a resource group, key vault, and variable group for each workload environment when integrating with Azure DevOps
 module "ado_variable_group" {
-  source = "modules/ado-variable-group"
+  source = "./modules/ado-variable-group"
 
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
