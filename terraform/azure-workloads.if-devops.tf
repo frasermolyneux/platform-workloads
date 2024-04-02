@@ -57,11 +57,17 @@ module "ado_variable_group" {
 
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
-  workload_name = each.key
-  environment   = each.value.environment_tag
-  location      = var.location
-  instance      = var.instance
-  tags          = var.tags
+  workload_name    = each.key
+  environment_name = each.value.environment_name
+  environment_tag  = each.value.environment_tag
+  devops_project   = each.value.devops_project
+  subscription     = each.value.subscription
+  location         = var.location
+  instance         = var.instance
+  tags             = var.tags
+
+  subscriptions        = var.subscriptions
+  azuredevops_projects = var.azuredevops_projects
 }
 
 //resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
@@ -70,14 +76,6 @@ module "ado_variable_group" {
 //  scope                = azurerm_key_vault.workload[each.key].id
 //  role_definition_name = "Key Vault Secrets Officer"
 //  principal_id         = azuread_service_principal.workload[each.key].object_id
-//}
-//
-//resource "azurerm_role_assignment" "deploy_principal_workload_key_vault_secrets_officer" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  scope                = azurerm_key_vault.workload[each.key].id
-//  role_definition_name = "Key Vault Secrets Officer"
-//  principal_id         = data.azurerm_client_config.current.object_id
 //}
 //
 //resource "azuredevops_variable_group" "workload" {
