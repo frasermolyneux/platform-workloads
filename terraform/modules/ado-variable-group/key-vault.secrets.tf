@@ -5,6 +5,6 @@ resource "azurerm_key_vault_secret" "enviroment_name_secret" {
   key_vault_id = azurerm_key_vault.kv.id
 
   depends_on = [
-    azurerm_role_assignment.deploy_principal_workload_key_vault_secrets_officer
+    azurerm_role_assignment.deploy_principal_key_vault_secrets_officer
   ]
 }
