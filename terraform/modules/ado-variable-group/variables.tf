@@ -25,7 +25,7 @@ variable "tags" {
 }
 
 variable "key_vault_variables" {
-  type = list(optional(string))
+  type = list(string)
 }
 
 // Reference Data
