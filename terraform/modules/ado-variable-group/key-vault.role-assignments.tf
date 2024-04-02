@@ -3,3 +3,9 @@ resource "azurerm_role_assignment" "deploy_principal_key_vault_secrets_officer" 
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
+  scope                = azurerm_key_vault.kv.id
+  role_definition_name = "Key Vault Secrets Officer"
+  principal_id         = azuread_service_principal.sp.object_id
+}

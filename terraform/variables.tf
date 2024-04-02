@@ -91,6 +91,6 @@ variable "environment_map" {
     Development       = "dev"
     Testing           = "tst"
     Production        = "prd"
-    ProductionWebApps = "prd"
+    ProductionWebApps = "prdwa"
   }
 }

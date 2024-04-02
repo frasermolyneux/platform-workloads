@@ -66,54 +66,8 @@ module "ado_variable_group" {
   instance         = var.instance
   tags             = var.tags
 
+  variables = merge(each.value.add_deploy_script_identity ? [{ name = "azure-deploy-script-identity" }] : [])
+
   subscriptions        = var.subscriptions
   azuredevops_projects = var.azuredevops_projects
 }
-
-//resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  scope                = azurerm_key_vault.workload[each.key].id
-//  role_definition_name = "Key Vault Secrets Officer"
-//  principal_id         = azuread_service_principal.workload[each.key].object_id
-//}
-//
-//resource "azuredevops_variable_group" "workload" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  project_id  = azuredevops_project.project[each.value.devops_project].id
-//  name        = each.key
-//  description = "Variable group for ${each.key}"
-//
-//  allow_access = true
-//
-//  key_vault {
-//    name                = azurerm_key_vault.workload[each.key].name
-//    service_endpoint_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
-//  }
-//
-//  variable {
-//    name = "azure-deploy-script-identity"
-//  }
-//
-//  dynamic "variable" {
-//    for_each = { for sub in local.workload_environments : sub.key => sub if sub.key == each.key && sub.add_deploy_script_identity }
-//
-//    content {
-//      name = "azure-deploy-script-identity"
-//    }
-//  }
-//
-//  depends_on = [
-//    azurerm_role_assignment.workload_key_vault_secrets_officer
-//  ]
-//}
-//
-//resource "azuredevops_pipeline_authorization" "workload_variable_group" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  project_id  = azuredevops_project.project[each.value.devops_project].id
-//  resource_id = azuredevops_variable_group.workload[each.key].id
-//
-//  type = "variablegroup"
-//}

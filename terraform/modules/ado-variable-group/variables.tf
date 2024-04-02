@@ -24,6 +24,13 @@ variable "tags" {
   default = {}
 }
 
+variable "variables" {
+  type = list(object({
+    name  = string
+    value = optional(string, null)
+  }))
+}
+
 // Reference Data
 variable "subscriptions" {
   type = map(object({
