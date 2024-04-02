@@ -1,7 +1,3 @@
-locals {
-  filtered_variables = [for v in var.variables : v if v.value != null]
-}
-
 resource "azuredevops_variable_group" "vg" {
   project_id  = data.azuredevops_project.project[var.devops_project].id
   name        = "${var.workload_name}-${var.environment_tag}"
@@ -15,11 +11,11 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   dynamic "variable" {
-    for_each = { for each in local.filtered_variables : each => each }
+    for_each = { for each in var.variables : each.name => each if each.value != null }
 
     content {
-      name  = each.name
-      value = each.value
+      name  = each.value.name
+      value = each.value.value
     }
   }
 
