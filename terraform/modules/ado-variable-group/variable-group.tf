@@ -12,8 +12,7 @@ resource "azuredevops_variable_group" "vg" {
 
   // At least one variable is required
   variable {
-    name  = "ado_key_vault_name"
-    value = azurerm_key_vault.kv.name
+    name = azurerm_key_vault_secret.enviroment_name_secret.name
   }
 
   dynamic "variable" {
@@ -25,8 +24,7 @@ resource "azuredevops_variable_group" "vg" {
   }
 
   depends_on = [
-    azurerm_role_assignment.workload_key_vault_secrets_officer,
-    azurerm_key_vault_secret.enviroment_name_secret
+    azurerm_role_assignment.workload_key_vault_secrets_officer
   ]
 }
 
