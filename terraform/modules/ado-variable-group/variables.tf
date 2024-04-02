@@ -26,7 +26,7 @@ variable "tags" {
 
 variable "variables" {
   type = list(object({
-    name  = string
+    name  = optional(string)
     value = optional(string, null)
   }))
 }
