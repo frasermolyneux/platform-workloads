@@ -114,7 +114,15 @@ resource "azuredevops_variable_group" "workload" {
   }
 
   variable {
-    name = "*"
+    name = "azure-deploy-script-identity"
+  }
+
+  dynamic "variable" {
+    for_each = { for sub in local.workload_environments : sub.key => sub if sub.key == each.key && sub.add_deploy_script_identity }
+
+    content {
+      name = "azure-deploy-script-identity"
+    }
   }
 
   depends_on = [
