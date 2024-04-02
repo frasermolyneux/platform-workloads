@@ -64,39 +64,6 @@ module "ado_variable_group" {
   tags          = var.tags
 }
 
-
-
-//resource "azurerm_resource_group" "workload" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  name     = format("rg-ado-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
-//  location = var.location
-//
-//  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
-//}
-//
-//resource "azurerm_key_vault" "workload" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-//
-//  name                = "kv-${random_id.workload_id[each.key].hex}-${var.location}"
-//  location            = var.location
-//  resource_group_name = azurerm_resource_group.workload[each.key].name
-//  tenant_id           = data.azurerm_client_config.current.tenant_id
-//
-//  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
-//
-//  soft_delete_retention_days = 90
-//  purge_protection_enabled   = true
-//  enable_rbac_authorization  = true
-//
-//  sku_name = "standard"
-//
-//  network_acls {
-//    bypass         = "AzureServices"
-//    default_action = "Allow"
-//  }
-//}
-//
 //resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
 //  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 //
