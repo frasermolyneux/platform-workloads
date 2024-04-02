@@ -52,89 +52,103 @@ resource "azuredevops_pipeline_authorization" "workload" {
 }
 
 // Create a resource group, key vault, and variable group for each workload environment when integrating with Azure DevOps
-resource "azurerm_resource_group" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+module "ado_variable_group" {
+  source = "modules/ado-variable-group"
 
-  name     = format("rg-ado-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
-  location = var.location
+  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
-  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+  workload_name = each.key
+  environment   = var.environment_map[each.value.environment_name]
+  location      = var.location
+  instance      = var.instance
+  tags          = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
 }
 
-resource "azurerm_key_vault" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
 
-  name                = "kv-${random_id.workload_id[each.key].hex}-${var.location}"
-  location            = var.location
-  resource_group_name = azurerm_resource_group.workload[each.key].name
-  tenant_id           = data.azurerm_client_config.current.tenant_id
 
-  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
-
-  soft_delete_retention_days = 90
-  purge_protection_enabled   = true
-  enable_rbac_authorization  = true
-
-  sku_name = "standard"
-
-  network_acls {
-    bypass         = "AzureServices"
-    default_action = "Allow"
-  }
-}
-
-resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-
-  scope                = azurerm_key_vault.workload[each.key].id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = azuread_service_principal.workload[each.key].object_id
-}
-
-resource "azurerm_role_assignment" "deploy_principal_workload_key_vault_secrets_officer" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-
-  scope                = azurerm_key_vault.workload[each.key].id
-  role_definition_name = "Key Vault Secrets Officer"
-  principal_id         = data.azurerm_client_config.current.object_id
-}
-
-resource "azuredevops_variable_group" "workload" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  name        = each.key
-  description = "Variable group for ${each.key}"
-
-  allow_access = true
-
-  key_vault {
-    name                = azurerm_key_vault.workload[each.key].name
-    service_endpoint_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
-  }
-
-  variable {
-    name = "azure-deploy-script-identity"
-  }
-
-  dynamic "variable" {
-    for_each = { for sub in local.workload_environments : sub.key => sub if sub.key == each.key && sub.add_deploy_script_identity }
-
-    content {
-      name = "azure-deploy-script-identity"
-    }
-  }
-
-  depends_on = [
-    azurerm_role_assignment.workload_key_vault_secrets_officer
-  ]
-}
-
-resource "azuredevops_pipeline_authorization" "workload_variable_group" {
-  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.workload[each.key].id
-
-  type = "variablegroup"
-}
+//resource "azurerm_resource_group" "workload" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  name     = format("rg-ado-%s-%s-%s-%s", each.value.workload_name, var.environment_map[each.value.environment_name], var.location, var.instance)
+//  location = var.location
+//
+//  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+//}
+//
+//resource "azurerm_key_vault" "workload" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  name                = "kv-${random_id.workload_id[each.key].hex}-${var.location}"
+//  location            = var.location
+//  resource_group_name = azurerm_resource_group.workload[each.key].name
+//  tenant_id           = data.azurerm_client_config.current.tenant_id
+//
+//  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+//
+//  soft_delete_retention_days = 90
+//  purge_protection_enabled   = true
+//  enable_rbac_authorization  = true
+//
+//  sku_name = "standard"
+//
+//  network_acls {
+//    bypass         = "AzureServices"
+//    default_action = "Allow"
+//  }
+//}
+//
+//resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  scope                = azurerm_key_vault.workload[each.key].id
+//  role_definition_name = "Key Vault Secrets Officer"
+//  principal_id         = azuread_service_principal.workload[each.key].object_id
+//}
+//
+//resource "azurerm_role_assignment" "deploy_principal_workload_key_vault_secrets_officer" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  scope                = azurerm_key_vault.workload[each.key].id
+//  role_definition_name = "Key Vault Secrets Officer"
+//  principal_id         = data.azurerm_client_config.current.object_id
+//}
+//
+//resource "azuredevops_variable_group" "workload" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  project_id  = azuredevops_project.project[each.value.devops_project].id
+//  name        = each.key
+//  description = "Variable group for ${each.key}"
+//
+//  allow_access = true
+//
+//  key_vault {
+//    name                = azurerm_key_vault.workload[each.key].name
+//    service_endpoint_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
+//  }
+//
+//  variable {
+//    name = "azure-deploy-script-identity"
+//  }
+//
+//  dynamic "variable" {
+//    for_each = { for sub in local.workload_environments : sub.key => sub if sub.key == each.key && sub.add_deploy_script_identity }
+//
+//    content {
+//      name = "azure-deploy-script-identity"
+//    }
+//  }
+//
+//  depends_on = [
+//    azurerm_role_assignment.workload_key_vault_secrets_officer
+//  ]
+//}
+//
+//resource "azuredevops_pipeline_authorization" "workload_variable_group" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.devops_create_variable_group }
+//
+//  project_id  = azuredevops_project.project[each.value.devops_project].id
+//  resource_id = azuredevops_variable_group.workload[each.key].id
+//
+//  type = "variablegroup"
+//}
