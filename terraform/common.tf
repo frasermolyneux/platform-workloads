@@ -1,6 +1,13 @@
-resource "azurerm_resource_group" "rg" {
-  name     = local.resource_group_name
-  location = var.location
 
-  tags = var.tags
+
+data "azurerm_client_config" "current" {}
+
+data "azuread_client_config" "current" {}
+
+resource "random_id" "environment_id" {
+  byte_length = 6
+}
+
+resource "time_rotating" "rotate" {
+  rotation_days = 30
 }

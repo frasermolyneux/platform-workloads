@@ -68,6 +68,11 @@ module "ado_variable_group" {
 
   subscriptions        = var.subscriptions
   azuredevops_projects = var.azuredevops_projects
+
+  providers = {
+    azurerm     = azurerm
+    azuredevops = azuredevops
+  }
 }
 
 //resource "azurerm_role_assignment" "workload_key_vault_secrets_officer" {
