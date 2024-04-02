@@ -55,7 +55,7 @@ resource "azuredevops_pipeline_authorization" "workload" {
 module "ado_variable_group" {
   source = "./modules/ado-variable-group"
 
-  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
   workload_name = each.key
   environment   = each.value.environment_tag
