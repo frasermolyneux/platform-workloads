@@ -61,7 +61,7 @@ module "ado_variable_group" {
   environment   = var.environment_map[each.value.environment_name]
   location      = var.location
   instance      = var.instance
-  tags          = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+  tags          = var.tags
 }
 
 
