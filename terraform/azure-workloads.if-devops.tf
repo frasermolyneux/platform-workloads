@@ -66,7 +66,7 @@ module "ado_variable_group" {
   instance         = var.instance
   tags             = var.tags
 
-  variables = merge(each.value.add_deploy_script_identity ? { name = "azure-deploy-script-identity" } : null)
+  variables = merge(each.value.add_deploy_script_identity == true ? [{ name = "azure-deploy-script-identity" }] : [])
 
   subscriptions        = var.subscriptions
   azuredevops_projects = var.azuredevops_projects
