@@ -18,8 +18,8 @@ resource "azuredevops_variable_group" "vg" {
     for_each = { for each in local.filtered_variables : each.key => each }
 
     content {
-      name  = each.key
-      value = each.value.value
+      name  = each.name
+      value = each.value
     }
   }
 
