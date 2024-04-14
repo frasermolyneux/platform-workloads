@@ -50,25 +50,3 @@ resource "azuredevops_pipeline_authorization" "workload" {
 
   type = "endpoint"
 }
-
-module "ado_variable_group" {
-  source = "./modules/ado-variable-group"
-
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-
-  workload_name    = each.value.workload_name
-  environment_name = each.value.environment_name
-  environment_tag  = each.value.environment_tag
-  devops_project   = each.value.devops_project
-  subscription     = each.value.subscription
-  location         = var.location
-  instance         = var.instance
-  tags             = var.tags
-
-  key_vault_variables = tolist([
-    each.value.add_deploy_script_identity == true ? "azure-deploy-script-identity" : null
-  ])
-
-  subscriptions        = var.subscriptions
-  azuredevops_projects = var.azuredevops_projects
-}
