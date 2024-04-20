@@ -263,6 +263,15 @@ workloads = [
       }
     ]
   },
+  {
+    name = "platform-letsencrypt-iis"
+    github = {
+      description = "This repository contains configuration and management scripts for Let's Encrypt certificates on IIS."
+      topics      = ["azure-pipelines", "letsencrypt", "iis", "powershell"]
+      
+      visibility = "public"
+    }
+  }
 
   // Bicep Modules Workload
   {
