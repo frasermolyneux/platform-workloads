@@ -329,7 +329,8 @@ workloads = [
           }
         ]
         directory_roles = [
-          "Cloud application administrator"
+          "Cloud application administrator",
+          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
         ]
       },
       {
@@ -352,7 +353,8 @@ workloads = [
           }
         ]
         directory_roles = [
-          "Cloud application administrator"
+          "Cloud application administrator",
+          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
         ]
       }
     ]
