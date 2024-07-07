@@ -1038,7 +1038,7 @@ workloads = [
 
       visibility = "public"
     }
-  }
+  },
 
   // Molyneux.Me
   {
@@ -1053,9 +1053,9 @@ workloads = [
     }
     environments = [
       {
-        name                       = "Development"
-        subscription               = "sub-molyneux-me-dev"
-        connect_to_github = true
+        name                    = "Development"
+        subscription            = "sub-molyneux-me-dev"
+        connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
           {
