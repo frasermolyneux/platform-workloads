@@ -59,6 +59,10 @@ subscriptions = {
   sub-finances-prd = {
     name            = "sub-finances-prd"
     subscription_id = "957a7d34-8562-4098-bb4c-072e08386d07"
+  },
+  sub-molyneux-me-dev = {
+    name            = "sub-molyneux-me-dev"
+    subscription_id = "ef3cc6c2-159e-4890-9193-13673dded835"
   }
 }
 
@@ -1035,4 +1039,35 @@ workloads = [
       visibility = "public"
     }
   }
+
+  // Molyneux.Me
+  {
+    name = "molyneux-me"
+    github = {
+      description = "A replacement for my WordPress website. Azure static website using Jekyll and GitHub Actions for deployment."
+      topics      = ["azure", "static-website", "jekyll", "github-actions"]
+
+      add_sonarcloud_secrets = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                       = "Development"
+        subscription               = "sub-molyneux-me-dev"
+        connect_to_github = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-molyneux-me-dev"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-molyneux-me-dev"
+          }
+        ]
+      }
+    ]
+  },
 ]
