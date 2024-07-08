@@ -63,6 +63,10 @@ subscriptions = {
   sub-molyneux-me-dev = {
     name            = "sub-molyneux-me-dev"
     subscription_id = "ef3cc6c2-159e-4890-9193-13673dded835"
+  },
+  sub-molyneux-me-prd = {
+    name            = "sub-molyneux-me-prd"
+    subscription_id = "3cc59319-eb1e-4b52-b19e-09a49f9db2e7"
   }
 }
 
@@ -1065,6 +1069,21 @@ workloads = [
           {
             role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
             scope                = "sub-molyneux-me-dev"
+          }
+        ]
+        }, {
+        name                    = "Production"
+        subscription            = "sub-molyneux-me-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-molyneux-me-prd"
+          },
+          {
+            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
+            scope                = "sub-molyneux-me-prd"
           }
         ]
       }
