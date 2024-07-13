@@ -1,4 +1,9 @@
-resource "azuread_application_federated_identity_credential" "workload" {
+moved {
+  from = azuread_application_federated_identity_credential.workload
+  to   = azuread_application_federated_identity_credential.github_workload
+}
+
+resource "azuread_application_federated_identity_credential" "github_workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
 
   application_id = azuread_application.workload[each.key].id
