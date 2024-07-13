@@ -57,7 +57,7 @@ resource "azuread_application_federated_identity_credential" "project" {
   description    = "Azure DevOps"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
-  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.key]}/${azuread_application.project[each.key].display_name}"
+  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.key].name}/${azuread_application.project[each.key].display_name}"
 }
 
 resource "azuredevops_serviceendpoint_azurerm" "project" {
