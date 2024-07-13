@@ -49,27 +49,29 @@ resource "azurerm_role_assignment" "project" {
   principal_id         = azuread_service_principal.project[each.key].object_id
 }
 
-resource "azuread_application_password" "project" {
+resource "azuread_application_federated_identity_credential" "project" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
-  display_name   = format("azdo-%s", lower(each.value.name))
   application_id = azuread_application.project[each.key].id
-
-  rotate_when_changed = {
-    rotation = time_rotating.rotate.id
-  }
+  display_name   = format("ado-%s", lower(each.value.name))
+  description    = "Azure DevOps"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
+  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.key]}/${azuread_application.project[each.key].display_name}"
 }
 
 resource "azuredevops_serviceendpoint_azurerm" "project" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
-  project_id            = azuredevops_project.project[each.key].id
-  service_endpoint_name = azuread_application.project[each.key].display_name
-  description           = "Managed By platform-workloads"
+  project_id = azuredevops_project.project[each.key].id
+
+  service_endpoint_name                  = azuread_application.project[each.key].display_name
+  service_endpoint_authentication_scheme = "WorkloadIdentityFederation"
+
+  description = "Managed By platform-workloads for Key Vault Access to NuGet secrets"
 
   credentials {
-    serviceprincipalid  = azuread_service_principal.project[each.key].application_id
-    serviceprincipalkey = azuread_application_password.project[each.key].value
+    serviceprincipalid = azuread_service_principal.project[each.key].application_id
   }
 
   azurerm_spn_tenantid      = "e56a6947-bb9a-4a6e-846a-1f118d1c3a14"
