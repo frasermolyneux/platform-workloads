@@ -6,7 +6,7 @@ resource "azuread_application_federated_identity_credential" "devops_workload" {
   description    = "Azure DevOps"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
-  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.value.devops_project].name}/${azuread_application.workload[each.key].name}"
+  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.value.devops_project].name}/${azuread_application.workload[each.key].display_name}"
 }
 
 resource "azuredevops_environment" "workload" {
