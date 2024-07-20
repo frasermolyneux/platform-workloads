@@ -87,7 +87,7 @@ resource "azuredevops_pipeline_authorization" "workload_auth_to_variable_group" 
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
   project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.workload[each.value.devops_project].id
+  resource_id = azuredevops_variable_group.workload[each.key].id
 
   type = "variablegroup"
 }
