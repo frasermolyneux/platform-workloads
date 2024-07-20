@@ -62,7 +62,7 @@ resource "azuredevops_variable_group" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
   project_id  = azuredevops_project.project[each.value.devops_project].id
-  name        = azuread_application.workload[each.key].display_name
+  name        = each.key
   description = "Managed by frasermolyneux/platform-workloads"
 
   allow_access = false
