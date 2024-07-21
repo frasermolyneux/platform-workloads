@@ -81,6 +81,26 @@ resource "azuredevops_variable_group" "workload" {
     name  = "AZURE_TENANT_ID"
     value = "e56a6947-bb9a-4a6e-846a-1f118d1c3a14"
   }
+
+  variable {
+    name  = "TF_BACKEND_RESOURCE_GROUP"
+    value = each.configure_for_terraform == true ? azurerm_resource_group.workload_terraform[each.key].name : "N/A"
+  }
+
+  variable {
+    name  = "TF_BACKEND_STORAGE_ACCOUNT"
+    value = each.configure_for_terraform == true ? azurerm_storage_account.workload[each.key].name : "N/A"
+  }
+
+  variable {
+    name  = "TF_BACKEND_STORAGE_CONTAINER"
+    value = each.configure_for_terraform == true ? azurerm_storage_container.workload[each.key].name : "N/A"
+  }
+
+  variable {
+    name  = "TF_BACKEND_STORAGE_STATE_KEY"
+    value = each.configure_for_terraform == true ? "terraform.tfstate" : "N/A"
+  }
 }
 
 resource "azuredevops_pipeline_authorization" "workload_auth_to_variable_group" {
