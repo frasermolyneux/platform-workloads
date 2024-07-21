@@ -84,22 +84,22 @@ resource "azuredevops_variable_group" "workload" {
 
   variable {
     name  = "TF_BACKEND_RESOURCE_GROUP"
-    value = each.configure_for_terraform == true ? azurerm_resource_group.workload_terraform[each.key].name : "N/A"
+    value = each.value.configure_for_terraform == true ? azurerm_resource_group.workload_terraform[each.key].name : "N/A"
   }
 
   variable {
     name  = "TF_BACKEND_STORAGE_ACCOUNT"
-    value = each.configure_for_terraform == true ? azurerm_storage_account.workload[each.key].name : "N/A"
+    value = each.value.configure_for_terraform == true ? azurerm_storage_account.workload[each.key].name : "N/A"
   }
 
   variable {
     name  = "TF_BACKEND_STORAGE_CONTAINER"
-    value = each.configure_for_terraform == true ? azurerm_storage_container.workload[each.key].name : "N/A"
+    value = each.value.configure_for_terraform == true ? azurerm_storage_container.workload[each.key].name : "N/A"
   }
 
   variable {
     name  = "TF_BACKEND_STORAGE_STATE_KEY"
-    value = each.configure_for_terraform == true ? "terraform.tfstate" : "N/A"
+    value = each.value.configure_for_terraform == true ? "terraform.tfstate" : "N/A"
   }
 }
 
