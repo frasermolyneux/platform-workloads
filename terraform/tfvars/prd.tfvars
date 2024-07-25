@@ -291,7 +291,7 @@ workloads = [
     environments = [
       {
         name                    = "Development"
-        subscription            = "sub-platform-management"
+        subscription            = "sub-visualstudio-enterprise"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
