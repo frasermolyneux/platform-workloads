@@ -280,6 +280,40 @@ workloads = [
       visibility = "public"
     }
   },
+  {
+    name = "platform-monitoring-func"
+    github = {
+      description = "A custom monitoring solution using Azure Function apps over standard web tests to reduce costs. Dployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "application-insights", "web-tests"]
+      visibility  = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-platform-management"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Contributor"
+            scope                = "sub-visualstudio-enterprise"
+          }
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-platform-management"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Contributor"
+            scope                = "sub-platform-management"
+          }
+        ]
+      }
+    ]
+  },
 
   // Bicep Modules Workload
   {
