@@ -283,9 +283,10 @@ workloads = [
   {
     name = "platform-monitoring-func"
     github = {
-      description = "A custom monitoring solution using Azure Function apps over standard web tests to reduce costs. Dployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "application-insights", "web-tests"]
-      visibility  = "public"
+      description            = "A custom monitoring solution using Azure Function apps over standard web tests to reduce costs. Dployed using Terraform and GitHub Actions."
+      topics                 = ["azure", "terraform", "github-actions", "application-insights", "web-tests"]
+      visibility             = "public"
+      add_sonarcloud_secrets = true
     }
     environments = [
       {
