@@ -310,6 +310,14 @@ workloads = [
           {
             role_definition_name = "Contributor"
             scope                = "sub-platform-management"
+          },
+          {
+            role_definition_name = "Contributor" // Needed to get access to App Insights
+            scope                = "sub-fm-geolocation-prd"
+          }
+          , {
+            role_definition_name = "Contributor" // Needed to get access to App Insights
+            scope                = "sub-xi-portal-prd"
           }
         ]
       }
