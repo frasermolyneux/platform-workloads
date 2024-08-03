@@ -765,16 +765,6 @@ workloads = [
     ]
   },
   {
-    name = "b3bot-config-generator"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; b3bot config generator."
-
-      add_sonarcloud_secrets = true
-
-      visibility = "public"
-    }
-  },
-  {
     name = "invision-api-client"
     github = {
       description = "Part of XtremeIdiots Portal solution; Invision Community forums integration api client. Published to NuGet.org."
