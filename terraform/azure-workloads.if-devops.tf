@@ -16,6 +16,16 @@ resource "azuredevops_environment" "workload" {
   name       = each.key
 }
 
+resource "azuredevops_check_exclusive_lock" "workload_environment" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+
+  project_id           = azuredevops_project.project[each.value.devops_project].id
+  target_resource_id   = azuredevops_environment.workload[each.key].id
+  target_resource_type = "environment"
+
+  timeout = 43200
+}
+
 resource "azuredevops_pipeline_authorization" "workload_environment" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
