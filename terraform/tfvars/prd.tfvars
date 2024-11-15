@@ -298,6 +298,10 @@ workloads = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
             scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
+            scope                = "sub-visualstudio-enterprise"
           }
         ]
       },
@@ -309,6 +313,10 @@ workloads = [
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
+            scope                = "sub-platform-management"
+          },
+          {
+            role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
             scope                = "sub-platform-management"
           },
           {
