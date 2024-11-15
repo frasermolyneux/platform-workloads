@@ -302,6 +302,10 @@ workloads = [
           {
             role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
             scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Website Contributor" // Required for Function App Deployments
+            scope                = "sub-visualstudio-enterprise"
           }
         ]
       },
@@ -317,6 +321,10 @@ workloads = [
           },
           {
             role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
+            scope                = "sub-platform-management"
+          },
+          {
+            role_definition_name = "Website Contributor" // Required for Function App Deployments
             scope                = "sub-platform-management"
           },
           {
