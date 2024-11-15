@@ -46,7 +46,7 @@ resource "azuredevops_serviceendpoint_azurerm" "workload" {
   description = "Managed By platform-workloads"
 
   credentials {
-    serviceprincipalid = azuread_service_principal.workload[each.key].application_id
+    serviceprincipalid = azuread_service_principal.workload[each.key].object_id
   }
 
   azurerm_spn_tenantid      = "e56a6947-bb9a-4a6e-846a-1f118d1c3a14"

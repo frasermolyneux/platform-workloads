@@ -71,7 +71,7 @@ resource "azuredevops_serviceendpoint_azurerm" "project" {
   description = "Managed By platform-workloads for Key Vault Access to NuGet secrets"
 
   credentials {
-    serviceprincipalid = azuread_service_principal.project[each.key].application_id
+    serviceprincipalid = azuread_service_principal.project[each.key].object_id
   }
 
   azurerm_spn_tenantid      = "e56a6947-bb9a-4a6e-846a-1f118d1c3a14"
