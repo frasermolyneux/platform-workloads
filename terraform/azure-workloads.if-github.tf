@@ -27,7 +27,7 @@ resource "github_actions_environment_secret" "client_id" {
   repository      = github_repository.workload[each.value.workload_name].name
   environment     = github_repository_environment.workload[each.key].environment
   secret_name     = "AZURE_CLIENT_ID"
-  plaintext_value = azuread_application.workload[each.key].application_id
+  plaintext_value = azuread_application.workload[each.key].client_id
 }
 
 resource "github_actions_environment_secret" "subscription_id" {
@@ -54,7 +54,7 @@ resource "github_dependabot_secret" "client_id" {
 
   repository      = github_repository.workload[each.value.workload_name].name
   secret_name     = "AZURE_CLIENT_ID"
-  plaintext_value = azuread_application.workload[each.key].application_id
+  plaintext_value = azuread_application.workload[each.key].client_id
 }
 
 resource "github_dependabot_secret" "subscription_id" {

@@ -79,7 +79,7 @@ resource "azuredevops_variable_group" "workload" {
 
   variable {
     name  = "AZURE_CLIENT_ID"
-    value = azuread_application.workload[each.key].application_id
+    value = azuread_application.workload[each.key].cient_id
   }
 
   variable {
