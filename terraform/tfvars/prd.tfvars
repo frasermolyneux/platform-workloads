@@ -296,7 +296,7 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Contributor"
+            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
             scope                = "sub-visualstudio-enterprise"
           }
         ]
