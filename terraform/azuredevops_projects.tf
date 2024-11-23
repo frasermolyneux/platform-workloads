@@ -122,7 +122,7 @@ resource "azuredevops_pipeline_authorization" "nuget" {
 }
 
 resource "azuredevops_variable_group" "sonarcloud" {
-  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
+  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_sonarcloud_variable_group }
 
   project_id  = azuredevops_project.project[each.key].id
   name        = "SonarCloud"

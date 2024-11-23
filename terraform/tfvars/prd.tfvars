@@ -80,7 +80,8 @@ azuredevops_projects = [
     version_control    = "Git"
     work_item_template = "Agile"
 
-    add_nuget_variable_group = true
+    add_nuget_variable_group      = true
+    add_sonarcloud_variable_group = true
 
     features = {
       "boards"       = "disabled"
@@ -99,7 +100,8 @@ azuredevops_projects = [
     version_control    = "Git"
     work_item_template = "Agile"
 
-    add_nuget_variable_group = true
+    add_nuget_variable_group      = true
+    add_sonarcloud_variable_group = true
 
     features = {
       "boards"       = "disabled"
