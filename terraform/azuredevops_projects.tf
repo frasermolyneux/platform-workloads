@@ -104,7 +104,7 @@ resource "azuredevops_variable_group" "nuget" {
 
   key_vault {
     name                = azurerm_key_vault.kv.name
-    service_endpoint_id = azuredevops_serviceendpoint_azurerm.nuget[each.key].id
+    service_endpoint_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
   }
 
   variable {
@@ -132,7 +132,7 @@ resource "azuredevops_variable_group" "sonarcloud" {
 
   key_vault {
     name                = azurerm_key_vault.kv.name
-    service_endpoint_id = azuredevops_serviceendpoint_azurerm.nuget[each.key].id
+    service_endpoint_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
   }
 
   variable {
