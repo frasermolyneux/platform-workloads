@@ -88,7 +88,12 @@ resource "azuredevops_pipeline_authorization" "project" {
   type = "endpoint"
 }
 
-resource "azuredevops_variable_group" "project" {
+moved {
+  from = azuredevops_variable_group.project
+  to   = azuredevops_variable_group.nuget
+}
+
+resource "azuredevops_variable_group" "nuget" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
 
   project_id  = azuredevops_project.project[each.key].id
@@ -99,7 +104,7 @@ resource "azuredevops_variable_group" "project" {
 
   key_vault {
     name                = azurerm_key_vault.kv.name
-    service_endpoint_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
+    service_endpoint_id = azuredevops_serviceendpoint_azurerm.nuget[each.key].id
   }
 
   variable {
@@ -111,7 +116,35 @@ resource "azuredevops_pipeline_authorization" "nuget" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
 
   project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.project[each.value.devops_project].id
+  resource_id = azuredevops_variable_group.nuget[each.value.devops_project].id
+
+  type = "variablegroup"
+}
+
+resource "azuredevops_variable_group" "sonarcloud" {
+  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
+
+  project_id  = azuredevops_project.project[each.key].id
+  name        = "SonarCloud"
+  description = "Variable group for SonarCloud secret access"
+
+  allow_access = true
+
+  key_vault {
+    name                = azurerm_key_vault.kv.name
+    service_endpoint_id = azuredevops_serviceendpoint_azurerm.nuget[each.key].id
+  }
+
+  variable {
+    name = "sonarcloud-token"
+  }
+}
+
+resource "azuredevops_pipeline_authorization" "sonarcloud" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+
+  project_id  = azuredevops_project.project[each.value.devops_project].id
+  resource_id = azuredevops_variable_group.sonarcloud[each.value.devops_project].id
 
   type = "variablegroup"
 }
