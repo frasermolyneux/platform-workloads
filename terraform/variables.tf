@@ -35,7 +35,8 @@ variable "azuredevops_projects" {
     version_control    = optional(string, "Git")
     work_item_template = optional(string, "Agile")
 
-    add_nuget_variable_group = optional(bool, false)
+    add_nuget_variable_group      = optional(bool, false)
+    add_sonarcloud_variable_group = optional(bool, false)
 
     features = optional(map(string), {
       "boards"       = "enabled"
