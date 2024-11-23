@@ -88,9 +88,8 @@ variable "workloads" {
 
 variable "environment_map" {
   default = {
-    Development       = "dev"
-    Testing           = "tst"
-    Production        = "prd"
-    ProductionWebApps = "prdwa"
+    Development = "dev"
+    Testing     = "tst"
+    Production  = "prd"
   }
 }
