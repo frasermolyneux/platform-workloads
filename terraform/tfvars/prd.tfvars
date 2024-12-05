@@ -255,19 +255,33 @@ workloads = [
   {
     name = "platform-monitoring"
     github = {
-      description = "Platform monitoring configuration for workloads hosted off-platform. Deployed using Bicep and Azure DevOps pipelines."
-      topics      = ["azure", "bicep", "azure-devops-pipelines", "application-insights", "web-tests", "key-vault"]
+      description = "Platform monitoring configuration for workloads hosted both on and off the Azure platform. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "application-insights", "web-tests", "key-vault"]
       visibility  = "public"
     }
     environments = [
       {
-        name           = "Production"
-        subscription   = "sub-platform-management"
-        devops_project = "Personal-Public"
+        name                    = "Production"
+        subscription            = "sub-platform-management"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
         role_assignments = [
           {
             role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
             scope                = "sub-platform-management"
+          },
+          {
+            role_definition_name = "Monitoring Contributor"
+            scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Monitoring Contributor"
+            scope                = "sub-fm-geolocation-prd"
+          },
+          {
+            role_definition_name = "Monitoring Contributor"
+            scope                = "sub-xi-portal-prd"
           }
         ]
       }
