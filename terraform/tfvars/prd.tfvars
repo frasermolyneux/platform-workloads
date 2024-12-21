@@ -310,66 +310,6 @@ workloads = [
       visibility = "public"
     }
   },
-  {
-    name = "platform-monitoring-func"
-    github = {
-      description            = "A custom monitoring solution using Azure Function apps over standard web tests to reduce costs. Dployed using Terraform and GitHub Actions."
-      topics                 = ["azure", "terraform", "github-actions", "application-insights", "web-tests"]
-      visibility             = "public"
-      add_sonarcloud_secrets = true
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Website Contributor" // Required for Function App Deployments
-            scope                = "sub-visualstudio-enterprise"
-          }
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-platform-management"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-platform-management"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Required for Function App Deployments
-            scope                = "sub-platform-management"
-          },
-          {
-            role_definition_name = "Website Contributor" // Required for Function App Deployments
-            scope                = "sub-platform-management"
-          },
-          {
-            role_definition_name = "Contributor" // Needed to get access to App Insights
-            scope                = "sub-fm-geolocation-prd"
-          }
-          , {
-            role_definition_name = "Contributor" // Needed to get access to App Insights
-            scope                = "sub-xi-portal-prd"
-          }
-        ]
-      }
-    ]
-  },
-
   // Bicep Modules Workload
   {
     name = "bicep-modules"
