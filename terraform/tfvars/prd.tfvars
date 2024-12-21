@@ -271,6 +271,14 @@ workloads = [
           {
             role_definition_name = "Owner"
             scope                = "sub-visualstudio-enterprise"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-enterprise-devtest-legacy"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-molyneux-me-dev"
           }
         ]
       },
@@ -283,19 +291,47 @@ workloads = [
         role_assignments = [
           {
             role_definition_name = "Owner"
-            scope                = "sub-platform-management"
-          },
-          {
-            role_definition_name = "Owner"
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Owner"
             scope                = "sub-fm-geolocation-prd"
           },
           {
             role_definition_name = "Owner"
+            scope                = "sub-mx-consulting-prd"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-platform-connectivity"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-platform-identity"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-platform-management"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-platform-strategic"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-talkwithtiles-prd"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-xi-demomanager-prd"
+          },
+          {
+            role_definition_name = "Owner"
             scope                = "sub-xi-portal-prd"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-finances-prd"
+          },
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-molyneux-me-prd"
           }
         ]
       }
