@@ -261,6 +261,19 @@ workloads = [
     }
     environments = [
       {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definition_name = "Owner"
+            scope                = "sub-visualstudio-enterprise"
+          }
+        ]
+      },
+      {
         name                    = "Production"
         subscription            = "sub-platform-management"
         devops_project          = "Personal-Public"
