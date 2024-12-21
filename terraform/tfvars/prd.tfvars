@@ -255,9 +255,10 @@ workloads = [
   {
     name = "platform-monitoring"
     github = {
-      description = "Platform monitoring configuration for workloads hosted both on and off the Azure platform. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "application-insights", "web-tests", "key-vault"]
-      visibility  = "public"
+      description            = "Platform monitoring configuration for workloads hosted both on and off the Azure platform. Deployed using Terraform and GitHub Actions."
+      topics                 = ["azure", "terraform", "github-actions", "application-insights", "web-tests", "key-vault"]
+      visibility             = "public"
+      add_sonarcloud_secrets = true
     }
     environments = [
       {
