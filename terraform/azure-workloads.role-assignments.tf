@@ -1,13 +1,15 @@
 locals {
   workload_role_assignments = flatten([
     for role_assignment_key, workload_environment in local.workload_environments : [
-      for role_assignment in workload_environment.role_assignments : {
-        role_assignment_key        = format("%s-%s-%s", workload_environment.key, role_assignment.role_definition_name, role_assignment.scope)
-        workload_environment_key   = workload_environment.key
-        add_deploy_script_identity = workload_environment.add_deploy_script_identity
-        scope                      = role_assignment.scope
-        role_definition_name       = role_assignment.role_definition_name
-      }
+      for role_assignment in workload_environment.role_assignments : [
+        for role_definition in role_assignment.role_definitions : {
+          role_assignment_key        = format("%s-%s-%s", workload_environment.key, role_assignment.role_definition_name, role_assignment.scope)
+          workload_environment_key   = workload_environment.key
+          add_deploy_script_identity = workload_environment.add_deploy_script_identity
+          scope                      = role_assignment.scope
+          role_definition_name       = role_definition
+        }
+      ]
     ]
   ])
 }

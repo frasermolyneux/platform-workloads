@@ -129,8 +129,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Contributor"
-            scope                = "sub-platform-management"
+            role_definitions = ["Contributor"]
+            scope            = "sub-platform-management"
           }
         ]
       }
@@ -151,20 +151,16 @@ workloads = [
         subscription            = "sub-platform-strategic"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-platform-strategic"
+            role_definitions = ["Owner", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-platform-strategic"
           },
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-platform-connectivity"
+            role_definitions = ["Owner"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-platform-connectivity"
           },
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-platform-strategic"
+            role_definitions = ["Owner"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -188,12 +184,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set Key Vault RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set Key Vault RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -206,12 +198,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set Key Vault RBAC role assignments
-            scope                = "sub-platform-strategic"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-platform-strategic"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set Key Vault RBAC role assignments
+            scope            = "sub-platform-strategic"
           }
         ]
         directory_roles = [
@@ -234,8 +222,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Contributor"
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Contributor"]
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
       },
@@ -245,8 +233,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Contributor"
-            scope                = "sub-platform-connectivity"
+            role_definitions = ["Contributor"]
+            scope            = "sub-platform-connectivity"
           }
         ]
       }
@@ -269,16 +257,16 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner"
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"]
+            scope            = "sub-visualstudio-enterprise"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-enterprise-devtest-legacy"
+            role_definitions = ["Owner"]
+            scope            = "sub-enterprise-devtest-legacy"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-molyneux-me-dev"
+            role_definitions = ["Owner"]
+            scope            = "sub-molyneux-me-dev"
           }
         ]
       },
@@ -290,48 +278,48 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner"
-            scope                = "sub-fm-geolocation-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-fm-geolocation-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-mx-consulting-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-mx-consulting-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-platform-connectivity"
+            role_definitions = ["Owner"]
+            scope            = "sub-platform-connectivity"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-platform-identity"
+            role_definitions = ["Owner"]
+            scope            = "sub-platform-identity"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-platform-management"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"]
+            scope            = "sub-platform-management"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-platform-strategic"
+            role_definitions = ["Owner"]
+            scope            = "sub-platform-strategic"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-talkwithtiles-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-talkwithtiles-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-xi-demomanager-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-xi-demomanager-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-xi-portal-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-finances-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-finances-prd"
           },
           {
-            role_definition_name = "Owner"
-            scope                = "sub-molyneux-me-prd"
+            role_definitions = ["Owner"]
+            scope            = "sub-molyneux-me-prd"
           }
         ]
       }
@@ -361,8 +349,8 @@ workloads = [
         devops_project = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Reader" // Reader on the subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope                = "sub-platform-strategic"
+            role_definitions = ["Reader"] // Reader on the subscription only to allow Azure Login; no other permissions required on a subscription level
+            scope            = "sub-platform-strategic"
           }
         ]
       }
@@ -389,16 +377,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -413,16 +393,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -451,16 +423,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -474,16 +438,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -511,16 +467,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -535,16 +483,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -572,16 +512,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -595,16 +527,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -632,12 +556,8 @@ workloads = [
         add_deploy_script_identity = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -651,12 +571,8 @@ workloads = [
         add_deploy_script_identity = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -683,16 +599,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -706,16 +614,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -744,16 +644,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -768,16 +660,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -816,12 +700,8 @@ workloads = [
         devops_project = "XtremeIdiots-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -835,12 +715,8 @@ workloads = [
         devops_project = "XtremeIdiots-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-portal-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-xi-portal-prd"
+            role_definitions = ["Owner", "sub-xi-portal-prd"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
           }
         ]
         directory_roles = [
@@ -879,8 +755,8 @@ workloads = [
         devops_project = "XtremeIdiots-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-xi-demomanager-prd"
+            role_definitions = ["Owner"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-demomanager-prd"
           }
         ]
       }
@@ -907,12 +783,8 @@ workloads = [
         add_deploy_script_identity = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -926,12 +798,8 @@ workloads = [
         add_deploy_script_identity = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-fm-geolocation-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-fm-geolocation-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-fm-geolocation-prd"
           }
         ]
         directory_roles = [
@@ -960,16 +828,8 @@ workloads = [
         devops_project          = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -983,16 +843,8 @@ workloads = [
         devops_project          = "Personal-Public"
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-talkwithtiles-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-talkwithtiles-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-talkwithtiles-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-talkwithtiles-prd"
           }
         ]
         directory_roles = [
@@ -1021,16 +873,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-visualstudio-enterprise"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-visualstudio-enterprise"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
           }
         ]
         directory_roles = [
@@ -1044,16 +888,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-finances-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-finances-prd"
-          },
-          {
-            role_definition_name = "Storage Blob Data Contributor" // Granting at this level reduces complexity for Terraform based pipelines
-            scope                = "sub-finances-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-finances-prd"
           }
         ]
         directory_roles = [
@@ -1096,12 +932,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-molyneux-me-dev"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-molyneux-me-dev"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-molyneux-me-dev"
           }
         ]
         }, {
@@ -1111,12 +943,8 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definition_name = "Owner" // Owner is required to be able to set RBAC role assignments
-            scope                = "sub-molyneux-me-prd"
-          },
-          {
-            role_definition_name = "Key Vault Secrets Officer" // Granting at this level reduces complexity manging secrets through Bicep or Terraform
-            scope                = "sub-molyneux-me-prd"
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-molyneux-me-prd"
           }
         ]
       }
