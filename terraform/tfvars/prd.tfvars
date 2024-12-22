@@ -715,7 +715,7 @@ workloads = [
         devops_project = "XtremeIdiots-Public"
         role_assignments = [
           {
-            role_definitions = ["Owner", "sub-xi-portal-prd"] // Owner is required to be able to set RBAC role assignments
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
             scope            = "sub-xi-portal-prd"
           }
         ]
