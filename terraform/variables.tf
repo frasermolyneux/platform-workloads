@@ -78,8 +78,8 @@ variable "workloads" {
       devops_create_variable_group = optional(bool, false)  // If true, a variable group will be created in the Azure DevOps project with a backing key vault
 
       role_assignments = optional(list(object({
-        scope                = string
-        role_definition_name = string
+        scope            = string
+        role_definitions = list(string)
       })), [])
 
       directory_roles = optional(list(string), [])
