@@ -268,6 +268,9 @@ workloads = [
             role_definitions = ["Owner"]
             scope            = "sub-molyneux-me-dev"
           }
+        ],
+        directory_roles = [
+          "Cloud application administrator"
         ]
       },
       {
@@ -321,6 +324,9 @@ workloads = [
             role_definitions = ["Owner"]
             scope            = "sub-molyneux-me-prd"
           }
+        ],
+        directory_roles = [
+          "Cloud application administrator"
         ]
       }
     ]
