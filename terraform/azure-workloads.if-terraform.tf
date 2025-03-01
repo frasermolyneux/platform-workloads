@@ -30,7 +30,7 @@ resource "azurerm_storage_container" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
 
   name                  = "tfstate"
-  storage_account_name  = azurerm_storage_account.workload[each.key].name
+  storage_account_id    = azurerm_storage_account.workload[each.key].id
   container_access_type = "private"
 }
 
