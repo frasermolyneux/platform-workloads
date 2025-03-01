@@ -787,6 +787,8 @@ workloads = [
         subscription               = "sub-visualstudio-enterprise"
         devops_project             = "Personal-Public"
         add_deploy_script_identity = true
+        connect_to_github          = true
+        configure_for_terraform    = true
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
@@ -802,6 +804,8 @@ workloads = [
         subscription               = "sub-fm-geolocation-prd"
         devops_project             = "Personal-Public"
         add_deploy_script_identity = true
+        connect_to_github          = true
+        configure_for_terraform    = true
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
@@ -810,6 +814,43 @@ workloads = [
         ]
         directory_roles = [
           "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
+    name = "geo-location-config"
+    github = {
+      description = "GeoLocation configuration and environment configuration."
+      topics      = ["azure"]
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-fm-geolocation-prd"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-fm-geolocation-prd"
+          }
         ]
       }
     ]
