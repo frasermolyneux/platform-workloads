@@ -50,3 +50,11 @@ resource "azurerm_role_assignment" "workload_storage_blob_contributor" {
   role_definition_name = "Storage Blob Data Contributor"
   principal_id         = azuread_service_principal.workload[each.key].object_id
 }
+
+resource "azurerm_role_assignment" "workload_storage_reader" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  scope                = azurerm_storage_account.workload[each.key].id
+  role_definition_name = "Reader"
+  principal_id         = azuread_service_principal.workload[each.key].object_id
+}
