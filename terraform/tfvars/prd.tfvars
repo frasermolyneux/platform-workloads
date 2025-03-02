@@ -811,6 +811,43 @@ workloads = [
 
   // Geo Location
   {
+    name = "geo-location-environments"
+    github = {
+      description = "GeoLocation environment management including identities, app registrations and permissions. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "app-configuration", "key-vault", "app-registration"]
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-fm-geolocation-prd"
+        devops_project          = "Personal-Public"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-fm-geolocation-prd"
+          }
+        ]
+      }
+    ]
+  },
+  {
     name = "geo-location"
     github = {
       description = "GeoLocation service providing IP to location related services. Deployed using Bicep and Azure DevOps pipelines."
@@ -854,80 +891,6 @@ workloads = [
         ]
         directory_roles = [
           "Cloud application administrator"
-        ]
-      }
-    ]
-  },
-  {
-    name = "geo-location-config"
-    github = {
-      description = "GeoLocation configuration and environment configuration."
-      topics      = ["azure"]
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "Personal-Public"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-fm-geolocation-prd"
-        devops_project          = "Personal-Public"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-fm-geolocation-prd"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    name = "geo-location-environments"
-    github = {
-      description = "GeoLocation environment management including identities, app registrations and permissions. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "app-configuration", "key-vault", "app-registration"]
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "Personal-Public"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-fm-geolocation-prd"
-        devops_project          = "Personal-Public"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-fm-geolocation-prd"
-          }
         ]
       }
     ]
