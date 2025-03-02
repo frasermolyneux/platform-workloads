@@ -357,7 +357,6 @@ workloads = [
       {
         name                    = "Production"
         subscription            = "sub-platform-management"
-        devops_project          = "Personal-Public"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
