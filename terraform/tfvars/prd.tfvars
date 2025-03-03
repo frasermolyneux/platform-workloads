@@ -831,6 +831,9 @@ workloads = [
             scope            = "sub-visualstudio-enterprise"
           }
         ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
       },
       {
         name                    = "Production"
@@ -843,6 +846,9 @@ workloads = [
             role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
             scope            = "sub-fm-geolocation-prd"
           }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
         ]
       }
     ]
