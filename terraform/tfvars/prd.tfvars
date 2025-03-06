@@ -332,46 +332,6 @@ workloads = [
     ]
   },
   {
-    name = "platform-dev-tools"
-    github = {
-      description = "Platform dev tools"
-      topics      = ["azure", "terraform", "github-actions"]
-      visibility  = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner"]
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ],
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-platform-management"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner"]
-            scope            = "sub-platform-management"
-          }
-        ],
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      }
-    ]
-  },
-  {
     name = "platform-letsencrypt-iis"
     github = {
       description = "This repository contains configuration and management scripts for Let's Encrypt certificates on IIS."
