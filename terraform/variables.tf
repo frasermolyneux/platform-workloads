@@ -84,6 +84,8 @@ variable "workloads" {
 
       directory_roles = optional(list(string), [])
     })), [])
+
+    create_dev_center_project = optional(bool, false)
   }))
 }
 
