@@ -1,3 +1,10 @@
+locals {
+  environment_types = [
+    "Development",
+    "Production",
+  ]
+}
+
 resource "azurerm_dev_center" "dev_center" {
   name = local.dev_center_name
 
@@ -5,6 +12,17 @@ resource "azurerm_dev_center" "dev_center" {
   resource_group_name = azurerm_resource_group.rg.name
 
   tags = var.tags
+}
+
+resource "azurerm_dev_center_environment_type" "environment" {
+  for_each = { for each in local.environment_types : each => each }
+
+  name          = each.value
+  dev_center_id = azurerm_dev_center.dev_center.id
+
+  tags = {
+    Environment = each.value
+  }
 }
 
 resource "azurerm_dev_center_project" "workload" {
@@ -20,13 +38,18 @@ resource "azurerm_dev_center_project" "workload" {
   tags = merge(var.tags, { Workload = each.value.name })
 }
 
-//resource "azurerm_dev_center_project_environment" "workload_env" {
-//  for_each = { for each in local.workload_environments : each.key => each if var.workloads[each.value.workload_name].create_dev_center_project }
-//
-//  name                = each.value.environment_name
-//  project_name        = azurerm_dev_center_project.workload[each.value.workload_name].name
-//  location            = azurerm_resource_group.rg.location
-//  resource_group_name = azurerm_resource_group.rg.name
-//
-//  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
-//}
+resource "azurerm_dev_center_project_environment_type" "project_environment" {
+  for_each = { for each in local.workload_environments : each.key => each if var.workloads[each.value.workload_name].create_dev_center_project }
+
+  name     = azurerm_dev_center_environment_type.environment[each.value.environment_type].name
+  location = azurerm_resource_group.rg.location
+
+  dev_center_project_id = azurerm_dev_center_project.dev_center.id
+  deployment_target_id  = data.azurerm_subscription.subscriptions[each.value.subscription].id
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+}
