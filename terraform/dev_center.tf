@@ -51,6 +51,6 @@ resource "azurerm_dev_center_project_environment_type" "project_environment" {
     type = "SystemAssigned"
   }
 
-  tags = { Workload = each.value.workload_name }
+  tags = merge(azurerm_dev_center_environment_type.environment[each.value.environment_name].tags, { Workload = each.value.workload_name })
 }
 
