@@ -39,9 +39,9 @@ resource "azurerm_dev_center_project" "workload" {
 }
 
 resource "azurerm_dev_center_project_environment_type" "project_environment" {
-  for_each = { for each in local.workload_environments : each.key => each if var.workloads[each.workload_name].create_dev_center_project }
+  for_each = { for each in local.workload_environments : each.key => each if each.create_dev_center_project }
 
-  name     = azurerm_dev_center_environment_type.environment[each.value.environment_type].name
+  name     = azurerm_dev_center_environment_type.environment[each.value.environment_name].name
   location = azurerm_resource_group.rg.location
 
   dev_center_project_id = azurerm_dev_center_project.workload[each.value.workload_name].id
