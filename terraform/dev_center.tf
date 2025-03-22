@@ -44,7 +44,7 @@ resource "azurerm_dev_center_project_environment_type" "project_environment" {
   name     = azurerm_dev_center_environment_type.environment[each.value.environment_type].name
   location = azurerm_resource_group.rg.location
 
-  dev_center_project_id = azurerm_dev_center_project.dev_center.id
+  dev_center_project_id = azurerm_dev_center_project.workload[each.value.workload_name].id
   deployment_target_id  = data.azurerm_subscription.subscriptions[each.value.subscription].id
 
   identity {
