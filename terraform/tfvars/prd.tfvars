@@ -814,7 +814,8 @@ workloads = [
     ]
   },
   {
-    name = "geo-location"
+    name                      = "geo-location"
+    create_dev_center_project = true
     github = {
       description = "GeoLocation service providing IP to location related services. Deployed using Bicep and Azure DevOps pipelines."
       topics      = ["azure", "bicep", "azure-devops-pipelines", "key-vault", "app-insights", "app-service", "api-management-api"]
