@@ -13,6 +13,20 @@
 //
 //  tags = var.tags
 //}
+resource "azapi_resource" "dev_center" {
+  type = "Microsoft.DevCenter/devcenters@2025-02-01"
+
+  name     = local.dev_center_name
+  location = azurerm_resource_group.rg.location
+
+  tags = var.tags
+
+  body = {
+    properties = {
+      displayName = local.dev_center_name
+    }
+  }
+}
 //
 //resource "azurerm_dev_center_environment_type" "environment" {
 //  for_each = { for each in local.environment_types : each => each }
