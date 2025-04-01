@@ -6,6 +6,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = "~> 4.25.0"
     }
+    azapi = {
+      source  = "azure/azapi"
+      version = "~> 2.3.0"
+    }
     azuredevops = {
       source  = "microsoft/azuredevops"
       version = ">= 1.7.0"
@@ -25,6 +29,9 @@ provider "azurerm" {
   features {}
 
   storage_use_azuread = true
+}
+
+provider "azapi" {
 }
 
 provider "azuredevops" {
