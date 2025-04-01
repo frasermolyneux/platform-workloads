@@ -53,9 +53,9 @@ resource "azapi_resource" "workload" {
 
   body = {
     properties = {
-      description   = "Project for workload ${each.value.name}"
-      dev_center_id = azapi_resource.dev_center.id
-      displayName   = each.value.name
+      description = "Project for workload ${each.value.name}"
+      devCenterId = azapi_resource.dev_center.id
+      displayName = each.value.name
     }
   }
 }
