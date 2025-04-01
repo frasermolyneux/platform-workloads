@@ -27,23 +27,24 @@ resource "azapi_resource" "environment_type" {
   type      = "Microsoft.DevCenter/devcenters/environmentTypes@2025-02-01"
   parent_id = azapi_resource.dev_center.id
 
-  name     = each.value
-  location = azurerm_resource_group.rg.location
+  name = each.value
 
   tags = {
     Environment = each.value
   }
 
   body = {
-    properties = {}
+    properties = {
+      displayName = each.value
+    }
   }
 }
 
 resource "azapi_resource" "workload" {
   for_each = { for each in var.workloads : each.name => each if each.create_dev_center_project }
 
-  type      = "Microsoft.DevCenter/devcenters/projects@2025-02-01"
-  parent_id = azapi_resource.dev_center.id
+  type      = "Microsoft.DevCenter/projects@2025-02-01"
+  parent_id = azurerm_resource_group.rg.id
 
   name     = each.value.name
   location = azurerm_resource_group.rg.location
@@ -52,7 +53,9 @@ resource "azapi_resource" "workload" {
 
   body = {
     properties = {
-      description = "Project for workload ${each.value.name}"
+      description   = "Project for workload ${each.value.name}"
+      dev_center_id = azapi_resource.dev_center.id
+      displayName   = each.value.name
     }
   }
 }
