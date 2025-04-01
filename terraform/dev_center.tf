@@ -14,7 +14,8 @@
 //  tags = var.tags
 //}
 resource "azapi_resource" "dev_center" {
-  type = "Microsoft.DevCenter/devcenters@2025-02-01"
+  type      = "Microsoft.DevCenter/devcenters@2025-02-01"
+  parent_id = azurerm_resource_group.rg.id
 
   name     = local.dev_center_name
   location = azurerm_resource_group.rg.location
