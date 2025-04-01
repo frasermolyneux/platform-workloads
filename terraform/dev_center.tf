@@ -63,7 +63,7 @@ resource "azapi_resource" "workload" {
 resource "azapi_resource" "project_environment" {
   for_each = { for each in local.workload_environments : each.key => each if each.create_dev_center_project }
 
-  type      = "Microsoft.DevCenter/devcenters/projects/environmentTypes@2025-02-01"
+  type      = "Microsoft.DevCenter/projects/environmentTypes@2025-02-01"
   parent_id = azapi_resource.workload[each.value.workload_name].id
 
   name     = azapi_resource.environment_type[each.value.environment_name].name
@@ -77,6 +77,8 @@ resource "azapi_resource" "project_environment" {
   body = {
     properties = {
       deploymentTargetId = data.azurerm_subscription.subscriptions[each.value.subscription].id
+      displayName        = azapi_resource.environment_type[each.value.environment_name].name
+      status             = "Enabled"
     }
   }
 
