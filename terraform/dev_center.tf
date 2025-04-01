@@ -66,8 +66,7 @@ resource "azapi_resource" "project_environment" {
   type      = "Microsoft.DevCenter/projects/environmentTypes@2025-02-01"
   parent_id = azapi_resource.workload[each.value.workload_name].id
 
-  name     = azapi_resource.environment_type[each.value.environment_name].name
-  location = azurerm_resource_group.rg.location
+  name = azapi_resource.environment_type[each.value.environment_name].name
 
   tags = merge(
     azapi_resource.environment_type[each.value.environment_name].tags,
