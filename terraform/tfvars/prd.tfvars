@@ -455,6 +455,49 @@ workloads = [
     ]
   },
   {
+    name = "portal-func"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; background function app for server integration, event processing and auto admin actions. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "function-app", "app-insights", "key-vault", "api-subscriptions"]
+
+      add_sonarcloud_secrets = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
     name = "portal-repository"
     github = {
       description = "Part of XtremeIdiots Portal solution; player and server data storage. Deployed using Terraform and GitHub Actions."
