@@ -470,7 +470,7 @@ workloads = [
     name = "portal-event-processor"
     github = {
       description = "Part of XtremeIdiots Portal solution; event processing into the service. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "api-management-api", "app-insights", "service-bus", "function-app", "key-vault", "app-registration"]
+      topics      = ["azure", "terraform", "github-actions"]
 
       add_sonarcloud_secrets = true
       add_nuget_environment  = true
