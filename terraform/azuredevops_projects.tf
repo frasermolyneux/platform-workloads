@@ -79,19 +79,14 @@ resource "azuredevops_serviceendpoint_azurerm" "project" {
   azurerm_subscription_name = "sub-platform-management"
 }
 
-resource "azuredevops_pipeline_authorization" "project" {
-  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
-
-  project_id  = azuredevops_project.project[each.key].id
-  resource_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
-
-  type = "endpoint"
-}
-
-moved {
-  from = azuredevops_variable_group.project
-  to   = azuredevops_variable_group.nuget
-}
+//resource "azuredevops_pipeline_authorization" "project" {
+//  for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
+//
+//  project_id  = azuredevops_project.project[each.key].id
+//  resource_id = azuredevops_serviceendpoint_azurerm.project[each.key].id
+//
+//  type = "endpoint"
+//}
 
 resource "azuredevops_variable_group" "nuget" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_nuget_variable_group }
@@ -112,14 +107,14 @@ resource "azuredevops_variable_group" "nuget" {
   }
 }
 
-resource "azuredevops_pipeline_authorization" "nuget" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.nuget[each.value.devops_project].id
-
-  type = "variablegroup"
-}
+//resource "azuredevops_pipeline_authorization" "nuget" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+//
+//  project_id  = azuredevops_project.project[each.value.devops_project].id
+//  resource_id = azuredevops_variable_group.nuget[each.value.devops_project].id
+//
+//  type = "variablegroup"
+//}
 
 resource "azuredevops_variable_group" "sonarcloud" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_sonarcloud_variable_group }
@@ -140,11 +135,11 @@ resource "azuredevops_variable_group" "sonarcloud" {
   }
 }
 
-resource "azuredevops_pipeline_authorization" "sonarcloud" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.sonarcloud[each.value.devops_project].id
-
-  type = "variablegroup"
-}
+//resource "azuredevops_pipeline_authorization" "sonarcloud" {
+//  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+//
+//  project_id  = azuredevops_project.project[each.value.devops_project].id
+//  resource_id = azuredevops_variable_group.sonarcloud[each.value.devops_project].id
+//
+//  type = "variablegroup"
+//}
