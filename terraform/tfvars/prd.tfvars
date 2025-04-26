@@ -411,6 +411,50 @@ workloads = [
     ]
   },
   {
+    name = "portal-common-messaging"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; common messaging abstractions via service bus. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
     name = "portal-event-abstractions"
     github = {
       description = "Part of XtremeIdiots Portal solution; event abstractions for the service. Deployed using Terraform and GitHub Actions."
