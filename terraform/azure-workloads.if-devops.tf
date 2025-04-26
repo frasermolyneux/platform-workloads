@@ -70,7 +70,7 @@ resource "azuredevops_variable_group" "workload" {
   name        = each.key
   description = "Managed by frasermolyneux/platform-workloads"
 
-  allow_access = false
+  allow_access = true
 
   variable {
     name  = "AZURE_CLIENT_ID"
