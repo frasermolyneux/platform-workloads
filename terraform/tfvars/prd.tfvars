@@ -411,10 +411,110 @@ workloads = [
     ]
   },
   {
+    name = "portal-event-abstractions"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; event abstractions for the service. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+  },
+  {
     name = "portal-event-ingest"
     github = {
-      description = "Part of XtremeIdiots Portal solution; event ingest and processing into the service. Deployed using Terraform and GitHub Actions."
+      description = "Part of XtremeIdiots Portal solution; event ingest into the service. Deployed using Terraform and GitHub Actions."
       topics      = ["azure", "terraform", "github-actions", "api-management-api", "app-insights", "service-bus", "function-app", "key-vault", "app-registration"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
+    name = "portal-event-processor"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; event processing into the service. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "api-management-api", "app-insights", "service-bus", "function-app", "key-vault", "app-registration"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-visualstudio-enterprise"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                    = "Production"
+        subscription            = "sub-xi-portal-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
+    name = "portal-environments"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; environment configuration and management. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
 
       add_sonarcloud_secrets = true
       add_nuget_environment  = true
