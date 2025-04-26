@@ -26,14 +26,14 @@ resource "azuredevops_check_exclusive_lock" "workload_environment" {
   timeout = 43200
 }
 
-//resource "azuredevops_pipeline_authorization" "workload_environment" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-//
-//  project_id  = azuredevops_project.project[each.value.devops_project].id
-//  resource_id = azuredevops_environment.workload[each.key].id
-//
-//  type = "environment"
-//}
+resource "azuredevops_pipeline_authorization" "workload_environment" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+
+  project_id  = azuredevops_project.project[each.value.devops_project].id
+  resource_id = azuredevops_environment.workload[each.key].id
+
+  type = "environment"
+}
 
 resource "azuredevops_serviceendpoint_azurerm" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
@@ -54,14 +54,14 @@ resource "azuredevops_serviceendpoint_azurerm" "workload" {
   azurerm_subscription_name = var.subscriptions[each.value.subscription].name
 }
 
-//resource "azuredevops_pipeline_authorization" "workload_auth_to_serviceendpoint" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-//
-//  project_id  = azuredevops_project.project[each.value.devops_project].id
-//  resource_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
-//
-//  type = "endpoint"
-//}
+resource "azuredevops_pipeline_authorization" "workload_auth_to_serviceendpoint" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+
+  project_id  = azuredevops_project.project[each.value.devops_project].id
+  resource_id = azuredevops_serviceendpoint_azurerm.workload[each.key].id
+
+  type = "endpoint"
+}
 
 resource "azuredevops_variable_group" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
@@ -108,11 +108,11 @@ resource "azuredevops_variable_group" "workload" {
   }
 }
 
-//resource "azuredevops_pipeline_authorization" "workload_auth_to_variable_group" {
-//  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-//
-//  project_id  = azuredevops_project.project[each.value.devops_project].id
-//  resource_id = azuredevops_variable_group.workload[each.key].id
-//
-//  type = "variablegroup"
-//}
+resource "azuredevops_pipeline_authorization" "workload_auth_to_variable_group" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
+
+  project_id  = azuredevops_project.project[each.value.devops_project].id
+  resource_id = azuredevops_variable_group.workload[each.key].id
+
+  type = "variablegroup"
+}
