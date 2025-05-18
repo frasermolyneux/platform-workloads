@@ -1148,4 +1148,40 @@ workloads = [
       }
     ]
   },
+  {
+    name = "health-molyneux-me"
+    github = {
+      description = "Health tracking app"
+      topics      = ["azure", "static-website", "github-actions"]
+
+      add_sonarcloud_secrets = true
+
+      visibility = "private"
+    }
+    environments = [
+      {
+        name                    = "Development"
+        subscription            = "sub-molyneux-me-dev"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-molyneux-me-dev"
+          }
+        ]
+        }, {
+        name                    = "Production"
+        subscription            = "sub-molyneux-me-prd"
+        connect_to_github       = true
+        configure_for_terraform = true
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-molyneux-me-prd"
+          }
+        ]
+      }
+    ]
+  },
 ]
