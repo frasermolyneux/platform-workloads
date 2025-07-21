@@ -1149,10 +1149,10 @@ workloads = [
     ]
   },
   {
-    name = "health-molyneux-me"
+    name = "skilling-molyneux-me"
     github = {
-      description = "Health tracking app"
-      topics      = ["azure", "static-website", "github-actions"]
+      description = "Skilling Graph App"
+      topics      = ["azure", "asp-net", "github-actions"]
 
       add_sonarcloud_secrets = true
 
