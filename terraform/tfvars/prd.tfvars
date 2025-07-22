@@ -1156,7 +1156,7 @@ workloads = [
 
       add_sonarcloud_secrets = true
 
-      visibility = "private"
+      visibility = "public"
     }
     environments = [
       {
