@@ -1163,7 +1163,7 @@ workloads = [
         name                    = "Development"
         subscription            = "sub-molyneux-me-dev"
         connect_to_github       = true
-        configure_for_terraform = true
+        configure_for_terraform = false
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
@@ -1174,7 +1174,7 @@ workloads = [
         name                    = "Production"
         subscription            = "sub-molyneux-me-prd"
         connect_to_github       = true
-        configure_for_terraform = true
+        configure_for_terraform = false
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
