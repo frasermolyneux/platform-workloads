@@ -1170,7 +1170,11 @@ workloads = [
             scope            = "sub-molyneux-me-dev"
           }
         ]
-        }, {
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
         name                    = "Production"
         subscription            = "sub-molyneux-me-prd"
         connect_to_github       = true
@@ -1180,6 +1184,9 @@ workloads = [
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
             scope            = "sub-molyneux-me-prd"
           }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
         ]
       }
     ]
