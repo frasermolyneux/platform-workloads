@@ -7,6 +7,13 @@ resource "azuread_application_federated_identity_credential" "devops_workload" {
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
   subject        = "sc://frasermolyneux/${azuredevops_project.project[each.value.devops_project].name}/${azuread_application.workload[each.key].display_name}"
+
+  # Ensure destroy ordering: federated credential must be deleted before the
+  # azuredevops_serviceendpoint_azurerm resource, otherwise the API returns an error
+  # "Cannot delete this service connection while federated credentials...".
+  depends_on = [
+    azuredevops_serviceendpoint_azurerm.workload[each.key]
+  ]
 }
 
 resource "azuredevops_environment" "workload" {

@@ -58,6 +58,14 @@ resource "azuread_application_federated_identity_credential" "project" {
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
   subject        = "sc://frasermolyneux/${azuredevops_project.project[each.key].name}/${azuread_application.project[each.key].display_name}"
+
+  # Explicitly depend on the service endpoint so that on destroy the federated credential
+  # is removed BEFORE the service endpoint is deleted. Azure DevOps blocks deletion of
+  # the service connection while a federated credential for the application still exists.
+  # (Destroy order is the reverse of create order.)
+  depends_on = [
+    azuredevops_serviceendpoint_azurerm.project[each.key]
+  ]
 }
 
 resource "azuredevops_serviceendpoint_azurerm" "project" {
