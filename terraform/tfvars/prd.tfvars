@@ -72,10 +72,10 @@ subscriptions = {
 
 azuredevops_projects = [
   {
-    name        = "Personal-Public"
-    description = "Personal, but publicly visible projects"
+    name        = "Molyneux.IO"
+    description = "Personal projects generally deployed to the Molyneux.IO platform."
 
-    visibility = "public"
+    visibility = "private"
 
     version_control    = "Git"
     work_item_template = "Agile"
@@ -92,10 +92,10 @@ azuredevops_projects = [
     }
   },
   {
-    name        = "XtremeIdiots-Public"
-    description = "XtremeIdiots Public Projects"
+    name        = "XtremeIdiots"
+    description = "XtremeIdiots projects generally deployed to the Molyneux.IO platform or XtremeIdiots hosted."
 
-    visibility = "public"
+    visibility = "private"
 
     version_control    = "Git"
     work_item_template = "Agile"
@@ -126,7 +126,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-platform-management"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Contributor"]
@@ -181,7 +181,7 @@ workloads = [
       {
         name           = "Development"
         subscription   = "sub-visualstudio-enterprise"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set Key Vault RBAC role assignments
@@ -195,7 +195,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-platform-strategic"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set Key Vault RBAC role assignments
@@ -219,7 +219,7 @@ workloads = [
       {
         name           = "Development"
         subscription   = "sub-visualstudio-enterprise"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Contributor"]
@@ -230,7 +230,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-platform-connectivity"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Contributor"]
@@ -252,7 +252,7 @@ workloads = [
       {
         name                    = "Development"
         subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -276,7 +276,7 @@ workloads = [
       {
         name                    = "Production"
         subscription            = "sub-platform-management"
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -352,7 +352,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-platform-strategic"
-        devops_project = "Personal-Public"
+        devops_project = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Reader"] // Reader on the subscription only to allow Azure Login; no other permissions required on a subscription level
@@ -789,7 +789,7 @@ workloads = [
       {
         name                    = "Development"
         subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "XtremeIdiots-Public"
+        devops_project          = "XtremeIdiots"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -805,7 +805,7 @@ workloads = [
       {
         name                    = "Production"
         subscription            = "sub-xi-portal-prd"
-        devops_project          = "XtremeIdiots-Public"
+        devops_project          = "XtremeIdiots"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -847,7 +847,7 @@ workloads = [
       {
         name           = "Development"
         subscription   = "sub-visualstudio-enterprise"
-        devops_project = "XtremeIdiots-Public"
+        devops_project = "XtremeIdiots"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
@@ -862,7 +862,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-xi-portal-prd"
-        devops_project = "XtremeIdiots-Public"
+        devops_project = "XtremeIdiots"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
@@ -902,7 +902,7 @@ workloads = [
       {
         name           = "Production"
         subscription   = "sub-xi-demomanager-prd"
-        devops_project = "XtremeIdiots-Public"
+        devops_project = "XtremeIdiots"
         role_assignments = [
           {
             role_definitions = ["Owner"] // Owner is required to be able to set RBAC role assignments
@@ -926,7 +926,7 @@ workloads = [
       {
         name                    = "Development"
         subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -942,7 +942,7 @@ workloads = [
       {
         name                    = "Production"
         subscription            = "sub-fm-geolocation-prd"
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         connect_to_github       = true
         configure_for_terraform = true
         role_assignments = [
@@ -973,7 +973,7 @@ workloads = [
       {
         name                       = "Development"
         subscription               = "sub-visualstudio-enterprise"
-        devops_project             = "Personal-Public"
+        devops_project             = "Molyneux.IO"
         add_deploy_script_identity = true
         connect_to_github          = true
         configure_for_terraform    = true
@@ -990,7 +990,7 @@ workloads = [
       {
         name                       = "Production"
         subscription               = "sub-fm-geolocation-prd"
-        devops_project             = "Personal-Public"
+        devops_project             = "Molyneux.IO"
         add_deploy_script_identity = true
         connect_to_github          = true
         configure_for_terraform    = true
@@ -1023,7 +1023,7 @@ workloads = [
         name                    = "Development"
         subscription            = "sub-visualstudio-enterprise"
         configure_for_terraform = true
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -1038,7 +1038,7 @@ workloads = [
         name                    = "Production"
         subscription            = "sub-talkwithtiles-prd"
         configure_for_terraform = true
-        devops_project          = "Personal-Public"
+        devops_project          = "Molyneux.IO"
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
