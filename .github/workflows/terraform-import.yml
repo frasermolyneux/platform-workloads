@@ -1,0 +1,51 @@
+# Workflow to manually import an existing resource into the Terraform state
+
+name: Terraform Import
+
+on:
+  workflow_dispatch:
+    inputs:
+      import-address:
+        description: "Terraform address of resource (e.g. azurerm_resource_group.rg or module.mod.azurerm_key_vault.kv)"
+        required: true
+      import-id:
+        description: "Cloud provider resource ID (e.g. full Azure resource ID)"
+        required: true
+      terraform-additional-args:
+        description: "Extra arguments to pass to terraform import (e.g. -lock-timeout=5m)"
+        required: false
+        default: ""
+
+permissions:
+  id-token: write
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}
+
+jobs:
+  terraform-import-prd:
+    name: Import Resource (Production)
+    runs-on: ubuntu-latest
+    environment: Production
+    concurrency:
+      group: ${{ github.repository }}-prd
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Run terraform-import action
+        uses: frasermolyneux/actions/terraform-import@main
+        with:
+          terraform-folder: "terraform"
+          terraform-var-file: "tfvars/prd.tfvars"
+          terraform-backend-file: "backends/prd.backend.hcl"
+          import-address: ${{ inputs.import-address }}
+          import-id: ${{ inputs.import-id }}
+          terraform-additional-args: ${{ inputs.terraform-additional-args }}
+          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+        env:
+          AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
