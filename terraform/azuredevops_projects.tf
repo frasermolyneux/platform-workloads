@@ -64,7 +64,9 @@ resource "azuread_application_federated_identity_credential" "project" {
   # the service connection while a federated credential for the application still exists.
   # (Destroy order is the reverse of create order.)
   depends_on = [
-    azuredevops_serviceendpoint_azurerm.project[each.key]
+    # Depend on all service endpoint instances; ensures they are created first and
+    # (more importantly) destroyed after these credentials.
+    azuredevops_serviceendpoint_azurerm.project
   ]
 }
 

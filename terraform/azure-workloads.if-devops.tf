@@ -12,7 +12,7 @@ resource "azuread_application_federated_identity_credential" "devops_workload" {
   # azuredevops_serviceendpoint_azurerm resource, otherwise the API returns an error
   # "Cannot delete this service connection while federated credentials...".
   depends_on = [
-    azuredevops_serviceendpoint_azurerm.workload[each.key]
+    azuredevops_serviceendpoint_azurerm.workload
   ]
 }
 
