@@ -57,7 +57,9 @@ resource "azuread_application_federated_identity_credential" "project" {
   description    = "Azure DevOps"
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://vstoken.dev.azure.com/af603ba1-963b-4eea-962e-9f543ae9813d"
-  subject        = "sc://frasermolyneux/${azuredevops_project.project[each.key].name}/${azuread_application.project[each.key].display_name}"
+  # Subject must follow pattern: sc://{organization}/{projectId}/{serviceConnectionId}
+  # Using project GUID (id) and the service connection id ensures Azure DevOps issued token matches.
+  subject = "sc://frasermolyneux/${azuredevops_project.project[each.key].id}/${azuredevops_serviceendpoint_azurerm.project[each.key].id}"
 
   # Explicitly depend on the service endpoint so that on destroy the federated credential
   # is removed BEFORE the service endpoint is deleted. Azure DevOps blocks deletion of
