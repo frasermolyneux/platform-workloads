@@ -17,18 +17,6 @@ resource "azuredevops_project" "project" {
     "artifacts"    = each.value.features.artifacts
   }
 }
-resource "azuredevops_serviceendpoint_github" "github_connection_default" {
-  for_each = { for each in var.azuredevops_projects : each.name => each }
-
-  project_id            = azuredevops_project.project[each.key].id
-  service_endpoint_name = azuredevops_project.project[each.key].name
-
-  description = "Managed by platform-workloads"
-
-  auth_personal {
-    personal_access_token = var.github_service_connection_pat
-  }
-}
 
 resource "azuredevops_serviceendpoint_github" "github_connection_pipelines" {
   for_each = { for each in var.azuredevops_projects : each.name => each }
