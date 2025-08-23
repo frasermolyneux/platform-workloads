@@ -28,10 +28,10 @@ jobs:
           terraform-folder: "terraform"
           terraform-var-file: "tfvars/prd.tfvars"
           terraform-backend-file: "backends/prd.backend.hcl"
+          terraform-additional-args: "-var github_service_connection_pat=${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}"
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
         env:
           AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
-          AZDO_GITHUB_SERVICE_CONNECTION_PAT: ${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}
           GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}

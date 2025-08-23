@@ -42,7 +42,7 @@ jobs:
           terraform-backend-file: "backends/prd.backend.hcl"
           import-address: ${{ inputs.import-address }}
           import-id: ${{ inputs.import-id }}
-          terraform-additional-args: ${{ inputs.terraform-additional-args }}
+          terraform-additional-args: "-var github_service_connection_pat=${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }} ${{ inputs.terraform-additional-args }}"
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}

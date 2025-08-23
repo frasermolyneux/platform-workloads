@@ -96,3 +96,9 @@ variable "environment_map" {
     Production  = "prd"
   }
 }
+
+variable "github_service_connection_pat" {
+  description = "Personal access token used for Azure DevOps GitHub service connections"
+  type        = string
+  sensitive   = true
+}

@@ -24,6 +24,10 @@ resource "azuredevops_serviceendpoint_github" "github_connection_default" {
   service_endpoint_name = azuredevops_project.project[each.key].name
 
   description = "Managed by platform-workloads"
+
+  auth_personal {
+    personal_access_token = var.github_service_connection_pat
+  }
 }
 
 resource "azuredevops_serviceendpoint_github" "github_connection_pipelines" {
@@ -33,6 +37,10 @@ resource "azuredevops_serviceendpoint_github" "github_connection_pipelines" {
   service_endpoint_name = "github.com_frasermolyneux"
 
   description = "Managed by platform-workloads"
+
+  auth_personal {
+    personal_access_token = var.github_service_connection_pat
+  }
 }
 
 resource "azuread_application" "project" {
