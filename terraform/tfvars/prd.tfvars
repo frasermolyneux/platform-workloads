@@ -573,7 +573,7 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
             scope            = "sub-visualstudio-enterprise"
           }
         ]
@@ -588,7 +588,7 @@ workloads = [
         configure_for_terraform = true
         role_assignments = [
           {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "App Configuration Data Owner"] // Owner is required to be able to set RBAC role assignments
             scope            = "sub-xi-portal-prd"
           }
         ]
