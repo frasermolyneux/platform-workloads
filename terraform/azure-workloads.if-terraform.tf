@@ -58,3 +58,22 @@ resource "azurerm_role_assignment" "workload_storage_reader" {
   role_definition_name = "Reader"
   principal_id         = azuread_service_principal.workload[each.key].object_id
 }
+
+resource "azurerm_role_assignment" "workload_terraform_state_reader" {
+  for_each = {
+    for pair in flatten([
+      for environment in local.workload_environments : [
+        for dependency in environment.requires_terraform_state_access : {
+          source_key = environment.key
+          target_key = format("%s-%s", dependency, environment.environment_name)
+        }
+      ]
+    ]) :
+    format("%s->%s", pair.source_key, pair.target_key) => pair
+    if contains(keys(azurerm_storage_account.workload), pair.target_key)
+  }
+
+  scope                = azurerm_storage_account.workload[each.value.target_key].id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azuread_service_principal.workload[each.value.source_key].object_id
+}

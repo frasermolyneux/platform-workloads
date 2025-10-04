@@ -365,196 +365,6 @@ workloads = [
 
   // XtremeIdiots Portal Workloads
   {
-    name = "portal-core"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; creates the application platform. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "api-management", "app-insights", "service-bus", "app-service-plan"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = false
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator",
-          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-portal-prd"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator",
-          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
-        ]
-      }
-    ]
-  },
-  {
-    name = "portal-common-messaging"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; common messaging abstractions via service bus. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-portal-prd"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      }
-    ]
-  },
-  {
-    name = "portal-event-abstractions"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; event abstractions for the service. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-  },
-  {
-    name = "portal-event-ingest"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; event ingest into the service. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions", "api-management-api", "app-insights", "service-bus", "function-app", "key-vault", "app-registration"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-portal-prd"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      }
-    ]
-  },
-  {
-    name = "portal-event-processor"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; event processing into the service. Deployed using Terraform and GitHub Actions."
-      topics      = ["azure", "terraform", "github-actions"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      },
-      {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-portal-prd"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator"
-        ]
-      }
-    ]
-  },
-  {
     name = "portal-environments"
     github = {
       description = "Part of XtremeIdiots Portal solution; environment configuration and management. Deployed using Terraform and GitHub Actions."
@@ -599,6 +409,204 @@ workloads = [
     ]
   },
   {
+    name = "portal-core"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; creates the application platform. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "api-management", "app-insights", "service-bus", "app-service-plan"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = false
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator",
+          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
+        ]
+      },
+      {
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator",
+          "Directory Writers" // Required to be able to create SQL AAD Admin Groups
+        ]
+      }
+    ]
+  },
+  {
+    name = "portal-common-messaging"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; common messaging abstractions via service bus. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
+    name = "portal-event-abstractions"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; event abstractions for the service. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+  },
+  {
+    name = "portal-event-ingest"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; event ingest into the service. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions", "api-management-api", "app-insights", "service-bus", "function-app", "key-vault", "app-registration"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
+    name = "portal-event-processor"
+    github = {
+      description = "Part of XtremeIdiots Portal solution; event processing into the service. Deployed using Terraform and GitHub Actions."
+      topics      = ["azure", "terraform", "github-actions"]
+
+      add_sonarcloud_secrets = true
+      add_nuget_environment  = true
+
+      visibility = "public"
+    }
+    environments = [
+      {
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-visualstudio-enterprise"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      },
+      {
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
+        role_assignments = [
+          {
+            role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
+            scope            = "sub-xi-portal-prd"
+          }
+        ]
+        directory_roles = [
+          "Cloud application administrator"
+        ]
+      }
+    ]
+  },
+  {
     name = "portal-repository"
     github = {
       description = "Part of XtremeIdiots Portal solution; player and server data storage. Deployed using Terraform and GitHub Actions."
@@ -611,10 +619,11 @@ workloads = [
     }
     environments = [
       {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -627,10 +636,11 @@ workloads = [
         ]
       },
       {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -656,10 +666,11 @@ workloads = [
     }
     environments = [
       {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -671,10 +682,11 @@ workloads = [
         ]
       },
       {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -743,10 +755,11 @@ workloads = [
     }
     environments = [
       {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -758,10 +771,11 @@ workloads = [
         ]
       },
       {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -787,11 +801,12 @@ workloads = [
     }
     environments = [
       {
-        name                    = "Development"
-        subscription            = "sub-visualstudio-enterprise"
-        devops_project          = "XtremeIdiots"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Development"
+        subscription                    = "sub-visualstudio-enterprise"
+        devops_project                  = "XtremeIdiots"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments
@@ -803,11 +818,12 @@ workloads = [
         ]
       },
       {
-        name                    = "Production"
-        subscription            = "sub-xi-portal-prd"
-        devops_project          = "XtremeIdiots"
-        connect_to_github       = true
-        configure_for_terraform = true
+        name                            = "Production"
+        subscription                    = "sub-xi-portal-prd"
+        devops_project                  = "XtremeIdiots"
+        connect_to_github               = true
+        configure_for_terraform         = true
+        requires_terraform_state_access = ["portal-core", "portal-environments"]
         role_assignments = [
           {
             role_definitions = ["Owner", "Key Vault Secrets Officer", "Storage Blob Data Contributor"] // Owner is required to be able to set RBAC role assignments

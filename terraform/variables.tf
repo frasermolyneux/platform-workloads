@@ -71,11 +71,12 @@ variable "workloads" {
       name         = string
       subscription = string // Index name from the subscriptions variable
 
-      connect_to_github            = optional(bool, false)  // If true, the SPN for the environment will be updated with a federated credential for the repository and added to the environment for use in GitHub Actions
-      add_deploy_script_identity   = optional(bool, false)  // If true, a deploy script user assigned identity will be created and added to the environment for use in ARM deployments. Will be given same permissions as deploy principal.
-      configure_for_terraform      = optional(bool, false)  // If true, a resource group, storage account and permissions will be set per environment for the Terraform state file
-      devops_project               = optional(string, null) // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
-      devops_create_variable_group = optional(bool, false)  // If true, a variable group will be created in the Azure DevOps project with a backing key vault
+      connect_to_github               = optional(bool, false)      // If true, the SPN for the environment will be updated with a federated credential for the repository and added to the environment for use in GitHub Actions
+      add_deploy_script_identity      = optional(bool, false)      // If true, a deploy script user assigned identity will be created and added to the environment for use in ARM deployments. Will be given same permissions as deploy principal.
+      configure_for_terraform         = optional(bool, false)      // If true, a resource group, storage account and permissions will be set per environment for the Terraform state file
+      requires_terraform_state_access = optional(list(string), []) // Names of other workloads whose Terraform state should be readable for the same environment
+      devops_project                  = optional(string, null)     // If set, the SPN for the environment will have a credential added and the service connection created in the Azure DevOps project
+      devops_create_variable_group    = optional(bool, false)      // If true, a variable group will be created in the Azure DevOps project with a backing key vault
 
       role_assignments = optional(list(object({
         scope            = string

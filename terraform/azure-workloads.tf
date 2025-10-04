@@ -23,20 +23,21 @@ locals {
   workload_environments = flatten([
     for environment_name, workload in var.workloads : [
       for environment in workload.environments : {
-        key                          = format("%s-%s", workload.name, environment.name)
-        workload_name                = workload.name
-        create_dev_center_project    = workload.create_dev_center_project
-        environment_name             = environment.name
-        environment_tag              = var.environment_map[environment.name]
-        connect_to_github            = environment.connect_to_github
-        add_deploy_script_identity   = environment.add_deploy_script_identity
-        configure_for_terraform      = environment.configure_for_terraform
-        subscription                 = environment.subscription
-        connect_to_devops            = environment.devops_project != null ? true : false
-        devops_project               = environment.devops_project
-        devops_create_variable_group = environment.devops_create_variable_group || environment.devops_project != null && environment.add_deploy_script_identity // If we're adding a deploy script identity, we need a variable group
-        role_assignments             = environment.role_assignments
-        directory_roles              = environment.directory_roles
+        key                             = format("%s-%s", workload.name, environment.name)
+        workload_name                   = workload.name
+        create_dev_center_project       = workload.create_dev_center_project
+        environment_name                = environment.name
+        environment_tag                 = var.environment_map[environment.name]
+        connect_to_github               = environment.connect_to_github
+        add_deploy_script_identity      = environment.add_deploy_script_identity
+        configure_for_terraform         = environment.configure_for_terraform
+        subscription                    = environment.subscription
+        connect_to_devops               = environment.devops_project != null ? true : false
+        devops_project                  = environment.devops_project
+        devops_create_variable_group    = environment.devops_create_variable_group || environment.devops_project != null && environment.add_deploy_script_identity // If we're adding a deploy script identity, we need a variable group
+        role_assignments                = environment.role_assignments
+        directory_roles                 = environment.directory_roles
+        requires_terraform_state_access = environment.requires_terraform_state_access
       }
     ]
   ])
