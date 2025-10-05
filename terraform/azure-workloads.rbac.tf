@@ -58,9 +58,20 @@ data "azurerm_role_definition" "workload_rbac_allowed" {
 }
 
 locals {
+  role_definition_guid_pattern = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
+
   workload_rbac_allowed_role_guids = {
     for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
-    key => element(reverse(split(definition.id, "/")), 0)
+    key => lower(
+      element(
+        compact([
+          try(element(regexall(local.role_definition_guid_pattern, definition.role_definition_id), 0), null),
+          try(element(regexall(local.role_definition_guid_pattern, definition.id), 0), null),
+          try(element(reverse(split(trim(definition.id, "/"), "/")), 0), null)
+        ]),
+        0
+      )
+    )
   }
 }
 
