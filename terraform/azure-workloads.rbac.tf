@@ -64,11 +64,12 @@ locals {
     for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
     key => lower(
       element(
-        compact([
-          try(element(regexall(local.role_definition_guid_pattern, definition.role_definition_id), 0), null),
-          try(element(regexall(local.role_definition_guid_pattern, definition.id), 0), null),
-          try(element(reverse(split(trim(definition.id, "/"), "/")), 0), null)
-        ]),
+        distinct(
+          compact([
+            try(definition.role_definition_id, null),
+            try(element(regexall(local.role_definition_guid_pattern, definition.id), 0), null)
+          ])
+        ),
         0
       )
     )
