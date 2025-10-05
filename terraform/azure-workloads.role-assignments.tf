@@ -17,7 +17,7 @@ locals {
 resource "azurerm_role_assignment" "workload" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each }
 
-  scope                = data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
@@ -25,7 +25,7 @@ resource "azurerm_role_assignment" "workload" {
 resource "azurerm_role_assignment" "workload_deploy_script" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each if each.add_deploy_script_identity }
 
-  scope                = data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }
