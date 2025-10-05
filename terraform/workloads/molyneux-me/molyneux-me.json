@@ -1,0 +1,46 @@
+{
+    "name": "molyneux-me",
+    "github": {
+        "description": "A replacement for my WordPress website. Azure static website using Jekyll and GitHub Actions for deployment.",
+        "topics": [
+            "azure",
+            "static-website",
+            "jekyll",
+            "github-actions"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-molyneux-me-dev",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "scope": "sub-molyneux-me-dev"
+                }
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-molyneux-me-prd",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "scope": "sub-molyneux-me-prd"
+                }
+            ]
+        }
+    ]
+}
