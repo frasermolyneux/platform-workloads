@@ -114,28 +114,6 @@ azuredevops_projects = [
 ]
 
 workloads = [
-  // Bicep Modules Workload
-  {
-    name = "bicep-modules"
-    github = {
-      description = "Bicep module repository; this contains Bicep modules that are published to an ACR for use in many projects. Bicep modules are pushed to ACR with an Azure DevOps pipeline."
-      topics      = ["azure", "bicep", "azure-devops-pipelines"]
-      visibility  = "public"
-    }
-    environments = [
-      {
-        name           = "Production"
-        subscription   = "sub-platform-strategic"
-        devops_project = "Molyneux.IO"
-        role_assignments = [
-          {
-            role_definitions = ["Reader"] // Reader on the subscription only to allow Azure Login; no other permissions required on a subscription level
-            scope            = "sub-platform-strategic"
-          }
-        ]
-      }
-    ]
-  },
   // Talk With Tiles
   {
     name = "talkwithtiles"
@@ -224,20 +202,6 @@ workloads = [
         ]
       }
     ]
-  },
-
-  // Misc Libraries
-  {
-    name = "api-client-abstractions"
-    github = {
-      description = "An abstractions library containing common API client functionality for .NET 7. Contains common interfaces, extensions and models for API clients use in my projects. Build and deployed to NuGet.org using GitHub Actions."
-      topics      = ["nuget", "github-actions", "api-client", "c-sharp", "dot-net-7"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
   },
 
   // Molyneux.Me
