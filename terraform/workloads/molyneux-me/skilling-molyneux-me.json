@@ -1,0 +1,51 @@
+{
+    "name": "skilling-molyneux-me",
+    "github": {
+        "description": "Skilling Graph App",
+        "topics": [
+            "azure",
+            "asp-net",
+            "github-actions"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-molyneux-me-dev",
+            "connect_to_github": true,
+            "configure_for_terraform": false,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "scope": "sub-molyneux-me-dev"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-molyneux-me-prd",
+            "connect_to_github": true,
+            "configure_for_terraform": false,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "scope": "sub-molyneux-me-prd"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}

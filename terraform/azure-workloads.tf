@@ -1,6 +1,6 @@
 // Assumption is that all workloads will have a GitHub repository
 resource "github_repository" "workload" {
-  for_each = { for each in var.workloads : each.name => each }
+  for_each = { for workload in local.all_workloads : workload.name => workload }
 
   name        = each.value.name
   description = each.value.github.description
@@ -8,10 +8,10 @@ resource "github_repository" "workload" {
 
   visibility = each.value.github.visibility
 
-  has_downloads = each.value.github.has_downloads
-  has_issues    = each.value.github.has_issues
-  has_projects  = each.value.github.has_projects
-  has_wiki      = each.value.github.has_wiki
+  has_downloads = try(each.value.github.has_downloads, false)
+  has_issues    = try(each.value.github.has_issues, false)
+  has_projects  = try(each.value.github.has_projects, false)
+  has_wiki      = try(each.value.github.has_wiki, false)
 
   vulnerability_alerts = true
 
@@ -21,23 +21,23 @@ resource "github_repository" "workload" {
 
 locals {
   workload_environments = flatten([
-    for environment_name, workload in var.workloads : [
-      for environment in workload.environments : {
+    for workload in local.all_workloads : [
+      for environment in try(workload.environments, []) : {
         key                             = format("%s-%s", workload.name, environment.name)
         workload_name                   = workload.name
-        create_dev_center_project       = workload.create_dev_center_project
+        create_dev_center_project       = try(workload.create_dev_center_project, false)
         environment_name                = environment.name
-        environment_tag                 = var.environment_map[environment.name]
-        connect_to_github               = environment.connect_to_github
-        add_deploy_script_identity      = environment.add_deploy_script_identity
-        configure_for_terraform         = environment.configure_for_terraform
+        environment_tag                 = lookup(var.environment_map, environment.name, lower(environment.name))
+        connect_to_github               = try(environment.connect_to_github, false)
+        add_deploy_script_identity      = try(environment.add_deploy_script_identity, false)
+        configure_for_terraform         = try(environment.configure_for_terraform, false)
         subscription                    = environment.subscription
-        connect_to_devops               = environment.devops_project != null ? true : false
-        devops_project                  = environment.devops_project
-        devops_create_variable_group    = environment.devops_create_variable_group || environment.devops_project != null && environment.add_deploy_script_identity // If we're adding a deploy script identity, we need a variable group
-        role_assignments                = environment.role_assignments
-        directory_roles                 = environment.directory_roles
-        requires_terraform_state_access = environment.requires_terraform_state_access
+        connect_to_devops               = try(environment.devops_project, null) != null
+        devops_project                  = try(environment.devops_project, null)
+        devops_create_variable_group    = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
+        role_assignments                = try(environment.role_assignments, [])
+        directory_roles                 = try(environment.directory_roles, [])
+        requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
       }
     ]
   ])
@@ -73,14 +73,14 @@ resource "azuread_service_principal" "workload" {
 }
 
 resource "github_repository_environment" "nuget" {
-  for_each = { for each in var.workloads : each.name => each if each.github.add_nuget_environment }
+  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_nuget_environment, false) }
 
   environment = "NuGet"
   repository  = github_repository.workload[each.value.name].name
 }
 
 resource "github_actions_environment_secret" "nuget_api_key" {
-  for_each = { for each in var.workloads : each.name => each if each.github.add_nuget_environment }
+  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_nuget_environment, false) }
 
   repository      = github_repository.workload[each.value.name].name
   environment     = github_repository_environment.nuget[each.key].environment
@@ -89,7 +89,7 @@ resource "github_actions_environment_secret" "nuget_api_key" {
 }
 
 resource "github_actions_secret" "sonar_token" {
-  for_each = { for each in var.workloads : each.name => each if each.github.add_sonarcloud_secrets }
+  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_sonarcloud_secrets, false) }
 
   repository      = github_repository.workload[each.value.name].name
   secret_name     = "SONAR_TOKEN"
@@ -97,7 +97,7 @@ resource "github_actions_secret" "sonar_token" {
 }
 
 resource "github_dependabot_secret" "sonar_token" {
-  for_each = { for each in var.workloads : each.name => each if each.github.add_sonarcloud_secrets }
+  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_sonarcloud_secrets, false) }
 
   repository      = github_repository.workload[each.value.name].name
   secret_name     = "SONAR_TOKEN"

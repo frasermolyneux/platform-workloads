@@ -1,0 +1,30 @@
+{
+    "name": "demo-manager",
+    "github": {
+        "description": "Part of XtremeIdiots Portal solution; demo manager click-once desktop application. Deployed using Bicep and Azure DevOps pipelines.",
+        "topics": [
+            "desktop",
+            "click-once",
+            "bicep",
+            "storage",
+            "azure-devops-pipelines"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-xi-demomanager-prd",
+            "devops_project": "XtremeIdiots",
+            "role_assignments": [
+                {
+                    "scope": "sub-xi-demomanager-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                }
+            ]
+        }
+    ]
+}

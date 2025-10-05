@@ -1,0 +1,57 @@
+{
+    "name": "geo-location-environments",
+    "github": {
+        "description": "GeoLocation environment management including identities, app registrations and permissions. Deployed using Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "app-configuration",
+            "key-vault",
+            "app-registration"
+        ],
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "App Configuration Data Owner"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-fm-geolocation-prd",
+            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-fm-geolocation-prd",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "App Configuration Data Owner"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}

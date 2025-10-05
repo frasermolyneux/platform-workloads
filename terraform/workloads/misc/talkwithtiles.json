@@ -1,0 +1,61 @@
+{
+    "name": "talkwithtiles",
+    "github": {
+        "description": "The TalkWithTiles is a platform that allows users to play online games of Scrabble against each other. Deployed using Terraform and Azure DevOps.",
+        "topics": [
+            "azure",
+            "terraform",
+            "azue-devops-pipelines",
+            "key-vault",
+            "app-insights",
+            "app-service",
+            "api-management",
+            "api-management-api",
+            "sql-server",
+            "sql-database",
+            "log-analytics"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "configure_for_terraform": true,
+            "devops_project": "Molyneux.IO",
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ],
+                    "scope": "sub-visualstudio-enterprise"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-talkwithtiles-prd",
+            "configure_for_terraform": true,
+            "devops_project": "Molyneux.IO",
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ],
+                    "scope": "sub-talkwithtiles-prd"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}

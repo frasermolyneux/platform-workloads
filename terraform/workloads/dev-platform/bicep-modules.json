@@ -1,0 +1,27 @@
+{
+    "name": "bicep-modules",
+    "github": {
+        "description": "Bicep module repository; this contains Bicep modules that are published to an ACR for use in many projects. Bicep modules are pushed to ACR with an Azure DevOps pipeline.",
+        "topics": [
+            "azure",
+            "bicep",
+            "azure-devops-pipelines"
+        ],
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-strategic",
+            "devops_project": "Molyneux.IO",
+            "role_assignments": [
+                {
+                    "scope": "sub-platform-strategic",
+                    "role_definitions": [
+                        "Reader"
+                    ]
+                }
+            ]
+        }
+    ]
+}

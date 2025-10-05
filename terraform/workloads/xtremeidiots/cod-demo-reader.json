@@ -1,0 +1,15 @@
+{
+    "name": "cod-demo-reader",
+    "github": {
+        "description": "Part of XtremeIdiots Portal solution; library used for reading call of duty Huffman demos. Published to NuGet.org.",
+        "topics": [
+            "nuget",
+            "github-actions",
+            "invision-community",
+            "api-client"
+        ],
+        "add_sonarcloud_secrets": true,
+        "add_nuget_environment": true,
+        "visibility": "public"
+    }
+}

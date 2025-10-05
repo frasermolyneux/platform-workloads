@@ -1,0 +1,42 @@
+{
+    "name": "platform-connectivity",
+    "github": {
+        "description": "Platform strategic resources; (Front Door, DNS, etc.) for Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines.",
+        "topics": [
+            "azure",
+            "bicep",
+            "azure-devops-pipelines",
+            "dns-zones",
+            "front-door"
+        ],
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "devops_project": "Molyneux.IO",
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-connectivity",
+            "devops_project": "Molyneux.IO",
+            "role_assignments": [
+                {
+                    "scope": "sub-platform-connectivity",
+                    "role_definitions": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        }
+    ]
+}
