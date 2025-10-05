@@ -136,53 +136,6 @@ workloads = [
       }
     ]
   },
-
-  // XtremeIdiots Portal Workloads 
-  {
-    name = "xtremeidiots-portal"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; legacy repository containing the web app. Deployed using Bicep and Azure DevOps pipelines."
-      topics      = ["azure", "bicep", "azure-devops-pipelines", "key-vault", "app-insights", "app-service", "function-app"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name           = "Development"
-        subscription   = "sub-visualstudio-enterprise"
-        devops_project = "XtremeIdiots"
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-visualstudio-enterprise"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator",
-          "Directory Writers" // Required to be able to create SQL AAD groups
-        ]
-      },
-      {
-        name           = "Production"
-        subscription   = "sub-xi-portal-prd"
-        devops_project = "XtremeIdiots"
-        role_assignments = [
-          {
-            role_definitions = ["Owner", "Key Vault Secrets Officer"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-portal-prd"
-          }
-        ]
-        directory_roles = [
-          "Cloud application administrator",
-          "Directory Writers" // Required to be able to create SQL AAD groups
-        ]
-      }
-    ]
-  }
-
   // Geo Location
   {
     name = "geo-location-environments"
