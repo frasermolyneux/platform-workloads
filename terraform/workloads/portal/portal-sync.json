@@ -21,7 +21,10 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "requires_terraform_state_access": ["portal-core", "portal-environments"],
+            "requires_terraform_state_access": [
+                "portal-core",
+                "portal-environments"
+            ],
             "role_assignments": [
                 {
                     "scope": "sub-visualstudio-enterprise",
@@ -41,7 +44,10 @@
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "requires_terraform_state_access": ["portal-core", "portal-environments"],
+            "requires_terraform_state_access": [
+                "portal-core",
+                "portal-environments"
+            ],
             "role_assignments": [
                 {
                     "scope": "sub-xi-portal-prd",
