@@ -1,0 +1,15 @@
+{
+    "name": "invision-api-client",
+    "github": {
+        "description": "Part of XtremeIdiots Portal solution; Invision Community forums integration api client. Published to NuGet.org.",
+        "topics": [
+            "nuget",
+            "github-actions",
+            "invision-community",
+            "api-client"
+        ],
+        "add_sonarcloud_secrets": true,
+        "add_nuget_environment": true,
+        "visibility": "public"
+    }
+}

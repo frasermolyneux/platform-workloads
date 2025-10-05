@@ -139,18 +139,6 @@ workloads = [
 
   // XtremeIdiots Portal Workloads 
   {
-    name = "invision-api-client"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; Invision Community forums integration api client. Published to NuGet.org."
-      topics      = ["nuget", "github-actions", "invision-community", "api-client"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-  },
-  {
     name = "xtremeidiots-portal"
     github = {
       description = "Part of XtremeIdiots Portal solution; legacy repository containing the web app. Deployed using Bicep and Azure DevOps pipelines."
@@ -193,43 +181,7 @@ workloads = [
         ]
       }
     ]
-  },
-  {
-    name = "cod-demo-reader"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; library used for reading call of duty Huffman demos. Published to NuGet.org."
-      topics      = ["nuget", "github-actions", "invision-community", "api-client"]
-
-      add_sonarcloud_secrets = true
-      add_nuget_environment  = true
-
-      visibility = "public"
-    }
-  },
-  {
-    name = "demo-manager"
-    github = {
-      description = "Part of XtremeIdiots Portal solution; demo manager click-once desktop application. Deployed using Bicep and Azure DevOps pipelines."
-      topics      = ["desktop", "click-once", "bicep", "storage", "azure-devops-pipelines"]
-
-      add_sonarcloud_secrets = true
-
-      visibility = "public"
-    }
-    environments = [
-      {
-        name           = "Production"
-        subscription   = "sub-xi-demomanager-prd"
-        devops_project = "XtremeIdiots"
-        role_assignments = [
-          {
-            role_definitions = ["Owner"] // Owner is required to be able to set RBAC role assignments
-            scope            = "sub-xi-demomanager-prd"
-          }
-        ]
-      }
-    ]
-  },
+  }
 
   // Geo Location
   {
