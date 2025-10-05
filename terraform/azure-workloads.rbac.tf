@@ -72,10 +72,27 @@ resource "azurerm_role_assignment" "workload_rbac_administrator" {
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 
   condition_version = "2.0"
-  condition = format(
-    "(\n (\n  !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})\n )\n OR \n (\n  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {%s}\n )\n)\nAND\n(\n (\n  !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})\n )\n OR \n (\n  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {%s}\n )\n)",
-    join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]]),
-    join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])
+  condition = trimspace(<<EOT
+(
+  (
+    !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})
+  )
+  OR
+  (
+    @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])}}
+  )
+)
+AND
+(
+  (
+    !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})
+  )
+  OR
+  (
+    @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])}}
+  )
+)
+EOT
   )
 }
 
