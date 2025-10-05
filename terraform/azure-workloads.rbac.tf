@@ -39,6 +39,7 @@ locals {
         assignment_key           = format("%s-%s-%d", environment.key, replace(entry.scope, "/", "-"), entry_index)
         workload_environment_key = environment.key
         scope_id                 = try(data.azurerm_subscription.subscriptions[entry.scope].id, entry.scope)
+        principal_object_id      = azuread_service_principal.workload[environment.key].object_id
         allowed_role_keys = [
           for role_name in try(entry.allowed_roles, []) :
           format("%s|%s", entry.scope, role_name)
@@ -52,8 +53,14 @@ locals {
 data "azurerm_role_definition" "workload_rbac_allowed" {
   for_each = local.workload_rbac_allowed_role_map
 
-  name  = each.value.role_name
-  scope = try(data.azurerm_subscription.subscriptions[each.value.scope_name].id, each.value.scope_name)
+  name = each.value.role_name
+}
+
+locals {
+  workload_rbac_allowed_role_guids = {
+    for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
+    key => element(split("/", definition.role_definition_id), length(split("/", definition.role_definition_id)) - 1)
+  }
 }
 
 resource "azurerm_role_assignment" "workload_rbac_administrator" {
@@ -64,18 +71,28 @@ resource "azurerm_role_assignment" "workload_rbac_administrator" {
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 
   condition_version = "2.0"
-  condition = jsonencode({
-    AllOf = [
-      {
-        AnyOf = [
-          for role_key in each.value.allowed_role_keys : {
-            Field  = "Microsoft.Authorization/roleAssignments/roleDefinitionId"
-            Equals = data.azurerm_role_definition.workload_rbac_allowed[role_key].id
-          }
-        ]
-      }
-    ]
-  })
+  condition = trimspace(<<EOT
+(
+  (
+    !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})
+  )
+  OR
+  (
+    @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])}}
+  )
+)
+AND
+(
+  (
+    !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})
+  )
+  OR
+  (
+    @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {${join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])}}
+  )
+)
+EOT
+  )
 }
 
 output "workload_rbac_administrators" {
