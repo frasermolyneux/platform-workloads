@@ -41,7 +41,7 @@ resource "azapi_resource" "environment_type" {
 }
 
 resource "azapi_resource" "workload" {
-  for_each = { for each in var.workloads : each.name => each if each.create_dev_center_project }
+  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.create_dev_center_project, false) }
 
   type      = "Microsoft.DevCenter/projects@2025-02-01"
   parent_id = azurerm_resource_group.rg.id

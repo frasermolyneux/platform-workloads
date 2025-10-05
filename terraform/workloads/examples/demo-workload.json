@@ -1,0 +1,29 @@
+{
+    "name": "demo-json-workload",
+    "github": {
+        "description": "Example workload managed via JSON file. Safe to copy as a starting point for real workloads.",
+        "topics": [
+            "demo",
+            "terraform",
+            "json-workload"
+        ],
+        "visibility": "private"
+    },
+    "create_dev_center_project": false,
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-platform-management",
+                    "role_definitions": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        }
+    ]
+}
