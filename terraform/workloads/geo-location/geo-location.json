@@ -31,6 +31,12 @@
                         "Contributor",
                         "Key Vault Secrets Officer"
                     ]
+                },
+                {
+                    "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
+                    "role_definitions": [
+                        "AcrPull"
+                    ]
                 }
             ],
             "directory_roles": [
@@ -50,6 +56,18 @@
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer"
+                    ]
+                },
+                {
+                    "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
+                    "role_definitions": [
+                        "AcrPull"
+                    ]
+                },
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
                     ]
                 }
             ],

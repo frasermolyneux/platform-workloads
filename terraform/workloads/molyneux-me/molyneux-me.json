@@ -25,6 +25,13 @@
                     ],
                     "scope": "sub-molyneux-me-dev"
                 }
+            ,
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
+                    ]
+                }
             ]
         },
         {
@@ -39,6 +46,13 @@
                         "Key Vault Secrets Officer"
                     ],
                     "scope": "sub-molyneux-me-prd"
+                }
+            ,
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
+                    ]
                 }
             ]
         }

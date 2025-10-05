@@ -36,6 +36,13 @@
                         "Storage Blob Data Contributor"
                     ]
                 }
+            ,
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
+                    ]
+                }
             ],
             "rbac_administrator": [
                 {
@@ -67,6 +74,13 @@
                         "Contributor",
                         "Key Vault Secrets Officer",
                         "Storage Blob Data Contributor"
+                    ]
+                }
+            ,
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
                     ]
                 }
             ],
