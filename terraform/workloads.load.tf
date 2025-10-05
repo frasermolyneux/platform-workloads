@@ -10,5 +10,5 @@ locals {
     jsondecode(file("${path.module}/workloads/${file_path}"))
   ]
 
-  all_workloads = concat(var.workloads, local.workloads_from_files)
+  all_workloads = local.workloads_from_files
 }
