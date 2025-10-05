@@ -53,26 +53,13 @@ locals {
 data "azurerm_role_definition" "workload_rbac_allowed" {
   for_each = local.workload_rbac_allowed_role_map
 
-  name  = each.value.role_name
-  scope = try(data.azurerm_subscription.subscriptions[each.value.scope_name].id, each.value.scope_name)
+  name = each.value.role_name
 }
 
 locals {
-  role_definition_guid_pattern = "[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}"
-
   workload_rbac_allowed_role_guids = {
     for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
-    key => lower(
-      element(
-        distinct(
-          compact([
-            try(definition.role_definition_id, null),
-            try(element(regexall(local.role_definition_guid_pattern, definition.id), 0), null)
-          ])
-        ),
-        0
-      )
-    )
+    key => lower(definition.role_definition_id)
   }
 }
 
