@@ -36,6 +36,7 @@ locals {
         devops_project                  = try(environment.devops_project, null)
         devops_create_variable_group    = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
         role_assignments                = try(environment.role_assignments, [])
+        rbac_administrator              = try(environment.rbac_administrator, [])
         directory_roles                 = try(environment.directory_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
       }
