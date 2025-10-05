@@ -24,20 +24,20 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ]
                 },
                 {
                     "scope": "sub-enterprise-devtest-legacy",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-molyneux-me-dev",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 }
             ],
@@ -55,68 +55,68 @@
                 {
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-mx-consulting-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-platform-connectivity",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-platform-identity",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-platform-management",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ]
                 },
                 {
                     "scope": "sub-platform-strategic",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-talkwithtiles-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-xi-demomanager-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-finances-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-molyneux-me-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 }
             ],

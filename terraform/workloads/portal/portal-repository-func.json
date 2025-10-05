@@ -28,7 +28,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "Storage Blob Data Contributor"
                     ]
@@ -51,7 +51,7 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "Storage Blob Data Contributor"
                     ]

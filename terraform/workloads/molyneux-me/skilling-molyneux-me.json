@@ -19,7 +19,7 @@
             "role_assignments": [
                 {
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ],
                     "scope": "sub-molyneux-me-dev"
@@ -37,7 +37,7 @@
             "role_assignments": [
                 {
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ],
                     "scope": "sub-molyneux-me-prd"

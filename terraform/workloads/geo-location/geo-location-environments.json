@@ -23,7 +23,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "App Configuration Data Owner"
                     ]
@@ -43,7 +43,7 @@
                 {
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "App Configuration Data Owner"
                     ]

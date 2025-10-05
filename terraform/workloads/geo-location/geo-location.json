@@ -28,7 +28,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ]
                 }
@@ -48,7 +48,7 @@
                 {
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer"
                     ]
                 }

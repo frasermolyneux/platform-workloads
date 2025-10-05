@@ -21,7 +21,7 @@
                 {
                     "scope": "sub-xi-demomanager-prd",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 }
             ]

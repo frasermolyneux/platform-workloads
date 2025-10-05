@@ -27,7 +27,7 @@
             "role_assignments": [
                 {
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "Storage Blob Data Contributor"
                     ],
@@ -46,7 +46,7 @@
             "role_assignments": [
                 {
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "Storage Blob Data Contributor"
                     ],

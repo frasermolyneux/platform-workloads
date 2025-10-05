@@ -21,7 +21,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "App Configuration Data Owner"
                     ]
@@ -41,7 +41,7 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Key Vault Secrets Officer",
                         "App Configuration Data Owner"
                     ]

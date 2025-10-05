@@ -20,20 +20,20 @@
                 {
                     "scope": "sub-platform-strategic",
                     "role_definitions": [
-                        "Owner",
+                        "Contributor",
                         "Storage Blob Data Contributor"
                     ]
                 },
                 {
                     "scope": "sub-platform-connectivity",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 },
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Owner"
+                        "Contributor"
                     ]
                 }
             ],
