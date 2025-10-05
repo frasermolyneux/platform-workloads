@@ -112,5 +112,3 @@ azuredevops_projects = [
     }
   }
 ]
-
-workloads = []
