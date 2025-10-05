@@ -1,0 +1,53 @@
+{
+    "name": "personal-finances",
+    "github": {
+        "description": "This project is for tracking my personal finances. Deployed using Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ],
+                    "scope": "sub-visualstudio-enterprise"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-finances-prd",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ],
+                    "scope": "sub-finances-prd"
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}
