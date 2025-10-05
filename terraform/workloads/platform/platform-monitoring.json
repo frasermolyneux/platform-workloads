@@ -1,0 +1,128 @@
+{
+    "name": "platform-monitoring",
+    "github": {
+        "description": "Platform monitoring configuration for workloads hosted both on and off the Azure platform. Deployed using Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "application-insights",
+            "web-tests",
+            "key-vault"
+        ],
+        "visibility": "public",
+        "add_sonarcloud_secrets": true
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ]
+                },
+                {
+                    "scope": "sub-enterprise-devtest-legacy",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-molyneux-me-dev",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-fm-geolocation-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-mx-consulting-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-platform-connectivity",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-platform-identity",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-platform-management",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ]
+                },
+                {
+                    "scope": "sub-platform-strategic",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-talkwithtiles-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-xi-demomanager-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-finances-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                },
+                {
+                    "scope": "sub-molyneux-me-prd",
+                    "role_definitions": [
+                        "Owner"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}
