@@ -1,0 +1,62 @@
+{
+    "name": "portal-bots",
+    "github": {
+        "description": "Part of XtremeIdiots Portal solution; b3 bots config and instance management. Deployed using Terraform/PowerShell and GitHub Actions/Azure DevOps Pipelines.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "azure-pipelines",
+            "powershell",
+            "key-vault",
+            "app-registration"
+        ],
+        "add_sonarcloud_secrets": true,
+        "add_nuget_environment": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "devops_project": "XtremeIdiots",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": ["portal-core", "portal-environments"],
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-xi-portal-prd",
+            "devops_project": "XtremeIdiots",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": ["portal-core", "portal-environments"],
+            "role_assignments": [
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer",
+                        "Storage Blob Data Contributor"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}

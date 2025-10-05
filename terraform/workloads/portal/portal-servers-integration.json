@@ -1,0 +1,57 @@
+{
+    "name": "portal-servers-integration",
+    "github": {
+        "description": "Part of XtremeIdiots Portal solution; game server integration via RCON and direct query. Deployed using Bicep and GitHub Actions.",
+        "topics": [
+            "azure",
+            "bicep",
+            "github-actions",
+            "key-vault",
+            "app-insights",
+            "app-service",
+            "api-subscription",
+            "api-management-api"
+        ],
+        "add_sonarcloud_secrets": true,
+        "add_nuget_environment": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "add_deploy_script_identity": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-xi-portal-prd",
+            "connect_to_github": true,
+            "add_deploy_script_identity": true,
+            "role_assignments": [
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Owner",
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
+        }
+    ]
+}
