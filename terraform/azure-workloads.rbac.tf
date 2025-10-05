@@ -57,6 +57,13 @@ data "azurerm_role_definition" "workload_rbac_allowed" {
   scope = try(data.azurerm_subscription.subscriptions[each.value.scope_name].id, each.value.scope_name)
 }
 
+locals {
+  workload_rbac_allowed_role_guids = {
+    for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
+    key => element(reverse(split(definition.id, "/")), 0)
+  }
+}
+
 resource "azurerm_role_assignment" "workload_rbac_administrator" {
   for_each = { for assignment in local.workload_rbac_administrator_assignments : assignment.assignment_key => assignment }
 
@@ -65,30 +72,11 @@ resource "azurerm_role_assignment" "workload_rbac_administrator" {
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 
   condition_version = "2.0"
-  condition = jsonencode({
-    AllOf = [
-      {
-        AnyOf = [
-          {
-            AllOf = [
-              {
-                Field  = "Microsoft.Authorization/roleAssignments/principalId"
-                Equals = each.value.principal_object_id
-              },
-              {
-                AnyOf = [
-                  for role_key in each.value.allowed_role_keys : {
-                    Field  = "Microsoft.Authorization/roleAssignments/roleDefinitionId"
-                    Equals = data.azurerm_role_definition.workload_rbac_allowed[role_key].id
-                  }
-                ]
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  })
+  condition = format(
+    "(\n (\n  !(ActionMatches{'Microsoft.Authorization/roleAssignments/write'})\n )\n OR \n (\n  @Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {%s}\n )\n)\nAND\n(\n (\n  !(ActionMatches{'Microsoft.Authorization/roleAssignments/delete'})\n )\n OR \n (\n  @Resource[Microsoft.Authorization/roleAssignments:RoleDefinitionId] ForAnyOfAnyValues:GuidEquals {%s}\n )\n)",
+    join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]]),
+    join(", ", [for role_key in each.value.allowed_role_keys : local.workload_rbac_allowed_role_guids[role_key]])
+  )
 }
 
 output "workload_rbac_administrators" {
