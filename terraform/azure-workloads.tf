@@ -8,10 +8,10 @@ resource "github_repository" "workload" {
 
   visibility = each.value.github.visibility
 
-  has_downloads = each.value.github.has_downloads
-  has_issues    = each.value.github.has_issues
-  has_projects  = each.value.github.has_projects
-  has_wiki      = each.value.github.has_wiki
+  has_downloads = try(each.value.github.has_downloads, false)
+  has_issues    = try(each.value.github.has_issues, false)
+  has_projects  = try(each.value.github.has_projects, false)
+  has_wiki      = try(each.value.github.has_wiki, false)
 
   vulnerability_alerts = true
 
