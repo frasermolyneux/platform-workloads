@@ -59,7 +59,7 @@ data "azurerm_role_definition" "workload_rbac_allowed" {
 locals {
   workload_rbac_allowed_role_guids = {
     for key, definition in data.azurerm_role_definition.workload_rbac_allowed :
-    key => lower(definition.role_definition_id)
+    key => element(split("/", definition.role_definition_id), length(split("/", definition.role_definition_id)) - 1)
   }
 }
 
