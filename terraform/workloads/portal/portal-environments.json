@@ -22,8 +22,15 @@
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
-                        "Key Vault Secrets Officer",
-                        "App Configuration Data Owner"
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ],
+            "rbac_administrator": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
+                        "App Configuration Data Contributor"
                     ]
                 }
             ],
@@ -42,8 +49,15 @@
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Contributor",
-                        "Key Vault Secrets Officer",
-                        "App Configuration Data Owner"
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ],
+            "rbac_administrator": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
+                        "App Configuration Data Contributor"
                     ]
                 }
             ],

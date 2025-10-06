@@ -48,8 +48,7 @@
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
                         "Key Vault Secrets User",
-                        "Storage Blob Data Owner",
-                        "App Configuration Data Contributor"
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
@@ -88,8 +87,7 @@
                     "scope": "sub-xi-portal-prd",
                     "allowed_roles": [
                         "Key Vault Secrets User",
-                        "Storage Blob Data Owner",
-                        "App Configuration Data Contributor"
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
