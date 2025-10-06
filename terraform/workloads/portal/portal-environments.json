@@ -21,23 +21,17 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
+                        "Contributor"
                     ]
                 }
             ],
             "rbac_administrator": [
                 {
                     "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "App Configuration Contributor"
-                    ]
+                    "allowed_roles": []
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Directory Writers"
-            ]
+            "directory_roles": []
         },
         {
             "name": "Production",
@@ -48,23 +42,17 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
+                        "Contributor"
                     ]
                 }
             ],
             "rbac_administrator": [
                 {
                     "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "App Configuration Contributor"
-                    ]
+                    "allowed_roles": []
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Directory Writers"
-            ]
+            "directory_roles": []
         }
     ]
 }
