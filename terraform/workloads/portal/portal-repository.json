@@ -31,9 +31,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
+                        "Contributor"
                     ]
                 },
                 {
@@ -47,14 +45,14 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
+                        "Key Vault Secrets Officer",
                         "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
+                        "Storage Blob Data Contributor"
                     ]
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator",
-                "Directory Writers"
+                "Cloud application administrator"
             ]
         },
         {
@@ -70,9 +68,7 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
+                        "Contributor"
                     ]
                 },
                 {
@@ -86,14 +82,14 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "allowed_roles": [
+                        "Key Vault Secrets Officer",
                         "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
+                        "Storage Blob Data Contributor"
                     ]
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator",
-                "Directory Writers"
+                "Cloud application administrator"
             ]
         }
     ]
