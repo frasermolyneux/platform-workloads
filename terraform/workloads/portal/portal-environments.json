@@ -55,7 +55,7 @@
             ],
             "rbac_administrator": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "sub-xi-portal-prd",
                     "allowed_roles": [
                         "App Configuration Contributor"
                     ]
