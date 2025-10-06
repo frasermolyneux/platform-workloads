@@ -30,7 +30,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
-                        "App Configuration Data Contributor"
+                        "App Configuration Contributor"
                     ]
                 }
             ],
@@ -57,7 +57,7 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
-                        "App Configuration Data Contributor"
+                        "App Configuration Contributor"
                     ]
                 }
             ],
