@@ -22,7 +22,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer"
@@ -35,7 +35,7 @@
                     ]
                 },
                 {
-                    "scope": "sub-molyneux-me-dev",
+                    "scope": "molyneux-me/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -53,7 +53,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
-                    "scope": "sub-fm-geolocation-prd",
+                    "scope": "geo-location/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -65,7 +65,7 @@
                     ]
                 },
                 {
-                    "scope": "sub-platform-connectivity",
+                    "scope": "platform-connectivity/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -77,44 +77,44 @@
                     ]
                 },
                 {
-                    "scope": "sub-platform-management",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer"
                     ]
                 },
                 {
-                    "scope": "sub-platform-strategic",
+                    "scope": "platform-strategic-services/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "sub-talkwithtiles-prd",
+                    "scope": "talkwithtiles/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "sub-xi-demomanager-prd",
+                    "scope": "demo-manager/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "sub-xi-portal-prd",
+                    "scope": "portal-core/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "sub-finances-prd",
+                    "scope": "personal-finances/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "sub-molyneux-me-prd",
+                    "scope": "molyneux-me/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]

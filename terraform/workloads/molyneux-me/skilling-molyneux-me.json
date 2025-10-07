@@ -22,7 +22,7 @@
                         "Contributor",
                         "Key Vault Secrets Officer"
                     ],
-                    "scope": "sub-molyneux-me-dev"
+                    "scope": "self/subscription"
                 }
             ],
             "directory_roles": [
@@ -40,7 +40,7 @@
                         "Contributor",
                         "Key Vault Secrets Officer"
                     ],
-                    "scope": "sub-molyneux-me-prd"
+                    "scope": "self/subscription"
                 }
             ],
             "directory_roles": [

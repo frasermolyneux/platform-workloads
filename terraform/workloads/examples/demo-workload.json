@@ -19,13 +19,19 @@
             "create_resource_group": true,
             "role_assignments": [
                 {
-                    "scope": "sub-platform-management",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
-                    "scope": "resource-group",
+                    "scope": "self/resource-group",
+                    "role_definitions": [
+                        "Reader"
+                    ]
+                },
+                {
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Reader"
                     ]

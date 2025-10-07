@@ -26,7 +26,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer",
@@ -49,7 +49,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-xi-portal-prd",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer",

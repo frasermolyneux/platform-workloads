@@ -21,7 +21,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer",
@@ -41,7 +41,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
-                    "scope": "sub-fm-geolocation-prd",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer",

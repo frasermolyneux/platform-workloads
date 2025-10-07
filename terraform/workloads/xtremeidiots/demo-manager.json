@@ -19,7 +19,7 @@
             "devops_project": "XtremeIdiots",
             "role_assignments": [
                 {
-                    "scope": "sub-xi-demomanager-prd",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]

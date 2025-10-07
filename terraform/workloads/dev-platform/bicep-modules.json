@@ -16,7 +16,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
-                    "scope": "sub-platform-strategic",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Reader"
                     ]

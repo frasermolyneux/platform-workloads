@@ -45,6 +45,49 @@ locals {
   ])
 }
 
+locals {
+  workload_environment_lookup = {
+    for environment in local.workload_environments : environment.key => environment
+  }
+
+  workload_scope_self = {
+    for environment in local.workload_environments : environment.key => merge(
+      {
+        "self/subscription"      = data.azurerm_subscription.subscriptions[environment.subscription].id
+        environment.subscription = data.azurerm_subscription.subscriptions[environment.subscription].id
+      },
+      environment.create_resource_group && contains(keys(azurerm_resource_group.workload_environment), environment.key) ? {
+        "self/resource-group" = azurerm_resource_group.workload_environment[environment.key].id
+        "resource-group"      = azurerm_resource_group.workload_environment[environment.key].id
+      } : {}
+    )
+  }
+
+  workload_scope_cross_subscriptions = {
+    for environment in local.workload_environments : environment.key => {
+      for other_environment in local.workload_environments :
+      format("%s/subscription", other_environment.workload_name) => data.azurerm_subscription.subscriptions[other_environment.subscription].id
+      if other_environment.environment_name == environment.environment_name
+    }
+  }
+
+  workload_scope_cross_resource_groups = {
+    for environment in local.workload_environments : environment.key => {
+      for other_environment in local.workload_environments :
+      format("%s/resource-group", other_environment.workload_name) => azurerm_resource_group.workload_environment[other_environment.key].id
+      if other_environment.environment_name == environment.environment_name && other_environment.create_resource_group && contains(keys(azurerm_resource_group.workload_environment), other_environment.key)
+    }
+  }
+
+  workload_scope_catalog = {
+    for environment in local.workload_environments : environment.key => merge(
+      local.workload_scope_self[environment.key],
+      local.workload_scope_cross_subscriptions[environment.key],
+      local.workload_scope_cross_resource_groups[environment.key]
+    )
+  }
+}
+
 resource "random_id" "workload_id" {
   for_each = { for each in local.workload_environments : each.key => each }
 

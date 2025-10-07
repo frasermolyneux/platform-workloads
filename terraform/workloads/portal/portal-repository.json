@@ -30,7 +30,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "resource-group",
+                    "scope": "self/resource-group",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -44,7 +44,7 @@
             ],
             "rbac_administrator": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "self/subscription",
                     "allowed_roles": [
                         "Key Vault Secrets Officer",
                         "Key Vault Secrets User",
@@ -68,7 +68,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "resource-group",
+                    "scope": "self/resource-group",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -82,7 +82,7 @@
             ],
             "rbac_administrator": [
                 {
-                    "scope": "sub-xi-portal-prd",
+                    "scope": "self/subscription",
                     "allowed_roles": [
                         "Key Vault Secrets Officer",
                         "Key Vault Secrets User",

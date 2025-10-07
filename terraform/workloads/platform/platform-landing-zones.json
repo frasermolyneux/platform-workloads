@@ -19,7 +19,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
-                    "scope": "sub-platform-management",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]

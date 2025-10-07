@@ -7,9 +7,12 @@ locals {
         environment_name       = environment.environment_name
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
         scope_name             = entry.scope
-        scope_id               = try(data.azurerm_subscription.subscriptions[entry.scope].id, entry.scope)
-        subscription_id        = try(data.azurerm_subscription.subscriptions[entry.scope].subscription_id, null)
-        allowed_roles          = try(entry.allowed_roles, [])
+        scope_id = startswith(entry.scope, "/subscriptions/") ? entry.scope : coalesce(
+          lookup(local.workload_scope_catalog[environment.key], entry.scope, null),
+          try(data.azurerm_subscription.subscriptions[entry.scope].id, null)
+        )
+        subscription_id = try(data.azurerm_subscription.subscriptions[entry.scope].subscription_id, null)
+        allowed_roles   = try(entry.allowed_roles, [])
       }
     ]
     if length(try(environment.rbac_administrator, [])) > 0
@@ -38,8 +41,11 @@ locals {
       for entry_index, entry in try(environment.rbac_administrator, []) : {
         assignment_key           = format("%s-%s-%d", environment.key, replace(entry.scope, "/", "-"), entry_index)
         workload_environment_key = environment.key
-        scope_id                 = try(data.azurerm_subscription.subscriptions[entry.scope].id, entry.scope)
-        principal_object_id      = azuread_service_principal.workload[environment.key].object_id
+        scope_id = startswith(entry.scope, "/subscriptions/") ? entry.scope : coalesce(
+          lookup(local.workload_scope_catalog[environment.key], entry.scope, null),
+          try(data.azurerm_subscription.subscriptions[entry.scope].id, null)
+        )
+        principal_object_id = azuread_service_principal.workload[environment.key].object_id
         allowed_role_keys = [
           for role_name in try(entry.allowed_roles, []) :
           format("%s|%s", entry.scope, role_name)

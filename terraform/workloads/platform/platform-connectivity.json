@@ -18,7 +18,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -31,7 +31,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
-                    "scope": "sub-platform-connectivity",
+                    "scope": "self/subscription",
                     "role_definitions": [
                         "Contributor"
                     ]

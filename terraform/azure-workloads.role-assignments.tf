@@ -7,7 +7,6 @@ locals {
           workload_environment_key   = workload_environment.key
           add_deploy_script_identity = workload_environment.add_deploy_script_identity
           scope                      = role_assignment.scope
-          use_resource_group_scope   = role_assignment.scope == "resource-group"
           role_definition_name       = role_definition
         }
       ]
@@ -16,12 +15,11 @@ locals {
 
   workload_role_assignment_scopes = {
     for role_assignment in local.workload_role_assignments : role_assignment.role_assignment_key => (
-      role_assignment.use_resource_group_scope
-      ? azurerm_resource_group.workload_environment[role_assignment.workload_environment_key].id
-      : (
-        startswith(role_assignment.scope, "/subscriptions/")
-        ? role_assignment.scope
-        : data.azurerm_subscription.subscriptions[role_assignment.scope].id
+      startswith(role_assignment.scope, "/subscriptions/")
+      ? role_assignment.scope
+      : coalesce(
+        lookup(local.workload_scope_catalog[role_assignment.workload_environment_key], role_assignment.scope, null),
+        try(data.azurerm_subscription.subscriptions[role_assignment.scope].id, null)
       )
     )
   }
