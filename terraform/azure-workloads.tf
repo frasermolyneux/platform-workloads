@@ -53,8 +53,8 @@ locals {
   workload_scope_self = {
     for environment in local.workload_environments : environment.key => merge(
       {
-        "self/subscription"      = data.azurerm_subscription.subscriptions[environment.subscription].id
-        environment.subscription = data.azurerm_subscription.subscriptions[environment.subscription].id
+        "self/subscription"        = data.azurerm_subscription.subscriptions[environment.subscription].id
+        (environment.subscription) = data.azurerm_subscription.subscriptions[environment.subscription].id
       },
       environment.create_resource_group && contains(keys(azurerm_resource_group.workload_environment), environment.key) ? {
         "self/resource-group" = azurerm_resource_group.workload_environment[environment.key].id
