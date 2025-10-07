@@ -7,17 +7,31 @@ locals {
           workload_environment_key   = workload_environment.key
           add_deploy_script_identity = workload_environment.add_deploy_script_identity
           scope                      = role_assignment.scope
+          use_resource_group_scope   = role_assignment.scope == "resource-group"
           role_definition_name       = role_definition
         }
       ]
     ]
   ])
+
+  workload_role_assignment_scopes = {
+    for role_assignment in local.workload_role_assignments : role_assignment.role_assignment_key => (
+      role_assignment.use_resource_group_scope
+      ? azurerm_resource_group.workload_environment[role_assignment.workload_environment_key].id
+      : (
+        startswith(role_assignment.scope, "/subscriptions/")
+        ? role_assignment.scope
+        : data.azurerm_subscription.subscriptions[role_assignment.scope].id
+      )
+    )
+  }
 }
 
 resource "azurerm_role_assignment" "workload" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each }
 
-  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope = local.workload_role_assignment_scopes[each.key]
+
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
@@ -25,7 +39,8 @@ resource "azurerm_role_assignment" "workload" {
 resource "azurerm_role_assignment" "workload_deploy_script" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each if each.add_deploy_script_identity }
 
-  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope = local.workload_role_assignment_scopes[each.key]
+
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }

@@ -23,6 +23,12 @@
                     "role_definitions": [
                         "Contributor"
                     ]
+                },
+                {
+                    "scope": "resource-group",
+                    "role_definitions": [
+                        "Reader"
+                    ]
                 }
             ]
         }
