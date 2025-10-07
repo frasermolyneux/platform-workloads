@@ -16,6 +16,7 @@
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "create_resource_group": true,
             "role_assignments": [
                 {
                     "scope": "sub-platform-management",

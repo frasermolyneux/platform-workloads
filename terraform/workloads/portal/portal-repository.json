@@ -23,6 +23,7 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "create_resource_group": true,
             "requires_terraform_state_access": [
                 "portal-core",
                 "portal-environments"
@@ -60,6 +61,7 @@
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "create_resource_group": true,
             "requires_terraform_state_access": [
                 "portal-core",
                 "portal-environments"

@@ -31,6 +31,7 @@ locals {
         connect_to_github               = try(environment.connect_to_github, false)
         add_deploy_script_identity      = try(environment.add_deploy_script_identity, false)
         configure_for_terraform         = try(environment.configure_for_terraform, false)
+        create_resource_group           = try(environment.create_resource_group, false)
         subscription                    = environment.subscription
         connect_to_devops               = try(environment.devops_project, null) != null
         devops_project                  = try(environment.devops_project, null)
