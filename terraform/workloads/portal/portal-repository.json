@@ -30,7 +30,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
+                    "scope": "resource-group",
                     "role_definitions": [
                         "Contributor"
                     ]
@@ -68,7 +68,7 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-xi-portal-prd",
+                    "scope": "resource-group",
                     "role_definitions": [
                         "Contributor"
                     ]
