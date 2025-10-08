@@ -10,6 +10,7 @@ locals {
           location                 = location
           name                     = lower(replace(replace(replace(resource_group.name, "{workload}", lower(environment.workload_name)), "{env}", lower(environment.environment_tag)), "{location}", location))
           role_assignments         = try(resource_group.role_assignments, [])
+          rbac_administrator_roles = try(resource_group.rbac_administrator_roles, [])
           tags = merge(var.tags, {
             Workload    = environment.workload_name
             Environment = environment.environment_name

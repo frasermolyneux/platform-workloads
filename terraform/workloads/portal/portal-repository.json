@@ -38,21 +38,16 @@
                     ]
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer",
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "rbac_administrator_roles": [
+                        "Key Vault Secrets User",
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
@@ -80,21 +75,16 @@
                     ]
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer",
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "rbac_administrator_roles": [
+                        "Key Vault Secrets User",
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
