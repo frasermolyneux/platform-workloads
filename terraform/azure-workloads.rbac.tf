@@ -120,7 +120,3 @@ AND
 EOT
   )
 }
-
-output "workload_rbac_administrators" {
-  value = local.workload_rbac_administrator_map
-}
