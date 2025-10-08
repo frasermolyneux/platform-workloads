@@ -13,7 +13,6 @@ locals {
           tags = merge(var.tags, {
             Workload    = environment.workload_name
             Environment = environment.environment_name
-            Location    = upper(location)
           })
         }
       ]
