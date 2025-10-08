@@ -21,9 +21,6 @@
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
-            "locations": [
-                "uksouth"
-            ],
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
@@ -58,9 +55,6 @@
         {
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
-            "locations": [
-                "uksouth"
-            ],
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
