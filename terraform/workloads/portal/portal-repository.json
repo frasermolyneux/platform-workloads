@@ -32,12 +32,6 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
@@ -56,7 +50,10 @@
             ],
             "resource_groups": [
                 {
-                    "name": "rg-{workload}-{env}-{location}"
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
                 }
             ],
             "directory_roles": [
@@ -77,12 +74,6 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
@@ -101,7 +92,10 @@
             ],
             "resource_groups": [
                 {
-                    "name": "rg-{workload}-{env}-{location}"
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
                 }
             ],
             "directory_roles": [
