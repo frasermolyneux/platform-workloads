@@ -43,6 +43,10 @@ resource "azapi_resource" "workload_resource_group" {
   location  = each.value.location
 
   tags = each.value.tags
+
+  lifecycle {
+    ignore_changes = [tags]
+  }
 }
 
 resource "azurerm_role_assignment" "workload_resource_group" {
