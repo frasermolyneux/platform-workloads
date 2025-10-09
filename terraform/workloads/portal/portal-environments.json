@@ -17,42 +17,42 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
+            "resource_groups": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
                         "Contributor"
+                    ],
+                    "rbac_administrator_roles": [
+                        "App Configuration Data Reader",
+                        "Key Vault Secrets User"
                     ]
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": []
-                }
-            ],
-            "directory_roles": []
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
         },
         {
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
+            "resource_groups": [
                 {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
                         "Contributor"
+                    ],
+                    "rbac_administrator_roles": [
+                        "App Configuration Data Reader",
+                        "Key Vault Secrets User"
                     ]
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": []
-                }
-            ],
-            "directory_roles": []
+            "directory_roles": [
+                "Cloud application administrator"
+            ]
         }
     ]
 }
