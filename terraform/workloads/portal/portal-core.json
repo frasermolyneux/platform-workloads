@@ -24,18 +24,14 @@
             "requires_terraform_state_access": [
                 "portal-environments"
             ],
-            "role_assignments": [
+            "resource_groups": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
                         "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
+                        "Key Vault Secrets Officer"
                     ]
                 }
-            ],
-            "directory_roles": [
-                "Cloud application administrator"
             ]
         },
         {
@@ -46,18 +42,14 @@
             "requires_terraform_state_access": [
                 "portal-environments"
             ],
-            "role_assignments": [
+            "resource_groups": [
                 {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
                         "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
+                        "Key Vault Secrets Officer"
                     ]
                 }
-            ],
-            "directory_roles": [
-                "Cloud application administrator"
             ]
         }
     ]

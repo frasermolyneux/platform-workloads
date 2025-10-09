@@ -29,25 +29,22 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
                 }
             ],
-            "rbac_administrator": [
+            "resource_groups": [
                 {
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer",
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "rbac_administrator_roles": [
                         "Key Vault Secrets User",
-                        "Storage Blob Data Contributor"
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
@@ -66,25 +63,22 @@
             ],
             "role_assignments": [
                 {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
                 }
             ],
-            "rbac_administrator": [
+            "resource_groups": [
                 {
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer",
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ],
+                    "rbac_administrator_roles": [
                         "Key Vault Secrets User",
-                        "Storage Blob Data Contributor"
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
