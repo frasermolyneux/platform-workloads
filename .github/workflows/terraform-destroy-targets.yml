@@ -1,4 +1,4 @@
-name: x - Terraform Import
+name: x - Terraform Destroy Targets
 
 on:
   workflow_dispatch:
@@ -7,14 +7,10 @@ on:
         description: "Short key for the environment (used for tfvars/backends naming and concurrency controls)"
         required: true
         default: dev
-      import-address:
-        description: "Terraform address to import"
+      destroy-targets:
+        description: "JSON array of Terraform target addresses to destroy"
         required: true
-        default: ""
-      import-id:
-        description: "Existing resource ID to import"
-        required: true
-        default: ""
+        default: '["",""]'
       terraform-folder:
         description: "Path to the Terraform configuration folder"
         required: false
@@ -29,12 +25,12 @@ permissions:
   contents: read
 
 jobs:
-  terraform-import:
-    name: Terraform Import
+  terraform-destroy-targets:
+    name: Terraform Destroy Targets
     runs-on: ubuntu-latest
     environment: ${{ inputs['environment-slug'] == 'dev' && 'Development' || inputs['environment-slug'] == 'prd' && 'Production' || inputs['environment-slug'] }}
     concurrency:
-      group: ${{ format('{0}-{1}-maintenance-import', github.repository, inputs['environment-slug']) }}
+      group: ${{ format('{0}-{1}-maintenance-destroy', github.repository, inputs['environment-slug']) }}
 
     steps:
       - name: Checkout repository
@@ -70,8 +66,16 @@ jobs:
           echo "terraform-var-file=$TERRAFORM_VAR_FILE" >> "$GITHUB_OUTPUT"
           echo "terraform-backend-file=$TERRAFORM_BACKEND_FILE" >> "$GITHUB_OUTPUT"
 
-      - name: Terraform import resource
-        uses: frasermolyneux/actions/terraform-import@main
+      - name: Validate destroy inputs
+        shell: bash
+        env:
+          DESTROY_TARGETS: ${{ inputs['destroy-targets'] }}
+        run: |
+          set -euo pipefail
+          echo "$DESTROY_TARGETS" | jq empty
+
+      - name: Terraform destroy targets
+        uses: frasermolyneux/actions/terraform-destroy-resources@main
         with:
           terraform-folder: ${{ steps.resolve.outputs.terraform-folder }}
           terraform-var-file: ${{ steps.resolve.outputs.terraform-var-file }}
@@ -80,8 +84,7 @@ jobs:
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-          import-address: ${{ inputs['import-address'] }}
-          import-id: ${{ inputs['import-id'] }}
+          resources: ${{ inputs['destroy-targets'] }}
         env:
           AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
           GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
