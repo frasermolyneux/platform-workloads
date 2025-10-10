@@ -23,19 +23,41 @@ locals {
   workload_environments = flatten([
     for workload in local.all_workloads : [
       for environment in try(workload.environments, []) : {
-        key                             = format("%s-%s", workload.name, environment.name)
-        workload_name                   = workload.name
-        create_dev_center_project       = try(workload.create_dev_center_project, false)
-        environment_name                = environment.name
-        environment_tag                 = lookup(var.environment_map, environment.name, lower(environment.name))
-        connect_to_github               = try(environment.connect_to_github, false)
-        add_deploy_script_identity      = try(environment.add_deploy_script_identity, false)
-        configure_for_terraform         = try(environment.configure_for_terraform, false)
-        subscription                    = environment.subscription
-        connect_to_devops               = try(environment.devops_project, null) != null
-        devops_project                  = try(environment.devops_project, null)
-        devops_create_variable_group    = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
-        role_assignments                = try(environment.role_assignments, [])
+        key                          = format("%s-%s", workload.name, environment.name)
+        workload_name                = workload.name
+        create_dev_center_project    = try(workload.create_dev_center_project, false)
+        environment_name             = environment.name
+        environment_tag              = lookup(var.environment_map, environment.name, lower(environment.name))
+        connect_to_github            = try(environment.connect_to_github, false)
+        add_deploy_script_identity   = try(environment.add_deploy_script_identity, false)
+        configure_for_terraform      = try(environment.configure_for_terraform, false)
+        subscription                 = environment.subscription
+        connect_to_devops            = try(environment.devops_project, null) != null
+        devops_project               = try(environment.devops_project, null)
+        devops_create_variable_group = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
+        role_assignments = [
+          for assignment in concat(
+            try(environment.role_assignments, []),
+            length([
+              for existing in try(environment.role_assignments, []) : 1
+              if try(existing.scope, null) == environment.subscription
+              ]) == 0 ? [
+              {
+                scope            = environment.subscription
+                role_definitions = []
+              }
+            ] : []
+            ) : (
+            assignment.scope == environment.subscription
+            ? merge(
+              assignment,
+              {
+                role_definitions = distinct(concat(try(assignment.role_definitions, []), ["Reader"]))
+              }
+            )
+            : assignment
+          )
+        ]
         rbac_administrator              = try(environment.rbac_administrator, [])
         directory_roles                 = try(environment.directory_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
