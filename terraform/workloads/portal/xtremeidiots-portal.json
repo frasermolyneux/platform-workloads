@@ -41,6 +41,9 @@
                     ]
                 }
             ],
+            "rbac_administrator_roles": [
+                "Key Vault Secrets User"
+            ],
             "directory_roles": [
                 "Cloud application administrator",
                 "Directory Writers"
@@ -70,6 +73,9 @@
                         "DNS Zone Contributor"
                     ]
                 }
+            ],
+            "rbac_administrator_roles": [
+                "Key Vault Secrets User"
             ],
             "directory_roles": [
                 "Cloud application administrator",
