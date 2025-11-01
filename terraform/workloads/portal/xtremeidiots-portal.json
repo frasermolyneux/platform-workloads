@@ -41,7 +41,7 @@
                     ]
                 }
             ],
-            "rbac_administrator_roles": [
+            "rbac_administrator": [
                 "Key Vault Secrets User"
             ],
             "directory_roles": [
@@ -74,7 +74,7 @@
                     ]
                 }
             ],
-            "rbac_administrator_roles": [
+            "rbac_administrator": [
                 "Key Vault Secrets User"
             ],
             "directory_roles": [
