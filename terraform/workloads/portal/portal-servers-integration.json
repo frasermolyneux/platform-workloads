@@ -41,6 +41,21 @@
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
+                },
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Website Contributor",
+                        "API Management Service Contributor"
+                    ]
+                }
+            ],
+            "rbac_administrator": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
+                        "Key Vault Secrets User"
+                    ]
                 }
             ],
             "directory_roles": [
@@ -70,6 +85,21 @@
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
+                    ]
+                },
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Website Contributor",
+                        "API Management Service Contributor"
+                    ]
+                }
+            ],
+            "rbac_administrator": [
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "allowed_roles": [
+                        "Key Vault Secrets User"
                     ]
                 }
             ],
