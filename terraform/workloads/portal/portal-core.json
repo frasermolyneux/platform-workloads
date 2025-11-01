@@ -32,6 +32,9 @@
                         "Key Vault Secrets Officer"
                     ]
                 }
+            ],
+            "rbac_administrator_roles": [
+                "Key Vault Secrets Officer"
             ]
         },
         {
@@ -50,6 +53,9 @@
                         "Key Vault Secrets Officer"
                     ]
                 }
+            ],
+            "rbac_administrator_roles": [
+                "Key Vault Secrets Officer"
             ]
         }
     ]
