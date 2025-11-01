@@ -37,7 +37,8 @@
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
-                        "Website Contributor"
+                        "Website Contributor",
+                        "API Management Service Contributor"
                     ]
                 }
             ],
@@ -77,7 +78,8 @@
                 {
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
-                        "Website Contributor"
+                        "Website Contributor",
+                        "API Management Service Contributor"
                     ]
                 }
             ],
