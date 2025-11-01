@@ -6,11 +6,28 @@ locals {
         workload_name          = environment.workload_name
         environment_name       = environment.environment_name
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
-        scope_name             = entry.scope
-        scope_id               = try(data.azurerm_subscription.subscriptions[entry.scope].id, entry.scope)
-        subscription_id        = try(data.azurerm_subscription.subscriptions[entry.scope].subscription_id, null)
-        allowed_roles          = try(entry.allowed_roles, [])
+        scope_name             = try(entry.scope, environment.subscription)
+        scope_id = try(
+          data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].id,
+          try(entry.scope, environment.subscription)
+        )
+        subscription_id = try(
+          data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].subscription_id,
+          null
+        )
+        allowed_roles = distinct(compact(flatten([
+          try(entry.allowed_roles, []),
+          try(entry.roles, []),
+          try([entry.role], []),
+          can(tostring(entry)) ? [tostring(entry)] : []
+        ])))
       }
+      if length(distinct(compact(flatten([
+        try(entry.allowed_roles, []),
+        try(entry.roles, []),
+        try([entry.role], []),
+        can(tostring(entry)) ? [tostring(entry)] : []
+      ])))) > 0
     ]
     if length(try(environment.rbac_administrator, [])) > 0
   }
@@ -20,9 +37,14 @@ locals {
       [
         for environment in local.workload_environments : [
           for entry in try(environment.rbac_administrator, []) : [
-            for role_name in try(entry.allowed_roles, []) : {
-              key        = format("%s|%s", entry.scope, role_name)
-              scope_name = entry.scope
+            for role_name in distinct(compact(flatten([
+              try(entry.allowed_roles, []),
+              try(entry.roles, []),
+              try([entry.role], []),
+              can(tostring(entry)) ? [tostring(entry)] : []
+              ]))) : {
+              key        = format("%s|%s", try(entry.scope, environment.subscription), role_name)
+              scope_name = try(entry.scope, environment.subscription)
               role_name  = role_name
             }
           ]
@@ -48,16 +70,34 @@ locals {
     [
       for environment in local.workload_environments : [
         for entry_index, entry in try(environment.rbac_administrator, []) : {
-          assignment_key           = format("%s-%s-%d", environment.key, replace(entry.scope, "/", "-"), entry_index)
+          assignment_key = format(
+            "%s-%s-%d",
+            environment.key,
+            replace(try(entry.scope, environment.subscription), "/", "-"),
+            entry_index
+          )
           workload_environment_key = environment.key
-          scope_id                 = try(data.azurerm_subscription.subscriptions[entry.scope].id, entry.scope)
-          principal_object_id      = azuread_service_principal.workload[environment.key].object_id
+          scope_id = try(
+            data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].id,
+            try(entry.scope, environment.subscription)
+          )
+          principal_object_id = azuread_service_principal.workload[environment.key].object_id
           allowed_role_keys = [
-            for role_name in try(entry.allowed_roles, []) :
-            format("%s|%s", entry.scope, role_name)
+            for role_name in distinct(compact(flatten([
+              try(entry.allowed_roles, []),
+              try(entry.roles, []),
+              try([entry.role], []),
+              can(tostring(entry)) ? [tostring(entry)] : []
+            ]))) :
+            format("%s|%s", try(entry.scope, environment.subscription), role_name)
           ]
         }
-        if length(try(entry.allowed_roles, [])) > 0
+        if length(distinct(compact(flatten([
+          try(entry.allowed_roles, []),
+          try(entry.roles, []),
+          try([entry.role], []),
+          can(tostring(entry)) ? [tostring(entry)] : []
+        ])))) > 0
       ]
     ],
     [

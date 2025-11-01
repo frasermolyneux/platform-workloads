@@ -42,7 +42,12 @@
                 }
             ],
             "rbac_administrator": [
-                "Key Vault Secrets Officer"
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
+                        "Key Vault Secrets Officer"
+                    ]
+                }
             ]
         },
         {
@@ -71,7 +76,12 @@
                 }
             ],
             "rbac_administrator": [
-                "Key Vault Secrets Officer"
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "allowed_roles": [
+                        "Key Vault Secrets Officer"
+                    ]
+                }
             ]
         }
     ]
