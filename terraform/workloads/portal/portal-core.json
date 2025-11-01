@@ -24,6 +24,14 @@
             "requires_terraform_state_access": [
                 "portal-environments"
             ],
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
@@ -44,6 +52,14 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "portal-environments"
+            ],
+            "role_assignments": [
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Key Vault Secrets Officer"
+                    ]
+                }
             ],
             "resource_groups": [
                 {
