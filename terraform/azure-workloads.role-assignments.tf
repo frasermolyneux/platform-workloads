@@ -1,5 +1,5 @@
 locals {
-  workload_role_assignments = flatten([
+  workload_role_assignments = distinct(flatten([
     for role_assignment_key, workload_environment in local.workload_environments : [
       for role_assignment in workload_environment.role_assignments : [
         for role_definition in role_assignment.role_definitions : {
@@ -11,7 +11,7 @@ locals {
         }
       ]
     ]
-  ])
+  ]))
 }
 
 resource "azurerm_role_assignment" "workload" {
