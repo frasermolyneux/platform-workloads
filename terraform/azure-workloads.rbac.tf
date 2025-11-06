@@ -33,7 +33,7 @@ locals {
   }
 
   workload_rbac_allowed_role_map = {
-    for request in flatten(concat(
+    for request in distinct(flatten(concat(
       [
         for environment in local.workload_environments : [
           for entry in try(environment.rbac_administrator, []) : [
@@ -59,7 +59,7 @@ locals {
           }
         ]
       ]
-    )) :
+    ))) :
     request.key => {
       scope_name = request.scope_name
       role_name  = request.role_name
