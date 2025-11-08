@@ -18,7 +18,8 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
-                "westeurope"
+                "westeurope",
+                "eastasia"
             ],
             "role_assignments": [
                 {
@@ -43,7 +44,9 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
-                "westeurope"
+                "westeurope",
+                "eastasia",
+                "eastus2"
             ],
             "role_assignments": [
                 {
