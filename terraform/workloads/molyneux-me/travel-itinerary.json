@@ -1,0 +1,65 @@
+{
+    "name": "travel-itinerary",
+    "github": {
+        "description": "A simple static website hosted on Azure as a static web app for sharing travel itineraries with my travel companions",
+        "topics": [
+            "azure",
+            "static-website",
+            "github-actions"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-molyneux-me-dev",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "westeurope"
+            ],
+            "role_assignments": [
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
+                    ]
+                }
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-molyneux-me-prd",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "westeurope"
+            ],
+            "role_assignments": [
+                {
+                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                    "role_definitions": [
+                        "DNS Zone Contributor"
+                    ]
+                }
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        }
+    ]
+}
