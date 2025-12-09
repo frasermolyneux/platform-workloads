@@ -16,6 +16,14 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "rbac_administrator": [
+                {
+                    "allowed_roles": [
+                        "Storage Blob Data Contributor",
+                        "Storage Table Data Contributor"
+                    ]
+                }
+            ],
             "locations": [
                 "westeurope"
             ],
@@ -41,6 +49,14 @@
             "subscription": "sub-molyneux-me-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "rbac_administrator": [
+                {
+                    "allowed_roles": [
+                        "Storage Blob Data Contributor",
+                        "Storage Table Data Contributor"
+                    ]
+                }
+            ],
             "locations": [
                 "westeurope"
             ],
