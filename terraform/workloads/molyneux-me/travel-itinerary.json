@@ -20,7 +20,8 @@
                 {
                     "allowed_roles": [
                         "Storage Blob Data Contributor",
-                        "Storage Table Data Contributor"
+                        "Storage Table Data Contributor",
+                        "Application Administrator"
                     ]
                 }
             ],
@@ -53,7 +54,8 @@
                 {
                     "allowed_roles": [
                         "Storage Blob Data Contributor",
-                        "Storage Table Data Contributor"
+                        "Storage Table Data Contributor",
+                        "Application Administrator"
                     ]
                 }
             ],
