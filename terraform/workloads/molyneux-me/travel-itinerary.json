@@ -33,6 +33,12 @@
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
+                },
+                {
+                    "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
+                    "role_definitions": [
+                        "Reader"
+                    ]
                 }
             ],
             "resource_groups": [
@@ -68,6 +74,12 @@
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                     "role_definitions": [
                         "DNS Zone Contributor"
+                    ]
+                },
+                {
+                    "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
+                    "role_definitions": [
+                        "Reader"
                     ]
                 }
             ],
