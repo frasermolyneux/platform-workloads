@@ -50,7 +50,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Directory Readers"
             ]
         },
         {
@@ -92,7 +93,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Directory Readers"
             ]
         }
     ]
