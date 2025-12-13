@@ -25,7 +25,7 @@
                 }
             ],
             "locations": [
-                "westeurope"
+                "uksouth"
             ],
             "role_assignments": [
                 {
@@ -68,7 +68,7 @@
                 }
             ],
             "locations": [
-                "westeurope"
+                "uksouth"
             ],
             "role_assignments": [
                 {
