@@ -1,10 +1,10 @@
 {
     "name": "travel-itinerary",
     "github": {
-        "description": "A simple static website hosted on Azure as a static web app for sharing travel itineraries with my travel companions",
+        "description": "A simple ASP.NET Core app hosted on Azure for sharing travel itineraries with my travel companions",
         "topics": [
             "azure",
-            "static-website",
+            "aspnet-core",
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,
