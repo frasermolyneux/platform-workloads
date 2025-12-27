@@ -9,7 +9,6 @@
         ],
         "visibility": "private"
     },
-    "create_dev_center_project": false,
     "environments": [
         {
             "name": "Development",

@@ -25,7 +25,6 @@ locals {
       for environment in try(workload.environments, []) : {
         key                          = format("%s-%s", workload.name, environment.name)
         workload_name                = workload.name
-        create_dev_center_project    = try(workload.create_dev_center_project, false)
         environment_name             = environment.name
         environment_tag              = lookup(var.environment_map, environment.name, lower(environment.name))
         connect_to_github            = try(environment.connect_to_github, false)
