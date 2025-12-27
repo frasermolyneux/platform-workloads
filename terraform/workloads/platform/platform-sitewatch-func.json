@@ -1,0 +1,64 @@
+{
+    "name": "platform-sitewatch-func",
+    "github": {
+        "description": "HTTP-based availability checks delivered via Azure Functions. Deployed with Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "azure-functions",
+            "uptime",
+            "health-check"
+        ],
+        "visibility": "public",
+        "add_sonarcloud_secrets": true
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth",
+                "eastus"
+            ],
+            "requires_terraform_state_access": [
+                "platform-monitoring"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth",
+                "eastus",
+                "westeurope",
+                "eastasia"
+            ],
+            "requires_terraform_state_access": [
+                "platform-monitoring"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor",
+                        "Key Vault Secrets Officer"
+                    ]
+                }
+            ]
+        }
+    ]
+}
