@@ -1,63 +1,111 @@
 # Platform Workloads
 
-| Stage                  | Status                                                                                                                                                                                                                                      |
-| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| DevOps Secure Scanning | [![DevOps Secure Scanning](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml) |
-| Feature Development    | [![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)          |
-| Release To Production  | [![Release to Production](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml)    |
+[![DevOps Secure Scanning](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml)
+[![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)
+[![Release to Production](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml)
 
----
+## 📚 Documentation
+
+- **[Architecture](docs/architecture.md)** - System design, component overview, and key patterns
+- **[Workload Configuration Guide](docs/workload-configuration.md)** - Complete JSON schema reference and examples
+- **[Developer Guide](docs/developer-guide.md)** - Setup instructions, workflow, and troubleshooting
+- **[Prerequisites](docs/prerequisites.md)** - Required setup for service principals and permissions
 
 ## Overview
 
-This repository contains the Terraform code to create the Azure DevOps and GitHub connections for the Azure Landing Zones.
+**Declarative infrastructure automation** using JSON-driven Terraform to manage Azure AD service principals, GitHub/Azure DevOps configurations, and RBAC assignments for multiple workloads.
 
-Included in this are the configurations for the service principals in Azure Active Directory alongside their configuration in the Azure DevOps and GitHub connections.
+**What It Does**:
+- Creates service principals with OIDC federation (password-less auth)
+- Provisions GitHub repos with environments and variables
+- Configures Azure DevOps service connections and variable groups
+- Assigns Azure RBAC roles across subscriptions/resources
+- Provisions Terraform state storage per workload
 
----
+**How**: JSON files in `terraform/workloads/{category}/` \u2192 `fileset()` discovery \u2192 Terraform generates infrastructure
 
-## Prerequisites
+## Quick Start
 
-The following prerequisites are required to run this code:
+Create `terraform/workloads/{category}/workload-name.json`:
 
-* An spn has been created for the GitHub connection (`spn-platform-workloads-production` is current production app registration)
-
-* The spn has been granted `global administrator` within Entra ID.
-
-* A federated credential using the `GitHub Actions deploying Azure resources` scenario has been created under the app registration:
-
-![image](docs/images/spn-federated-credential.png)
-
-* The following secrets have been added to the `Production` environment in the GitHub environment:
-  * `AZDO_PERSONAL_ACCESS_TOKEN` - This is the PAT for the Azure DevOps organisation for the globaladdy@molyneux.io account
-  * `AZURE_CLIENT_ID` - This is the `Application (client) ID` of the `spn-platform-workloads-production` app registration
-  * `AZURE_SUBSCRIPTION_ID` - This is the subscription ID of the management subscription
-  * `AZURE_TENANT_ID` - This is the `Directory (tenant) ID` of the `spn-platform-workloads-production` app registration
-  * `TERRAFORM_GITHUB_TOKEN` - This is the PAT for the GitHub organisation
-
-![image](docs/images/github-environment-secrets.png)
-
-* There is a requirement that the service principal that runs the workloads deployment ia an owner of the `/` scope.
-
-```powershell
-az role assignment create --scope '/' --role 'Owner' --assignee-object-id $(az ad sp list --display-name "spn-platform-workloads-production" --query '[].{id:id}' -o tsv) --assignee-principal-type ServicePrincipal
+```json
+{
+  "name": "workload-name",
+  "github": {
+    "description": "Description of the workload",
+    "topics": ["azure"],
+    "visibility": "public"
+  },
+  "environments": [
+    {
+      "name": "Development",
+      "subscription": "sub-visualstudio-enterprise",
+      "connect_to_github": true,
+      "devops_project": "ProjectName",
+      "configure_for_terraform": true,
+      "role_assignments": [
+        {
+          "scope": "sub-visualstudio-enterprise",
+          "role_definitions": ["Contributor"]
+        }
+      ]
+    }
+  ]
+}
 ```
 
----
+Commit and push \u2014 Terraform auto-discovers and applies. See [Workload Configuration](docs/workload-configuration.md) for full schema.
 
-## NuGet and SonarCloud Tokens
+## Developer-backend-config="backends/prd.backend.hcl"
 
-This repository will create a resource group and key vault to store the NuGet and SonarCloud tokens; these are then injected into the GitHub secrets.
-
-* If the secrets need to be updated this can be done through Key Vault and re-running this workflow.
-* If the secrets do not exist (first-time run) then the workflow will fail.
-
----
-
-## Post Deployment Manual Step
-
-* There is a requirement that the service principal that runs the landing zones deployment is an owner of the `/` scope.
-
-```powershell
-az role assignment create --scope '/' --role 'Owner' --assignee-object-id $(az ad sp list --display-name "spn-platform-landing-zones-production" --query '[].{id:id}' -o tsv) --assignee-principal-type ServicePrincipal
+# Plan changes
+terraform plan -var-file="tfvars/prd.tfvars"
 ```
+
+### Common Commands
+
+```bash
+# Format Terraform code
+terraform fmt -recursive
+
+# Validate configuration
+terraform validate
+
+# Preview changes
+terraform plan -var-file="tfvars/prd.tfvars"
+
+# Apply changes
+terraform apply -var-file="tfvars/prd.tfvars"
+```
+
+📖 See the [Developer Guide](docs/developer-guide.md) for detailed setup, workflow, and troubleshooting.
+
+## Key Conventions
+
+- **Service Principal Naming**: `spn-{workload-name}-{environment-name}` (lowercase)
+- **Resource Naming**: `{type}-{workload}-{env}-{location}-{instance}`
+- **Environment Mapping**: Development→dev, Testing→tst, Production→prd
+- **Tenant ID**: `e56a6947-bb9a-4a6e-846a-1f118d1c3a14` (hard-coded)
+
+## Contributing
+
+1. Create workload JSON file in appropriate category
+2. Run `terraform fmt -recursive` before committing
+3. Test with `terraform plan` to verify changes
+4. Commit with clear, descriptive message
+5. Push and monitor GitHub Actions workflow
+
+## Support
+
+For issues, questions, or contributions, please refer to:
+- [Architecture documentation](docs/architecture.md) for design patterns
+- [Developer Guide](docs/developer-guide.md) for troubleshooting
+- Existing workload files for examplesPatterns
+
+- **Service Principal**: `spn-{workload}-{environment}` (lowercase)
+- **OIDC GitHub Subject**: `repo:frasermolyneux/{repo}:environment:{Environment}`
+- **Resource Key**: `{workload-name}-{environment-name}` in all `for_each` loops
+- **Scope Resolution**: Subscription aliases OR full ARM resource IDs
+- **Examples Exclusion**: `workloads/examples/` filtered in `workloads.load.tf`
+- **Environment Mapping**: Development\u2192dev, Testing\u2192tst, Production\u2192prd
+- **Tenant ID**: `e56a6947-bb9a-4a6e-846a-1f118d1c3a14` (hard-coded)
