@@ -37,6 +37,14 @@
                         "Key Vault Secrets User"
                     ]
                 }
+            ],
+            "role_assignments": [
+                {
+                    "scope": "sub-visualstudio-enterprise",
+                    "role_definitions": [
+                        "Reader"
+                    ]
+                }
             ]
         },
         {
@@ -62,6 +70,20 @@
                     ],
                     "rbac_administrator_roles": [
                         "Key Vault Secrets User"
+                    ]
+                }
+            ],
+            "role_assignments": [
+                {
+                    "scope": "sub-xi-portal-prd",
+                    "role_definitions": [
+                        "Reader"
+                    ]
+                },
+                {
+                    "scope": "sub-fm-geolocation-prd",
+                    "role_definitions": [
+                        "Reader"
                     ]
                 }
             ]
