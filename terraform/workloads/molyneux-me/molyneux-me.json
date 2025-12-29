@@ -42,6 +42,12 @@
                         "roles": [
                             "DNS Zone Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Development",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
                     }
                 ]
             }
@@ -76,6 +82,12 @@
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                         "roles": [
                             "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Production",
+                        "roles": [
+                            "Monitoring Reader"
                         ]
                     }
                 ]

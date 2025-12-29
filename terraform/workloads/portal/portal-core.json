@@ -52,6 +52,12 @@
                         "roles": [
                             "Key Vault Secrets Officer"
                         ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Development",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
                     }
                 ],
                 "rbac_admin_roles": [
@@ -98,6 +104,12 @@
                     {
                         "roles": [
                             "Key Vault Secrets Officer"
+                        ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Production",
+                        "roles": [
+                            "Monitoring Reader"
                         ]
                     }
                 ],
