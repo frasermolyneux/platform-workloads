@@ -1,110 +1,54 @@
 # Developer Guide
 
-## Prerequisites
+Audience: senior engineers running and evolving platform-workloads Terraform.
 
+## Environment Setup
 - Terraform >= 1.14.0
-- Azure CLI with authenticated session
-- PATs: Azure DevOps (`AZDO_PERSONAL_ACCESS_TOKEN`) and GitHub (`GITHUB_TOKEN`)
+- Azure CLI logged in (az login) and subscription set to match the tfvars backend/alias you plan to use.
+- Environment variables: AZDO_PERSONAL_ACCESS_TOKEN, GITHUB_TOKEN, and optionally AZDO_GITHUB_SERVICE_CONNECTION_PAT (used for github_service_connection_pat).
+- PATs must have rights for the Azure DevOps and GitHub providers; the platform service principal must be Owner at / scope.
 
-## Authentication Setup
-
-#### Azure Authentication
-
-```bash
-# Login to Azure
-az login
-
-# Set active subscription
-az account set --subscription "<subscription-id>"
-```
-
-#### Environment Variables
-
-Required for running Terraform:
-
-```powershell
-# Azure DevOps PAT for provider authentication
-$env:AZDO_PERSONAL_ACCESS_TOKEN = "<your-pat>"
-
-# GitHub PAT for provider authentication
-$env:GITHUB_TOKEN = "<your-github-pat>"
-```
-
-## Terraform Workflow
+## Running Terraform Locally
+1. From repository root: `cd terraform`
+2. Initialize against the production backend:
 
 ```bash
-cd terraform
 terraform init -backend-config="backends/prd.backend.hcl"
-terraform plan -var-file="tfvars/prd.tfvars" -var="github_service_connection_pat=$env:AZDO_GITHUB_SERVICE_CONNECTION_PAT"
-terraform fmt -recursive  # Before committing
 ```
 
-## Workload Patterns
-
-### JSON Discovery Mechanism
-
-Workloads are auto-discovered via `fileset()` in `workloads.load.tf`:
-- Files in `workloads/examples/` are excluded
-- Changes take effect on next `terraform plan/apply`
-- No Terraform code changes needed for new workloads
-
-### Testing New Workloads
+3. Plan (include the GitHub service connection PAT if required):
 
 ```bash
-# Validate JSON syntax
-Get-Content terraform/workloads/platform/new-workload.json | ConvertFrom-Json
-
-# Preview Terraform changes
-terraform plan -target='github_repository.workload["new-workload"]'
+terraform plan -var-file="tfvars/prd.tfvars" -var "github_service_connection_pat=$env:AZDO_GITHUB_SERVICE_CONNECTION_PAT"
 ```
 
-## Common Issues
+4. Apply after review:
 
-### Service Principal Permissions
-
-Most errors stem from missing Owner role at `/` scope:
-```powershell
-az role assignment list --assignee "<spn-object-id>" --scope "/"
-```
-
-### Role Assignment Scope Resolution
-
-Scopes support both:
-- Subscription aliases (e.g., `sub-visualstudio-enterprise`) → resolved via `data.azurerm_subscription`
-- Full ARM resource IDs → used directly
-
-### OIDC Federation Subjects
-
-**GitHub**: `repo:frasermolyneux/{repo}:environment:{Environment}`
-**Azure DevOps**: Dynamically set from service endpoint issuer/subject
-
-## Key Implementation Files
-
-- `workloads.load.tf`: Discovery via `fileset()` with examples exclusion
-- `azure-workloads.tf`: Core SPN and GitHub resources
-- `azure-workloads.if-*.tf`: Conditional resources by feature flag
-- `azure-workloads.role-assignments.tf`: Scope resolution logic
-- `azure-workloads.rbac.tf`: ABAC condition generation for role administrators
-
-## Troubleshooting Patterns
-
-### Workload Environment Key Format
-
-All resources keyed by `"{workload-name}-{environment-name}"` (e.g., `geo-location-Development`):
 ```bash
-terraform state show 'azuread_application.workload["geo-location-Development"]'
+terraform apply -var-file="tfvars/prd.tfvars"
 ```
 
-### RBAC Administrator Conditions
+5. Keep formatting clean before committing: `terraform fmt -recursive`.
 
-Generated ABAC conditions use GUID lookups from `data.azurerm_role_definition`. View generated conditions:
-```bash
-terraform state show 'azurerm_role_assignment.workload_rbac_administrator["platform-strategic-services-Production-sub-platform-strategic-0"]'
-```
+### Targeted Operations
+- Validate a new workload file: `Get-Content terraform/workloads/platform/new-workload.json | ConvertFrom-Json`
+- Plan a single resource to reduce noise: `terraform plan -var-file="tfvars/prd.tfvars" -target='github_repository.workload["portal-core"]'`
+- Inspect generated resources: `terraform state show 'azuread_application.workload["geo-location-Development"]'`
 
-### Terraform State Storage Role Requirements
+## Working with Workloads
+- Add JSON under terraform/workloads/{category}/; examples in terraform/workloads/platform/ and portal/ show production patterns.
+- Files under terraform/workloads/examples/ are ignored by design.
+- Reader is auto-added at the environment subscription when no assignment targets that scope; if an assignment exists, Reader is merged into its roles.
+- Scope inputs accept aliases from var.subscriptions, raw ARM IDs, workload: and workload-rg: helpers (see docs/workload-configuration.md).
 
-Service principals need THREE roles on state storage accounts:
-- Storage Account Key Operator Service Role (Terraform requirement)
-- Storage Blob Data Contributor (state read/write)
-- Reader (resource metadata)
+## CI Workflows
+- DevOps Secure Scanning runs repository checks.
+- Feature Development drives PR validation.
+- Release to Production runs promotion for mainline changes.
+Inspect .github/workflows for triggers and any required environment secrets before depending on them.
+
+## Troubleshooting Quick Checks
+- Permission failures: confirm the platform service principal is Owner at / (`az role assignment list --assignee <spn-object-id> --scope /`).
+- Scope resolution errors: ensure the alias exists in tfvars/prd.tfvars or supply a full ARM ID.
+- OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}; Azure DevOps issuer/subject come from the service endpoint.
+- Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.

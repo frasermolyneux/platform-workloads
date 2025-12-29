@@ -1,111 +1,38 @@
 # Platform Workloads - Copilot Instructions
 
-## Architecture Overview
+## Core Model
+- Declarative, JSON-driven Terraform: workload files under [terraform/workloads](../terraform/workloads) (excluding examples/) are discovered in [terraform/workloads.load.tf](../terraform/workloads.load.tf) and flattened into `{workload}-{environment}` keys consumed across the `azure-workloads.*.tf` stack.
+- Outputs per workload/environment: GitHub repo + environments, Azure AD app/SPN with OIDC, Azure DevOps project integrations, RBAC role assignments, optional Terraform state RG/SA/container.
+- Reader auto-injection: if no subscription-level assignment exists for an environment, a Reader role is added/merged for that subscription in [terraform/azure-workloads.tf](../terraform/azure-workloads.tf) locals.
 
-This repository manages Azure infrastructure and CI/CD configurations for multiple workloads using a **declarative JSON-driven Terraform approach**. Workload definitions in `terraform/workloads/` drive the creation of:
+## Workload JSON Shape
+- Minimal fields: `name`, `github` (description/topics/visibility), `environments` array with `name`, `subscription`, optional `devops_project`, `connect_to_github`, `connect_to_devops`, `configure_for_terraform`, `add_deploy_script_identity`.
+- Role inputs live under `role_assignments.assigned_roles[*]` (scope + roles array) and `role_assignments.rbac_admin_roles[*]` (allowed_roles). Directory roles, resource_groups, locations, and `requires_terraform_state_access` are optional extensions.
+- Scope inputs accept: subscription alias (`var.subscriptions`), full ARM ID, `sub:alias`, `workload:workload/environment`, or `workload-rg:workload/environment` helpers resolved in [terraform/azure-workloads.role-assignments.tf](../terraform/azure-workloads.role-assignments.tf).
 
-- **Azure AD** service principals with federated credentials (OIDC)
-- **GitHub** repositories with environment configurations
-- **Azure DevOps** projects, service connections, and variable groups
-- **Azure RBAC** role assignments at subscription/resource scopes
-- **Terraform state storage** (when `configure_for_terraform: true`)
+## Naming, Defaults, Guards
+- SPN/app naming: `spn-{workload}-{environment}` (lowercase) created in [terraform/azure-workloads.tf](../terraform/azure-workloads.tf); resource naming convention `{type}-{workload}-{env}-{location}-{instance}` with environment map Development→dev, Testing→tst, Production→prd ([terraform/variables.tf](../terraform/variables.tf)).
+- Tenant ID is fixed to `e56a6947-bb9a-4a6e-846a-1f118d1c3a14`; default location `uksouth` and instance `01` from vars.
+- Examples in `terraform/workloads/examples/` are intentionally ignored—real workloads live under platform/, portal/, geo-location/, etc.
 
-The core pattern: JSON workload files → Terraform reads via `fileset()` → generates all infrastructure.
+## OIDC & Integrations
+- GitHub federation subject: `repo:frasermolyneux/{repo}:environment:{Environment}`; environment variables `AZURE_CLIENT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_TENANT_ID` published per environment in [terraform/azure-workloads.if-github.tf](../terraform/azure-workloads.if-github.tf).
+- Azure DevOps federation issuer/subject come from the generated service endpoint; variable groups per environment expose the same Azure identifiers and Terraform backend details when `configure_for_terraform` is true ([terraform/azure-workloads.if-devops.tf](../terraform/azure-workloads.if-devops.tf)).
 
-## Workload Definition Structure
+## Terraform State Path
+- When `configure_for_terraform` is true, [terraform/azure-workloads.if-terraform.tf](../terraform/azure-workloads.if-terraform.tf) creates `rg-tf-{workload}-{env}-{location}-{instance}` + storage account + `tfstate` container, assigning the SPN `Storage Account Key Operator`, `Storage Blob Data Contributor`, and `Reader` on the account.
+- `requires_terraform_state_access` lets one workload read another's state (grants Storage Blob Data Reader on the target storage account).
 
-Workload JSON files (`terraform/workloads/**/*.json`) define everything. Key patterns:
+## RBAC Expansion & Delegation
+- Assigned roles are expanded per role name and resolved scope; deploy script identity (if enabled) receives the same set in [terraform/azure-workloads.role-assignments.tf](../terraform/azure-workloads.role-assignments.tf).
+- Conditional RBAC administration uses `Role Based Access Control Administrator` with ABAC conditions limiting allowed role IDs derived from `rbac_admin_roles` in [terraform/azure-workloads.rbac.tf](../terraform/azure-workloads.rbac.tf).
 
-```json
-{
-  "name": "workload-name",
-  "github": { 
-    "description": "...", 
-    "topics": [...],
-    "visibility": "public|private"
-  },
-  "environments": [
-    {
-      "name": "Development|Production",
-      "subscription": "sub-alias",
-      "devops_project": "ProjectName",
-      "connect_to_github": true,
-      "connect_to_devops": true,
-      "configure_for_terraform": true,
-      "add_deploy_script_identity": true,
-      "role_assignments": [
-        {
-          "scope": "sub-alias or full ARM resource ID",
-          "role_definitions": ["Contributor", "Key Vault Secrets Officer"]
-        }
-      ],
-      "directory_roles": ["Cloud application administrator"]
-    }
-  ]
-}
-```
+## Working Locally
+- From [terraform](../terraform): `terraform init -backend-config="backends/prd.backend.hcl"`; `terraform plan -var-file="tfvars/prd.tfvars"`; include `-var "github_service_connection_pat=$env:AZDO_GITHUB_SERVICE_CONNECTION_PAT"` when needed.
+- Common env vars: `AZDO_PERSONAL_ACCESS_TOKEN`, `GITHUB_TOKEN`, optional `AZDO_GITHUB_SERVICE_CONNECTION_PAT` for DevOps GitHub service connections.
+- Targeting examples: `terraform plan -var-file="tfvars/prd.tfvars" -target="github_repository.workload[\"portal-core\"]"`.
 
-**Important**: Files in `terraform/workloads/examples/` are excluded via `workloads.load.tf` logic.
-
-## Critical Patterns
-
-### 1. Service Principal Naming
-Format: `spn-{workload-name}-{environment-name}` (lowercase). Created per environment in [azure-workloads.tf](../terraform/azure-workloads.tf).
-
-### 2. OIDC Federation
-- **GitHub**: Subject `repo:frasermolyneux/{repo}:environment:{Environment}` ([azure-workloads.if-github.tf](../terraform/azure-workloads.if-github.tf))
-- **Azure DevOps**: Dynamic issuer/subject from service endpoint ([azure-workloads.if-devops.tf](../terraform/azure-workloads.if-devops.tf))
-
-### 3. Role Assignment Scopes
-Handles both subscription aliases and full ARM resource IDs. See [azure-workloads.role-assignments.tf](../terraform/azure-workloads.role-assignments.tf) for scope resolution logic using `data.azurerm_subscription.subscriptions`.
-
-### 4. Terraform State Management
-When `configure_for_terraform: true`, creates resource group `rg-tf-{workload}-{env}-{location}-{instance}` with storage account for remote state ([azure-workloads.if-terraform.tf](../terraform/azure-workloads.if-terraform.tf)).
-
-## Common Tasks
-
-### Adding a New Workload
-1. Create JSON file in `terraform/workloads/{category}/`
-2. Define `name`, `github`, and `environments` sections
-3. Terraform automatically picks it up via `fileset()` in [workloads.load.tf](../terraform/workloads.load.tf)
-4. Run `terraform plan` to preview changes
-
-### Modifying Role Assignments
-Edit `role_assignments` array in workload JSON. Each assignment:
-- `scope`: Subscription alias (e.g., `"sub-platform-strategic"`) or full ARM resource ID
-- `role_definitions`: Array of role names (not GUIDs)
-
-Both service principal AND deploy script identity (if enabled) get the roles.
-
-### Running Terraform
-Production workflow uses:
-```bash
-terraform plan -var-file="tfvars/prd.tfvars" -backend-config="backends/prd.backend.hcl"
-```
-
-Requires environment variables:
-- `AZDO_PERSONAL_ACCESS_TOKEN` (Azure DevOps PAT)
-- `GITHUB_TOKEN` (GitHub provider authentication)
-
-## Key Files
-
-- [workloads.load.tf](../terraform/workloads.load.tf): Discovers all workload JSON files
-- [azure-workloads.tf](../terraform/azure-workloads.tf): GitHub repos, environments, app registrations
-- [azure-workloads.rbac.tf](../terraform/azure-workloads.rbac.tf): Complex RBAC administrator mappings
-- [locals.tf](../terraform/locals.tf): Resource naming conventions
-- [variables.tf](../terraform/variables.tf): `subscriptions` map and `environment_map` (Dev→dev, Prod→prd)
-
-## Conventions
-
-- **Subscription aliases**: Use short names like `sub-visualstudio-enterprise` mapped in `tfvars/prd.tfvars`
-- **Tenant ID**: Hard-coded `e56a6947-bb9a-4a6e-846a-1f118d1c3a14` across multiple files
-- **Resource naming**: `{type}-{workload}-{env}-{location}-{instance}` format
-- **Terraform formatting**: Run `terraform fmt` before commits (see terminal history)
-- **Environment mapping**: Development→dev, Testing→tst, Production→prd
-
-## Gotchas
-
-1. **Service principal must be Owner at `/` scope** for creating role assignments across subscriptions
-2. **Workload JSON changes are immediate** - no staging/preview step beyond `terraform plan`
-3. **Deploy script identity** requires `add_deploy_script_identity: true` AND role assignments
-4. **Examples folder exclusion**: `workloads/examples/` files intentionally ignored by `!startswith(file_path, "examples/")`
+## Quick Pointers
+- Add a workload by dropping JSON under `terraform/workloads/{category}/`; discovery is automatic via `fileset()`.
+- Service principal executing Terraform needs Owner at `/` to create cross-subscription assignments.
+- Docs: [docs/architecture.md](../docs/architecture.md), [docs/workload-configuration.md](../docs/workload-configuration.md), [docs/developer-guide.md](../docs/developer-guide.md), [docs/prerequisites.md](../docs/prerequisites.md).

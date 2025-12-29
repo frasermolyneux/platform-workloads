@@ -40,7 +40,18 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
   "connect_to_devops": true,
   "configure_for_terraform": true,
   "add_deploy_script_identity": true,
-  "role_assignments": [...],
+  "role_assignments": {
+    "assigned_roles": [
+      { "roles": ["Contributor"] },
+      {
+        "scope": "/subscriptions/.../resourceGroups/...",
+        "roles": ["DNS Zone Contributor"]
+      }
+    ],
+    "rbac_admin_roles": [
+      { "allowed_roles": ["Key Vault Secrets User"] }
+    ]
+  },
   "directory_roles": [...],
   "requires_terraform_state_access": [...]
 }
@@ -73,20 +84,39 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                      |
 | `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                |
 | `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                          |
-| `role_assignments`                | array   | No       | Azure RBAC role assignments                                             |
+| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                   |
 | `directory_roles`                 | array   | No       | Entra ID directory roles                                                |
 | `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state |
 
-### Role Assignment Scopes
+### Role Assignments
+
+Environment-level `role_assignments`:
 
 ```json
-{ "scope": "sub-alias or /subscriptions/.../resourceGroups/.../providers/...", "role_definitions": ["Role Name"] }
+{
+  "assigned_roles": [
+    { "roles": ["Contributor", "Key Vault Secrets Officer"] },
+    { "scope": "/subscriptions/.../resourceGroups/rg-foo", "roles": ["DNS Zone Contributor"] }
+  ],
+  "rbac_admin_roles": [
+    { "allowed_roles": ["Key Vault Secrets User"] }
+  ]
+}
 ```
 
-**Scope Resolution**:
-- Subscription aliases (e.g., `sub-platform-strategic`) resolved via `data.azurerm_subscription`
-- Full ARM resource IDs used directly
-- Service principal AND deploy script identity (if enabled) receive assignments
+- If `scope` is omitted, the environment `subscription` is used.
+- A `Reader` assignment is automatically added on the environment subscription; if a role already targets that scope, `Reader` is merged into its roles.
+- `assigned_roles.roles` accept any Azure RBAC role name.
+- Scope input options (case-insensitive prefixes):
+  - `sub:<alias>` resolves to a subscription from `var.subscriptions` (e.g., `sub:sub-visualstudio-enterprise`).
+  - `/subscriptions/...` uses a raw ARM ID (any level: subscription, RG, or resource).
+  - `workload:<workload>/<Environment>` targets another workload environment’s subscription (e.g., `workload:portal-core/Production`).
+  - `workload-rg:<workload>/<Environment>/<rg-name>/<location>` targets a workload resource group after templating (e.g., `workload-rg:portal-core/Production/rg-portal-core-prd-app-uksouth`).
+  - Bare values continue to support existing aliases or ARM IDs for backward compatibility.
+- `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.
+- Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
+
+Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. If `scope` is omitted for a resource group role assignment, the resource group ID is used by default.
 
 ## Examples
 

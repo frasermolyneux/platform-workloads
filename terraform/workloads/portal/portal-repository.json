@@ -27,37 +27,56 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Website Contributor",
-                        "API Management Service Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ],
-                    "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "roles": [
+                            "Website Contributor",
+                            "API Management Service Contributor"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Storage Blob Data Owner"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -68,37 +87,56 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Website Contributor",
-                        "API Management Service Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ],
-                    "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "roles": [
+                            "Website Contributor",
+                            "API Management Service Contributor"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Storage Blob Data Owner"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

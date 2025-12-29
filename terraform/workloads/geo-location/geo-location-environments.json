@@ -19,19 +19,20 @@
             "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "App Configuration Data Owner"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "App Configuration Data Owner"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -39,19 +40,20 @@
             "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "scope": "sub-fm-geolocation-prd",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "App Configuration Data Owner"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "App Configuration Data Owner"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

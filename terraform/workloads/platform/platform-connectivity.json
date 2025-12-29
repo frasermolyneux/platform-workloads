@@ -16,27 +16,29 @@
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
             "subscription": "sub-platform-connectivity",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "scope": "sub-platform-connectivity",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

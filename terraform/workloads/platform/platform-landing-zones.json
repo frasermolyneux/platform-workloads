@@ -17,14 +17,15 @@
             "name": "Production",
             "subscription": "sub-platform-management",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "scope": "sub-platform-management",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

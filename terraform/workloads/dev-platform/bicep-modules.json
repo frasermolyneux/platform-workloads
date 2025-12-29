@@ -14,14 +14,15 @@
             "name": "Production",
             "subscription": "sub-platform-strategic",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "scope": "sub-platform-strategic",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Reader"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

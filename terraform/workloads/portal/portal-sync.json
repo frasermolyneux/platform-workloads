@@ -25,19 +25,20 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -48,19 +49,20 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

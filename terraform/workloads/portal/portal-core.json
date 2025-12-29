@@ -24,31 +24,44 @@
             "requires_terraform_state_access": [
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -58,31 +71,44 @@
             "requires_terraform_state_access": [
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
-            "rbac_administrator": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

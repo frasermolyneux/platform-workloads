@@ -27,25 +27,26 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                },
-                {
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -56,25 +57,26 @@
                 "portal-core",
                 "portal-environments"
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                },
-                {
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

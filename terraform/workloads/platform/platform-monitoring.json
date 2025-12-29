@@ -21,30 +21,31 @@
             "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
-                },
-                {
-                    "scope": "sub-enterprise-devtest-legacy",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-molyneux-me-dev",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    },
+                    {
+                        "scope": "sub-enterprise-devtest-legacy",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-molyneux-me-dev",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -52,78 +53,79 @@
             "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "scope": "sub-fm-geolocation-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-mx-consulting-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-platform-connectivity",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-platform-identity",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-platform-management",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
-                },
-                {
-                    "scope": "sub-platform-strategic",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-talkwithtiles-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-xi-demomanager-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-finances-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                },
-                {
-                    "scope": "sub-molyneux-me-prd",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "sub-fm-geolocation-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-mx-consulting-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-connectivity",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-identity",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-strategic",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-talkwithtiles-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-xi-demomanager-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-xi-portal-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-finances-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-molyneux-me-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

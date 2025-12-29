@@ -29,26 +29,37 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ],
-                    "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner",
-                        "Storage Blob Data Contributor",
-                        "Storage Queue Data Contributor"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Contributor",
+                                    "Storage Queue Data Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Reader"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -67,32 +78,44 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ],
-                    "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner",
-                        "Storage Blob Data Contributor",
-                        "Storage Queue Data Contributor"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Contributor",
+                                    "Storage Queue Data Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
-            "role_assignments": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                },
-                {
-                    "scope": "sub-fm-geolocation-prd",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "sub-xi-portal-prd",
+                        "roles": [
+                            "Reader"
+                        ]
+                    },
+                    {
+                        "scope": "sub-fm-geolocation-prd",
+                        "roles": [
+                            "Reader"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

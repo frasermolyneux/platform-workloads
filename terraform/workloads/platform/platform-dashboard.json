@@ -25,9 +25,15 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-uksouth",
-                    "role_assignments": [
-                        "Contributor"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ]
         },
@@ -39,9 +45,15 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-uksouth",
-                    "role_assignments": [
-                        "Contributor"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ]
         }

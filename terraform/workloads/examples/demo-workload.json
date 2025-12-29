@@ -15,14 +15,15 @@
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "scope": "sub-platform-management",
-                    "role_definitions": [
-                        "Contributor"
-                    ]
-                }
-            ]
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }
