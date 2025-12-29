@@ -35,6 +35,7 @@
                     ],
                     "rbac_administrator_roles": [
                         "Key Vault Secrets User",
+                        "Storage Blob Data Owner",
                         "Storage Blob Data Contributor",
                         "Storage Queue Data Contributor"
                     ]
@@ -72,6 +73,7 @@
                     ],
                     "rbac_administrator_roles": [
                         "Key Vault Secrets User",
+                        "Storage Blob Data Owner",
                         "Storage Blob Data Contributor",
                         "Storage Queue Data Contributor"
                     ]
