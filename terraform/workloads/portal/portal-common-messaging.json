@@ -46,6 +46,15 @@
             ],
             "directory_roles": [
                 "Cloud application administrator"
+            ],
+            "rbac_administrator": [
+                {
+                    "allowed_roles": [
+                        "Storage Blob Data Owner",
+                        "Azure Service Bus Data Receiver",
+                        "Azure Service Bus Data Sender"
+                    ]
+                }
             ]
         },
         {
@@ -82,6 +91,15 @@
             ],
             "directory_roles": [
                 "Cloud application administrator"
+            ],
+            "rbac_administrator": [
+                {
+                    "allowed_roles": [
+                        "Storage Blob Data Owner",
+                        "Azure Service Bus Data Receiver",
+                        "Azure Service Bus Data Sender"
+                    ]
+                }
             ]
         }
     ]
