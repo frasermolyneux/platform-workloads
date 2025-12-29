@@ -1,0 +1,53 @@
+{
+    "name": "platform-hosting",
+    "github": {
+        "description": "Shared App Service and Static Web App hosting plans for downstream workloads. Deployed using Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "app-service",
+            "static-web-apps",
+            "shared-hosting"
+        ],
+        "visibility": "public"
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth",
+                "westeurope"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-strategic",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth",
+                "westeurope"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ]
+                }
+            ]
+        }
+    ]
+}
