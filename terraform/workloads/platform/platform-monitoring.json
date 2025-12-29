@@ -23,6 +23,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
@@ -30,12 +31,14 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-enterprise-devtest-legacy",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-molyneux-me-dev",
                     "role_definitions": [
                         "Contributor"
@@ -54,30 +57,35 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-mx-consulting-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-platform-connectivity",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-platform-identity",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-platform-management",
                     "role_definitions": [
                         "Contributor",
@@ -85,36 +93,42 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-platform-strategic",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-talkwithtiles-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-xi-demomanager-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-finances-prd",
                     "role_definitions": [
                         "Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-molyneux-me-prd",
                     "role_definitions": [
                         "Contributor"

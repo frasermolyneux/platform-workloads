@@ -17,6 +17,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-platform-management",
                     "role_definitions": [
                         "Contributor"

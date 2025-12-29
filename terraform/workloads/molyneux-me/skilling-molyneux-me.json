@@ -18,6 +18,7 @@
             "configure_for_terraform": false,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer"
@@ -36,6 +37,7 @@
             "configure_for_terraform": false,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "role_definitions": [
                         "Contributor",
                         "Key Vault Secrets Officer"

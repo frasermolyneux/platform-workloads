@@ -21,6 +21,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
@@ -41,6 +42,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
                         "Contributor",

@@ -29,6 +29,7 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
@@ -37,6 +38,7 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
@@ -58,6 +60,7 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Contributor",
@@ -66,6 +69,7 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"

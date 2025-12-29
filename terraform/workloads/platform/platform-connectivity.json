@@ -18,6 +18,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor"
@@ -31,6 +32,7 @@
             "devops_project": "Molyneux.IO",
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-platform-connectivity",
                     "role_definitions": [
                         "Contributor"

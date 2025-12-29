@@ -27,6 +27,7 @@
                     "name": "rg-{workload}-{env}-uksouth",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor"
                             ]
@@ -45,6 +46,7 @@
                     "name": "rg-{workload}-{env}-uksouth",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor"
                             ]
