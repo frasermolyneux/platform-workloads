@@ -28,8 +28,8 @@ locals {
             )
           )
         )
-        scope_name      = scope_resolved
-        scope_id        = scope_resolved
+        scope_name      = tostring(scope_resolved)
+        scope_id        = tostring(scope_resolved)
         subscription_id = try(data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].subscription_id, null)
         allowed_roles = distinct(compact(flatten([
           try(entry.allowed_roles, [])
@@ -75,8 +75,8 @@ locals {
                 )
               )
             )
-            key        = format("%s|%s", scope_resolved, role_name)
-            scope_name = scope_resolved
+            key        = format("%s|%s", tostring(scope_resolved), role_name)
+            scope_name = tostring(scope_resolved)
             role_name  = role_name
           }
         ]
@@ -116,8 +116,8 @@ locals {
                 )
               )
             )
-            key        = format("%s|%s", scope_resolved, role_name)
-            scope_name = scope_resolved
+            key        = format("%s|%s", tostring(scope_resolved), role_name)
+            scope_name = tostring(scope_resolved)
             role_name  = role_name
           }
         ]
@@ -171,7 +171,7 @@ locals {
             for role_name in distinct(compact(flatten([
               try(entry.allowed_roles, [])
             ]))) :
-            format("%s|%s", scope_id, role_name)
+            format("%s|%s", tostring(scope_id), role_name)
           ]
         }
         if length(distinct(compact(flatten([
@@ -208,7 +208,7 @@ locals {
           principal_object_id = azuread_service_principal.workload[resource_group.workload_environment_key].object_id
           allowed_role_keys = [
             for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) :
-            format("%s|%s", scope_id, role_name)
+            format("%s|%s", tostring(scope_id), role_name)
           ]
         }
         if length(distinct(compact(flatten([try(entry.allowed_roles, [])])))) > 0
