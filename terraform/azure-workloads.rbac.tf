@@ -32,39 +32,51 @@ locals {
     if length(try(environment.rbac_administrator, [])) > 0
   }
 
-  workload_rbac_allowed_role_map = {
-    for request in distinct(flatten(concat(
-      [
-        for environment in local.workload_environments : [
-          for entry in try(environment.rbac_administrator, []) : [
-            for role_name in distinct(compact(flatten([
-              try(entry.allowed_roles, []),
-              try(entry.roles, []),
-              try([entry.role], []),
-              can(tostring(entry)) ? [tostring(entry)] : []
-              ]))) : {
-              key        = format("%s|%s", try(entry.scope, environment.subscription), role_name)
-              scope_name = try(entry.scope, environment.subscription)
-              role_name  = role_name
-            }
-          ]
-        ]
-      ],
-      [
-        for resource_group in local.workload_environment_resource_groups : [
-          for role_name in resource_group.rbac_administrator_roles : {
-            key        = format("%s|%s", resource_group.key, role_name)
-            scope_name = azapi_resource.workload_resource_group[resource_group.key].id
+  // Environment-scoped RBAC roles (all values known at plan time)
+  workload_rbac_allowed_role_map_env = {
+    for request in distinct(flatten([
+      for environment in local.workload_environments : [
+        for entry in try(environment.rbac_administrator, []) : [
+          for role_name in distinct(compact(flatten([
+            try(entry.allowed_roles, []),
+            try(entry.roles, []),
+            try([entry.role], []),
+            can(tostring(entry)) ? [tostring(entry)] : []
+            ]))) : {
+            key        = format("%s|%s", try(entry.scope, environment.subscription), role_name)
+            scope_name = try(entry.scope, environment.subscription)
             role_name  = role_name
           }
         ]
       ]
-    ))) :
+    ])) :
     request.key => {
       scope_name = request.scope_name
       role_name  = request.role_name
     }
   }
+
+  // Resource-group-scoped RBAC roles (scope IDs resolve after apply, but keys are fully known at plan time)
+  workload_rbac_allowed_role_map_rg = {
+    for request in flatten([
+      for resource_group in local.workload_environment_resource_groups : [
+        for role_name in resource_group.rbac_administrator_roles : {
+          key        = format("%s|%s", resource_group.key, role_name)
+          scope_name = azapi_resource.workload_resource_group[resource_group.key].id
+          role_name  = role_name
+        }
+      ]
+    ]) :
+    request.key => {
+      scope_name = request.scope_name
+      role_name  = request.role_name
+    }
+  }
+
+  workload_rbac_allowed_role_map = merge(
+    local.workload_rbac_allowed_role_map_env,
+    local.workload_rbac_allowed_role_map_rg
+  )
 
   workload_rbac_administrator_assignments = flatten(concat(
     [
