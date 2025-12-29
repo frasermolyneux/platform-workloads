@@ -55,6 +55,12 @@
                             "Key Vault Secrets Officer",
                             "Storage Blob Data Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Development",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
                     }
                 ],
                 "rbac_admin_roles": [
@@ -110,6 +116,12 @@
                             "Contributor",
                             "Key Vault Secrets Officer",
                             "Storage Blob Data Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Production",
+                        "roles": [
+                            "Monitoring Reader"
                         ]
                     }
                 ],
