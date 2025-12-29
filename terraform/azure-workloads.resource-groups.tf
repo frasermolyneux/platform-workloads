@@ -52,6 +52,13 @@ locals {
   ])
 }
 
+locals {
+  workload_environment_resource_groups_map = {
+    for resource_group in local.workload_environment_resource_groups :
+    resource_group.key => resource_group
+  }
+}
+
 resource "azapi_resource" "workload_resource_group" {
   for_each = { for each in local.workload_environment_resource_groups : each.key => each }
 
@@ -70,7 +77,7 @@ resource "azapi_resource" "workload_resource_group" {
 resource "azurerm_role_assignment" "workload_resource_group" {
   for_each = { for each in local.workload_environment_resource_group_role_assignments : each.key => each }
 
-  scope                = coalesce(each.value.scope, local.workload_environment_resource_groups[each.value.resource_group_key].role_assignments.default_scope, azapi_resource.workload_resource_group[each.value.resource_group_key].id)
+  scope                = coalesce(each.value.scope, local.workload_environment_resource_groups_map[each.value.resource_group_key].role_assignments.default_scope, azapi_resource.workload_resource_group[each.value.resource_group_key].id)
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
