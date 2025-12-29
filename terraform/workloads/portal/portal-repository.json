@@ -50,8 +50,12 @@
                         "Key Vault Secrets Officer"
                     ],
                     "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
+                        {
+                            "allowed_roles": [
+                                "Key Vault Secrets User",
+                                "Storage Blob Data Owner"
+                            ]
+                        }
                     ]
                 }
             ],
@@ -91,8 +95,12 @@
                         "Key Vault Secrets Officer"
                     ],
                     "rbac_administrator_roles": [
-                        "Key Vault Secrets User",
-                        "Storage Blob Data Owner"
+                        {
+                            "allowed_roles": [
+                                "Key Vault Secrets User",
+                                "Storage Blob Data Owner"
+                            ]
+                        }
                     ]
                 }
             ],

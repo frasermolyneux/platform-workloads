@@ -16,20 +16,21 @@ locals {
           null
         )
         allowed_roles = distinct(compact(flatten([
-          try(entry.allowed_roles, []),
-          try(entry.roles, []),
-          try([entry.role], []),
-          can(tostring(entry)) ? [tostring(entry)] : []
+          try(entry.allowed_roles, [])
         ])))
       }
       if length(distinct(compact(flatten([
-        try(entry.allowed_roles, []),
-        try(entry.roles, []),
-        try([entry.role], []),
-        can(tostring(entry)) ? [tostring(entry)] : []
+        try(entry.allowed_roles, [])
       ])))) > 0
     ]
     if length(try(environment.rbac_administrator_roles, [])) > 0
+  }
+
+  workload_resource_group_rbac_roles = {
+    for resource_group in local.workload_environment_resource_groups :
+    resource_group.key => distinct(compact(flatten([
+      for entry in try(resource_group.rbac_administrator_roles, []) : try(entry.allowed_roles, [])
+    ])))
   }
 
   // Environment-scoped RBAC roles (all values known at plan time)
@@ -38,10 +39,7 @@ locals {
       for environment in local.workload_environments : [
         for entry in try(environment.rbac_administrator_roles, []) : [
           for role_name in distinct(compact(flatten([
-            try(entry.allowed_roles, []),
-            try(entry.roles, []),
-            try([entry.role], []),
-            can(tostring(entry)) ? [tostring(entry)] : []
+            try(entry.allowed_roles, [])
             ]))) : {
             key        = format("%s|%s", try(entry.scope, environment.subscription), role_name)
             scope_name = try(entry.scope, environment.subscription)
@@ -60,7 +58,7 @@ locals {
   workload_rbac_allowed_role_map_rg = {
     for request in flatten([
       for resource_group in local.workload_environment_resource_groups : [
-        for role_name in resource_group.rbac_administrator_roles : {
+        for role_name in lookup(local.workload_resource_group_rbac_roles, resource_group.key, []) : {
           key        = format("%s|%s", resource_group.key, role_name)
           scope_name = azapi_resource.workload_resource_group[resource_group.key].id
           role_name  = role_name
@@ -96,19 +94,13 @@ locals {
           principal_object_id = azuread_service_principal.workload[environment.key].object_id
           allowed_role_keys = [
             for role_name in distinct(compact(flatten([
-              try(entry.allowed_roles, []),
-              try(entry.roles, []),
-              try([entry.role], []),
-              can(tostring(entry)) ? [tostring(entry)] : []
+              try(entry.allowed_roles, [])
             ]))) :
             format("%s|%s", try(entry.scope, environment.subscription), role_name)
           ]
         }
         if length(distinct(compact(flatten([
-          try(entry.allowed_roles, []),
-          try(entry.roles, []),
-          try([entry.role], []),
-          can(tostring(entry)) ? [tostring(entry)] : []
+          try(entry.allowed_roles, [])
         ])))) > 0
       ]
     ],
@@ -119,11 +111,11 @@ locals {
         scope_id                 = azapi_resource.workload_resource_group[resource_group.key].id
         principal_object_id      = azuread_service_principal.workload[resource_group.workload_environment_key].object_id
         allowed_role_keys = [
-          for role_name in resource_group.rbac_administrator_roles :
+          for role_name in lookup(local.workload_resource_group_rbac_roles, resource_group.key, []) :
           format("%s|%s", resource_group.key, role_name)
         ]
       }
-      if length(resource_group.rbac_administrator_roles) > 0
+      if length(lookup(local.workload_resource_group_rbac_roles, resource_group.key, [])) > 0
     ]
   ))
 }

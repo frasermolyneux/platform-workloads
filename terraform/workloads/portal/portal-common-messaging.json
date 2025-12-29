@@ -28,9 +28,13 @@
                         "Contributor"
                     ],
                     "rbac_administrator_roles": [
-                        "Storage Blob Data Owner",
-                        "Azure Service Bus Data Receiver",
-                        "Azure Service Bus Data Sender"
+                        {
+                            "allowed_roles": [
+                                "Storage Blob Data Owner",
+                                "Azure Service Bus Data Receiver",
+                                "Azure Service Bus Data Sender"
+                            ]
+                        }
                     ]
                 }
             ],
@@ -73,9 +77,13 @@
                         "Contributor"
                     ],
                     "rbac_administrator_roles": [
-                        "Storage Blob Data Owner",
-                        "Azure Service Bus Data Receiver",
-                        "Azure Service Bus Data Sender"
+                        {
+                            "allowed_roles": [
+                                "Storage Blob Data Owner",
+                                "Azure Service Bus Data Receiver",
+                                "Azure Service Bus Data Sender"
+                            ]
+                        }
                     ]
                 }
             ],

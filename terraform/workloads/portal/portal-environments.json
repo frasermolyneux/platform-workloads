@@ -26,8 +26,12 @@
                         "App Configuration Data Owner"
                     ],
                     "rbac_administrator_roles": [
-                        "App Configuration Data Reader",
-                        "Key Vault Secrets User"
+                        {
+                            "allowed_roles": [
+                                "App Configuration Data Reader",
+                                "Key Vault Secrets User"
+                            ]
+                        }
                     ]
                 }
             ],
@@ -49,8 +53,12 @@
                         "App Configuration Data Owner"
                     ],
                     "rbac_administrator_roles": [
-                        "App Configuration Data Reader",
-                        "Key Vault Secrets User"
+                        {
+                            "allowed_roles": [
+                                "App Configuration Data Reader",
+                                "Key Vault Secrets User"
+                            ]
+                        }
                     ]
                 }
             ],
