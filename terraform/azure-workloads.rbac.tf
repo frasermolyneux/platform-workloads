@@ -8,21 +8,21 @@ locals {
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
         scope_value            = coalesce(try(entry.scope, null), environment.subscription)
         scope_resolved = (
-          scope_value == null
+          coalesce(try(entry.scope, null), environment.subscription) == null
           ? data.azurerm_subscription.subscriptions[environment.subscription].id
           : (
-            startswith(lower(scope_value), "/subscriptions/")
-            ? scope_value
+            startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+            ? coalesce(try(entry.scope, null), environment.subscription)
             : (
-              startswith(lower(scope_value), "sub:")
-              ? data.azurerm_subscription.subscriptions[replace(lower(scope_value), "sub:", "")].id
+              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
+              ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
               : (
-                startswith(lower(scope_value), "workload:")
-                ? local.workload_environment_subscription_id_by_name[replace(lower(scope_value), "workload:", "")]
+                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
+                ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
                 : (
-                  startswith(lower(scope_value), "workload-rg:")
-                  ? local.workload_resource_group_scope_map[replace(lower(scope_value), "workload-rg:", "")]
-                  : data.azurerm_subscription.subscriptions[scope_value].id
+                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
+                  ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
+                  : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
                 )
               )
             )
@@ -30,7 +30,7 @@ locals {
         )
         scope_name      = scope_resolved
         scope_id        = scope_resolved
-        subscription_id = try(data.azurerm_subscription.subscriptions[scope_value].subscription_id, null)
+        subscription_id = try(data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].subscription_id, null)
         allowed_roles = distinct(compact(flatten([
           try(entry.allowed_roles, [])
         ])))
@@ -55,21 +55,21 @@ locals {
             ]))) : {
             scope_value = coalesce(try(entry.scope, null), environment.subscription)
             scope_resolved = (
-              scope_value == null
+              coalesce(try(entry.scope, null), environment.subscription) == null
               ? data.azurerm_subscription.subscriptions[environment.subscription].id
               : (
-                startswith(lower(scope_value), "/subscriptions/")
-                ? scope_value
+                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+                ? coalesce(try(entry.scope, null), environment.subscription)
                 : (
-                  startswith(lower(scope_value), "sub:")
-                  ? data.azurerm_subscription.subscriptions[replace(lower(scope_value), "sub:", "")].id
+                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
+                  ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
                   : (
-                    startswith(lower(scope_value), "workload:")
-                    ? local.workload_environment_subscription_id_by_name[replace(lower(scope_value), "workload:", "")]
+                    startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
+                    ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
                     : (
-                      startswith(lower(scope_value), "workload-rg:")
-                      ? local.workload_resource_group_scope_map[replace(lower(scope_value), "workload-rg:", "")]
-                      : data.azurerm_subscription.subscriptions[scope_value].id
+                      startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
+                      ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
+                      : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
                     )
                   )
                 )
@@ -96,21 +96,21 @@ locals {
           for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) : {
             scope_value = coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
             scope_resolved = (
-              scope_value == null
+              coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id) == null
               ? azapi_resource.workload_resource_group[resource_group.key].id
               : (
-                startswith(lower(scope_value), "/subscriptions/")
-                ? scope_value
+                startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+                ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
                 : (
-                  startswith(lower(scope_value), "sub:")
-                  ? data.azurerm_subscription.subscriptions[replace(lower(scope_value), "sub:", "")].id
+                  startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
+                  ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:", "")].id
                   : (
-                    startswith(lower(scope_value), "workload:")
-                    ? local.workload_environment_subscription_id_by_name[replace(lower(scope_value), "workload:", "")]
+                    startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:")
+                    ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:", "")]
                     : (
-                      startswith(lower(scope_value), "workload-rg:")
-                      ? local.workload_resource_group_scope_map[replace(lower(scope_value), "workload-rg:", "")]
-                      : data.azurerm_subscription.subscriptions[scope_value].id
+                      startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:")
+                      ? local.workload_resource_group_scope_map[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:", "")]
+                      : data.azurerm_subscription.subscriptions[coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)].id
                     )
                   )
                 )
@@ -145,23 +145,22 @@ locals {
             entry_index
           )
           workload_environment_key = environment.key
-          scope_value              = coalesce(try(entry.scope, null), environment.subscription)
           scope_id = (
-            scope_value == null
+            coalesce(try(entry.scope, null), environment.subscription) == null
             ? data.azurerm_subscription.subscriptions[environment.subscription].id
             : (
-              startswith(lower(scope_value), "/subscriptions/")
-              ? scope_value
+              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+              ? coalesce(try(entry.scope, null), environment.subscription)
               : (
-                startswith(lower(scope_value), "sub:")
-                ? data.azurerm_subscription.subscriptions[replace(lower(scope_value), "sub:", "")].id
+                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
+                ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
                 : (
-                  startswith(lower(scope_value), "workload:")
-                  ? local.workload_environment_subscription_id_by_name[replace(lower(scope_value), "workload:", "")]
+                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
+                  ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
                   : (
-                    startswith(lower(scope_value), "workload-rg:")
-                    ? local.workload_resource_group_scope_map[replace(lower(scope_value), "workload-rg:", "")]
-                    : data.azurerm_subscription.subscriptions[scope_value].id
+                    startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
+                    ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
+                    : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
                   )
                 )
               )
@@ -185,23 +184,22 @@ locals {
         for entry_index, entry in try(resource_group.role_assignments.rbac_admin_roles, []) : {
           assignment_key           = format("%s-rbac-%d", resource_group.key, entry_index)
           workload_environment_key = resource_group.workload_environment_key
-          scope_value              = coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
           scope_id = (
-            scope_value == null
+            coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id) == null
             ? azapi_resource.workload_resource_group[resource_group.key].id
             : (
-              startswith(lower(scope_value), "/subscriptions/")
-              ? scope_value
+              startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+              ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
               : (
-                startswith(lower(scope_value), "sub:")
-                ? data.azurerm_subscription.subscriptions[replace(lower(scope_value), "sub:", "")].id
+                startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
+                ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:", "")].id
                 : (
-                  startswith(lower(scope_value), "workload:")
-                  ? local.workload_environment_subscription_id_by_name[replace(lower(scope_value), "workload:", "")]
+                  startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:")
+                  ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:", "")]
                   : (
-                    startswith(lower(scope_value), "workload-rg:")
-                    ? local.workload_resource_group_scope_map[replace(lower(scope_value), "workload-rg:", "")]
-                    : data.azurerm_subscription.subscriptions[scope_value].id
+                    startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:")
+                    ? local.workload_resource_group_scope_map[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:", "")]
+                    : data.azurerm_subscription.subscriptions[coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)].id
                   )
                 )
               )
