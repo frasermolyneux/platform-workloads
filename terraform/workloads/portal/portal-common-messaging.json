@@ -21,6 +21,19 @@
                 "portal-core",
                 "portal-environments"
             ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ],
+                    "rbac_administrator_roles": [
+                        "Storage Blob Data Owner",
+                        "Azure Service Bus Data Receiver",
+                        "Azure Service Bus Data Sender"
+                    ]
+                }
+            ],
             "role_assignments": [
                 {
                     "scope": "sub-visualstudio-enterprise",
@@ -43,6 +56,19 @@
             "requires_terraform_state_access": [
                 "portal-core",
                 "portal-environments"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": [
+                        "Contributor"
+                    ],
+                    "rbac_administrator_roles": [
+                        "Storage Blob Data Owner",
+                        "Azure Service Bus Data Receiver",
+                        "Azure Service Bus Data Sender"
+                    ]
+                }
             ],
             "role_assignments": [
                 {
