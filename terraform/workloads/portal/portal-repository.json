@@ -46,8 +46,12 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
+                        {
+                            "role_definitions": [
+                                "Contributor",
+                                "Key Vault Secrets Officer"
+                            ]
+                        }
                     ],
                     "rbac_administrator_roles": [
                         {
@@ -91,8 +95,12 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
+                        {
+                            "role_definitions": [
+                                "Contributor",
+                                "Key Vault Secrets Officer"
+                            ]
+                        }
                     ],
                     "rbac_administrator_roles": [
                         {

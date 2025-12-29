@@ -26,7 +26,11 @@
                 {
                     "name": "rg-{workload}-{env}-uksouth",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ]
                 }
             ]
@@ -40,7 +44,11 @@
                 {
                     "name": "rg-{workload}-{env}-uksouth",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ]
                 }
             ]

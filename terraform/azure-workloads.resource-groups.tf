@@ -9,7 +9,11 @@ locals {
           subscription             = environment.subscription
           location                 = location
           name                     = lower(replace(replace(replace(resource_group.name, "{workload}", lower(environment.workload_name)), "{env}", lower(environment.environment_tag)), "{location}", location))
-          role_assignments         = try(resource_group.role_assignments, [])
+          role_assignments = [
+            for assignment in try(resource_group.role_assignments, []) : {
+              role_definitions = distinct(try(assignment.role_definitions, []))
+            }
+          ]
           rbac_administrator_roles = try(resource_group.rbac_administrator_roles, [])
           tags = merge(var.tags, {
             Workload    = environment.workload_name
@@ -24,12 +28,15 @@ locals {
 locals {
   workload_environment_resource_group_role_assignments = flatten([
     for resource_group in local.workload_environment_resource_groups : [
-      for role_definition in resource_group.role_assignments : {
-        key                      = format("%s-%s", resource_group.key, lower(role_definition))
-        workload_environment_key = resource_group.workload_environment_key
-        resource_group_key       = resource_group.key
-        role_definition_name     = role_definition
-      }
+      for assignment in resource_group.role_assignments : [
+        for role_definition in assignment.role_definitions : {
+          key                      = format("%s-%s", resource_group.key, lower(role_definition))
+          workload_environment_key = resource_group.workload_environment_key
+          resource_group_key       = resource_group.key
+          role_definition_name     = role_definition
+        }
+      ]
+      if length(assignment.role_definitions) > 0
     ]
   ])
 }

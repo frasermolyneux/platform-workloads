@@ -25,7 +25,11 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ],
                     "rbac_administrator_roles": [
                         {
@@ -74,7 +78,11 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ],
                     "rbac_administrator_roles": [
                         {

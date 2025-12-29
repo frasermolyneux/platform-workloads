@@ -26,7 +26,11 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ]
                 }
             ]
@@ -44,7 +48,11 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        {
+                            "role_definitions": [
+                                "Contributor"
+                            ]
+                        }
                     ]
                 }
             ]
