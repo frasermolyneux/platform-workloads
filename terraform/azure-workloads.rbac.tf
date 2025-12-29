@@ -6,13 +6,13 @@ locals {
         workload_name          = environment.workload_name
         environment_name       = environment.environment_name
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
-        scope_name             = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+        scope_name             = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
         scope_id = try(
-          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].id,
-          coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)].id,
+          coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
         )
         subscription_id = try(
-          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].subscription_id,
+          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)].subscription_id,
           null
         )
         allowed_roles = distinct(compact(flatten([
@@ -37,8 +37,8 @@ locals {
           for role_name in distinct(compact(flatten([
             try(entry.allowed_roles, [])
             ]))) : {
-            key        = format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), role_name)
-            scope_name = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+            key        = format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription), role_name)
+            scope_name = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
             role_name  = role_name
           }
         ]
@@ -81,20 +81,20 @@ locals {
           assignment_key = format(
             "%s-%s-%d",
             environment.key,
-            replace(coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), "/", "-"),
+            replace(coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription), "/", "-"),
             entry_index
           )
           workload_environment_key = environment.key
           scope_id = try(
-            data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].id,
-            coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+            data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)].id,
+            coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
           )
           principal_object_id = azuread_service_principal.workload[environment.key].object_id
           allowed_role_keys = [
             for role_name in distinct(compact(flatten([
               try(entry.allowed_roles, [])
             ]))) :
-            format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), role_name)
+            format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription), role_name)
           ]
         }
         if length(distinct(compact(flatten([

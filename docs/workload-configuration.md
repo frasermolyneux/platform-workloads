@@ -41,7 +41,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
   "configure_for_terraform": true,
   "add_deploy_script_identity": true,
   "role_assignments": {
-    "scope": "sub-visualstudio-enterprise",
+    "default_scope": "sub-visualstudio-enterprise",
     "assigned_roles": [
       { "roles": ["Contributor"] },
       {
@@ -95,7 +95,7 @@ Environment-level `role_assignments`:
 
 ```json
 {
-  "scope": "sub-visualstudio-enterprise",          // optional default; falls back to environment subscription
+  "default_scope": "sub-visualstudio-enterprise",  // optional default; falls back to environment subscription
   "assigned_roles": [
     { "roles": ["Contributor", "Key Vault Secrets Officer"] },
     { "scope": "/subscriptions/.../resourceGroups/rg-foo", "roles": ["DNS Zone Contributor"] }
@@ -106,7 +106,7 @@ Environment-level `role_assignments`:
 }
 ```
 
-- `scope` (optional) sets the default scope for entries that omit `scope`; if omitted, the environment `subscription` is used.
+- `default_scope` (optional) sets the default scope for entries that omit `scope`; if omitted, the environment `subscription` is used.
 - A `Reader` assignment is automatically added on the environment subscription scope; if a role already targets that scope, `Reader` is merged into its roles.
 - `assigned_roles.roles` accept any Azure RBAC role name; `scope` can be a subscription alias or full ARM resource ID.
 - `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.

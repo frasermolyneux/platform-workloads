@@ -10,16 +10,16 @@ locals {
           location                 = location
           name                     = lower(replace(replace(replace(resource_group.name, "{workload}", lower(environment.workload_name)), "{env}", lower(environment.environment_tag)), "{location}", location))
           role_assignments = {
-            default_scope = try(resource_group.role_assignments.scope, null)
+            default_scope = try(resource_group.role_assignments.default_scope, null)
             assigned_roles = [
               for assignment in try(resource_group.role_assignments.assigned_roles, []) : {
-                scope = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null)), null)
+                scope = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.default_scope, null)), null)
                 roles = distinct(try(assignment.roles, []))
               }
             ]
             rbac_admin_roles = [
               for assignment in try(resource_group.role_assignments.rbac_admin_roles, []) : {
-                scope         = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null)), null)
+                scope         = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.default_scope, null)), null)
                 allowed_roles = distinct(try(assignment.allowed_roles, []))
               }
               if length(distinct(compact(flatten([try(assignment.allowed_roles, [])])))) > 0

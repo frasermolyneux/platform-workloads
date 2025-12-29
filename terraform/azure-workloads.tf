@@ -35,13 +35,13 @@ locals {
         devops_project               = try(environment.devops_project, null)
         devops_create_variable_group = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
         role_assignments = {
-          default_scope = coalesce(try(environment.role_assignments.scope, null), environment.subscription)
+          default_scope = coalesce(try(environment.role_assignments.default_scope, null), environment.subscription)
           assigned_roles = [
             for assignment in concat(
               try(environment.role_assignments.assigned_roles, []),
               length([
                 for existing in try(environment.role_assignments.assigned_roles, []) : 1
-                if coalesce(try(existing.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription) == environment.subscription
+                if coalesce(try(existing.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription) == environment.subscription
                 ]) == 0 ? [
                 {
                   scope = environment.subscription
@@ -50,17 +50,17 @@ locals {
               ] : []
               ) : merge(
               {
-                scope = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+                scope = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
                 roles = distinct(try(assignment.roles, []))
               },
-              coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription) == environment.subscription
+              coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription) == environment.subscription
               ? { roles = distinct(concat(try(assignment.roles, []), ["Reader"])) }
               : {}
             )
           ]
           rbac_admin_roles = [
             for assignment in try(environment.role_assignments.rbac_admin_roles, []) : {
-              scope         = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+              scope         = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
               allowed_roles = distinct(try(assignment.allowed_roles, []))
             }
             if length(distinct(compact(flatten([try(assignment.allowed_roles, [])])))) > 0
