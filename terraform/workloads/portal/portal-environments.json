@@ -22,15 +22,15 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer",
                                 "App Configuration Data Owner"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "App Configuration Data Reader",
                                 "Key Vault Secrets User"
@@ -53,15 +53,15 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer",
                                 "App Configuration Data Owner"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "App Configuration Data Reader",
                                 "Key Vault Secrets User"

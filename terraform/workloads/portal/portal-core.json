@@ -26,8 +26,16 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
+                        "Key Vault Secrets Officer"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
                         "Key Vault Secrets Officer"
                     ]
                 }
@@ -37,19 +45,18 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
+                        },
+                        {
+                            "type": "rbac_administrator",
+                            "allowed_roles": [
+                                "Key Vault Secrets Officer"
+                            ]
                         }
-                    ]
-                }
-            ],
-            "rbac_administrator_roles": [
-                {
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer"
                     ]
                 }
             ]
@@ -64,8 +71,16 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
+                        "Key Vault Secrets Officer"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "scope": "sub-xi-portal-prd",
+                    "allowed_roles": [
                         "Key Vault Secrets Officer"
                     ]
                 }
@@ -75,19 +90,18 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
+                        },
+                        {
+                            "type": "rbac_administrator",
+                            "allowed_roles": [
+                                "Key Vault Secrets Officer"
+                            ]
                         }
-                    ]
-                }
-            ],
-            "rbac_administrator_roles": [
-                {
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "Key Vault Secrets Officer"
                     ]
                 }
             ]

@@ -39,25 +39,27 @@ locals {
             try(environment.role_assignments, []),
             length([
               for existing in try(environment.role_assignments, []) : 1
-              if try(existing.scope, null) == environment.subscription
+              if try(existing.scope, null) == environment.subscription && try(existing.type, "standard") == "standard"
               ]) == 0 ? [
               {
+                type             = "standard"
                 scope            = environment.subscription
-                role_definitions = []
+                role_definitions = ["Reader"]
               }
             ] : []
-            ) : (
-            assignment.scope == environment.subscription
-            ? merge(
-              assignment,
-              {
-                role_definitions = distinct(concat(try(assignment.role_definitions, []), ["Reader"]))
-              }
-            )
-            : assignment
+            ) : merge(
+            {
+              type             = try(assignment.type, "standard")
+              scope            = try(assignment.scope, environment.subscription)
+              role_definitions = distinct(try(assignment.role_definitions, []))
+              allowed_roles    = distinct(try(assignment.allowed_roles, []))
+            },
+            assignment.type == "standard" && try(assignment.scope, environment.subscription) == environment.subscription
+            ? { role_definitions = distinct(concat(try(assignment.role_definitions, []), ["Reader"])) }
+            : {}
           )
         ]
-        rbac_administrator_roles        = try(environment.rbac_administrator_roles, [])
+        rbac_administrator_roles        = []
         directory_roles                 = try(environment.directory_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
         locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]

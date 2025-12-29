@@ -22,6 +22,7 @@
             "devops_project": "XtremeIdiots",
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
@@ -29,20 +30,21 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
                     "role_definitions": [
                         "AcrPull"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
-                }
-            ],
-            "rbac_administrator_roles": [
+                },
                 {
+                    "type": "rbac_administrator",
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
                         "Key Vault Secrets User"
@@ -60,6 +62,7 @@
             "devops_project": "XtremeIdiots",
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Contributor",
@@ -67,20 +70,21 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
                     "role_definitions": [
                         "AcrPull"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
-                }
-            ],
-            "rbac_administrator_roles": [
+                },
                 {
+                    "type": "rbac_administrator",
                     "scope": "sub-xi-portal-prd",
                     "allowed_roles": [
                         "Key Vault Secrets User"

@@ -25,6 +25,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Contributor",
@@ -32,27 +33,28 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
                     "role_definitions": [
                         "AcrPull"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/geo-location.net",
                     "role_definitions": [
                         "DNS Zone Contributor"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "allowed_roles": [
+                        "Key Vault Secrets User"
                     ]
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ],
-            "rbac_administrator_roles": [
-                {
-                    "allowed_roles": [
-                        "Key Vault Secrets User"
-                    ]
-                }
             ]
         },
         {
@@ -64,6 +66,7 @@
             "configure_for_terraform": true,
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
                         "Contributor",
@@ -71,27 +74,28 @@
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
                     "role_definitions": [
                         "AcrPull"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/geo-location.net",
                     "role_definitions": [
                         "DNS Zone Contributor"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "allowed_roles": [
+                        "Key Vault Secrets User"
                     ]
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ],
-            "rbac_administrator_roles": [
-                {
-                    "allowed_roles": [
-                        "Key Vault Secrets User"
-                    ]
-                }
             ]
         }
     ]

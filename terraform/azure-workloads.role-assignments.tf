@@ -10,6 +10,7 @@ locals {
           role_definition_name       = role_definition
         }
       ]
+      if try(role_assignment.type, "standard") == "standard"
     ]
   ]))
 }

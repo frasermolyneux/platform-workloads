@@ -31,14 +31,14 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "Key Vault Secrets User",
                                 "Storage Blob Data Owner",
@@ -51,6 +51,7 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Reader"
@@ -77,14 +78,14 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "Key Vault Secrets User",
                                 "Storage Blob Data Owner",
@@ -97,12 +98,14 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Reader"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-fm-geolocation-prd",
                     "role_definitions": [
                         "Reader"

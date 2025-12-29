@@ -29,16 +29,26 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-visualstudio-enterprise",
                     "role_definitions": [
                         "Website Contributor",
                         "API Management Service Contributor"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "scope": "sub-visualstudio-enterprise",
+                    "allowed_roles": [
+                        "Key Vault Secrets User",
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
@@ -47,14 +57,14 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "Key Vault Secrets User",
                                 "Storage Blob Data Owner"
@@ -78,16 +88,26 @@
             ],
             "role_assignments": [
                 {
+                    "type": "standard",
                     "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                     "role_definitions": [
                         "DNS Zone Contributor"
                     ]
                 },
                 {
+                    "type": "standard",
                     "scope": "sub-xi-portal-prd",
                     "role_definitions": [
                         "Website Contributor",
                         "API Management Service Contributor"
+                    ]
+                },
+                {
+                    "type": "rbac_administrator",
+                    "scope": "sub-xi-portal-prd",
+                    "allowed_roles": [
+                        "Key Vault Secrets User",
+                        "Storage Blob Data Owner"
                     ]
                 }
             ],
@@ -96,14 +116,14 @@
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
                         {
+                            "type": "standard",
                             "role_definitions": [
                                 "Contributor",
                                 "Key Vault Secrets Officer"
                             ]
-                        }
-                    ],
-                    "rbac_administrator_roles": [
+                        },
                         {
+                            "type": "rbac_administrator",
                             "allowed_roles": [
                                 "Key Vault Secrets User",
                                 "Storage Blob Data Owner"
