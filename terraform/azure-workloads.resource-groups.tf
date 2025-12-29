@@ -13,13 +13,13 @@ locals {
             default_scope = try(resource_group.role_assignments.scope, null)
             assigned_roles = [
               for assignment in try(resource_group.role_assignments.assigned_roles, []) : {
-                scope = coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null))
+                scope = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null)), null)
                 roles = distinct(try(assignment.roles, []))
               }
             ]
             rbac_admin_roles = [
               for assignment in try(resource_group.role_assignments.rbac_admin_roles, []) : {
-                scope         = coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null))
+                scope         = try(coalesce(try(assignment.scope, null), try(resource_group.role_assignments.scope, null)), null)
                 allowed_roles = distinct(try(assignment.allowed_roles, []))
               }
               if length(distinct(compact(flatten([try(assignment.allowed_roles, [])])))) > 0
