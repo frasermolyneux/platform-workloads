@@ -47,7 +47,7 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Key Vault Secrets User"
@@ -86,7 +86,7 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Key Vault Secrets User"

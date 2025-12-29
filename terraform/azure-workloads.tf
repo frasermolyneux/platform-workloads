@@ -57,7 +57,7 @@ locals {
             : assignment
           )
         ]
-        rbac_administrator              = try(environment.rbac_administrator, [])
+        rbac_administrator_roles        = try(environment.rbac_administrator_roles, [])
         directory_roles                 = try(environment.directory_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
         locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]

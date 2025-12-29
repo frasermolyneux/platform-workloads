@@ -47,7 +47,7 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Storage Blob Data Owner",
@@ -92,7 +92,7 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Storage Blob Data Owner",

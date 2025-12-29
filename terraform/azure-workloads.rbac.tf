@@ -2,7 +2,7 @@ locals {
   workload_rbac_administrator_map = {
     for environment in local.workload_environments :
     environment.key => [
-      for entry in try(environment.rbac_administrator, []) : {
+      for entry in try(environment.rbac_administrator_roles, []) : {
         workload_name          = environment.workload_name
         environment_name       = environment.environment_name
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
@@ -29,14 +29,14 @@ locals {
         can(tostring(entry)) ? [tostring(entry)] : []
       ])))) > 0
     ]
-    if length(try(environment.rbac_administrator, [])) > 0
+    if length(try(environment.rbac_administrator_roles, [])) > 0
   }
 
   // Environment-scoped RBAC roles (all values known at plan time)
   workload_rbac_allowed_role_map_env = {
     for request in distinct(flatten([
       for environment in local.workload_environments : [
-        for entry in try(environment.rbac_administrator, []) : [
+        for entry in try(environment.rbac_administrator_roles, []) : [
           for role_name in distinct(compact(flatten([
             try(entry.allowed_roles, []),
             try(entry.roles, []),
@@ -81,7 +81,7 @@ locals {
   workload_rbac_administrator_assignments = flatten(concat(
     [
       for environment in local.workload_environments : [
-        for entry_index, entry in try(environment.rbac_administrator, []) : {
+        for entry_index, entry in try(environment.rbac_administrator_roles, []) : {
           assignment_key = format(
             "%s-%s-%d",
             environment.key,

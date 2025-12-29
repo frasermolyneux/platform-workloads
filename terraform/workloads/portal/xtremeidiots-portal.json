@@ -41,7 +41,7 @@
                     ]
                 }
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "scope": "sub-visualstudio-enterprise",
                     "allowed_roles": [
@@ -79,7 +79,7 @@
                     ]
                 }
             ],
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "scope": "sub-xi-portal-prd",
                     "allowed_roles": [

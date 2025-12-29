@@ -16,7 +16,7 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Storage Blob Data Contributor",
@@ -59,7 +59,7 @@
             "subscription": "sub-molyneux-me-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "rbac_administrator": [
+            "rbac_administrator_roles": [
                 {
                     "allowed_roles": [
                         "Storage Blob Data Contributor",
