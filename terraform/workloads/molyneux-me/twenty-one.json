@@ -1,81 +1,82 @@
 {
-    "name": "twenty-one",
-    "github": {
-        "description": "A simple static website hosted on Azure as a static web app for practicing Blackjack",
-        "topics": [
-            "azure",
-            "static-website",
-            "github-actions"
-        ],
-        "add_sonarcloud_secrets": true,
-        "visibility": "public"
-    },
-    "environments": [
+  "name": "twenty-one",
+  "github": {
+    "description": "A simple static website hosted on Azure as a static web app for practicing Blackjack",
+    "topics": [
+      "azure",
+      "static-website",
+      "github-actions"
+    ],
+    "add_sonarcloud_secrets": true,
+    "visibility": "public"
+  },
+  "environments": [
+    {
+      "name": "Development",
+      "subscription": "sub-molyneux-me-dev",
+      "connect_to_github": true,
+      "configure_for_terraform": true,
+      "locations": [
+        "westeurope"
+      ],
+      "resource_groups": [
         {
-            "name": "Development",
-            "subscription": "sub-molyneux-me-dev",
-            "connect_to_github": true,
-            "configure_for_terraform": true,
-            "locations": [
-                "westeurope"
-            ],
-            "resource_groups": [
-                {
-                    "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": {
-                        "assigned_roles": [
-                            {
-                                "roles": [
-                                    "Contributor"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            "role_assignments": {
-                "assigned_roles": [
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                        "roles": [
-                            "DNS Zone Contributor"
-                        ]
-                    }
+          "name": "rg-{workload}-{env}-{location}",
+          "role_assignments": {
+            "assigned_roles": [
+              {
+                "roles": [
+                  "Contributor"
                 ]
-            }
-        },
-        {
-            "name": "Production",
-            "subscription": "sub-molyneux-me-prd",
-            "connect_to_github": true,
-            "configure_for_terraform": true,
-            "locations": [
-                "westeurope"
-            ],
-            "resource_groups": [
-                {
-                    "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": {
-                        "assigned_roles": [
-                            {
-                                "roles": [
-                                    "Contributor"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            "role_assignments": {
-                "assigned_roles": [
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                        "roles": [
-                            "DNS Zone Contributor"
-                        ]
-                    }
-                ]
-            }
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "role_assignments": {
+        "assigned_roles": [
+          {
+            "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+            "roles": [
+              "DNS Zone Contributor"
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "name": "Production",
+      "subscription": "sub-molyneux-me-prd",
+      "connect_to_github": true,
+      "configure_for_terraform": true,
+      "locations": [
+        "westeurope"
+      ],
+      "resource_groups": [
+        {
+          "name": "rg-{workload}-{env}-{location}",
+          "role_assignments": {
+            "assigned_roles": [
+              {
+                "roles": [
+                  "Contributor"
+                ]
+              }
+            ]
+          }
+        }
+      ],
+      "role_assignments": {
+        "assigned_roles": [
+          {
+            "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+            "roles": [
+              "DNS Zone Contributor"
+            ]
+          }
+        ]
+      }
+    }
+  ]
 }
+

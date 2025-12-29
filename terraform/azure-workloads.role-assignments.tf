@@ -6,8 +6,29 @@ locals {
           role_assignment_key        = format("%s-%s-%s", workload_environment.key, role_definition, role_assignment.scope)
           workload_environment_key   = workload_environment.key
           add_deploy_script_identity = workload_environment.add_deploy_script_identity
-          scope                      = role_assignment.scope
-          role_definition_name       = role_definition
+          scope_value                = coalesce(role_assignment.scope, workload_environment.subscription)
+          resolved_scope = (
+            role_assignment.scope == null
+            ? data.azurerm_subscription.subscriptions[workload_environment.subscription].id
+            : (
+              startswith(lower(role_assignment.scope), "/subscriptions/")
+              ? role_assignment.scope
+              : (
+                startswith(lower(role_assignment.scope), "sub:")
+                ? data.azurerm_subscription.subscriptions[replace(lower(role_assignment.scope), "sub:", "")].id
+                : (
+                  startswith(lower(role_assignment.scope), "workload:")
+                  ? local.workload_environment_subscription_id_by_name[replace(lower(role_assignment.scope), "workload:", "")]
+                  : (
+                    startswith(lower(role_assignment.scope), "workload-rg:")
+                    ? local.workload_resource_group_scope_map[replace(lower(role_assignment.scope), "workload-rg:", "")]
+                    : data.azurerm_subscription.subscriptions[role_assignment.scope].id
+                  )
+                )
+              )
+            )
+          )
+          role_definition_name = role_definition
         }
       ]
     ]
@@ -17,7 +38,7 @@ locals {
 resource "azurerm_role_assignment" "workload" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each }
 
-  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope                = each.value.resolved_scope
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
@@ -25,7 +46,7 @@ resource "azurerm_role_assignment" "workload" {
 resource "azurerm_role_assignment" "workload_deploy_script" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each if each.add_deploy_script_identity }
 
-  scope                = startswith(each.value.scope, "/subscriptions/") ? each.value.scope : data.azurerm_subscription.subscriptions[each.value.scope].id
+  scope                = each.value.resolved_scope
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }

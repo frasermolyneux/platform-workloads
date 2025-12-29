@@ -35,13 +35,12 @@ locals {
         devops_project               = try(environment.devops_project, null)
         devops_create_variable_group = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
         role_assignments = {
-          default_scope = coalesce(try(environment.role_assignments.default_scope, null), environment.subscription)
           assigned_roles = [
             for assignment in concat(
               try(environment.role_assignments.assigned_roles, []),
               length([
                 for existing in try(environment.role_assignments.assigned_roles, []) : 1
-                if coalesce(try(existing.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription) == environment.subscription
+                if coalesce(try(existing.scope, null), environment.subscription) == environment.subscription
                 ]) == 0 ? [
                 {
                   scope = environment.subscription
@@ -50,17 +49,17 @@ locals {
               ] : []
               ) : merge(
               {
-                scope = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
+                scope = coalesce(try(assignment.scope, null), environment.subscription)
                 roles = distinct(try(assignment.roles, []))
               },
-              coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription) == environment.subscription
+              coalesce(try(assignment.scope, null), environment.subscription) == environment.subscription
               ? { roles = distinct(concat(try(assignment.roles, []), ["Reader"])) }
               : {}
             )
           ]
           rbac_admin_roles = [
             for assignment in try(environment.role_assignments.rbac_admin_roles, []) : {
-              scope         = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.default_scope, null), environment.subscription), environment.subscription)
+              scope         = coalesce(try(assignment.scope, null), environment.subscription)
               allowed_roles = distinct(try(assignment.allowed_roles, []))
             }
             if length(distinct(compact(flatten([try(assignment.allowed_roles, [])])))) > 0
@@ -73,6 +72,25 @@ locals {
       }
     ]
   ])
+}
+
+locals {
+  // Fast lookups for scope resolution and cross-environment references
+  workload_environments_map = { for environment in local.workload_environments : environment.key => environment }
+
+  workload_environment_lookup_by_name = {
+    for environment in local.workload_environments :
+    lower(format("%s/%s", environment.workload_name, environment.environment_name)) => environment
+  }
+
+  workload_environment_subscription_id_map = {
+    for environment in local.workload_environments : environment.key => data.azurerm_subscription.subscriptions[environment.subscription].id
+  }
+
+  workload_environment_subscription_id_by_name = {
+    for environment in local.workload_environments :
+    lower(format("%s/%s", environment.workload_name, environment.environment_name)) => data.azurerm_subscription.subscriptions[environment.subscription].id
+  }
 }
 
 resource "random_id" "workload_id" {

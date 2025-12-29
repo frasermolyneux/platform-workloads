@@ -9,7 +9,6 @@ Audience: senior engineers designing or reviewing workload configuration.
 ```json
 {
   "role_assignments": {
-    "default_scope": "sub-alias-or-arm-scope-optional",
     "assigned_roles": [
       { "roles": ["Contributor", "User Access Administrator"] },
       { "scope": "/subscriptions/.../resourceGroups/rg-x", "roles": ["DNS Zone Contributor"] }
@@ -22,8 +21,7 @@ Audience: senior engineers designing or reviewing workload configuration.
 }
 ```
 
-- `scope` acts as `default_scope`; if omitted, the environment subscription alias is used.
- - `default_scope` sets the fallback scope for entries without an explicit `scope`; if omitted, the environment subscription alias is used.
+- If `scope` is omitted, the environment subscription alias is used.
 - `assigned_roles` are expanded into Azure role assignments for the workload service principal; when `add_deploy_script_identity=true`, the deploy script UAI receives the same set.
 - A `Reader` assignment is auto-added at the environment subscription scope; if you already target that scope, `Reader` is merged into its roles.
 - Scopes accept subscription aliases (resolved via `data.azurerm_subscription`) or full ARM IDs.
@@ -37,7 +35,6 @@ Audience: senior engineers designing or reviewing workload configuration.
     {
       "name": "rg-{workload}-{env}-{location}",
       "role_assignments": {
-        "default_scope": "/subscriptions/.../resourceGroups/rg-custom-override-optional",
         "assigned_roles": [
           { "roles": ["Contributor"] },
           { "scope": "/subscriptions/.../resourceGroups/rg-other", "roles": ["Reader"] }
@@ -51,15 +48,15 @@ Audience: senior engineers designing or reviewing workload configuration.
 }
 ```
 
-- `role_assignments.default_scope` sets the default for entries without a scope; if omitted, the RG’s own ID is used.
+- If `scope` is omitted for a resource group role assignment, the resource group ID is used.
 - `assigned_roles` apply to the workload service principal (and deploy UAI when enabled).
 - `rbac_admin_roles` behave like environment level but scoped to the RG (or override).
 
 ## Resolution Rules (Terraform implementation)
 
-- Environment defaults: `default_scope = coalesce(role_assignments.scope, subscription)`.
-- RG defaults: `default_scope = role_assignments.scope` (else RG ID).
-- Assignment scope: `coalesce(entry.scope, default_scope, <fallback>)`; RG fallback is the created RG ID.
+- Environment defaults: `scope = coalesce(entry.scope, subscription)`.
+- RG defaults: `scope = coalesce(entry.scope, <resource group id>)`.
+- Assignment scope: environment uses subscription when scope omitted; RG uses its own ID when scope omitted.
 - Subscription alias scopes convert to subscription IDs; ARM IDs pass through.
 - Reader auto-add: if no assignment targets the environment subscription, inject `Reader`; if one does, append `Reader` to its roles.
 - Identities targeted: workload service principal always; deploy script UAI only when `add_deploy_script_identity=true`.
@@ -78,7 +75,6 @@ Audience: senior engineers designing or reviewing workload configuration.
 graph TD
   W[Workload JSON] --> E[Environment]
   E --> RA[Environment role_assignments]
-  RA --> DS["default_scope (env scope or subscription)"]
   RA --> AR["assigned_roles (roles, optional scope)"]
   RA --> RB["rbac_admin_roles (allowed_roles, optional scope)"]
   AR -->|expands| RAE["Role assignments to Service Principal"]
@@ -90,18 +86,17 @@ graph TD
 
   E --> RG[Resource groups]
   RG --> RRA[RG role_assignments]
-  RRA --> RDS["default_scope (override or RG ID)"]
   RRA --> RAR[assigned_roles]
   RRA --> RRB[rbac_admin_roles]
   RAR -->|expands| RGRA["RG role assignments to SP / Deploy UAI"]
-  RGRA --> SCOPE2["Resolved scope (override or RG ID)"]
+  RGRA --> SCOPE2["Resolved scope (override or RG ID when scope omitted)"]
   RRB -->|one per entry| RGRBA["RG RBAC Admin assignment"]
   RGRBA -->|condition limits| ALLOWED
 ```
 
-## Review Notes (current implementation)
+# Review Notes (current implementation)
 
-- Default scope and Reader auto-add are implemented in `local.workload_environments` and RG locals; scopes use subscription alias resolution before ARM ID fallback.
+- Reader auto-add is implemented in `local.workload_environments` and RG locals; scopes use subscription alias resolution before ARM ID fallback.
 - RBAC admin assignments use conditional `Role Based Access Control Administrator` and resolve allowed roles via `azurerm_role_definition` for both env and RG levels.
 - Resource group role assignments now use a keyed map to avoid list indexing errors when resolving scopes.
 - Deploy script identity receives the same assigned roles only when `add_deploy_script_identity` is enabled; RBAC admin delegation is only for the workload service principal.

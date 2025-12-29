@@ -41,7 +41,6 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
   "configure_for_terraform": true,
   "add_deploy_script_identity": true,
   "role_assignments": {
-    "default_scope": "sub-visualstudio-enterprise",
     "assigned_roles": [
       { "roles": ["Contributor"] },
       {
@@ -85,7 +84,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                      |
 | `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                |
 | `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                          |
-| `role_assignments`                | object  | No       | Azure RBAC role assignments (default scope, roles, RBAC admin rules)    |
+| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                   |
 | `directory_roles`                 | array   | No       | Entra ID directory roles                                                |
 | `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state |
 
@@ -95,7 +94,6 @@ Environment-level `role_assignments`:
 
 ```json
 {
-  "default_scope": "sub-visualstudio-enterprise",  // optional default; falls back to environment subscription
   "assigned_roles": [
     { "roles": ["Contributor", "Key Vault Secrets Officer"] },
     { "scope": "/subscriptions/.../resourceGroups/rg-foo", "roles": ["DNS Zone Contributor"] }
@@ -106,13 +104,19 @@ Environment-level `role_assignments`:
 }
 ```
 
-- `default_scope` (optional) sets the default scope for entries that omit `scope`; if omitted, the environment `subscription` is used.
-- A `Reader` assignment is automatically added on the environment subscription scope; if a role already targets that scope, `Reader` is merged into its roles.
-- `assigned_roles.roles` accept any Azure RBAC role name; `scope` can be a subscription alias or full ARM resource ID.
+- If `scope` is omitted, the environment `subscription` is used.
+- A `Reader` assignment is automatically added on the environment subscription; if a role already targets that scope, `Reader` is merged into its roles.
+- `assigned_roles.roles` accept any Azure RBAC role name.
+- Scope input options (case-insensitive prefixes):
+  - `sub:<alias>` resolves to a subscription from `var.subscriptions` (e.g., `sub:sub-visualstudio-enterprise`).
+  - `/subscriptions/...` uses a raw ARM ID (any level: subscription, RG, or resource).
+  - `workload:<workload>/<Environment>` targets another workload environment’s subscription (e.g., `workload:portal-core/Production`).
+  - `workload-rg:<workload>/<Environment>/<rg-name>/<location>` targets a workload resource group after templating (e.g., `workload-rg:portal-core/Production/rg-portal-core-prd-app-uksouth`).
+  - Bare values continue to support existing aliases or ARM IDs for backward compatibility.
 - `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.
 - Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
 
-Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. The optional `scope` on the resource group `role_assignments` sets the default to something other than the resource group ID when needed; otherwise, the resource group is used.
+Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. If `scope` is omitted for a resource group role assignment, the resource group ID is used by default.
 
 ## Examples
 
