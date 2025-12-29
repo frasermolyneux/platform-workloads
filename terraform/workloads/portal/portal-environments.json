@@ -21,7 +21,9 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        "Contributor",
+                        "Key Vault Secrets Officer",
+                        "App Configuration Data Owner"
                     ],
                     "rbac_administrator_roles": [
                         "App Configuration Data Reader",
@@ -42,7 +44,9 @@
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": [
-                        "Contributor"
+                        "Contributor",
+                        "Key Vault Secrets Officer",
+                        "App Configuration Data Owner"
                     ],
                     "rbac_administrator_roles": [
                         "App Configuration Data Reader",
