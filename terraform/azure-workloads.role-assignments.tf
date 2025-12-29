@@ -1,8 +1,8 @@
 locals {
   workload_role_assignments = distinct(flatten([
-    for role_assignment_key, workload_environment in local.workload_environments : [
-      for role_assignment in workload_environment.role_assignments : [
-        for role_definition in role_assignment.role_definitions : {
+    for workload_environment in local.workload_environments : [
+      for role_assignment in workload_environment.role_assignments.assigned_roles : [
+        for role_definition in role_assignment.roles : {
           role_assignment_key        = format("%s-%s-%s", workload_environment.key, role_definition, role_assignment.scope)
           workload_environment_key   = workload_environment.key
           add_deploy_script_identity = workload_environment.add_deploy_script_identity
@@ -10,7 +10,6 @@ locals {
           role_definition_name       = role_definition
         }
       ]
-      if try(role_assignment.type, "standard") == "standard"
     ]
   ]))
 }

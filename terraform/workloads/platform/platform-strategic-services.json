@@ -18,37 +18,37 @@
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Directory Writers"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
             "subscription": "sub-platform-strategic",
             "devops_project": "Molyneux.IO",
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "sub-platform-strategic",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer"
-                    ]
-                }
-            ],
             "directory_roles": [
                 "Directory Writers"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

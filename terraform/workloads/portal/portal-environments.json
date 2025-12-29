@@ -20,23 +20,25 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor",
-                                "Key Vault Secrets Officer",
-                                "App Configuration Data Owner"
-                            ]
-                        },
-                        {
-                            "type": "rbac_administrator",
-                            "allowed_roles": [
-                                "App Configuration Data Reader",
-                                "Key Vault Secrets User"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer",
+                                    "App Configuration Data Owner"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "App Configuration Data Reader",
+                                    "Key Vault Secrets User"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
@@ -51,23 +53,25 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor",
-                                "Key Vault Secrets Officer",
-                                "App Configuration Data Owner"
-                            ]
-                        },
-                        {
-                            "type": "rbac_administrator",
-                            "allowed_roles": [
-                                "App Configuration Data Reader",
-                                "Key Vault Secrets User"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer",
+                                    "App Configuration Data Owner"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "App Configuration Data Reader",
+                                    "Key Vault Secrets User"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [

@@ -25,14 +25,15 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-uksouth",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ]
         },
@@ -44,14 +45,15 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-uksouth",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ]
         }

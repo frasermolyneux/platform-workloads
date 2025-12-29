@@ -16,40 +16,40 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ],
-                    "scope": "sub-visualstudio-enterprise"
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
             "subscription": "sub-finances-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ],
-                    "scope": "sub-finances-prd"
-                }
-            ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

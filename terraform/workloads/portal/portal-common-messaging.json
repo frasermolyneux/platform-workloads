@@ -24,47 +24,49 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        },
-                        {
-                            "type": "rbac_administrator",
-                            "allowed_roles": [
-                                "Storage Blob Data Owner",
-                                "Azure Service Bus Data Receiver",
-                                "Azure Service Bus Data Sender"
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "sub-visualstudio-enterprise",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                },
-                {
-                    "type": "rbac_administrator",
-                    "scope": "sub-visualstudio-enterprise",
-                    "allowed_roles": [
-                        "Storage Blob Data Owner",
-                        "Azure Service Bus Data Receiver",
-                        "Azure Service Bus Data Sender"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -78,47 +80,49 @@
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        },
-                        {
-                            "type": "rbac_administrator",
-                            "allowed_roles": [
-                                "Storage Blob Data Owner",
-                                "Azure Service Bus Data Receiver",
-                                "Azure Service Bus Data Sender"
-                            ]
-                        }
-                    ]
-                }
-            ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "sub-xi-portal-prd",
-                    "role_definitions": [
-                        "Contributor",
-                        "Key Vault Secrets Officer",
-                        "Storage Blob Data Contributor"
-                    ]
-                },
-                {
-                    "type": "rbac_administrator",
-                    "scope": "sub-xi-portal-prd",
-                    "allowed_roles": [
-                        "Storage Blob Data Owner",
-                        "Azure Service Bus Data Receiver",
-                        "Azure Service Bus Data Sender"
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

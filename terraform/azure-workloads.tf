@@ -34,32 +34,38 @@ locals {
         connect_to_devops            = try(environment.devops_project, null) != null
         devops_project               = try(environment.devops_project, null)
         devops_create_variable_group = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
-        role_assignments = [
-          for assignment in concat(
-            try(environment.role_assignments, []),
-            length([
-              for existing in try(environment.role_assignments, []) : 1
-              if try(existing.scope, null) == environment.subscription && try(existing.type, "standard") == "standard"
-              ]) == 0 ? [
+        role_assignments = {
+          default_scope = coalesce(try(environment.role_assignments.scope, null), environment.subscription)
+          assigned_roles = [
+            for assignment in concat(
+              try(environment.role_assignments.assigned_roles, []),
+              length([
+                for existing in try(environment.role_assignments.assigned_roles, []) : 1
+                if coalesce(try(existing.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription) == environment.subscription
+                ]) == 0 ? [
+                {
+                  scope = environment.subscription
+                  roles = ["Reader"]
+                }
+              ] : []
+              ) : merge(
               {
-                type             = "standard"
-                scope            = environment.subscription
-                role_definitions = ["Reader"]
-              }
-            ] : []
-            ) : merge(
-            {
-              type             = try(assignment.type, "standard")
-              scope            = try(assignment.scope, environment.subscription)
-              role_definitions = distinct(try(assignment.role_definitions, []))
-              allowed_roles    = distinct(try(assignment.allowed_roles, []))
-            },
-            assignment.type == "standard" && try(assignment.scope, environment.subscription) == environment.subscription
-            ? { role_definitions = distinct(concat(try(assignment.role_definitions, []), ["Reader"])) }
-            : {}
-          )
-        ]
-        rbac_administrator_roles        = []
+                scope = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+                roles = distinct(try(assignment.roles, []))
+              },
+              coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription) == environment.subscription
+              ? { roles = distinct(concat(try(assignment.roles, []), ["Reader"])) }
+              : {}
+            )
+          ]
+          rbac_admin_roles = [
+            for assignment in try(environment.role_assignments.rbac_admin_roles, []) : {
+              scope         = coalesce(try(assignment.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
+              allowed_roles = distinct(try(assignment.allowed_roles, []))
+            }
+            if length(distinct(compact(flatten([try(assignment.allowed_roles, [])])))) > 0
+          ]
+        }
         directory_roles                 = try(environment.directory_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
         locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]

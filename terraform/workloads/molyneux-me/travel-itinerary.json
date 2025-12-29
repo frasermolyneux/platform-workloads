@@ -19,46 +19,48 @@
             "locations": [
                 "uksouth"
             ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                },
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                },
-                {
-                    "type": "rbac_administrator",
-                    "allowed_roles": [
-                        "Storage Blob Data Contributor",
-                        "Storage Table Data Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator",
                 "Directory Readers"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
+                        "roles": [
+                            "Reader"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Contributor",
+                            "Storage Table Data Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -68,46 +70,48 @@
             "locations": [
                 "uksouth"
             ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                },
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
-                    "role_definitions": [
-                        "Reader"
-                    ]
-                },
-                {
-                    "type": "rbac_administrator",
-                    "allowed_roles": [
-                        "Storage Blob Data Contributor",
-                        "Storage Table Data Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
             ],
             "directory_roles": [
                 "Cloud application administrator",
                 "Directory Readers"
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "/subscriptions/d68448b0-9947-46d7-8771-baa331a3063a",
+                        "roles": [
+                            "Reader"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Contributor",
+                            "Storage Table Data Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

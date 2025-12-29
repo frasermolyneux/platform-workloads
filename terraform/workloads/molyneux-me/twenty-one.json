@@ -19,28 +19,30 @@
             "locations": [
                 "westeurope"
             ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    }
+                ]
+            }
         },
         {
             "name": "Production",
@@ -50,28 +52,30 @@
             "locations": [
                 "westeurope"
             ],
-            "role_assignments": [
-                {
-                    "type": "standard",
-                    "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                    "role_definitions": [
-                        "DNS Zone Contributor"
-                    ]
-                }
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": [
-                        {
-                            "type": "standard",
-                            "role_definitions": [
-                                "Contributor"
-                            ]
-                        }
-                    ]
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
                 }
-            ]
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    }
+                ]
+            }
         }
     ]
 }

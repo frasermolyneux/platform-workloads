@@ -2,30 +2,30 @@ locals {
   workload_rbac_administrator_map = {
     for environment in local.workload_environments :
     environment.key => [
-      for entry in try(environment.role_assignments, []) : {
+      for entry in try(environment.role_assignments.rbac_admin_roles, []) : {
         workload_name          = environment.workload_name
         environment_name       = environment.environment_name
         service_principal_name = format("spn-%s-%s", lower(environment.workload_name), lower(environment.environment_name))
-        scope_name             = try(entry.scope, environment.subscription)
+        scope_name             = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
         scope_id = try(
-          data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].id,
-          try(entry.scope, environment.subscription)
+          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].id,
+          coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
         )
         subscription_id = try(
-          data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].subscription_id,
+          data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].subscription_id,
           null
         )
         allowed_roles = distinct(compact(flatten([
           try(entry.allowed_roles, [])
         ])))
       }
-      if try(entry.type, "standard") == "rbac_administrator" && length(distinct(compact(flatten([
+      if length(distinct(compact(flatten([
         try(entry.allowed_roles, [])
       ])))) > 0
     ]
     if length([
-      for entry in try(environment.role_assignments, []) : 1
-      if try(entry.type, "standard") == "rbac_administrator" && length(distinct(compact(flatten([try(entry.allowed_roles, [])])))) > 0
+      for entry in try(environment.role_assignments.rbac_admin_roles, []) : 1
+      if length(distinct(compact(flatten([try(entry.allowed_roles, [])])))) > 0
     ]) > 0
   }
 
@@ -33,16 +33,15 @@ locals {
   workload_rbac_allowed_role_map_env = {
     for request in distinct(flatten([
       for environment in local.workload_environments : [
-        for entry in try(environment.role_assignments, []) : [
+        for entry in try(environment.role_assignments.rbac_admin_roles, []) : [
           for role_name in distinct(compact(flatten([
             try(entry.allowed_roles, [])
             ]))) : {
-            key        = format("%s|%s", try(entry.scope, environment.subscription), role_name)
-            scope_name = try(entry.scope, environment.subscription)
+            key        = format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), role_name)
+            scope_name = coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
             role_name  = role_name
           }
         ]
-        if try(entry.type, "standard") == "rbac_administrator"
       ]
     ])) :
     request.key => {
@@ -55,14 +54,13 @@ locals {
   workload_rbac_allowed_role_map_rg = {
     for request in flatten([
       for resource_group in local.workload_environment_resource_groups : [
-        for entry in try(resource_group.role_assignments, []) : [
+        for entry in try(resource_group.role_assignments.rbac_admin_roles, []) : [
           for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) : {
-            key        = format("%s|%s", coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id), role_name)
-            scope_name = coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
+            key        = format("%s|%s", coalesce(entry.scope, resource_group.role_assignments.default_scope, azapi_resource.workload_resource_group[resource_group.key].id), role_name)
+            scope_name = coalesce(entry.scope, resource_group.role_assignments.default_scope, azapi_resource.workload_resource_group[resource_group.key].id)
             role_name  = role_name
           }
         ]
-        if try(entry.type, "standard") == "rbac_administrator"
       ]
     ]) :
     request.key => {
@@ -79,44 +77,44 @@ locals {
   workload_rbac_administrator_assignments = flatten(concat(
     [
       for environment in local.workload_environments : [
-        for entry_index, entry in try(environment.role_assignments, []) : {
+        for entry_index, entry in try(environment.role_assignments.rbac_admin_roles, []) : {
           assignment_key = format(
             "%s-%s-%d",
             environment.key,
-            replace(try(entry.scope, environment.subscription), "/", "-"),
+            replace(coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), "/", "-"),
             entry_index
           )
           workload_environment_key = environment.key
           scope_id = try(
-            data.azurerm_subscription.subscriptions[try(entry.scope, environment.subscription)].id,
-            try(entry.scope, environment.subscription)
+            data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)].id,
+            coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription)
           )
           principal_object_id = azuread_service_principal.workload[environment.key].object_id
           allowed_role_keys = [
             for role_name in distinct(compact(flatten([
               try(entry.allowed_roles, [])
             ]))) :
-            format("%s|%s", try(entry.scope, environment.subscription), role_name)
+            format("%s|%s", coalesce(try(entry.scope, null), coalesce(try(environment.role_assignments.scope, null), environment.subscription), environment.subscription), role_name)
           ]
         }
-        if try(entry.type, "standard") == "rbac_administrator" && length(distinct(compact(flatten([
+        if length(distinct(compact(flatten([
           try(entry.allowed_roles, [])
         ])))) > 0
       ]
     ],
     [
       for resource_group in local.workload_environment_resource_groups : [
-        for entry_index, entry in try(resource_group.role_assignments, []) : {
+        for entry_index, entry in try(resource_group.role_assignments.rbac_admin_roles, []) : {
           assignment_key           = format("%s-rbac-%d", resource_group.key, entry_index)
           workload_environment_key = resource_group.workload_environment_key
-          scope_id                 = coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
+          scope_id                 = coalesce(entry.scope, resource_group.role_assignments.default_scope, azapi_resource.workload_resource_group[resource_group.key].id)
           principal_object_id      = azuread_service_principal.workload[resource_group.workload_environment_key].object_id
           allowed_role_keys = [
             for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) :
-            format("%s|%s", coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id), role_name)
+            format("%s|%s", coalesce(entry.scope, resource_group.role_assignments.default_scope, azapi_resource.workload_resource_group[resource_group.key].id), role_name)
           ]
         }
-        if try(entry.type, "standard") == "rbac_administrator" && length(distinct(compact(flatten([try(entry.allowed_roles, [])])))) > 0
+        if length(distinct(compact(flatten([try(entry.allowed_roles, [])])))) > 0
       ]
     ]
   ))
