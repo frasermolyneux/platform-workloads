@@ -1,54 +1,53 @@
 {
-  "name": "skilling-molyneux-me",
-  "github": {
-    "description": "Skilling Graph App",
-    "topics": [
-      "azure",
-      "asp-net",
-      "github-actions"
-    ],
-    "add_sonarcloud_secrets": true,
-    "visibility": "public"
-  },
-  "environments": [
-    {
-      "name": "Development",
-      "subscription": "sub-molyneux-me-dev",
-      "connect_to_github": true,
-      "configure_for_terraform": false,
-      "directory_roles": [
-        "Cloud application administrator"
-      ],
-      "role_assignments": {
-        "assigned_roles": [
-          {
-            "roles": [
-              "Contributor",
-              "Key Vault Secrets Officer"
-            ]
-          }
-        ]
-      }
+    "name": "skilling-molyneux-me",
+    "github": {
+        "description": "Skilling Graph App",
+        "topics": [
+            "azure",
+            "asp-net",
+            "github-actions"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public"
     },
-    {
-      "name": "Production",
-      "subscription": "sub-molyneux-me-prd",
-      "connect_to_github": true,
-      "configure_for_terraform": false,
-      "directory_roles": [
-        "Cloud application administrator"
-      ],
-      "role_assignments": {
-        "assigned_roles": [
-          {
-            "roles": [
-              "Contributor",
-              "Key Vault Secrets Officer"
-            ]
-          }
-        ]
-      }
-    }
-  ]
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-molyneux-me-dev",
+            "connect_to_github": true,
+            "configure_for_terraform": false,
+            "directory_roles": [
+                "Cloud application administrator"
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-molyneux-me-prd",
+            "connect_to_github": true,
+            "configure_for_terraform": false,
+            "directory_roles": [
+                "Cloud application administrator"
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor",
+                            "Key Vault Secrets Officer"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
 }
-
