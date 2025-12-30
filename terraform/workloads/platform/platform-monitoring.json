@@ -48,7 +48,8 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Monitoring Reader"
+                            "Monitoring Reader",
+                            "Key Vault Secrets User"
                         ]
                     }
                 ]
@@ -135,7 +136,8 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Monitoring Reader"
+                            "Monitoring Reader",
+                            "Key Vault Secrets User"
                         ]
                     }
                 ]
