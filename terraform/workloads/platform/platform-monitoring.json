@@ -44,6 +44,13 @@
                             "Contributor"
                         ]
                     }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Monitoring Reader"
+                        ]
+                    }
                 ]
             }
         },
@@ -122,6 +129,13 @@
                         "scope": "sub-molyneux-me-prd",
                         "roles": [
                             "Contributor"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Monitoring Reader"
                         ]
                     }
                 ]
