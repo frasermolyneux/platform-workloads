@@ -7,6 +7,11 @@ resource "azurerm_resource_group" "workload_terraform" {
   tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
 }
 
+data "azurerm_storage_account" "platform_workloads_backend" {
+  name                = var.platform_workloads_backend_storage_account_name
+  resource_group_name = var.platform_workloads_backend_resource_group_name
+}
+
 resource "azurerm_storage_account" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
 
@@ -76,4 +81,12 @@ resource "azurerm_role_assignment" "workload_terraform_state_reader" {
   scope                = azurerm_storage_account.workload[each.value.target_key].id
   role_definition_name = "Storage Blob Data Reader"
   principal_id         = azuread_service_principal.workload[each.value.source_key].object_id
+}
+
+resource "azurerm_role_assignment" "workload_platform_workloads_backend_reader" {
+  for_each = { for env in local.workload_environments : env.key => env if env.configure_for_terraform }
+
+  scope                = data.azurerm_storage_account.platform_workloads_backend.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azuread_service_principal.workload[each.key].object_id
 }

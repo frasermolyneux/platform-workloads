@@ -14,6 +14,16 @@ variable "subscription_id" {
   type = string
 }
 
+variable "platform_workloads_backend_resource_group_name" {
+  description = "Resource group containing the platform-workloads Terraform backend storage account"
+  type        = string
+}
+
+variable "platform_workloads_backend_storage_account_name" {
+  description = "Storage account name for the platform-workloads Terraform backend"
+  type        = string
+}
+
 variable "tags" {
   default = {}
 }
