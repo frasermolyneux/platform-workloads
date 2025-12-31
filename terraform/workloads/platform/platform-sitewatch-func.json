@@ -24,6 +24,7 @@
                 "eastus"
             ],
             "requires_terraform_state_access": [
+                "platform-workloads",
                 "platform-monitoring"
             ],
             "resource_groups": [
@@ -72,6 +73,7 @@
                 "westeurope"
             ],
             "requires_terraform_state_access": [
+                "platform-workloads",
                 "platform-monitoring"
             ],
             "resource_groups": [
