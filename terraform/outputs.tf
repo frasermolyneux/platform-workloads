@@ -48,3 +48,22 @@ output "workload_terraform_backends" {
     }
   }
 }
+
+output "workload_administrative_units" {
+  description = "Administrative Units per workload, nested by environment tag (dev/tst/prd). Access: workload_administrative_units[workload][env_tag]. Use administrative_unit_object_id when assigning AU-scoped roles or placing groups in the AU."
+  value = {
+    for workload_name in distinct([for env in local.workload_environments : env.workload_name]) :
+    workload_name => {
+      for environment in local.workload_environments :
+      environment.environment_tag => {
+        workload                      = environment.workload_name
+        environment                   = environment.environment_name
+        environment_tag               = environment.environment_tag
+        administrative_unit_id        = azuread_administrative_unit.workload[environment.key].id
+        administrative_unit_object_id = azuread_administrative_unit.workload[environment.key].object_id
+        administrative_unit_name      = azuread_administrative_unit.workload[environment.key].display_name
+      }
+      if environment.workload_name == workload_name && contains(keys(azuread_administrative_unit.workload), environment.key)
+    }
+  }
+}
