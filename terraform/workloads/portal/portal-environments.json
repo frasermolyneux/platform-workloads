@@ -43,6 +43,9 @@
             ],
             "directory_roles": [
                 "Cloud application administrator"
+            ],
+            "administrative_unit_roles": [
+                "Groups Administrator"
             ]
         },
         {
@@ -76,6 +79,9 @@
             ],
             "directory_roles": [
                 "Cloud application administrator"
+            ],
+            "administrative_unit_roles": [
+                "Groups Administrator"
             ]
         }
     ]

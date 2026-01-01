@@ -53,6 +53,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
     ]
   },
   "directory_roles": [...],
+  "administrative_unit_roles": [...],
   "requires_terraform_state_access": [...]
 }
 ```
@@ -86,6 +87,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                          |
 | `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                   |
 | `directory_roles`                 | array   | No       | Entra ID directory roles                                                |
+| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator) |
 | `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state |
 
 ### Role Assignments

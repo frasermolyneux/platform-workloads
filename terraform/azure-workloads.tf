@@ -66,6 +66,7 @@ locals {
           ]
         }
         directory_roles                 = try(environment.directory_roles, [])
+        administrative_unit_roles       = try(environment.administrative_unit_roles, [])
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
         locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]
         resource_groups                 = try(environment.resource_groups, null)
