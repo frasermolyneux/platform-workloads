@@ -84,7 +84,7 @@
                 "Cloud application administrator"
             ],
             "administrative_unit_roles": {
-                "administrative_unit": "xtremeidiots-prod",
+                "administrative_unit": "xtremeidiots-prd",
                 "roles": [
                     "Groups Administrator"
                 ]
