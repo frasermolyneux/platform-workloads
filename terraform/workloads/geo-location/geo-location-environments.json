@@ -32,9 +32,9 @@
                         ]
                     }
                 ],
-                "rbac_admin": [
+                "rbac_admin_roles": [
                     {
-                        "roles": [
+                        "allowed_roles": [
                             "App Configuration Data Reader",
                             "Key Vault Secrets User"
                         ]
@@ -61,9 +61,9 @@
                         ]
                     }
                 ],
-                "rbac_admin": [
+                "rbac_admin_roles": [
                     {
-                        "roles": [
+                        "allowed_roles": [
                             "App Configuration Data Reader",
                             "Key Vault Secrets User"
                         ]
