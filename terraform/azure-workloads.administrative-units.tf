@@ -1,6 +1,10 @@
-resource "azuread_administrative_unit" "workload" {
-  for_each = { for environment in local.workload_environments : environment.key => environment }
+locals {
+  administrative_unit_keys = keys(var.administrative_units)
+}
 
-  display_name = format("au-%s-%s", lower(each.value.workload_name), lower(each.value.environment_tag))
-  description  = format("Administrative unit for workload %s (%s)", each.value.workload_name, each.value.environment_name)
+resource "azuread_administrative_unit" "platform" {
+  for_each = var.administrative_units
+
+  display_name = coalesce(try(each.value.display_name, null), each.key)
+  description  = try(each.value.description, null)
 }

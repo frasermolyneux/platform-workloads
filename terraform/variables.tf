@@ -68,6 +68,28 @@ variable "environment_map" {
   }
 }
 
+variable "administrative_units" {
+  description = "Administrative Units managed by platform-workloads; keyed by short name."
+  type = map(object({
+    display_name = optional(string)
+    description  = optional(string)
+  }))
+  default = {
+    xtremeidiots-dev = {
+      display_name = "XtremeIdiots Development"
+    }
+    xtremeidiots-prd = {
+      display_name = "XtremeIdiots Production"
+    }
+    molyneux-io-dev = {
+      display_name = "Molyneux.IO Development"
+    }
+    molyneux-io-prd = {
+      display_name = "Molyneux.IO Production"
+    }
+  }
+}
+
 variable "github_service_connection_pat" {
   description = "Personal access token used for Azure DevOps GitHub service connections"
   type        = string

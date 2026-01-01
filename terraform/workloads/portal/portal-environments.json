@@ -44,9 +44,12 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "administrative_unit_roles": [
-                "Groups Administrator"
-            ]
+            "administrative_unit_roles": {
+                "administrative_unit": "xtremeidiots-dev",
+                "roles": [
+                    "Groups Administrator"
+                ]
+            }
         },
         {
             "name": "Production",
@@ -80,9 +83,12 @@
             "directory_roles": [
                 "Cloud application administrator"
             ],
-            "administrative_unit_roles": [
-                "Groups Administrator"
-            ]
+            "administrative_unit_roles": {
+                "administrative_unit": "xtremeidiots-prod",
+                "roles": [
+                    "Groups Administrator"
+                ]
+            }
         }
     ]
 }
