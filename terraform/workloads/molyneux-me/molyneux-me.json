@@ -17,6 +17,9 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-monitoring"
+            ],
             "locations": [
                 "westeurope",
                 "eastasia"
@@ -57,6 +60,9 @@
             "subscription": "sub-molyneux-me-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-monitoring"
+            ],
             "locations": [
                 "westeurope",
                 "eastasia",
