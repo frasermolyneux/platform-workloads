@@ -56,17 +56,13 @@ output "workload_administrative_units" {
     workload_name => {
       for environment in local.workload_environments :
       environment.environment_tag => {
-        workload        = environment.workload_name
-        environment     = environment.environment_name
-        environment_tag = environment.environment_tag
-        administrative_units = [
-          for au_key in environment.administrative_unit_keys : {
-            key                           = au_key
-            administrative_unit_id        = azuread_administrative_unit.platform[au_key].id
-            administrative_unit_object_id = azuread_administrative_unit.platform[au_key].object_id
-            administrative_unit_name      = azuread_administrative_unit.platform[au_key].display_name
-          }
-        ]
+        workload                      = environment.workload_name
+        environment                   = environment.environment_name
+        environment_tag               = environment.environment_tag
+        administrative_unit_key       = environment.administrative_unit_keys[0]
+        administrative_unit_id        = azuread_administrative_unit.platform[environment.administrative_unit_keys[0]].id
+        administrative_unit_object_id = azuread_administrative_unit.platform[environment.administrative_unit_keys[0]].object_id
+        administrative_unit_name      = azuread_administrative_unit.platform[environment.administrative_unit_keys[0]].display_name
       }
       if environment.workload_name == workload_name && length(environment.administrative_unit_keys) > 0
     }
