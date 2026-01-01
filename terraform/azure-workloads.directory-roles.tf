@@ -46,7 +46,7 @@ resource "azuread_administrative_unit_role_member" "workload" {
     for each in local.workload_directory_roles_au : each.directory_assignment_key => each
   }
 
-  administrative_unit_object_id = azuread_administrative_unit.workload[each.value.workload_environment_key].id
+  administrative_unit_object_id = azuread_administrative_unit.workload[each.value.workload_environment_key].object_id
   role_object_id                = local.directory_role_object_ids[each.value.name]
   member_object_id              = azuread_service_principal.workload[each.value.workload_environment_key].object_id
 }
@@ -57,7 +57,7 @@ resource "azuread_administrative_unit_role_member" "workload_deploy_script" {
     if each.add_deploy_script_identity
   }
 
-  administrative_unit_object_id = azuread_administrative_unit.workload[each.value.workload_environment_key].id
+  administrative_unit_object_id = azuread_administrative_unit.workload[each.value.workload_environment_key].object_id
   role_object_id                = local.directory_role_object_ids[each.value.name]
   member_object_id              = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }
