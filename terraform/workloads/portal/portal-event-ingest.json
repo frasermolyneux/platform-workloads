@@ -51,6 +51,16 @@
                             "Monitoring Reader"
                         ]
                     }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender",
+                            "Key Vault Secrets User"
+                        ]
+                    }
                 ]
             }
         },
@@ -85,6 +95,16 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender",
+                            "Key Vault Secrets User"
                         ]
                     }
                 ]
