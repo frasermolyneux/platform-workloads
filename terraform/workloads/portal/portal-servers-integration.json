@@ -21,6 +21,27 @@
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "portal-core",
+                "portal-environments"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "add_deploy_script_identity": true,
             "directory_roles": [
                 "Cloud application administrator"
@@ -65,6 +86,27 @@
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "portal-core",
+                "portal-environments"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "add_deploy_script_identity": true,
             "directory_roles": [
                 "Cloud application administrator"

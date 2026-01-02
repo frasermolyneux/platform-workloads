@@ -24,6 +24,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
+                "platform-monitoring",
                 "portal-core",
                 "portal-environments"
             ],
@@ -91,6 +92,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
+                "platform-monitoring",
                 "portal-core",
                 "portal-environments"
             ],
