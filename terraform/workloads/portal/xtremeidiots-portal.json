@@ -27,6 +27,9 @@
                 "portal-core",
                 "portal-environments"
             ],
+            "locations": [
+                "swedencentral"
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
@@ -87,6 +90,9 @@
             "subscription": "sub-xi-portal-prd",
             "devops_project": "XtremeIdiots",
             "connect_to_github": true,
+            "locations": [
+                "uksouth"
+            ],
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "platform-monitoring",

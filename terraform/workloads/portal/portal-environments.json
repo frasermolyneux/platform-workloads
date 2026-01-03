@@ -17,6 +17,9 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "locations": [
+                "swedencentral"
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
@@ -55,6 +58,9 @@
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
+            "locations": [
+                "uksouth"
+            ],
             "configure_for_terraform": true,
             "resource_groups": [
                 {
