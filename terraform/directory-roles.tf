@@ -3,7 +3,8 @@ locals {
     "Directory Readers",
     "Directory Writers",
     "Cloud application administrator",
-    "Groups Administrator"
+    "Groups Administrator",
+    "Application Administrator"
   ]
 }
 
