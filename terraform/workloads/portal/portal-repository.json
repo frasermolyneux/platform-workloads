@@ -55,7 +55,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Groups Administrator"
             ],
             "role_assignments": {
                 "assigned_roles": [
@@ -126,7 +127,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Groups Administrator"
             ],
             "role_assignments": {
                 "assigned_roles": [
