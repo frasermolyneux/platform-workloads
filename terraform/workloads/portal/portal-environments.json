@@ -45,7 +45,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Application Administrator"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-dev",
@@ -87,7 +88,8 @@
                 }
             ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Application Administrator"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-prd",
