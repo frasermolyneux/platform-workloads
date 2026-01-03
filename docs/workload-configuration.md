@@ -53,6 +53,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
     ]
   },
   "directory_roles": [...],
+  "graph_api_permissions": ["AppRoleAssignment.ReadWrite.All"],
   "administrative_unit_roles": [...],
   "requires_terraform_state_access": [...]
 }
@@ -76,19 +77,20 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 
 ### Environment Section
 
-| Property                          | Type    | Required | Description                                                                            |
-| --------------------------------- | ------- | -------- | -------------------------------------------------------------------------------------- |
-| `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                   |
-| `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                               |
-| `devops_project`                  | string  | No       | Azure DevOps project name                                                              |
-| `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                          |
-| `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                                     |
-| `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                               |
-| `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                         |
-| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                  |
-| `directory_roles`                 | array   | No       | Entra ID directory roles                                                               |
-| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator) |
-| `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                |
+| Property                          | Type    | Required | Description                                                                                                     |
+| --------------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------- |
+| `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                                            |
+| `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                                                        |
+| `devops_project`                  | string  | No       | Azure DevOps project name                                                                                       |
+| `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                                                   |
+| `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                                                              |
+| `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                                                        |
+| `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                                                  |
+| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                           |
+| `directory_roles`                 | array   | No       | Entra ID directory roles                                                                                        |
+| `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All) |
+| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                          |
+| `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                                         |
 
 ### Role Assignments
 
@@ -109,6 +111,7 @@ Environment-level `role_assignments`:
 - If `scope` is omitted, the environment `subscription` is used.
 - A `Reader` assignment is automatically added on the environment subscription; if a role already targets that scope, `Reader` is merged into its roles.
 - `assigned_roles.roles` accept any Azure RBAC role name.
+- `graph_api_permissions` are applied to the workload service principal (and deploy script identity when enabled) against Microsoft Graph; values must match Graph app role values such as `AppRoleAssignment.ReadWrite.All` or `Application.Read.All`.
 - Scope input options (case-insensitive prefixes):
   - `sub:<alias>` resolves to a subscription from `var.subscriptions` (e.g., `sub:sub-visualstudio-enterprise`).
   - `/subscriptions/...` uses a raw ARM ID (any level: subscription, RG, or resource).

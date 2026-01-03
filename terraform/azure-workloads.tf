@@ -84,6 +84,7 @@ locals {
         requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
         locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]
         resource_groups                 = try(environment.resource_groups, null)
+        graph_api_permissions           = distinct(try(environment.graph_api_permissions, []))
       }
     ]
   ])

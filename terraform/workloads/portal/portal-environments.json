@@ -44,9 +44,10 @@
                     }
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Application Administrator"
+            "graph_api_permissions": [
+                "Application.ReadWrite.OwnedBy",
+                "AppRoleAssignment.ReadWrite.All",
+                "Application.Read.All"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-dev",
@@ -87,9 +88,10 @@
                     }
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Application Administrator"
+            "graph_api_permissions": [
+                "Application.ReadWrite.OwnedBy",
+                "AppRoleAssignment.ReadWrite.All",
+                "Application.Read.All"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-prd",
