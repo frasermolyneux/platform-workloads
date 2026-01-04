@@ -47,7 +47,8 @@
             "graph_api_permissions": [
                 "Application.ReadWrite.OwnedBy",
                 "AppRoleAssignment.ReadWrite.All",
-                "Application.Read.All"
+                "Application.Read.All",
+                "AdministrativeUnit.Read.All"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-dev",
@@ -91,7 +92,8 @@
             "graph_api_permissions": [
                 "Application.ReadWrite.OwnedBy",
                 "AppRoleAssignment.ReadWrite.All",
-                "Application.Read.All"
+                "Application.Read.All",
+                "AdministrativeUnit.Read.All"
             ],
             "administrative_unit_roles": {
                 "administrative_unit": "xtremeidiots-prd",
