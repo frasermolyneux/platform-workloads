@@ -62,6 +62,14 @@
                             "Monitoring Reader"
                         ]
                     }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Key Vault Secrets User"
+                        ]
+                    }
                 ]
             }
         },
@@ -109,6 +117,14 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
+                        ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Storage Blob Data Owner",
+                            "Key Vault Secrets User"
                         ]
                     }
                 ]
