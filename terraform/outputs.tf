@@ -68,3 +68,24 @@ output "workload_administrative_units" {
     }
   }
 }
+
+output "workload_service_principals" {
+  description = "Workload application and service principal identifiers, nested by environment tag (dev/tst/prd). Access: workload_service_principals[workload][env_tag]."
+  value = {
+    for workload_name in distinct([for env in local.workload_environments : env.workload_name]) :
+    workload_name => {
+      for environment in local.workload_environments :
+      environment.environment_tag => {
+        workload                 = environment.workload_name
+        environment              = environment.environment_name
+        environment_tag          = environment.environment_tag
+        application_id           = azuread_application.workload[environment.key].application_id
+        application_object_id    = azuread_application.workload[environment.key].object_id
+        service_principal_id     = azuread_service_principal.workload[environment.key].id
+        service_principal_app_id = azuread_service_principal.workload[environment.key].application_id
+        service_principal_name   = azuread_service_principal.workload[environment.key].display_name
+      }
+      if environment.workload_name == workload_name
+    }
+  }
+}
