@@ -43,7 +43,11 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Key Vault Secrets Officer"
+                                    "Key Vault Secrets Officer",
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
                                 ]
                             }
                         ]
@@ -68,7 +72,11 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Key Vault Secrets Officer"
+                            "Key Vault Secrets Officer",
+                            "Key Vault Secrets User",
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender"
                         ]
                     }
                 ]
@@ -101,7 +109,11 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Key Vault Secrets Officer"
+                                    "Key Vault Secrets Officer",
+                                    "Key Vault Secrets User",
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
                                 ]
                             }
                         ]
@@ -126,7 +138,11 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Key Vault Secrets Officer"
+                            "Key Vault Secrets Officer",
+                            "Key Vault Secrets User",
+                            "Storage Blob Data Owner",
+                            "Azure Service Bus Data Receiver",
+                            "Azure Service Bus Data Sender"
                         ]
                     }
                 ]
