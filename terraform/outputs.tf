@@ -82,7 +82,7 @@ output "workload_service_principals" {
         application_client_id          = azuread_application.workload[environment.key].client_id
         application_object_id          = azuread_application.workload[environment.key].object_id
         service_principal_client_id    = azuread_service_principal.workload[environment.key].client_id
-        service_principal_object_id    = azuread_service_principal.workload[environment.key].id
+        service_principal_object_id    = azuread_service_principal.workload[environment.key].object_id
         service_principal_display_name = azuread_service_principal.workload[environment.key].display_name
       }
       if environment.workload_name == workload_name
