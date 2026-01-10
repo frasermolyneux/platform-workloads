@@ -23,8 +23,27 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
+                "platform-monitoring",
                 "portal-core",
                 "portal-environments"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
+                }
             ],
             "directory_roles": [
                 "Cloud application administrator"
@@ -54,8 +73,27 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
+                "platform-monitoring",
                 "portal-core",
                 "portal-environments"
+            ],
+            "locations": [
+                "uksouth"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
+                        ]
+                    }
+                }
             ],
             "directory_roles": [
                 "Cloud application administrator"

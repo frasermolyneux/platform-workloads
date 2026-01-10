@@ -87,14 +87,14 @@
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
-            "locations": [
-                "uksouth"
-            ],
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "platform-monitoring",
                 "portal-core",
                 "portal-environments"
+            ],
+            "locations": [
+                "uksouth"
             ],
             "resource_groups": [
                 {
