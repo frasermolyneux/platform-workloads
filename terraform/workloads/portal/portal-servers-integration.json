@@ -144,7 +144,7 @@
                         ]
                     },
                     {
-                        "scope": "workload:platform-monitoring/Development",
+                        "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
                         ]
