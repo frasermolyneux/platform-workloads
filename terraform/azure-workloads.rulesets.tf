@@ -52,7 +52,30 @@ resource "github_repository_ruleset" "workload" {
       }
     }
 
+    dynamic "required_code_scanning" {
+      for_each = length(try(each.value.rules.required_code_scanning, [])) > 0 ? [1] : []
+      content {
+        dynamic "required_code_scanning_tool" {
+          for_each = try(each.value.rules.required_code_scanning, [])
+          content {
+            tool                      = required_code_scanning_tool.value.tool
+            alerts_threshold          = try(required_code_scanning_tool.value.alerts_threshold, null)
+            security_alerts_threshold = try(required_code_scanning_tool.value.security_alerts_threshold, null)
+          }
+        }
+      }
+    }
+
+    dynamic "copilot_code_review" {
+      for_each = try(each.value.rules.copilot_code_review, null) != null ? [1] : []
+      content {
+        review_draft_pull_requests = try(each.value.rules.copilot_code_review.review_draft_pull_requests, false)
+        review_on_push             = try(each.value.rules.copilot_code_review.review_on_push, false)
+      }
+    }
+
     required_signatures     = try(each.value.rules.required_signatures, false)
     required_linear_history = try(each.value.rules.required_linear_history, false)
+    non_fast_forward        = try(each.value.rules.non_fast_forward, false)
   }
 }

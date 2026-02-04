@@ -27,25 +27,50 @@
             "rules": {
                 "required_status_checks": [
                     {
-                        "context": "Build and Test / build-and-test"
+                        "context": "SonarCloud Code Analysis",
+                        "integration_id": 12526
                     },
                     {
-                        "context": "PR Verify / build-and-test"
+                        "context": "build-and-test",
+                        "integration_id": 15368
                     },
                     {
-                        "context": "Code Quality / quality"
+                        "context": "quality / Code Quality",
+                        "integration_id": 15368
                     }
                 ],
-                "strict_required_status_checks_policy": false,
+                "strict_required_status_checks_policy": true,
                 "do_not_enforce_on_create": false,
                 "pull_request": {
+                    "allowed_merge_methods": [
+                        "merge",
+                        "rebase",
+                        "squash"
+                    ],
                     "required_approving_review_count": 1,
                     "dismiss_stale_reviews_on_push": true,
                     "require_code_owner_review": false,
                     "required_review_thread_resolution": true
                 },
+                "required_code_scanning": [
+                    {
+                        "tool": "CodeQL",
+                        "alerts_threshold": "errors",
+                        "security_alerts_threshold": "high_or_higher"
+                    },
+                    {
+                        "tool": "SonarCloud",
+                        "alerts_threshold": "errors",
+                        "security_alerts_threshold": "high_or_higher"
+                    }
+                ],
+                "copilot_code_review": {
+                    "review_draft_pull_requests": true,
+                    "review_on_push": true
+                },
                 "required_signatures": false,
-                "required_linear_history": true
+                "required_linear_history": true,
+                "non_fast_forward": true
             }
         }
     ],
