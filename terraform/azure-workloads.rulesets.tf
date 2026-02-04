@@ -31,7 +31,7 @@ resource "github_repository_ruleset" "workload" {
         do_not_enforce_on_create             = try(each.value.rules.do_not_enforce_on_create, false)
 
         dynamic "required_check" {
-          for_each = try(each.value.rules.required_status_checks, []);
+          for_each = try(each.value.rules.required_status_checks, [])
           content {
             context        = required_check.value.context
             integration_id = try(required_check.value.integration_id, null)
@@ -43,12 +43,12 @@ resource "github_repository_ruleset" "workload" {
     dynamic "pull_request" {
       for_each = try(each.value.rules.pull_request, null) != null ? [1] : []
       content {
-        allowed_merge_methods            = try(each.value.rules.pull_request.allowed_merge_methods, null)
-        dismiss_stale_reviews_on_push    = try(each.value.rules.pull_request.dismiss_stale_reviews_on_push, false)
-        require_code_owner_review        = try(each.value.rules.pull_request.require_code_owner_review, false)
-        required_approving_review_count  = try(each.value.rules.pull_request.required_approving_review_count, 0)
+        allowed_merge_methods             = try(each.value.rules.pull_request.allowed_merge_methods, null)
+        dismiss_stale_reviews_on_push     = try(each.value.rules.pull_request.dismiss_stale_reviews_on_push, false)
+        require_code_owner_review         = try(each.value.rules.pull_request.require_code_owner_review, false)
+        required_approving_review_count   = try(each.value.rules.pull_request.required_approving_review_count, 0)
         required_review_thread_resolution = try(each.value.rules.pull_request.required_review_thread_resolution, false)
-        require_last_push_approval       = try(each.value.rules.pull_request.require_last_push_approval, false)
+        require_last_push_approval        = try(each.value.rules.pull_request.require_last_push_approval, false)
       }
     }
 
