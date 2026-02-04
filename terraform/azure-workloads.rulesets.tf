@@ -27,37 +27,32 @@ resource "github_repository_ruleset" "workload" {
     dynamic "required_status_checks" {
       for_each = length(try(each.value.rules.required_status_checks, [])) > 0 ? [1] : []
       content {
+        strict_required_status_checks_policy = try(each.value.rules.strict_required_status_checks_policy, false)
+        do_not_enforce_on_create             = try(each.value.rules.do_not_enforce_on_create, false)
+
         dynamic "required_check" {
-          for_each = try(each.value.rules.required_status_checks, [])
+          for_each = try(each.value.rules.required_status_checks, []);
           content {
-            context = required_check.value.context
+            context        = required_check.value.context
+            integration_id = try(required_check.value.integration_id, null)
           }
         }
       }
     }
 
-    dynamic "required_pull_request" {
-      for_each = try(each.value.rules.required_pull_request, null) != null ? [1] : []
+    dynamic "pull_request" {
+      for_each = try(each.value.rules.pull_request, null) != null ? [1] : []
       content {
-        required_approving_review_count = try(each.value.rules.required_pull_request.required_approving_review_count, 1)
-        dismiss_stale_reviews           = try(each.value.rules.required_pull_request.dismiss_stale_reviews, true)
-        require_code_owner_review       = try(each.value.rules.required_pull_request.require_code_owner_review, false)
+        allowed_merge_methods            = try(each.value.rules.pull_request.allowed_merge_methods, null)
+        dismiss_stale_reviews_on_push    = try(each.value.rules.pull_request.dismiss_stale_reviews_on_push, false)
+        require_code_owner_review        = try(each.value.rules.pull_request.require_code_owner_review, false)
+        required_approving_review_count  = try(each.value.rules.pull_request.required_approving_review_count, 0)
+        required_review_thread_resolution = try(each.value.rules.pull_request.required_review_thread_resolution, false)
+        require_last_push_approval       = try(each.value.rules.pull_request.require_last_push_approval, false)
       }
     }
 
-    dynamic "required_conversation_resolution" {
-      for_each = try(each.value.rules.required_conversation_resolution, false) ? [1] : []
-      content {}
-    }
-
-    dynamic "required_signatures" {
-      for_each = try(each.value.rules.required_signatures, false) ? [1] : []
-      content {}
-    }
-
-    dynamic "linear_history" {
-      for_each = try(each.value.rules.linear_history, false) ? [1] : []
-      content {}
-    }
+    required_signatures     = try(each.value.rules.required_signatures, false)
+    required_linear_history = try(each.value.rules.required_linear_history, false)
   }
 }

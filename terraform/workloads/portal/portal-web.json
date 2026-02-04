@@ -36,14 +36,16 @@
                         "context": "Code Quality / quality"
                     }
                 ],
-                "required_pull_request": {
+                "strict_required_status_checks_policy": false,
+                "do_not_enforce_on_create": false,
+                "pull_request": {
                     "required_approving_review_count": 1,
-                    "dismiss_stale_reviews": true,
-                    "require_code_owner_review": false
+                    "dismiss_stale_reviews_on_push": true,
+                    "require_code_owner_review": false,
+                    "required_review_thread_resolution": true
                 },
-                "required_conversation_resolution": true,
                 "required_signatures": false,
-                "linear_history": true
+                "required_linear_history": true
             }
         }
     ],
