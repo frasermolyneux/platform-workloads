@@ -15,6 +15,38 @@
         "add_nuget_environment": true,
         "visibility": "public"
     },
+    "rulesets": [
+        {
+            "name": "main-protection",
+            "target": "branch",
+            "enforcement": "active",
+            "includes": [
+                "refs/heads/main"
+            ],
+            "excludes": [],
+            "rules": {
+                "required_status_checks": [
+                    {
+                        "context": "Build and Test / build-and-test"
+                    },
+                    {
+                        "context": "PR Verify / build-and-test"
+                    },
+                    {
+                        "context": "Code Quality / quality"
+                    }
+                ],
+                "required_pull_request": {
+                    "required_approving_review_count": 1,
+                    "dismiss_stale_reviews": true,
+                    "require_code_owner_review": false
+                },
+                "required_conversation_resolution": true,
+                "required_signatures": false,
+                "linear_history": true
+            }
+        }
+    ],
     "environments": [
         {
             "name": "Development",
