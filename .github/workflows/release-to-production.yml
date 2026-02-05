@@ -7,15 +7,14 @@ on:
   push:
     branches: [ "main" ]
 
-permissions:
-  id-token: write # This is required for requesting the JWT
-  contents: read  # This is required for actions/checkout
-
 concurrency: # This is required to prevent multiple runs of the same workflow from running at the same time.
   group: ${{ github.workflow }}
 
 jobs:
- terraform-plan-and-apply-prd:
+  terraform-plan-and-apply-prd:
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
     environment: Production
     runs-on: ubuntu-latest
 

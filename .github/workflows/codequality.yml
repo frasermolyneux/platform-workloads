@@ -11,21 +11,21 @@ on:
       - main
     types: [opened, synchronize, reopened, ready_for_review]
 
-permissions:
-  contents: read
-  actions: read
-  security-events: write
   
 jobs:
   devops-secure-scanning:
+    permissions:
+      contents: read
+      actions: read
+      security-events: write
     uses: frasermolyneux/actions/.github/workflows/devops-secure-scanning.yml@main
 
   dependency-review:
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
