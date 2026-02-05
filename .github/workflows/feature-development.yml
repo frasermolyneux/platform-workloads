@@ -9,6 +9,8 @@ on:
       - 'feature/*'
 
   
+permissions: read-all
+
 jobs:
   terraform-plan-prd:
     permissions:
