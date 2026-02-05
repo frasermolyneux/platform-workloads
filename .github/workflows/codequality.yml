@@ -1,0 +1,31 @@
+name: Code Quality
+
+on:
+  schedule:
+    - cron: "0 3 * * 1" # Monday 3am UTC
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    types: [opened, synchronize, reopened, ready_for_review]
+
+permissions:
+  contents: read
+  actions: read
+  security-events: write
+  
+jobs:
+  devops-secure-scanning:
+    uses: frasermolyneux/actions/.github/workflows/devops-secure-scanning.yml@main
+
+  dependency-review:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v4
