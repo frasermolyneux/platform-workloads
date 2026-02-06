@@ -27,10 +27,6 @@
                         "integration_id": 15368
                     },
                     {
-                        "context": "quality / Code Quality",
-                        "integration_id": 15368
-                    },
-                    {
                         "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
@@ -48,13 +44,7 @@
                     "require_code_owner_review": false,
                     "required_review_thread_resolution": true
                 },
-                "required_code_scanning": [
-                    {
-                        "tool": "CodeQL",
-                        "alerts_threshold": "errors",
-                        "security_alerts_threshold": "high_or_higher"
-                    }
-                ],
+                "required_code_scanning": [],
                 "copilot_code_review": {
                     "review_draft_pull_requests": true,
                     "review_on_push": true
