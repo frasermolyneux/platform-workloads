@@ -11,7 +11,7 @@
             "service-bus",
             "app-service-plan"
         ],
-        "add_sonarcloud_secrets": true,
+        "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
         "visibility": "public"
     },
@@ -27,15 +27,15 @@
             "rules": {
                 "required_status_checks": [
                     {
-                        "context": "SonarCloud Code Analysis",
-                        "integration_id": 12526
-                    },
-                    {
-                        "context": "build-and-test",
+                        "context": "terraform-plan-dev",
                         "integration_id": 15368
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],
