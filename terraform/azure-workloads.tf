@@ -20,6 +20,25 @@ resource "github_repository" "workload" {
 }
 
 locals {
+  workload_labels = flatten([
+    for workload in local.all_workloads : [
+      for label in try(workload.labels, []) : merge(label, {
+        workload_name = workload.name
+      })
+    ]
+  ])
+}
+
+resource "github_issue_label" "workload" {
+  for_each = { for label in local.workload_labels : format("%s-%s", label.workload_name, label.name) => label }
+
+  repository  = github_repository.workload[each.value.workload_name].name
+  name        = each.value.name
+  color       = try(each.value.color, "ededed")
+  description = try(each.value.description, null)
+}
+
+locals {
   workload_environments = flatten([
     for workload in local.all_workloads : [
       for environment in try(workload.environments, []) : {
