@@ -1,19 +1,17 @@
 {
     "name": "talkwithtiles",
     "github": {
-        "description": "The TalkWithTiles is a platform that allows users to play online games of Scrabble against each other. Deployed using Terraform and Azure DevOps.",
+        "description": "Scrabble-style multiplayer word game delivered on Azure and deployed with Terraform plus Azure DevOps.",
         "topics": [
             "azure",
             "terraform",
-            "azue-devops-pipelines",
-            "key-vault",
-            "app-insights",
+            "azure-devops-pipelines",
+            "game",
+            "scrabble",
             "app-service",
-            "api-management",
-            "api-management-api",
-            "sql-server",
             "sql-database",
-            "log-analytics"
+            "app-insights",
+            "key-vault"
         ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"

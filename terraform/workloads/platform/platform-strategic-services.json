@@ -1,7 +1,7 @@
 {
     "name": "platform-strategic-services",
     "github": {
-        "description": "Platform strategic resources; (API Management, App Service Plans, etc.) for Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines.",
+        "description": "Strategic shared services for the Molyneux.IO platform (API Management, App Service Plans, Key Vault, SQL) delivered with Bicep and Azure DevOps.",
         "topics": [
             "azure",
             "bicep",

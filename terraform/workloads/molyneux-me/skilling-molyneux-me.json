@@ -1,10 +1,12 @@
 {
     "name": "skilling-molyneux-me",
     "github": {
-        "description": "Skilling Graph App",
+        "description": "Skilling tracker web app that surfaces personal learning progress with Microsoft Graph, built on ASP.NET Core.",
         "topics": [
             "azure",
-            "asp-net",
+            "aspnet-core",
+            "microsoft-graph",
+            "learning",
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,

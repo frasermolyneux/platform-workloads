@@ -1,11 +1,13 @@
 {
     "name": "bicep-modules",
     "github": {
-        "description": "Bicep module repository; this contains Bicep modules that are published to an ACR for use in many projects. Bicep modules are pushed to ACR with an Azure DevOps pipeline.",
+        "description": "Reusable Azure Bicep modules published to ACR for shared platform workloads, validated and shipped via Azure DevOps OnePipeline.",
         "topics": [
             "azure",
             "bicep",
-            "azure-devops-pipelines"
+            "modules",
+            "azure-devops-pipelines",
+            "acr"
         ],
         "visibility": "public"
     },

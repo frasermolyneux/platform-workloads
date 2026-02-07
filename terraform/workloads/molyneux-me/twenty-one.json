@@ -1,10 +1,12 @@
 {
     "name": "twenty-one",
     "github": {
-        "description": "A simple static website hosted on Azure as a static web app for practicing Blackjack",
+        "description": "Static Blackjack practice site deployed as an Azure Static Web App.",
         "topics": [
             "azure",
-            "static-website",
+            "static-web-apps",
+            "blackjack",
+            "static-site",
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,

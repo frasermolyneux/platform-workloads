@@ -1,16 +1,17 @@
 {
     "name": "portal-servers-integration",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; game server integration via RCON and direct query. Deployed using Bicep and GitHub Actions.",
+        "description": "Game server integration service for the XtremeIdiots portal (RCON and query endpoints) deployed with Bicep and GitHub Actions.",
         "topics": [
             "azure",
             "bicep",
             "github-actions",
-            "key-vault",
-            "app-insights",
+            "game-servers",
+            "rcon",
             "app-service",
-            "api-subscription",
-            "api-management-api"
+            "api-management",
+            "key-vault",
+            "app-insights"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
@@ -37,6 +38,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

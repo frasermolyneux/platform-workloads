@@ -1,15 +1,15 @@
 {
     "name": "portal-web",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; legacy repository containing the web app. Deployed using Bicep and Azure DevOps pipelines.",
+        "description": "XtremeIdiots portal web app (ASP.NET Core MVC) with Azure resources defined in Bicep and deployed via Azure DevOps.",
         "topics": [
             "azure",
+            "aspnet-core",
             "bicep",
             "azure-devops-pipelines",
-            "key-vault",
-            "app-insights",
             "app-service",
-            "function-app"
+            "app-insights",
+            "key-vault"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
@@ -36,6 +36,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

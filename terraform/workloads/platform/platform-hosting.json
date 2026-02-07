@@ -1,12 +1,12 @@
 {
     "name": "platform-hosting",
     "github": {
-        "description": "Shared App Service and Static Web App hosting plans for downstream workloads. Deployed using Terraform and GitHub Actions.",
+        "description": "Shared App Service and Static Web App hosting plans for downstream workloads provisioned with Terraform and GitHub Actions.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "app-service",
+            "app-service-plan",
             "static-web-apps",
             "shared-hosting"
         ],

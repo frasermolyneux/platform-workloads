@@ -1,13 +1,14 @@
 {
     "name": "platform-connectivity",
     "github": {
-        "description": "Platform strategic resources; (Front Door, DNS, etc.) for Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines.",
+        "description": "Connectivity layer for the Molyneux.IO platform covering Front Door, DNS, and certificates, built with Bicep and Azure DevOps OnePipeline.",
         "topics": [
             "azure",
             "bicep",
             "azure-devops-pipelines",
-            "dns-zones",
-            "front-door"
+            "front-door",
+            "dns",
+            "networking"
         ],
         "visibility": "public"
     },

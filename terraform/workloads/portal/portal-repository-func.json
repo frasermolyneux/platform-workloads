@@ -1,12 +1,12 @@
 {
     "name": "portal-repository-func",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; repository maintenance and statistics building. Deployed using Terraform and GitHub Actions.",
+        "description": "Background functions for the XtremeIdiots Repository API handling maintenance, telemetry, and subscription tasks, deployed with Terraform and GitHub Actions.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "function-app",
+            "azure-functions",
             "app-insights",
             "key-vault",
             "api-subscriptions"

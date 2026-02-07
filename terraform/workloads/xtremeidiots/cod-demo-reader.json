@@ -1,13 +1,14 @@
 {
     "name": "cod-demo-reader",
     "github": {
-        "description": "MX CodDemoReader: Call of Duty 2/4/5 Huffman demo reader packaged as the MX.CodDemoReader NuGet library.",
+        "description": "MX CodDemoReader library for parsing Call of Duty 2/4/5 demo files (Huffman decoder) published to NuGet.",
         "topics": [
             "dotnet",
             "nuget",
-            "library",
             "call-of-duty",
-            "huffman"
+            "huffman",
+            "binary-parsing",
+            "library"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
@@ -34,6 +35,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

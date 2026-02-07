@@ -1,13 +1,13 @@
 {
     "name": "demo-manager",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; demo manager click-once desktop application. Deployed using Bicep and Azure DevOps pipelines.",
+           "description": "ClickOnce desktop application for managing Call of Duty demo recordings and downloads, published via Azure DevOps.",
         "topics": [
-            "desktop",
-            "click-once",
-            "bicep",
-            "storage",
-            "azure-devops-pipelines"
+              "desktop",
+              "click-once",
+              "call-of-duty",
+              "storage",
+              "azure-devops-pipelines"
         ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"

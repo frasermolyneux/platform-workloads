@@ -1,11 +1,15 @@
 {
     "name": "portal-environments",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; environment configuration and management. Deployed using Terraform and GitHub Actions.",
+        "description": "Environment scaffolding for the XtremeIdiots portal: App Configuration, Key Vaults, identities, and Entra administrative units managed with Terraform.",
         "topics": [
             "azure",
             "terraform",
-            "github-actions"
+            "github-actions",
+            "app-configuration",
+            "key-vault",
+            "entra-id",
+            "identity-management"
         ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": true,

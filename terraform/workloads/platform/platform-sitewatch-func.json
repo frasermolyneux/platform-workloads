@@ -1,14 +1,15 @@
 {
     "name": "platform-sitewatch-func",
     "github": {
-        "description": "HTTP-based availability checks delivered via Azure Functions. Deployed with Terraform and GitHub Actions.",
+        "description": "HTTP availability monitoring implemented as Azure Functions with schedules managed by Terraform and deployed via GitHub Actions.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
             "azure-functions",
             "uptime",
-            "health-check"
+            "health-check",
+            "monitoring"
         ],
         "visibility": "public",
         "add_sonarcloud_secrets": true

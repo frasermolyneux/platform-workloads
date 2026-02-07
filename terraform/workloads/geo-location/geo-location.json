@@ -1,15 +1,18 @@
 {
     "name": "geo-location",
     "github": {
-        "description": "GeoLocation service providing IP to location related services. Deployed using Bicep and Azure DevOps pipelines.",
+        "description": "MaxMind-backed GeoLocation service with caching: ASP.NET API, web UI, and client library published behind API Management; deployed with Bicep and Azure DevOps.",
         "topics": [
             "azure",
-            "bicep",
-            "azure-devops-pipelines",
-            "key-vault",
-            "app-insights",
+            "geolocation",
+            "aspnet-core",
+            "maxmind",
+            "api-management",
             "app-service",
-            "api-management-api"
+            "app-insights",
+            "caching",
+            "bicep",
+            "azure-devops-pipelines"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,

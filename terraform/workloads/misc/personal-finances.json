@@ -1,11 +1,15 @@
 {
     "name": "personal-finances",
     "github": {
-        "description": "This project is for tracking my personal finances. Deployed using Terraform and GitHub Actions.",
+        "description": "Personal finance tracker and budgeting app deployed to Azure with Terraform and GitHub Actions.",
         "topics": [
             "azure",
             "terraform",
-            "github-actions"
+            "github-actions",
+            "finance",
+            "app-service",
+            "app-insights",
+            "key-vault"
         ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"

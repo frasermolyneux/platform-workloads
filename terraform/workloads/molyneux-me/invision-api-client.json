@@ -1,12 +1,15 @@
 {
     "name": "invision-api-client",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; Invision Community forums integration api client. Published to NuGet.org.",
+        "description": "Invision Community API client library used by the XtremeIdiots portal, published to NuGet.",
         "topics": [
-            "nuget",
-            "github-actions",
+            "dotnet",
+            "api-client",
             "invision-community",
-            "api-client"
+            "restsharp",
+            "polly",
+            "nuget",
+            "github-actions"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
@@ -33,6 +36,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

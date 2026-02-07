@@ -1,14 +1,14 @@
 {
     "name": "platform-landing-zones",
     "github": {
-        "description": "Azure landing zones configuration and deployment for the Molyneux.IO Azure Platform. Deployed using Bicep and Azure DevOps pipelines.",
+        "description": "Landing zone configuration for the Molyneux.IO platform covering subscriptions, policy, and logging, deployed with Bicep and Azure DevOps.",
         "topics": [
             "azure",
             "bicep",
             "azure-devops-pipelines",
-            "azure-landing-zones",
-            "log-analytics-workspace",
-            "subscription-placement"
+            "landing-zone",
+            "policy",
+            "log-analytics"
         ],
         "visibility": "public"
     },

@@ -1,16 +1,15 @@
 {
     "name": "portal-sync",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; data synchronization for game servers ban files and other external services. Deployed using Terraform and GitHub Actions.",
+        "description": "File and data synchronization service for the XtremeIdiots portal (ban lists and external feeds) using Azure Functions and storage.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "function-app",
-            "app-insights",
-            "key-vault",
+            "azure-functions",
             "storage",
-            "api-subscription"
+            "app-insights",
+            "key-vault"
         ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"
@@ -36,6 +35,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

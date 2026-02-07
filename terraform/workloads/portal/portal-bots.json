@@ -1,13 +1,14 @@
 {
     "name": "portal-bots",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; b3 bots config and instance management. Deployed using Terraform/PowerShell and GitHub Actions/Azure DevOps Pipelines.",
+        "description": "XtremeIdiots portal bots infrastructure and b3 configuration, provisioned with Terraform/PowerShell and CI/CD pipelines.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
             "azure-pipelines",
             "powershell",
+            "game-servers",
             "key-vault",
             "app-registration"
         ],

@@ -1,11 +1,12 @@
 {
     "name": "molyneux-me",
     "github": {
-        "description": "A replacement for my WordPress website. Azure static website using Jekyll and GitHub Actions for deployment.",
+        "description": "Personal molyneux.me site built with Jekyll and deployed as an Azure Static Web App via GitHub Actions.",
         "topics": [
             "azure",
-            "static-website",
             "jekyll",
+            "static-web-apps",
+            "personal-site",
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,

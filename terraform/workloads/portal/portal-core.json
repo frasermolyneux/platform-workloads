@@ -1,15 +1,16 @@
 {
     "name": "portal-core",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; creates the application platform. Deployed using Terraform and GitHub Actions.",
+        "description": "Core platform for the XtremeIdiots portal (API Management, Service Bus, shared app plans, monitoring hooks) provisioned with Terraform.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
             "api-management",
-            "app-insights",
             "service-bus",
-            "app-service-plan"
+            "app-service-plan",
+            "observability",
+            "key-vault"
         ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,

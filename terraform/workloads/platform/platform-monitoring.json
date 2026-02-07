@@ -1,15 +1,15 @@
 {
     "name": "platform-monitoring",
     "github": {
-        "description": "Log Analytics plus resource and service health alerting for workloads hosted on and off Azure. Deployed using Terraform and GitHub Actions.",
+        "description": "Monitoring baseline for platform and external workloads: Log Analytics, alerts, workbooks, and action groups deployed with Terraform and GitHub Actions.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "azure-monitor",
+            "monitoring",
             "log-analytics",
-            "resource-health",
-            "service-health"
+            "alerts",
+            "workbooks"
         ],
         "visibility": "public",
         "add_sonarcloud_secrets": true

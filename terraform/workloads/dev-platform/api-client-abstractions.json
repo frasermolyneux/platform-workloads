@@ -1,15 +1,16 @@
 {
     "name": "api-client-abstractions",
     "github": {
-        "description": "An abstractions library containing shared API client functionality for .NET 9/10. Includes common interfaces, options builders, and RestSharp/Polly extensions used across my projects. Built and deployed to NuGet.org using GitHub Actions.",
+        "description": "MX API Abstractions: shared API envelopes, RestSharp + Polly client stack, and ASP.NET Core helpers for consistent .NET 9/10 API providers and consumers published to NuGet.",
         "topics": [
-            "nuget",
-            "github-actions",
-            "api-client",
-            "c-sharp",
             "dotnet",
+            "aspnet-core",
+            "api-client",
             "restsharp",
-            "polly"
+            "polly",
+            "nuget",
+            "azure-identity",
+            "github-actions"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
@@ -36,6 +37,10 @@
                     },
                     {
                         "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
                         "integration_id": 15368
                     }
                 ],

@@ -1,16 +1,16 @@
 {
     "name": "portal-event-ingest",
     "github": {
-        "description": "Part of XtremeIdiots Portal solution; event ingest into the service. Deployed using Terraform and GitHub Actions.",
+        "description": "Event ingest pipeline for the XtremeIdiots portal using HTTP + Service Bus functions to feed player and server events into the platform.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "api-management-api",
-            "app-insights",
+            "azure-functions",
             "service-bus",
-            "function-app",
+            "app-insights",
             "key-vault",
+            "api-management",
             "app-registration"
         ],
         "add_sonarcloud_secrets": true,
