@@ -1,13 +1,13 @@
 {
     "name": "demo-manager",
     "github": {
-           "description": "ClickOnce desktop application for managing Call of Duty demo recordings and downloads, published via Azure DevOps.",
+        "description": "ClickOnce desktop application for managing Call of Duty demo recordings and downloads, published via Azure DevOps.",
         "topics": [
-              "desktop",
-              "click-once",
-              "call-of-duty",
-              "storage",
-              "azure-devops-pipelines"
+            "desktop",
+            "click-once",
+            "call-of-duty",
+            "storage",
+            "azure-devops-pipelines"
         ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"
