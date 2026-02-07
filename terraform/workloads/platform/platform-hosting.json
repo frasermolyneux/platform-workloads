@@ -19,7 +19,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
-                "uksouth",
+                "swedencentral",
                 "westeurope"
             ],
             "resource_groups": [
