@@ -36,6 +36,10 @@
                     {
                         "context": "quality / Code Quality",
                         "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
+                        "integration_id": 15368
                     }
                 ],
                 "strict_required_status_checks_policy": true,
