@@ -8,8 +8,7 @@ on:
     branches:
       - 'feature/*'
 
-  
-permissions: read-all
+permissions: {}
 
 jobs:
   terraform-plan-prd:

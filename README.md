@@ -1,6 +1,5 @@
 # Platform Workloads
 
-[![DevOps Secure Scanning](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/devops-secure-scanning.yml)
 [![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)
 [![Release to Production](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/release-to-production.yml)
 
