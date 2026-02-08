@@ -87,6 +87,9 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
             "locations": [
                 "swedencentral"
             ],
@@ -117,6 +120,12 @@
                         ]
                     },
                     {
+                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-swedencentral/swedencentral",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
                         "scope": "sub:sub-visualstudio-enterprise",
                         "roles": [
                             "Reader"
@@ -138,6 +147,9 @@
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
             "locations": [
                 "swedencentral"
             ],
@@ -165,6 +177,12 @@
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                         "roles": [
                             "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
+                        "roles": [
+                            "Contributor"
                         ]
                     },
                     {
