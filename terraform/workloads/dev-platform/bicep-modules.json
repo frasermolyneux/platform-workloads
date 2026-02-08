@@ -14,7 +14,7 @@
     "environments": [
         {
             "name": "Production",
-            "subscription": "sub-platform-strategic",
+            "subscription": "sub-platform-shared",
             "devops_project": "Molyneux.IO",
             "role_assignments": {
                 "assigned_roles": [

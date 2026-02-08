@@ -149,7 +149,7 @@
                         ]
                     },
                     {
-                        "scope": "sub-platform-strategic",
+                        "scope": "sub-platform-shared",
                         "roles": [
                             "Contributor"
                         ]

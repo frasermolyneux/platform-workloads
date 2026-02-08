@@ -39,8 +39,8 @@ subscriptions = {
     name            = "sub-platform-management"
     subscription_id = "7760848c-794d-4a19-8cb2-52f71a21ac2b"
   },
-  sub-platform-strategic = {
-    name            = "sub-platform-strategic"
+  sub-platform-shared = {
+    name            = "sub-platform-shared"
     subscription_id = "903b6685-c12a-4703-ac54-7ec1ff15ca43"
   },
   sub-talkwithtiles-prd = {

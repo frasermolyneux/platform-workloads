@@ -34,7 +34,7 @@
         },
         {
             "name": "Production",
-            "subscription": "sub-platform-strategic",
+            "subscription": "sub-platform-shared",
             "devops_project": "Molyneux.IO",
             "directory_roles": [
                 "Directory Writers"

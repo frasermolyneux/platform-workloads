@@ -88,7 +88,7 @@
         },
         {
             "name": "Production",
-            "subscription": "sub-platform-strategic",
+            "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
