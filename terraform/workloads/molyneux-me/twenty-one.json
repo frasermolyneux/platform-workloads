@@ -85,6 +85,9 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
             "locations": [
                 "westeurope"
             ],
@@ -108,6 +111,12 @@
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                         "roles": [
                             "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-westeurope/westeurope",
+                        "roles": [
+                            "Contributor"
                         ]
                     }
                 ]
@@ -118,6 +127,9 @@
             "subscription": "sub-molyneux-me-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
             "locations": [
                 "westeurope"
             ],
@@ -141,6 +153,12 @@
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                         "roles": [
                             "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-westeurope/westeurope",
+                        "roles": [
+                            "Contributor"
                         ]
                     }
                 ]
