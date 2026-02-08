@@ -86,8 +86,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-monitoring",
-                "platform-hosting"
+                "platform-monitoring"
             ],
             "locations": [
                 "westeurope"
@@ -119,12 +118,6 @@
                         "roles": [
                             "Monitoring Reader"
                         ]
-                    },
-                    {
-                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-westeurope/westeurope",
-                        "roles": [
-                            "Contributor"
-                        ]
                     }
                 ]
             }
@@ -135,8 +128,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-monitoring",
-                "platform-hosting"
+                "platform-monitoring"
             ],
             "locations": [
                 "westeurope"
@@ -167,12 +159,6 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-westeurope/westeurope",
-                        "roles": [
-                            "Contributor"
                         ]
                     }
                 ]
