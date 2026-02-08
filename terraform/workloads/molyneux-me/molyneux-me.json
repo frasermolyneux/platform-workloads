@@ -22,8 +22,7 @@
                 "platform-monitoring"
             ],
             "locations": [
-                "westeurope",
-                "eastasia"
+                "westeurope"
             ],
             "resource_groups": [
                 {
@@ -65,9 +64,7 @@
                 "platform-monitoring"
             ],
             "locations": [
-                "westeurope",
-                "eastasia",
-                "eastus2"
+                "westeurope"
             ],
             "resource_groups": [
                 {
