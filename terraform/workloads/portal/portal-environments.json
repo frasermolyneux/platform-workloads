@@ -11,6 +11,10 @@
             "entra-id",
             "identity-management"
         ],
+        "labels": [
+            "deploy-dev",
+            "run-prd-plan"
+        ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": true,
         "visibility": "public"

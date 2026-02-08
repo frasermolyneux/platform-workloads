@@ -11,6 +11,10 @@
             "key-vault",
             "api-subscriptions"
         ],
+        "labels": [
+            "deploy-dev",
+            "run-prd-plan"
+        ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"
     },

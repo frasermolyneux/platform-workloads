@@ -13,6 +13,10 @@
             "app-insights",
             "aad-groups"
         ],
+        "labels": [
+            "deploy-dev",
+            "run-prd-plan"
+        ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
         "visibility": "public"

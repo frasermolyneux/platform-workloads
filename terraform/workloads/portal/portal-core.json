@@ -12,6 +12,10 @@
             "observability",
             "key-vault"
         ],
+        "labels": [
+            "deploy-dev",
+            "run-prd-plan"
+        ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
         "visibility": "public"
