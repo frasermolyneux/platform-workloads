@@ -132,12 +132,6 @@
                         "roles": [
                             "Contributor"
                         ]
-                    },
-                    {
-                        "scope": "sub:sub-visualstudio-enterprise",
-                        "roles": [
-                            "Reader"
-                        ]
                     }
                 ],
                 "rbac_admin_roles": [
@@ -191,12 +185,6 @@
                         "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
                         "roles": [
                             "Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub:sub-visualstudio-enterprise",
-                        "roles": [
-                            "Reader"
                         ]
                     }
                 ],
