@@ -92,7 +92,7 @@
     "environments": [
         {
             "name": "Development",
-            "subscription": "sub-molyneux-me-dev",
+            "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
