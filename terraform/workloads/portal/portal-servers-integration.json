@@ -123,18 +123,7 @@
             ],
             "add_deploy_script_identity": true,
             "directory_roles": [
-                "Cloud application administrator""labels": [
-                    {
-                        "name": "deploy-dev",
-                        "description": "Run dev Terraform plan+apply and deploy the app",
-                        "color": "0E8A16"
-                    },
-                    {
-                        "name": "run-prd-plan",
-                        "description": "Run prd Terraform plan",
-                        "color": "5319E7"
-                    }
-                ],
+                "Cloud application administrator"
             ],
             "role_assignments": {
                 "assigned_roles": [

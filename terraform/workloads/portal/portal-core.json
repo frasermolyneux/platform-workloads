@@ -104,18 +104,6 @@
                                     "Key Vault Secrets User",
                                     "Storage Blob Data Owner",
                                     "Azure Service Bus Data Receiver",
-                                    "labels": [
-                                        {
-                                            "name": "deploy-dev",
-                                            "description": "Run dev Terraform plan+apply and deploy the app",
-                                            "color": "0E8A16"
-                                        },
-                                        {
-                                            "name": "run-prd-plan",
-                                            "description": "Run prd Terraform plan",
-                                            "color": "5319E7"
-                                        }
-                                    ],
                                     "Azure Service Bus Data Sender"
                                 ]
                             }
