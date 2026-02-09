@@ -120,18 +120,7 @@
                                     "Key Vault Secrets User",
                                     "Storage Blob Data Owner",
                                     "Storage Blob Data Contributor",
-                                    "Storage Queue Data Contributor""labels": [
-                                        {
-                                            "name": "deploy-dev",
-                                            "description": "Run dev Terraform plan+apply and deploy the app",
-                                            "color": "0E8A16"
-                                        },
-                                        {
-                                            "name": "run-prd-plan",
-                                            "description": "Run prd Terraform plan",
-                                            "color": "5319E7"
-                                        }
-                                    ],
+                                    "Storage Queue Data Contributor"
                                 ]
                             }
                         ]
