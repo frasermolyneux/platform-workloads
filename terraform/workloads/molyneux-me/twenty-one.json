@@ -9,13 +9,21 @@
             "static-site",
             "github-actions"
         ],
-        "labels": [
-            "deploy-dev",
-            "run-prd-plan"
-        ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"
     },
+    "labels": [
+        {
+            "name": "deploy-dev",
+            "description": "Run dev Terraform plan+apply and deploy the app",
+            "color": "0E8A16"
+        },
+        {
+            "name": "run-prd-plan",
+            "description": "Run prd Terraform plan",
+            "color": "5319E7"
+        }
+    ],
     "rulesets": [
         {
             "name": "main-protection",
@@ -105,6 +113,18 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "labels": [
+                            {
+                                "name": "deploy-dev",
+                                "description": "Run dev Terraform plan+apply and deploy the app",
+                                "color": "0E8A16"
+                            },
+                            {
+                                "name": "run-prd-plan",
+                                "description": "Run prd Terraform plan",
+                                "color": "5319E7"
+                            }
+                        ],
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
                         "roles": [
                             "DNS Zone Contributor"

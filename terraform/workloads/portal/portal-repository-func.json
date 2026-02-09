@@ -11,13 +11,21 @@
             "key-vault",
             "api-subscriptions"
         ],
-        "labels": [
-            "deploy-dev",
-            "run-prd-plan"
-        ],
         "add_sonarcloud_secrets": true,
         "visibility": "public"
     },
+    "labels": [
+        {
+            "name": "deploy-dev",
+            "description": "Run dev Terraform plan+apply and deploy the app",
+            "color": "0E8A16"
+        },
+        {
+            "name": "run-prd-plan",
+            "description": "Run prd Terraform plan",
+            "color": "5319E7"
+        }
+    ],
     "rulesets": [
         {
             "name": "main-protection",
@@ -112,6 +120,18 @@
             ],
             "directory_roles": [
                 "Cloud application administrator"
+            ],
+            "labels": [
+                {
+                    "name": "deploy-dev",
+                    "description": "Run dev Terraform plan+apply and deploy the app",
+                    "color": "0E8A16"
+                },
+                {
+                    "name": "run-prd-plan",
+                    "description": "Run prd Terraform plan",
+                    "color": "5319E7"
+                }
             ],
             "role_assignments": {
                 "assigned_roles": [

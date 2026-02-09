@@ -10,14 +10,22 @@
             "static-web-apps",
             "shared-hosting"
         ],
-        "labels": [
-            "deploy-dev",
-            "run-prd-plan"
-        ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
         "visibility": "public"
     },
+    "labels": [
+        {
+            "name": "deploy-dev",
+            "description": "Run dev Terraform plan+apply and deploy the app",
+            "color": "0E8A16"
+        },
+        {
+            "name": "run-prd-plan",
+            "description": "Run prd Terraform plan",
+            "color": "5319E7"
+        }
+    ],
     "rulesets": [
         {
             "name": "main-protection",
@@ -88,6 +96,18 @@
         },
         {
             "name": "Production",
+            "labels": [
+                {
+                    "name": "deploy-dev",
+                    "description": "Run dev Terraform plan+apply and deploy the app",
+                    "color": "0E8A16"
+                },
+                {
+                    "name": "run-prd-plan",
+                    "description": "Run prd Terraform plan",
+                    "color": "5319E7"
+                }
+            ],
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,

@@ -12,12 +12,20 @@
             "monitoring"
         ],
         "visibility": "public",
-        "add_sonarcloud_secrets": true,
-        "labels": [
-            "deploy-dev",
-            "run-prd-plan"
-        ]
+        "add_sonarcloud_secrets": true
     },
+    "labels": [
+        {
+            "name": "deploy-dev",
+            "description": "Run dev Terraform plan+apply and deploy the app",
+            "color": "0E8A16"
+        },
+        {
+            "name": "run-prd-plan",
+            "description": "Run prd Terraform plan",
+            "color": "5319E7"
+        }
+    ],
     "rulesets": [
         {
             "name": "main-protection",
@@ -112,7 +120,18 @@
                                     "Key Vault Secrets User",
                                     "Storage Blob Data Owner",
                                     "Storage Blob Data Contributor",
-                                    "Storage Queue Data Contributor"
+                                    "Storage Queue Data Contributor""labels": [
+                                        {
+                                            "name": "deploy-dev",
+                                            "description": "Run dev Terraform plan+apply and deploy the app",
+                                            "color": "0E8A16"
+                                        },
+                                        {
+                                            "name": "run-prd-plan",
+                                            "description": "Run prd Terraform plan",
+                                            "color": "5319E7"
+                                        }
+                                    ],
                                 ]
                             }
                         ]
