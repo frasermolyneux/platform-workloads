@@ -14,6 +14,17 @@ resource "azuread_application_federated_identity_credential" "github_workload" {
   subject        = format("repo:frasermolyneux/%s:environment:%s", lower(each.value.workload_name), each.value.environment_name)
 }
 
+resource "azuread_application_federated_identity_credential" "github_workload_plan" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
+
+  application_id = azuread_application.workload_plan[each.key].id
+  display_name   = format("github-%s-%s-plan", lower(each.value.workload_name), lower(each.value.environment_name))
+  description    = "GitHub Actions (plan-only)"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject        = format("repo:frasermolyneux/%s:environment:%s", lower(each.value.workload_name), each.value.environment_name)
+}
+
 resource "github_repository_environment" "workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
 
@@ -28,6 +39,15 @@ resource "github_actions_environment_variable" "client_id" {
   environment   = github_repository_environment.workload[each.key].environment
   variable_name = "AZURE_CLIENT_ID"
   value         = azuread_application.workload[each.key].client_id
+}
+
+resource "github_actions_environment_variable" "plan_client_id" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
+
+  repository    = github_repository.workload[each.value.workload_name].name
+  environment   = github_repository_environment.workload[each.key].environment
+  variable_name = "AZURE_PLAN_CLIENT_ID"
+  value         = azuread_application.workload_plan[each.key].client_id
 }
 
 resource "github_actions_environment_variable" "subscription_id" {

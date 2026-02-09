@@ -50,3 +50,12 @@ resource "azurerm_role_assignment" "workload_deploy_script" {
   role_definition_name = each.value.role_definition_name
   principal_id         = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }
+
+# Plan-only identity gets Reader on the subscription so it can perform Terraform plans without write permissions.
+resource "azurerm_role_assignment" "workload_plan_reader" {
+  for_each = { for each in local.workload_environments : each.key => each }
+
+  scope                = data.azurerm_subscription.subscriptions[each.value.subscription].id
+  role_definition_name = "Reader"
+  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
+}

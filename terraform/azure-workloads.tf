@@ -157,6 +157,30 @@ resource "azuread_service_principal" "workload" {
   ]
 }
 
+# Plan-only identity used for read-only Terraform plan runs (e.g., Dependabot)
+resource "azuread_application" "workload_plan" {
+  for_each = { for each in local.workload_environments : each.key => each }
+
+  display_name = format("spn-%s-%s-plan", lower(each.value.workload_name), lower(each.value.environment_name))
+
+  owners = [
+    data.azuread_client_config.current.object_id
+  ]
+
+  sign_in_audience = "AzureADMyOrg"
+}
+
+resource "azuread_service_principal" "workload_plan" {
+  for_each = { for each in local.workload_environments : each.key => each }
+
+  client_id                    = azuread_application.workload_plan[each.key].client_id
+  app_role_assignment_required = false
+
+  owners = [
+    data.azuread_client_config.current.object_id
+  ]
+}
+
 resource "github_repository_environment" "nuget" {
   for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_nuget_environment, false) }
 

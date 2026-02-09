@@ -48,6 +48,14 @@ resource "azurerm_role_assignment" "workload_storage_blob_key_operator" {
   principal_id         = azuread_service_principal.workload[each.key].object_id
 }
 
+resource "azurerm_role_assignment" "workload_plan_storage_blob_key_operator" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  scope                = azurerm_storage_account.workload[each.key].id
+  role_definition_name = "Storage Account Key Operator Service Role"
+  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
+}
+
 resource "azurerm_role_assignment" "workload_storage_blob_contributor" {
   for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
 
@@ -56,12 +64,28 @@ resource "azurerm_role_assignment" "workload_storage_blob_contributor" {
   principal_id         = azuread_service_principal.workload[each.key].object_id
 }
 
+resource "azurerm_role_assignment" "workload_plan_storage_blob_contributor" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  scope                = azurerm_storage_account.workload[each.key].id
+  role_definition_name = "Storage Blob Data Contributor"
+  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
+}
+
 resource "azurerm_role_assignment" "workload_storage_reader" {
   for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
 
   scope                = azurerm_storage_account.workload[each.key].id
   role_definition_name = "Reader"
   principal_id         = azuread_service_principal.workload[each.key].object_id
+}
+
+resource "azurerm_role_assignment" "workload_plan_storage_reader" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  scope                = azurerm_storage_account.workload[each.key].id
+  role_definition_name = "Reader"
+  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
 }
 
 resource "azurerm_role_assignment" "workload_terraform_state_reader" {
@@ -83,10 +107,37 @@ resource "azurerm_role_assignment" "workload_terraform_state_reader" {
   principal_id         = azuread_service_principal.workload[each.value.source_key].object_id
 }
 
+resource "azurerm_role_assignment" "workload_plan_terraform_state_reader" {
+  for_each = {
+    for pair in flatten([
+      for environment in local.workload_environments : [
+        for dependency in environment.requires_terraform_state_access : {
+          source_key = environment.key
+          target_key = format("%s-%s", dependency, environment.environment_name)
+        }
+      ]
+    ]) :
+    format("%s->%s", pair.source_key, pair.target_key) => pair
+    if contains(keys(azurerm_storage_account.workload), pair.target_key)
+  }
+
+  scope                = azurerm_storage_account.workload[each.value.target_key].id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azuread_service_principal.workload_plan[each.value.source_key].object_id
+}
+
 resource "azurerm_role_assignment" "workload_platform_workloads_backend_reader" {
   for_each = { for env in local.workload_environments : env.key => env if env.configure_for_terraform }
 
   scope                = data.azurerm_storage_account.platform_workloads_backend.id
   role_definition_name = "Storage Blob Data Reader"
   principal_id         = azuread_service_principal.workload[each.key].object_id
+}
+
+resource "azurerm_role_assignment" "workload_plan_platform_workloads_backend_reader" {
+  for_each = { for env in local.workload_environments : env.key => env if env.configure_for_terraform }
+
+  scope                = data.azurerm_storage_account.platform_workloads_backend.id
+  role_definition_name = "Storage Blob Data Reader"
+  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
 }
