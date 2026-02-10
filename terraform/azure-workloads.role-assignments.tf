@@ -34,18 +34,17 @@ locals {
     ]
   ]))
 
-  plan_role_subscriptions = distinct([
-    for workload_environment in local.workload_environments : workload_environment.subscription
-  ] ++ flatten([
-    for workload_environment in local.workload_environments : workload_environment.plan_subscriptions if length(workload_environment.plan_subscriptions) > 0
-  ])
+  plan_role_subscriptions = distinct(concat(
+    [for workload_environment in local.workload_environments : workload_environment.subscription],
+    flatten([for workload_environment in local.workload_environments : workload_environment.plan_subscriptions if length(workload_environment.plan_subscriptions) > 0])
+  ))
 
   plan_role_assignments = flatten([
     for workload_environment in local.workload_environments : [
       for subscription in workload_environment.plan_subscriptions : {
-        key           = format("%s-%s", workload_environment.key, subscription)
-        env_key       = workload_environment.key
-        subscription  = subscription
+        key          = format("%s-%s", workload_environment.key, subscription)
+        env_key      = workload_environment.key
+        subscription = subscription
       }
     ]
   ])
