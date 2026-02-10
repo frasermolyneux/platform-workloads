@@ -67,7 +67,6 @@ resource "azurerm_role_definition" "plan_read_only" {
       "Microsoft.Web/sites/config/read",
       "Microsoft.Web/sites/config/list/action",
       "Microsoft.Web/sites/config/appsettings/read",
-      "Microsoft.Web/sites/config/authsettings/list/action",
       "Microsoft.Web/sites/functions/read",
       "Microsoft.Web/sites/functions/list/action",
       "Microsoft.Web/sites/slots/read",
