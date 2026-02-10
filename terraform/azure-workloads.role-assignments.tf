@@ -33,6 +33,52 @@ locals {
       ]
     ]
   ]))
+
+  plan_role_subscriptions = distinct([
+    for workload_environment in local.workload_environments : workload_environment.subscription
+  ])
+}
+
+resource "random_uuid" "plan_read_only" {
+  for_each = toset(local.plan_role_subscriptions)
+}
+
+resource "azurerm_role_definition" "plan_read_only" {
+  for_each = toset(local.plan_role_subscriptions)
+
+  name        = random_uuid.plan_read_only[each.key].result
+  scope       = data.azurerm_subscription.subscriptions[each.key].id
+  description = "Read-only permissions for Terraform plan identities, including App Service config list actions."
+
+  permissions {
+    actions = [
+      "Microsoft.Web/sites/read",
+      "Microsoft.Web/sites/config/read",
+      "Microsoft.Web/sites/config/list/action",
+      "Microsoft.Web/sites/config/appsettings/read",
+      "Microsoft.Web/sites/config/appsettings/list/action",
+      "Microsoft.Web/sites/config/connectionstrings/list/action",
+      "Microsoft.Web/sites/authsettingsV2/read",
+      "Microsoft.Web/sites/config/authsettings/list/action",
+      "Microsoft.Web/sites/functions/read",
+      "Microsoft.Web/sites/functions/list/action",
+      "Microsoft.Web/sites/slots/read",
+      "Microsoft.Web/sites/slots/config/read",
+      "Microsoft.Web/sites/slots/config/list/action",
+      "Microsoft.Web/sites/slots/authsettingsV2/read",
+      "Microsoft.Web/sites/slots/config/authsettings/list/action",
+      "Microsoft.Web/sites/slots/functions/read",
+      "Microsoft.Web/sites/slots/functions/list/action",
+      "Microsoft.Web/serverfarms/read",
+      "Microsoft.KeyVault/vaults/read",
+      "Microsoft.KeyVault/vaults/secrets/read",
+      "Microsoft.KeyVault/vaults/secrets/list",
+      "Microsoft.KeyVault/vaults/secrets/getSecret/action"
+    ]
+    not_actions = []
+  }
+
+  assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
 }
 
 resource "azurerm_role_assignment" "workload" {
@@ -58,4 +104,12 @@ resource "azurerm_role_assignment" "workload_plan_reader" {
   scope                = data.azurerm_subscription.subscriptions[each.value.subscription].id
   role_definition_name = "Reader"
   principal_id         = azuread_service_principal.workload_plan[each.key].object_id
+}
+
+resource "azurerm_role_assignment" "workload_plan_read_only" {
+  for_each = { for each in local.workload_environments : each.key => each }
+
+  scope              = data.azurerm_subscription.subscriptions[each.value.subscription].id
+  role_definition_id = azurerm_role_definition.plan_read_only[each.value.subscription].role_definition_resource_id
+  principal_id       = azuread_service_principal.workload_plan[each.key].object_id
 }
