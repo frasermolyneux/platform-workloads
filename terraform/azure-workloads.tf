@@ -42,17 +42,19 @@ locals {
   workload_environments = flatten([
     for workload in local.all_workloads : [
       for environment in try(workload.environments, []) : {
-        key                          = format("%s-%s", workload.name, environment.name)
-        workload_name                = workload.name
-        environment_name             = environment.name
-        environment_tag              = lookup(var.environment_map, environment.name, lower(environment.name))
-        connect_to_github            = try(environment.connect_to_github, false)
-        add_deploy_script_identity   = try(environment.add_deploy_script_identity, false)
-        configure_for_terraform      = try(environment.configure_for_terraform, false)
-        subscription                 = environment.subscription
-        connect_to_devops            = try(environment.devops_project, null) != null
-        devops_project               = try(environment.devops_project, null)
-        devops_create_variable_group = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
+        key                           = format("%s-%s", workload.name, environment.name)
+        workload_name                 = workload.name
+        environment_name              = environment.name
+        environment_tag               = lookup(var.environment_map, environment.name, lower(environment.name))
+        connect_to_github             = try(environment.connect_to_github, false)
+        add_deploy_script_identity    = try(environment.add_deploy_script_identity, false)
+        configure_for_terraform       = try(environment.configure_for_terraform, false)
+        subscription                  = environment.subscription
+        connect_to_devops             = try(environment.devops_project, null) != null
+        devops_project                = try(environment.devops_project, null)
+        devops_create_variable_group  = try(environment.devops_create_variable_group, false) || (try(environment.devops_project, null) != null && try(environment.add_deploy_script_identity, false))
+        plan_additional_subscriptions = distinct(try(environment.plan_additional_subscriptions, []))
+        plan_subscriptions            = distinct(concat([environment.subscription], try(environment.plan_additional_subscriptions, [])))
         role_assignments = {
           assigned_roles = [
             for assignment in concat(

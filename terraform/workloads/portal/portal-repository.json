@@ -98,6 +98,9 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity"
+            ],
             "requires_terraform_state_access": [
                 "platform-monitoring",
                 "portal-core",
@@ -173,6 +176,10 @@
                 "uksouth"
             ],
             "configure_for_terraform": true,
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity",
+                "sub-platform-management"
+            ],
             "requires_terraform_state_access": [
                 "platform-monitoring",
                 "portal-core",

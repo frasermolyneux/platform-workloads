@@ -36,6 +36,18 @@ locals {
 
   plan_role_subscriptions = distinct([
     for workload_environment in local.workload_environments : workload_environment.subscription
+  ] ++ flatten([
+    for workload_environment in local.workload_environments : workload_environment.plan_subscriptions if length(workload_environment.plan_subscriptions) > 0
+  ])
+
+  plan_role_assignments = flatten([
+    for workload_environment in local.workload_environments : [
+      for subscription in workload_environment.plan_subscriptions : {
+        key           = format("%s-%s", workload_environment.key, subscription)
+        env_key       = workload_environment.key
+        subscription  = subscription
+      }
+    ]
   ])
 }
 
@@ -99,17 +111,17 @@ resource "azurerm_role_assignment" "workload_deploy_script" {
 
 # Plan-only identity gets Reader on the subscription so it can perform Terraform plans without write permissions.
 resource "azurerm_role_assignment" "workload_plan_reader" {
-  for_each = { for each in local.workload_environments : each.key => each }
+  for_each = { for each in local.plan_role_assignments : each.key => each }
 
   scope                = data.azurerm_subscription.subscriptions[each.value.subscription].id
   role_definition_name = "Reader"
-  principal_id         = azuread_service_principal.workload_plan[each.key].object_id
+  principal_id         = azuread_service_principal.workload_plan[each.value.env_key].object_id
 }
 
 resource "azurerm_role_assignment" "workload_plan_read_only" {
-  for_each = { for each in local.workload_environments : each.key => each }
+  for_each = { for each in local.plan_role_assignments : each.key => each }
 
   scope              = data.azurerm_subscription.subscriptions[each.value.subscription].id
   role_definition_id = azurerm_role_definition.plan_read_only[each.value.subscription].role_definition_resource_id
-  principal_id       = azuread_service_principal.workload_plan[each.key].object_id
+  principal_id       = azuread_service_principal.workload_plan[each.value.env_key].object_id
 }

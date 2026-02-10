@@ -103,6 +103,10 @@
                 "portal-core",
                 "portal-environments"
             ],
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity",
+                "sub-platform-shared"
+            ],
             "locations": [
                 "swedencentral"
             ],
@@ -179,6 +183,11 @@
                 "platform-monitoring",
                 "portal-core",
                 "portal-environments"
+            ],
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity",
+                "sub-platform-shared",
+                "sub-platform-management"
             ],
             "resource_groups": [
                 {
