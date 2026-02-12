@@ -1,7 +1,7 @@
 {
     "name": "geo-location",
     "github": {
-        "description": "MaxMind-backed GeoLocation service with caching: ASP.NET API, web UI, and client library published behind API Management; deployed with Bicep and Azure DevOps.",
+        "description": "MaxMind-backed GeoLocation service with caching: ASP.NET API, web UI, and client library published behind API Management; deployed with Terraform and GitHub Actions.",
         "topics": [
             "azure",
             "geolocation",
@@ -11,44 +11,127 @@
             "app-service",
             "app-insights",
             "caching",
-            "bicep",
-            "azure-devops-pipelines"
+            "terraform",
+            "github-actions"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": true,
         "visibility": "public"
     },
+    "labels": [
+        {
+            "name": "deploy-dev",
+            "description": "Run dev Terraform plan+apply and deploy the app",
+            "color": "0E8A16"
+        },
+        {
+            "name": "run-prd-plan",
+            "description": "Run prd Terraform plan",
+            "color": "5319E7"
+        }
+    ],
+    "rulesets": [
+        {
+            "name": "main-protection",
+            "target": "branch",
+            "enforcement": "active",
+            "includes": [
+                "refs/heads/main"
+            ],
+            "excludes": [],
+            "bypass_actors": [
+                {
+                    "bypass_mode": "always",
+                    "actor_id": 5,
+                    "actor_type": "RepositoryRole"
+                }
+            ],
+            "rules": {
+                "required_status_checks": [
+                    {
+                        "context": "SonarCloud Code Analysis",
+                        "integration_id": 12526
+                    },
+                    {
+                        "context": "build-and-test",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "quality / Code Quality",
+                        "integration_id": 15368
+                    },
+                    {
+                        "context": "devops-secure-scanning / DevOps Secure Scanning",
+                        "integration_id": 15368
+                    }
+                ],
+                "strict_required_status_checks_policy": true,
+                "do_not_enforce_on_create": false,
+                "pull_request": {
+                    "allowed_merge_methods": [
+                        "merge",
+                        "rebase",
+                        "squash"
+                    ],
+                    "required_approving_review_count": 0,
+                    "dismiss_stale_reviews_on_push": true,
+                    "require_code_owner_review": false,
+                    "required_review_thread_resolution": true
+                },
+                "required_code_scanning": [
+                    {
+                        "tool": "CodeQL",
+                        "alerts_threshold": "errors",
+                        "security_alerts_threshold": "high_or_higher"
+                    },
+                    {
+                        "tool": "SonarCloud",
+                        "alerts_threshold": "errors",
+                        "security_alerts_threshold": "high_or_higher"
+                    }
+                ],
+                "copilot_code_review": {
+                    "review_draft_pull_requests": true,
+                    "review_on_push": true
+                },
+                "required_signatures": false,
+                "required_linear_history": true,
+                "non_fast_forward": true
+            }
+        }
+    ],
     "environments": [
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
-            "devops_project": "Molyneux.IO",
-            "add_deploy_script_identity": true,
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Directory Readers"
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {
-                        "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
-                        ]
-                    },
-                    {
-                        "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
-                        "roles": [
-                            "AcrPull"
-                        ]
-                    },
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    },
                     {
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/geo-location.net",
                         "roles": [
@@ -56,16 +139,19 @@
                         ]
                     },
                     {
-                        "scope": "workload:platform-monitoring/Development",
+                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-swedencentral/swedencentral",
                         "roles": [
-                            "Monitoring Reader"
+                            "Contributor"
                         ]
                     }
                 ],
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Key Vault Secrets User"
+                            "Key Vault Secrets User",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor",
+                            "Storage Table Data Contributor"
                         ]
                     }
                 ]
@@ -73,34 +159,35 @@
         },
         {
             "name": "Production",
-            "subscription": "sub-fm-geolocation-prd",
-            "devops_project": "Molyneux.IO",
-            "add_deploy_script_identity": true,
+            "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "directory_roles": [
-                "Cloud application administrator"
+                "Cloud application administrator",
+                "Directory Readers"
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {
-                        "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
-                        ]
-                    },
-                    {
-                        "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
-                        "roles": [
-                            "AcrPull"
-                        ]
-                    },
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    },
                     {
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/geo-location.net",
                         "roles": [
@@ -108,16 +195,19 @@
                         ]
                     },
                     {
-                        "scope": "workload:platform-monitoring/Production",
+                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
                         "roles": [
-                            "Monitoring Reader"
+                            "Contributor"
                         ]
                     }
                 ],
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Key Vault Secrets User"
+                            "Key Vault Secrets User",
+                            "Key Vault Secrets Officer",
+                            "Storage Blob Data Contributor",
+                            "Storage Table Data Contributor"
                         ]
                     }
                 ]
