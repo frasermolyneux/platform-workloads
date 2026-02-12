@@ -2,15 +2,6 @@ name: Destroy Environment
 
 on:
   workflow_dispatch:
-    inputs:
-      environment:
-        description: "Environment to destroy"
-        required: true
-        type: choice
-        default: dev
-        options:
-          - dev
-          - prd
 
 permissions: {}
 
@@ -19,16 +10,16 @@ jobs:
     permissions:
       contents: read
       id-token: write
-    environment: ${{ inputs.environment == 'prd' && 'Production' || 'Development' }}
+    environment: Production
     runs-on: ubuntu-latest
     concurrency:
-      group: ${{ github.repository }}-${{ inputs.environment }}
+      group: ${{ github.repository }}-prd
     steps:
       - uses: frasermolyneux/actions/terraform-destroy@main
         with:
           terraform-folder: "terraform"
-          terraform-var-file: ${{ inputs.environment == 'prd' && 'tfvars/prd.tfvars' || 'tfvars/dev.tfvars' }}
-          terraform-backend-file: ${{ inputs.environment == 'prd' && 'backends/prd.backend.hcl' || 'backends/dev.backend.hcl' }}
+          terraform-var-file: "tfvars/prd.tfvars"
+          terraform-backend-file: "backends/prd.backend.hcl"
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
           AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
           AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
