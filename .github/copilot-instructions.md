@@ -1,15 +1,46 @@
 # Copilot Instructions
 
-- **Purpose**: Terraform stack that turns JSON workload definitions into Azure AD applications/service principals with OIDC, GitHub repos/environments/secrets, Azure DevOps service connections/environments/variable groups, RBAC role assignments, and optional Terraform state storage per workload.
-- **Core flow**: Workload JSON files in [terraform/workloads](terraform/workloads) (excluding `examples/`) are discovered in [terraform/workloads.load.tf](terraform/workloads.load.tf), flattened to `{workload}-{environment}` keys, and fed into resources in [terraform/azure-workloads.tf](terraform/azure-workloads.tf) plus feature-gated files `azure-workloads.if-*.tf`.
-- **Feature gates**: `connect_to_github`, `connect_to_devops` (implied when `devops_project` set), `configure_for_terraform`, and `add_deploy_script_identity` toggle GitHub environments/OIDC, Azure DevOps assets, Terraform state RG+storage+roles, and a deploy script managed identity.
-- **RBAC patterns**: Scope resolution supports subscription aliases from `var.subscriptions`, raw ARM IDs, `workload:` and `workload-rg:` helpers. Reader is auto-added per environment subscription unless an assignment already targets that scope (then merged). ABAC-conditioned RBAC admin delegation is generated in [terraform/azure-workloads.rbac.tf](terraform/azure-workloads.rbac.tf) using allowed role lists.
-- **Naming/keys**: Environments map via `var.environment_map` (Development→dev, Testing→tst, Production→prd). Service principals: `spn-{workload}-{environment}` (lowercase). Default tenant `e56a6947-bb9a-4a6e-846a-1f118d1c3a14`, location `var.location`, instance `var.instance`.
-- **OIDC subjects**: GitHub: `repo:frasermolyneux/{repo}:environment:{Environment}`; Azure DevOps federation subject comes from the service endpoint. Use OIDC over client secrets.
-- **State sharing**: When `configure_for_terraform` is true, per-workload RG/storage/container is created and exposed via outputs (see [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md)); use `use_oidc = true` when reading remote state.
-- **Key docs**: [docs/architecture.md](docs/architecture.md) (design), [docs/workload-configuration.md](docs/workload-configuration.md) (JSON schema + scope helpers), [docs/developer-guide.md](docs/developer-guide.md) (local commands), [docs/prerequisites.md](docs/prerequisites.md) (required identities/secrets), [docs/role-assignments.md](docs/role-assignments.md) (RBAC details), [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md) (remote state consumption).
-- **Local workflow**: From repo root `cd terraform`; `terraform init -backend-config="backends/prd.backend.hcl"`; `terraform plan -var-file="tfvars/prd.tfvars" -var "github_service_connection_pat=$env:AZDO_GITHUB_SERVICE_CONNECTION_PAT"`; `terraform apply -var-file="tfvars/prd.tfvars"`; keep `terraform fmt -recursive` before commit. Target specific resources with `-target` for noise reduction.
-- **Provider auth expectations**: Azure CLI logged in with Owner at `/` for the platform SPN; environment variables `AZDO_PERSONAL_ACCESS_TOKEN`, `GITHUB_TOKEN`, optional `AZDO_GITHUB_SERVICE_CONNECTION_PAT` for GitHub service connection PAT. GitHub environment secrets listed in [docs/prerequisites.md](docs/prerequisites.md).
-- **Workload authoring**: Add JSON under [terraform/workloads](terraform/workloads)/{category}; files under `examples/` are ignored. Validate shape with `Get-Content ... | ConvertFrom-Json` or plan. Ensure subscriptions in JSON exist in `tfvars` alias map and scopes resolve.
-- **Troubleshooting**: Scope resolution errors mean alias/ARM ID mismatch; permission failures usually indicate missing Owner at `/`; federation errors imply missing GitHub/AzDO subjects; Terraform state access requires Storage Account Key Operator Service Role + Storage Blob Data Contributor + Reader when state is enabled.
-- **CI/CD**: Workflows in [.github/workflows](.github/workflows) — `feature-development` (PR/feature validation), `release-to-production` (mainline promotion), `codequality` (weekly/PR scanning), `dependabot-automerge`.
+## Project Overview
+
+This is a Terraform stack that transforms JSON workload definitions into Azure AD applications, service principals with OIDC federation, GitHub repositories with environments and secrets, Azure DevOps service connections/environments/variable groups, and workload-scoped RBAC role assignments. It is an infrastructure-as-code project using HCL (Terraform) with JSON configuration files.
+
+## Repository Structure
+
+- `terraform/` — All Terraform configuration files (`.tf`) and workload definitions.
+- `terraform/workloads/` — JSON workload definition files organized by category. Files under `examples/` are excluded.
+- `terraform/workloads.load.tf` — Discovers and loads all workload JSON files, flattening them to `{workload}-{environment}` keys.
+- `terraform/azure-workloads.tf` — Core resource definitions for Azure AD apps, service principals, and GitHub repositories.
+- `terraform/azure-workloads.if-*.tf` — Feature-gated resources toggled by `connect_to_github`, `connect_to_devops`, `configure_for_terraform`, and `add_deploy_script_identity`.
+- `terraform/azure-workloads.rbac.tf` — ABAC-conditioned RBAC admin delegation using allowed role lists.
+- `.github/workflows/` — CI/CD workflows for PR verification, deployments, code quality, and Dependabot automerge.
+- `docs/` — Architecture, workload configuration schema, developer guide, prerequisites, role assignments, and output consumption guides.
+
+## Key Conventions
+
+- **Naming**: Service principals follow `spn-{workload}-{environment}` (lowercase). Environments map via `var.environment_map` (Development→dev, Testing→tst, Production→prd).
+- **Scope resolution**: Supports subscription aliases from `var.subscriptions`, raw ARM IDs, and `workload:`/`workload-rg:` helpers. Reader role is auto-added per environment subscription.
+- **OIDC subjects**: GitHub uses `repo:frasermolyneux/{repo}:environment:{Environment}`. Always prefer OIDC over client secrets.
+- **State sharing**: When `configure_for_terraform` is true, per-workload RG/storage/container is created and exposed via outputs; downstream consumers use `use_oidc = true`.
+- **Formatting**: Always run `terraform fmt -recursive` before committing changes.
+
+## Working with This Codebase
+
+- Run `cd terraform` then `terraform init -backend-config="backends/prd.backend.hcl"` to initialize.
+- Use `terraform plan -var-file="tfvars/prd.tfvars"` to preview changes; use `-target` for scoped plans.
+- To add a workload, create a JSON file under `terraform/workloads/{category}/`. Validate with `terraform plan`. Ensure subscriptions referenced in JSON exist in the `tfvars` alias map.
+- Provider authentication requires Azure CLI login with Owner at `/`, plus `AZDO_PERSONAL_ACCESS_TOKEN`, `GITHUB_TOKEN`, and optionally `AZDO_GITHUB_SERVICE_CONNECTION_PAT` environment variables.
+
+## Providers
+
+The stack uses `azurerm`, `azapi`, `azuredevops`, and `github` Terraform providers. See `terraform/providers.tf` for version constraints.
+
+## Documentation
+
+Refer to [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), [docs/prerequisites.md](docs/prerequisites.md), [docs/role-assignments.md](docs/role-assignments.md), and [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md) for detailed guidance.
+
+## Troubleshooting
+
+- Scope resolution errors typically indicate alias/ARM ID mismatches in workload JSON.
+- Permission failures usually mean the executing identity lacks Owner at root scope (`/`).
+- Federation errors suggest missing GitHub or Azure DevOps OIDC subjects.
+- Terraform state access requires Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader when state storage is enabled.
