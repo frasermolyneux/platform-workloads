@@ -2,13 +2,12 @@
 
 [![Build and Test](https://github.com/frasermolyneux/platform-workloads/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/build-and-test.yml)
 [![Code Quality](https://github.com/frasermolyneux/platform-workloads/actions/workflows/codequality.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/codequality.yml)
-[![PR Verify](https://github.com/frasermolyneux/platform-workloads/actions/workflows/pr-verify.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/pr-verify.yml)
-[![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)
-[![Deploy Dev](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-dev.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-dev.yml)
+[![Copilot Setup Steps](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml)
+[![Dependabot Automerge](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml)
 [![Deploy Prd](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-prd.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-prd.yml)
 [![Destroy Environment](https://github.com/frasermolyneux/platform-workloads/actions/workflows/destroy-environment.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/destroy-environment.yml)
-[![Dependabot Automerge](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml)
-[![Copilot Setup Steps](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml)
+[![Feature Development](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/feature-development.yml)
+[![PR Verify](https://github.com/frasermolyneux/platform-workloads/actions/workflows/pr-verify.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/pr-verify.yml)
 
 ## Documentation
 
