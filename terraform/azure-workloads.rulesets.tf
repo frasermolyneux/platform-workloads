@@ -1,7 +1,7 @@
 locals {
   workload_rulesets = flatten([
     for workload in local.all_workloads : [
-      for ruleset in try(workload.rulesets, []) : merge(ruleset, {
+      for ruleset in try(workload.github.rulesets, []) : merge(ruleset, {
         workload_name = workload.name
       })
     ]

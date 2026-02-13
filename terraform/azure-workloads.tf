@@ -22,7 +22,7 @@ resource "github_repository" "workload" {
 locals {
   workload_labels = flatten([
     for workload in local.all_workloads : [
-      for label in try(workload.labels, []) : merge(label, {
+      for label in try(workload.github.labels, []) : merge(label, {
         workload_name = workload.name
       })
     ]
