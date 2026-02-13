@@ -107,7 +107,8 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-hosting"
+                "platform-hosting",
+                "platform-monitoring"
             ],
             "locations": [
                 "swedencentral"
@@ -163,7 +164,8 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-hosting"
+                "platform-hosting",
+                "platform-monitoring"
             ],
             "locations": [
                 "swedencentral"
