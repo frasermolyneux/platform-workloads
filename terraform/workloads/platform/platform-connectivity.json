@@ -1,22 +1,105 @@
 {
     "name": "platform-connectivity",
     "github": {
-        "description": "Connectivity layer for the Molyneux.IO platform covering Front Door, DNS, and certificates, built with Bicep and Azure DevOps OnePipeline.",
+        "description": "Connectivity layer for the Molyneux.IO platform covering DNS zones and private link zones, built with Terraform and GitHub Actions.",
         "topics": [
             "azure",
-            "bicep",
-            "azure-devops-pipelines",
-            "front-door",
+            "terraform",
+            "github-actions",
             "dns",
-            "networking"
+            "networking",
+            "private-link"
         ],
-        "visibility": "public"
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "public",
+        "rulesets": [
+            {
+                "name": "main-protection",
+                "target": "branch",
+                "enforcement": "active",
+                "includes": [
+                    "refs/heads/main"
+                ],
+                "excludes": [],
+                "bypass_actors": [
+                    {
+                        "bypass_mode": "always",
+                        "actor_id": 5,
+                        "actor_type": "RepositoryRole"
+                    }
+                ],
+                "rules": {
+                    "required_status_checks": [
+                        {
+                            "context": "terraform-plan-dev",
+                            "integration_id": 15368
+                        },
+                        {
+                            "context": "devops-secure-scanning / DevOps Secure Scanning",
+                            "integration_id": 15368
+                        }
+                    ],
+                    "strict_required_status_checks_policy": true,
+                    "do_not_enforce_on_create": false,
+                    "pull_request": {
+                        "allowed_merge_methods": [
+                            "merge",
+                            "rebase",
+                            "squash"
+                        ],
+                        "required_approving_review_count": 0,
+                        "dismiss_stale_reviews_on_push": true,
+                        "require_code_owner_review": false,
+                        "required_review_thread_resolution": true
+                    },
+                    "required_code_scanning": [],
+                    "copilot_code_review": {
+                        "review_draft_pull_requests": true,
+                        "review_on_push": true
+                    },
+                    "required_signatures": false,
+                    "required_linear_history": true,
+                    "non_fast_forward": true
+                }
+            }
+        ],
+        "labels": [
+            {
+                "name": "deploy-dev",
+                "description": "Run dev Terraform plan+apply",
+                "color": "0E8A16"
+            },
+            {
+                "name": "run-prd-plan",
+                "description": "Run prd Terraform plan",
+                "color": "5319E7"
+            }
+        ]
     },
     "environments": [
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
-            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
@@ -30,7 +113,25 @@
         {
             "name": "Production",
             "subscription": "sub-platform-connectivity",
-            "devops_project": "Molyneux.IO",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "locations": [
+                "uksouth"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
