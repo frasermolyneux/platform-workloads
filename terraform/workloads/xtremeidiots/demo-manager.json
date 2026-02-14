@@ -25,7 +25,7 @@
                         ]
                     },
                     {
-                        "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-acr-prd-uksouth-01/providers/Microsoft.ContainerRegistry/registries/acrty7og2i6qpv3s",
+                        "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-platform-registry-prd-uksouth/providers/Microsoft.ContainerRegistry/registries/acr7ca0fd3326df",
                         "roles": [
                             "AcrPull"
                         ]
