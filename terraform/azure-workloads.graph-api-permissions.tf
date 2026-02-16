@@ -34,3 +34,11 @@ resource "azuread_app_role_assignment" "workload_graph_api_deploy_script" {
   principal_object_id = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
   resource_object_id  = azuread_service_principal.microsoft_graph.object_id
 }
+
+resource "azuread_app_role_assignment" "workload_plan_graph_api" {
+  for_each = { for entry in local.workload_graph_api_permissions : entry.assignment_key => entry }
+
+  app_role_id         = each.value.app_role_id
+  principal_object_id = azuread_service_principal.workload_plan[each.value.workload_environment_key].object_id
+  resource_object_id  = azuread_service_principal.microsoft_graph.object_id
+}
