@@ -74,8 +74,10 @@ resource "azurerm_role_definition" "plan_read_only" {
       "Microsoft.Web/serverfarms/read",
       "Microsoft.KeyVault/vaults/read",
       "Microsoft.KeyVault/vaults/secrets/read",
-      "Microsoft.KeyVault/vaults/secrets/getSecret/action",
       "Microsoft.Storage/storageAccounts/listKeys/action"
+    ]
+    data_actions = [
+      "Microsoft.KeyVault/vaults/secrets/getSecret/action"
     ]
     not_actions = []
   }
