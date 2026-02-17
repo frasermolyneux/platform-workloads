@@ -45,6 +45,17 @@ resource "azuread_directory_role_assignment" "workload_deploy_script" {
   principal_object_id = azurerm_user_assigned_identity.workload_deploy_script[each.value.workload_environment_key].principal_id
 }
 
+# Plan-only identity gets Directory Readers so it can read Entra ID applications during Terraform plan.
+resource "azuread_directory_role_assignment" "workload_plan" {
+  for_each = {
+    for each in local.workload_directory_roles_tenant : each.directory_assignment_key => each
+    if each.name == "Directory Readers"
+  }
+
+  role_id             = local.directory_role_ids[each.value.name]
+  principal_object_id = azuread_service_principal.workload_plan[each.value.workload_environment_key].object_id
+}
+
 resource "azuread_administrative_unit_role_member" "workload" {
   for_each = {
     for each in local.workload_directory_roles_au : each.directory_assignment_key => each
