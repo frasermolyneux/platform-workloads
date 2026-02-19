@@ -191,7 +191,7 @@
                         ]
                     },
                     {
-                        "scope": "sub-fm-geolocation-prd",
+                        "scope": "sub-platform-shared",
                         "roles": [
                             "Reader"
                         ]
