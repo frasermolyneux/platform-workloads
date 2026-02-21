@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/deploy-prd.yml'
   workflow_dispatch:
   schedule:
     - cron: "0 3 * * 4"
@@ -23,7 +26,7 @@ jobs:
     concurrency:
       group: ${{ github.repository }}-prd
     steps:
-      - uses: frasermolyneux/actions/terraform-plan-and-apply@main
+      - uses: frasermolyneux/actions/terraform-plan-and-apply@terraform-plan-and-apply/v1.4
         with:
           terraform-folder: "terraform"
           terraform-var-file: "tfvars/prd.tfvars"

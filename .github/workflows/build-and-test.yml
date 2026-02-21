@@ -22,7 +22,7 @@ jobs:
     concurrency:
       group: ${{ github.repository }}-prd
     steps:
-      - uses: frasermolyneux/actions/terraform-plan@main
+      - uses: frasermolyneux/actions/terraform-plan@terraform-plan/v1.4
         with:
           terraform-folder: "terraform"
           terraform-var-file: "tfvars/prd.tfvars"

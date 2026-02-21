@@ -24,7 +24,7 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: frasermolyneux/actions/terraform-plan@main
+      - uses: frasermolyneux/actions/terraform-plan@terraform-plan/v1.4
         with:
           terraform-folder: "terraform"
           terraform-var-file: "tfvars/prd.tfvars"
