@@ -6,6 +6,9 @@ on:
       - "feature/**"
       - "bugfix/**"
       - "hotfix/**"
+    paths:
+      - 'terraform/**'
+      - '.github/workflows/build-and-test.yml'
 
 permissions: {}
 
