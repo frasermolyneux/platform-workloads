@@ -4,10 +4,24 @@ updates:
     assignees: ["frasermolyneux"]
     directory: "/terraform"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
+      time: "05:30"
+      timezone: "Etc/UTC"
+    groups:
+      terraform:
+        patterns:
+          - "*"
 
   - package-ecosystem: "github-actions"
     assignees: ["frasermolyneux"]
     directory: "/"
     schedule:
-      interval: "daily"
+      interval: "weekly"
+      day: "sunday"
+      time: "05:30"
+      timezone: "Etc/UTC"
+    groups:
+      github-actions:
+        patterns:
+          - "*"

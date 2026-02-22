@@ -9,7 +9,7 @@ on:
       - '.github/workflows/deploy-prd.yml'
   workflow_dispatch:
   schedule:
-    - cron: "0 3 * * 4"
+    - cron: "0 6 * * 5"
 
 permissions: {}
 
