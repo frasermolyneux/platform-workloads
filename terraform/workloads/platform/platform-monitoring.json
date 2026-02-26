@@ -189,6 +189,13 @@
                         ]
                     },
                     {
+                        "scope": "/providers/Microsoft.Management/managementGroups/alz",
+                        "roles": [
+                            "Resource Policy Contributor",
+                            "User Access Administrator"
+                        ]
+                    },
+                    {
                         "scope": "sub-fm-geolocation-prd",
                         "roles": [
                             "Contributor"

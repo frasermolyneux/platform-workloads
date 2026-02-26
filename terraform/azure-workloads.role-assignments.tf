@@ -11,7 +11,7 @@ locals {
             role_assignment.scope == null
             ? data.azurerm_subscription.subscriptions[workload_environment.subscription].id
             : (
-              startswith(lower(role_assignment.scope), "/subscriptions/")
+              startswith(role_assignment.scope, "/")
               ? role_assignment.scope
               : (
                 startswith(lower(role_assignment.scope), "sub:")

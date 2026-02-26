@@ -113,6 +113,7 @@ Environment-level `role_assignments`:
 - `assigned_roles.roles` accept any Azure RBAC role name.
 - `graph_api_permissions` are applied to the workload service principal (and deploy script identity when enabled) against Microsoft Graph; values must match Graph app role values such as `AppRoleAssignment.ReadWrite.All` or `Application.Read.All`.
 - Scope input options (case-insensitive prefixes):
+  - Raw ARM IDs starting with `/` are passed through as-is (e.g., `/providers/Microsoft.Management/managementGroups/alz`, `/subscriptions/.../resourceGroups/...`).
   - `sub:<alias>` resolves to a subscription from `var.subscriptions` (e.g., `sub:sub-visualstudio-enterprise`).
   - `/subscriptions/...` uses a raw ARM ID (any level: subscription, RG, or resource).
   - `workload:<workload>/<Environment>` targets another workload environment’s subscription (e.g., `workload:portal-core/Production`).
