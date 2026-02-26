@@ -91,6 +91,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All) |
 | `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                          |
 | `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                                         |
+| `cloudflare_tokens`               | array   | No       | Cloudflare API tokens to create and inject as GitHub environment secrets (see [Cloudflare Tokens](#cloudflare-tokens)) |
 
 ### Role Assignments
 
@@ -123,6 +124,34 @@ Environment-level `role_assignments`:
 - Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
 
 Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. If `scope` is omitted for a resource group role assignment, the resource group ID is used by default.
+
+### Cloudflare Tokens
+
+Environment-level `cloudflare_tokens` create scoped Cloudflare API tokens and inject them as GitHub environment secrets:
+
+```json
+{
+  "cloudflare_tokens": [
+    {
+      "name_suffix": "cert-rotation",
+      "policies": [
+        {
+          "permission_groups": ["DNS Write", "Zone Read"],
+          "zone": "example.com"
+        }
+      ]
+    }
+  ]
+}
+```
+
+- Each token is created with name `spn-{workload}-{env}-{name_suffix}`.
+- The token value is injected as a GitHub environment secret named `CLOUDFLARE_API_KEY`.
+- `permission_groups` must be valid Cloudflare zone-level permission group names.
+- `zone` is the domain name used to look up the Cloudflare zone ID.
+- All policies use `allow` effect by convention.
+- The environment must have `connect_to_github: true` for the secret to be injected.
+- Requires the `TERRAFORM_CLOUDFLARE_BOOTSTRAP_TOKEN` GitHub environment secret on platform-workloads (see [prerequisites](prerequisites.md)).
 
 ## Examples
 

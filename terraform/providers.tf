@@ -18,6 +18,10 @@ terraform {
       source  = "integrations/github"
       version = "~> 6.11.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 4.0"
+    }
   }
 
   backend "azurerm" {}
@@ -40,4 +44,7 @@ provider "azuredevops" {
 
 provider "github" {
   owner = "frasermolyneux"
+}
+
+provider "cloudflare" {
 }

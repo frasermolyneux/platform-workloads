@@ -7,8 +7,29 @@
             "iis",
             "powershell",
             "certificate-automation",
-            "azure-pipelines"
+            "github-actions"
         ],
         "visibility": "public"
-    }
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "cert-rotation",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "xtremeidiots.com"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
 }
