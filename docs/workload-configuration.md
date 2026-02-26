@@ -151,7 +151,7 @@ Environment-level `cloudflare_tokens` create scoped Cloudflare API tokens and in
 - `zone` is the domain name used to look up the Cloudflare zone ID.
 - All policies use `allow` effect by convention.
 - The environment must have `connect_to_github: true` for the secret to be injected.
-- Requires the `TERRAFORM_CLOUDFLARE_BOOTSTRAP_TOKEN` GitHub environment secret on platform-workloads (see [prerequisites](prerequisites.md)).
+- Requires `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` GitHub environment secrets on platform-workloads (see [prerequisites](prerequisites.md)).
 
 ## Examples
 
