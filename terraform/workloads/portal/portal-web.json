@@ -143,12 +143,6 @@
                         ]
                     },
                     {
-                        "scope": "workload:portal-environments/Development",
-                        "roles": [
-                            "Reader"
-                        ]
-                    },
-                    {
                         "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
                         "roles": [
                             "DNS Zone Contributor"
@@ -206,12 +200,6 @@
                         "scope": "workload:portal-core/Production",
                         "roles": [
                             "Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload:portal-environments/Production",
-                        "roles": [
-                            "Reader"
                         ]
                     },
                     {
