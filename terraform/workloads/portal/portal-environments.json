@@ -105,8 +105,7 @@
                                 "allowed_roles": [
                                     "App Configuration Data Reader",
                                     "Cognitive Services User",
-                                    "Key Vault Secrets User",
-                                    "Storage Blob Data Contributor"
+                                    "Key Vault Secrets User"
                                 ]
                             }
                         ]
@@ -152,8 +151,7 @@
                                 "allowed_roles": [
                                     "App Configuration Data Reader",
                                     "Cognitive Services User",
-                                    "Key Vault Secrets User",
-                                    "Storage Blob Data Contributor"
+                                    "Key Vault Secrets User"
                                 ]
                             }
                         ]

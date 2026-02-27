@@ -144,7 +144,6 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Contributor",
                             "Storage Table Data Contributor"
                         ]
                     }
@@ -199,7 +198,6 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Contributor",
                             "Storage Table Data Contributor"
                         ]
                     }

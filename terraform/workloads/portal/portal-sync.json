@@ -117,8 +117,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -132,9 +131,7 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
@@ -147,8 +144,7 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Key Vault Secrets User"
+                            "Storage Blob Data Owner"
                         ]
                     }
                 ]
@@ -177,8 +173,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -192,9 +187,7 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
@@ -207,8 +200,7 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Key Vault Secrets User"
+                            "Storage Blob Data Owner"
                         ]
                     }
                 ]

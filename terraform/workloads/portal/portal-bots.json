@@ -51,13 +51,6 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
-                        "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
-                        ]
-                    },
-                    {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
@@ -103,13 +96,6 @@
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {
-                        "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
-                        ]
-                    },
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [

@@ -123,15 +123,13 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ],
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Key Vault Secrets User",
                                     "Storage Blob Data Owner"
                                 ]
                             }
@@ -147,29 +145,25 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Website Contributor",
-                            "API Management Service Contributor"
+                            "Reader"
                         ]
                     },
                     {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "scope": "workload:portal-core/Development",
                         "roles": [
-                            "DNS Zone Contributor"
+                            "SQL DB Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:portal-environments/Development",
+                        "roles": [
+                            "API Management Service Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets User",
-                            "Storage Blob Data Owner"
                         ]
                     }
                 ]
@@ -199,15 +193,13 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ],
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Key Vault Secrets User",
                                     "Storage Blob Data Owner"
                                 ]
                             }
@@ -223,29 +215,25 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Website Contributor",
-                            "API Management Service Contributor"
+                            "Reader"
                         ]
                     },
                     {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "scope": "workload:portal-core/Production",
                         "roles": [
-                            "DNS Zone Contributor"
+                            "SQL DB Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:portal-environments/Production",
+                        "roles": [
+                            "API Management Service Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets User",
-                            "Storage Blob Data Owner"
                         ]
                     }
                 ]

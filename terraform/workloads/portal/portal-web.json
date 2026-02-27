@@ -123,8 +123,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -138,9 +137,15 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "scope": "workload:portal-core/Development",
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:portal-environments/Development",
+                        "roles": [
+                            "Reader"
                         ]
                     },
                     {
@@ -153,13 +158,6 @@
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]
@@ -191,8 +189,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -206,9 +203,15 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "scope": "workload:portal-core/Production",
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:portal-environments/Production",
+                        "roles": [
+                            "Reader"
                         ]
                     },
                     {
@@ -221,13 +224,6 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]

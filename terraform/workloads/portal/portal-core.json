@@ -99,19 +99,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
-                                ]
-                            }
-                        ],
-                        "rbac_admin_roles": [
-                            {
-                                "allowed_roles": [
-                                    "Key Vault Secrets Officer",
-                                    "Key Vault Secrets User",
-                                    "Storage Blob Data Owner",
-                                    "Azure Service Bus Data Receiver",
-                                    "Azure Service Bus Data Sender"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -121,26 +109,15 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "scope": "workload:portal-environments/Development",
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
+                            "Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets Officer",
-                            "Key Vault Secrets User",
-                            "Storage Blob Data Owner",
-                            "Azure Service Bus Data Receiver",
-                            "Azure Service Bus Data Sender"
                         ]
                     }
                 ]
@@ -168,19 +145,7 @@
                         "assigned_roles": [
                             {
                                 "roles": [
-                                    "Contributor",
-                                    "Key Vault Secrets Officer"
-                                ]
-                            }
-                        ],
-                        "rbac_admin_roles": [
-                            {
-                                "allowed_roles": [
-                                    "Key Vault Secrets Officer",
-                                    "Key Vault Secrets User",
-                                    "Storage Blob Data Owner",
-                                    "Azure Service Bus Data Receiver",
-                                    "Azure Service Bus Data Sender"
+                                    "Contributor"
                                 ]
                             }
                         ]
@@ -190,26 +155,15 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "scope": "workload:portal-environments/Production",
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer"
+                            "Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Key Vault Secrets Officer",
-                            "Key Vault Secrets User",
-                            "Storage Blob Data Owner",
-                            "Azure Service Bus Data Receiver",
-                            "Azure Service Bus Data Sender"
                         ]
                     }
                 ]

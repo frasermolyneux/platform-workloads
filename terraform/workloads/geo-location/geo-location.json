@@ -154,7 +154,6 @@
                         "allowed_roles": [
                             "Key Vault Secrets User",
                             "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor",
                             "Storage Table Data Contributor"
                         ]
                     }
@@ -214,7 +213,6 @@
                         "allowed_roles": [
                             "Key Vault Secrets User",
                             "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor",
                             "Storage Table Data Contributor"
                         ]
                     }

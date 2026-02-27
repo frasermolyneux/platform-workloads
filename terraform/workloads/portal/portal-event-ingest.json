@@ -124,7 +124,16 @@
                             {
                                 "roles": [
                                     "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Storage Blob Data Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
                                 ]
                             }
                         ]
@@ -138,31 +147,19 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "scope": "workload:portal-environments/Development",
                         "roles": [
-                            "DNS Zone Contributor"
+                            "API Management Service Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Azure Service Bus Data Receiver",
-                            "Azure Service Bus Data Sender",
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]
@@ -193,7 +190,16 @@
                             {
                                 "roles": [
                                     "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Storage Blob Data Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
                                 ]
                             }
                         ]
@@ -207,31 +213,19 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "scope": "workload:portal-environments/Production",
                         "roles": [
-                            "DNS Zone Contributor"
+                            "API Management Service Contributor"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Azure Service Bus Data Receiver",
-                            "Azure Service Bus Data Sender",
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]

@@ -118,7 +118,14 @@
                             {
                                 "roles": [
                                     "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Storage Blob Data Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner"
                                 ]
                             }
                         ]
@@ -132,23 +139,13 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]
@@ -178,7 +175,14 @@
                             {
                                 "roles": [
                                     "Contributor",
-                                    "Key Vault Secrets Officer"
+                                    "Storage Blob Data Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner"
                                 ]
                             }
                         ]
@@ -192,23 +196,13 @@
                 "assigned_roles": [
                     {
                         "roles": [
-                            "Contributor",
-                            "Key Vault Secrets Officer",
-                            "Storage Blob Data Contributor"
+                            "Reader"
                         ]
                     },
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Blob Data Owner",
-                            "Key Vault Secrets User"
                         ]
                     }
                 ]
