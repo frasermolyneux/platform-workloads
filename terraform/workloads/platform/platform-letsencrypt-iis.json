@@ -26,6 +26,41 @@
                                 "Zone Read"
                             ],
                             "zone": "xtremeidiots.com"
+                        },
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "xtremeidiots.net"
+                        },
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "bishopsbees.co.uk"
+                        },
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "moanclub.com"
+                        },
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "dm-electricalservices.co.uk"
+                        },
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "bqba.co.uk"
                         }
                     ]
                 }
