@@ -49,6 +49,10 @@ subscriptions = {
   },
   sub-visualstudio-enterprise = {
     name            = "sub-visualstudio-enterprise"
+    subscription_id = "6cad03c1-9e98-4160-8ebe-64dd30f1bbc7"
+  },
+  sub-visualstudio-enterprise-legacy = {
+    name            = "sub-visualstudio-enterprise-legacy"
     subscription_id = "d68448b0-9947-46d7-8771-baa331a3063a"
   },
   sub-xi-demomanager-prd = {
