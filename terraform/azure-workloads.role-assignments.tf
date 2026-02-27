@@ -1,5 +1,5 @@
 locals {
-  workload_role_assignments = distinct(flatten([
+  workload_role_assignments = flatten([
     for workload_environment in local.workload_environments : [
       for role_assignment in workload_environment.role_assignments.assigned_roles : [
         for role_definition in role_assignment.roles : {
@@ -32,7 +32,7 @@ locals {
         }
       ]
     ]
-  ]))
+  ])
 
   plan_role_subscriptions = distinct(concat(
     [for workload_environment in local.workload_environments : workload_environment.subscription],
