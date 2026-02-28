@@ -93,7 +93,6 @@
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {"scope": "workload:idp-core/Development", "roles": ["Contributor"]},
                     {"scope": "workload:platform-hosting/Development", "roles": ["Contributor"]}
                 ]
             }
@@ -115,7 +114,6 @@
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {"scope": "workload:idp-core/Production", "roles": ["Contributor"]},
                     {"scope": "workload:platform-hosting/Production", "roles": ["Contributor"]}
                 ]
             }
