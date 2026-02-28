@@ -153,6 +153,12 @@
                         "roles": [
                             "Monitoring Reader"
                         ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-core/Development/rg-portal-core-dev-swedencentral/swedencentral",
+                        "roles": [
+                            "Application Insights Component Contributor"
+                        ]
                     }
                 ]
             }
@@ -215,6 +221,12 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-core/Production/rg-portal-core-prd-uksouth/uksouth",
+                        "roles": [
+                            "Application Insights Component Contributor"
                         ]
                     }
                 ]

@@ -55,6 +55,12 @@
                         "roles": [
                             "Monitoring Reader"
                         ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-environments/Development/rg-portal-environments-dev-swedencentral/swedencentral",
+                        "roles": [
+                            "Key Vault Secrets User"
+                        ]
                     }
                 ]
             }
@@ -100,6 +106,12 @@
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Reader"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-environments/Production/rg-portal-environments-prd-uksouth/uksouth",
+                        "roles": [
+                            "Key Vault Secrets User"
                         ]
                     }
                 ]

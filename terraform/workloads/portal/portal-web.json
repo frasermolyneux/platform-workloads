@@ -139,7 +139,13 @@
                     {
                         "scope": "workload:portal-core/Development",
                         "roles": [
-                            "Contributor"
+                            "SQL DB Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-core/Development/rg-portal-core-dev-swedencentral/swedencentral",
+                        "roles": [
+                            "Application Insights Component Contributor"
                         ]
                     },
                     {
@@ -205,7 +211,13 @@
                     {
                         "scope": "workload:portal-core/Production",
                         "roles": [
-                            "Contributor"
+                            "SQL DB Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:portal-core/Production/rg-portal-core-prd-uksouth/uksouth",
+                        "roles": [
+                            "Application Insights Component Contributor"
                         ]
                     },
                     {
