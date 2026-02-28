@@ -106,15 +106,26 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
                         "scope": "sub-enterprise-devtest-legacy",
                         "roles": [
-                            "Monitoring Contributor"
+                            "Contributor"
                         ]
                     },
                     {
                         "scope": "sub-molyneux-me-dev",
                         "roles": [
-                            "Monitoring Contributor"
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-visualstudio-enterprise-legacy",
+                        "roles": [
+                            "Contributor"
                         ]
                     }
                 ]
@@ -147,6 +158,11 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
                         "scope": "/providers/Microsoft.Management/managementGroups/alz",
                         "roles": [
                             "Resource Policy Contributor",
@@ -156,61 +172,61 @@
                     {
                         "scope": "sub-fm-geolocation-prd",
                         "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-mx-consulting-prd",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-platform-connectivity",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-platform-identity",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-platform-shared",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-talkwithtiles-prd",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-xi-demomanager-prd",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-xi-portal-prd",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "sub-finances-prd",
-                        "roles": [
-                            "Monitoring Contributor"
+                            "Contributor"
                         ]
                     },
                     {
                         "scope": "sub-molyneux-me-prd",
                         "roles": [
-                            "Monitoring Contributor"
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-mx-consulting-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-connectivity",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-identity",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-platform-shared",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-talkwithtiles-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-xi-demomanager-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-xi-portal-prd",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub-finances-prd",
+                        "roles": [
+                            "Contributor"
                         ]
                     }
                 ]

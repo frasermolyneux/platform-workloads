@@ -32,6 +32,7 @@ variable "subscriptions" {
   type = map(object({
     name            = string
     subscription_id = string
+    environment     = string
   }))
 }
 

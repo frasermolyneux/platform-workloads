@@ -89,3 +89,8 @@ output "workload_service_principals" {
     }
   }
 }
+
+output "subscriptions" {
+  description = "Master list of all subscriptions managed by platform-workloads. Access: subscriptions[name].subscription_id."
+  value       = var.subscriptions
+}
