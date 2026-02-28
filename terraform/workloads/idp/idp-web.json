@@ -89,7 +89,9 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "idp-core",
-                "platform-hosting"
+                "platform-hosting",
+                "platform-monitoring",
+                "platform-workloads"
             ],
             "locations": [
                 "swedencentral"
@@ -115,6 +117,12 @@
                         "roles": [
                             "Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Development",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
                     }
                 ]
             }
@@ -126,7 +134,9 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "idp-core",
-                "platform-hosting"
+                "platform-hosting",
+                "platform-monitoring",
+                "platform-workloads"
             ],
             "locations": [
                 "swedencentral"
@@ -151,6 +161,12 @@
                         "scope": "workload:platform-hosting/Production",
                         "roles": [
                             "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:platform-monitoring/Production",
+                        "roles": [
+                            "Monitoring Reader"
                         ]
                     }
                 ]

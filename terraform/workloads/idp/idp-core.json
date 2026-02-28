@@ -103,6 +103,10 @@
                     }
                 }
             ],
+            "directory_roles": [
+                "Cloud application administrator",
+                "Directory Readers"
+            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
@@ -110,6 +114,77 @@
                         "roles": [
                             "Monitoring Reader"
                         ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Key Vault Secrets Officer",
+                            "Cognitive Services OpenAI User",
+                            "Search Index Data Reader",
+                            "Search Index Data Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub:sub-visualstudio-enterprise",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-visualstudio-enterprise-legacy",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-connectivity",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-identity",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-management",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-shared",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-enterprise-devtest-legacy",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-fm-geolocation-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-mx-consulting-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-talkwithtiles-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-xi-demomanager-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-xi-portal-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-finances-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-molyneux-me-dev",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-molyneux-me-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
                     }
                 ]
             }
@@ -140,6 +215,10 @@
                     }
                 }
             ],
+            "directory_roles": [
+                "Cloud application administrator",
+                "Directory Readers"
+            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
@@ -147,6 +226,77 @@
                         "roles": [
                             "Monitoring Reader"
                         ]
+                    }
+                ],
+                "rbac_admin_roles": [
+                    {
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Key Vault Secrets Officer",
+                            "Cognitive Services OpenAI User",
+                            "Search Index Data Reader",
+                            "Search Index Data Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "sub:sub-visualstudio-enterprise",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-visualstudio-enterprise-legacy",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-connectivity",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-identity",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-management",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-platform-shared",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-enterprise-devtest-legacy",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-fm-geolocation-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-mx-consulting-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-talkwithtiles-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-xi-demomanager-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-xi-portal-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-finances-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-molyneux-me-dev",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
+                    },
+                    {
+                        "scope": "sub:sub-molyneux-me-prd",
+                        "allowed_roles": ["Reader", "Cost Management Reader"]
                     }
                 ]
             }
