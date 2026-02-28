@@ -11,13 +11,15 @@
         ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
-        "visibility": "private",
+        "visibility": "public",
         "rulesets": [
             {
                 "name": "main-protection",
                 "target": "branch",
                 "enforcement": "active",
-                "includes": ["refs/heads/main"],
+                "includes": [
+                    "refs/heads/main"
+                ],
                 "excludes": [],
                 "bypass_actors": [
                     {
@@ -40,7 +42,11 @@
                     "strict_required_status_checks_policy": true,
                     "do_not_enforce_on_create": false,
                     "pull_request": {
-                        "allowed_merge_methods": ["merge", "rebase", "squash"],
+                        "allowed_merge_methods": [
+                            "merge",
+                            "rebase",
+                            "squash"
+                        ],
                         "required_approving_review_count": 0,
                         "dismiss_stale_reviews_on_push": true,
                         "require_code_owner_review": false,
@@ -76,19 +82,35 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "requires_terraform_state_access": ["platform-monitoring", "platform-workloads"],
-            "locations": ["swedencentral"],
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "platform-workloads"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": {
-                        "assigned_roles": [{"roles": ["Contributor"]}]
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
                     }
                 }
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {"scope": "workload:platform-monitoring/Development", "roles": ["Monitoring Reader"]}
+                    {
+                        "scope": "workload:platform-monitoring/Development",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
+                    }
                 ]
             }
         },
@@ -97,19 +119,35 @@
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "requires_terraform_state_access": ["platform-monitoring", "platform-workloads"],
-            "locations": ["swedencentral"],
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "platform-workloads"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
                     "role_assignments": {
-                        "assigned_roles": [{"roles": ["Contributor"]}]
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
                     }
                 }
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {"scope": "workload:platform-monitoring/Production", "roles": ["Monitoring Reader"]}
+                    {
+                        "scope": "workload:platform-monitoring/Production",
+                        "roles": [
+                            "Monitoring Reader"
+                        ]
+                    }
                 ]
             }
         }
