@@ -104,7 +104,7 @@
             "configure_for_terraform": true,
             "locations": [
                 "swedencentral",
-                "eastus"
+                "westus2"
             ],
             "requires_terraform_state_access": [
                 "platform-monitoring"
