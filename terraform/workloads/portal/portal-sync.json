@@ -135,6 +135,12 @@
                         ]
                     },
                     {
+                        "scope": "workload:portal-environments/Development",
+                        "roles": [
+                            "Managed Identity Operator"
+                        ]
+                    },
+                    {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
@@ -188,6 +194,12 @@
                     {
                         "roles": [
                             "Reader"
+                        ]
+                    },
+                    {
+                        "scope": "workload:portal-environments/Production",
+                        "roles": [
+                            "Managed Identity Operator"
                         ]
                     },
                     {

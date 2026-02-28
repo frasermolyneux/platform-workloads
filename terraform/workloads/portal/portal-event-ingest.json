@@ -153,7 +153,8 @@
                     {
                         "scope": "workload:portal-environments/Development",
                         "roles": [
-                            "API Management Service Contributor"
+                            "API Management Service Contributor",
+                            "Managed Identity Operator"
                         ]
                     },
                     {
@@ -219,7 +220,8 @@
                     {
                         "scope": "workload:portal-environments/Production",
                         "roles": [
-                            "API Management Service Contributor"
+                            "API Management Service Contributor",
+                            "Managed Identity Operator"
                         ]
                     },
                     {
