@@ -123,12 +123,10 @@
                             "Key Vault Secrets Officer",
                             "Cognitive Services OpenAI User",
                             "Search Index Data Reader",
-                            "Search Index Data Contributor"
+                            "Search Index Data Contributor",
+                            "Reader",
+                            "Cost Management Reader"
                         ]
-                    },
-                    {
-                        "scope": "sub:sub-visualstudio-enterprise",
-                        "allowed_roles": ["Reader", "Cost Management Reader"]
                     },
                     {
                         "scope": "sub:sub-visualstudio-enterprise-legacy",
@@ -235,7 +233,9 @@
                             "Key Vault Secrets Officer",
                             "Cognitive Services OpenAI User",
                             "Search Index Data Reader",
-                            "Search Index Data Contributor"
+                            "Search Index Data Contributor",
+                            "Reader",
+                            "Cost Management Reader"
                         ]
                     },
                     {
@@ -256,10 +256,6 @@
                     },
                     {
                         "scope": "sub:sub-platform-management",
-                        "allowed_roles": ["Reader", "Cost Management Reader"]
-                    },
-                    {
-                        "scope": "sub:sub-platform-shared",
                         "allowed_roles": ["Reader", "Cost Management Reader"]
                     },
                     {
