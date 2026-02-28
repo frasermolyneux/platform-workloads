@@ -139,7 +139,8 @@
                     {
                         "scope": "workload:portal-core/Development",
                         "roles": [
-                            "SQL DB Contributor"
+                            "SQL DB Contributor",
+                            "SQL Security Manager"
                         ]
                     },
                     {
@@ -211,7 +212,8 @@
                     {
                         "scope": "workload:portal-core/Production",
                         "roles": [
-                            "SQL DB Contributor"
+                            "SQL DB Contributor",
+                            "SQL Security Manager"
                         ]
                     },
                     {
