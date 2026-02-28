@@ -103,7 +103,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
-                "uksouth",
+                "swedencentral",
                 "eastus"
             ],
             "requires_terraform_state_access": [
