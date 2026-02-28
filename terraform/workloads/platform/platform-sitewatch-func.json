@@ -103,8 +103,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
-                "swedencentral",
-                "westus2"
+                "swedencentral"
             ],
             "requires_terraform_state_access": [
                 "platform-monitoring"
