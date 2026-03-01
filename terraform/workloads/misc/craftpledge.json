@@ -1,0 +1,186 @@
+{
+    "name": "craftpledge",
+    "github": {
+        "description": "CraftPledge — a certification brand for human-made work in the age of AI. Made by humans. Verified.",
+        "topics": [
+            "azure",
+            "aspnet-core",
+            "dotnet-aspire",
+            "app-service",
+            "github-actions",
+            "brochure-site"
+        ],
+        "add_sonarcloud_secrets": true,
+        "visibility": "public",
+        "rulesets": [
+            {
+                "name": "main-protection",
+                "target": "branch",
+                "enforcement": "active",
+                "includes": [
+                    "refs/heads/main"
+                ],
+                "excludes": [],
+                "bypass_actors": [
+                    {
+                        "bypass_mode": "always",
+                        "actor_id": 5,
+                        "actor_type": "RepositoryRole"
+                    }
+                ],
+                "rules": {
+                    "required_status_checks": [
+                        {
+                            "context": "SonarCloud Code Analysis",
+                            "integration_id": 12526
+                        },
+                        {
+                            "context": "build-and-test",
+                            "integration_id": 15368
+                        },
+                        {
+                            "context": "quality / Code Quality",
+                            "integration_id": 15368
+                        },
+                        {
+                            "context": "devops-secure-scanning / DevOps Secure Scanning",
+                            "integration_id": 15368
+                        }
+                    ],
+                    "strict_required_status_checks_policy": true,
+                    "do_not_enforce_on_create": false,
+                    "pull_request": {
+                        "allowed_merge_methods": [
+                            "merge",
+                            "rebase",
+                            "squash"
+                        ],
+                        "required_approving_review_count": 0,
+                        "dismiss_stale_reviews_on_push": true,
+                        "require_code_owner_review": false,
+                        "required_review_thread_resolution": true
+                    },
+                    "required_code_scanning": [
+                        {
+                            "tool": "CodeQL",
+                            "alerts_threshold": "errors",
+                            "security_alerts_threshold": "high_or_higher"
+                        },
+                        {
+                            "tool": "SonarCloud",
+                            "alerts_threshold": "errors",
+                            "security_alerts_threshold": "high_or_higher"
+                        }
+                    ],
+                    "copilot_code_review": {
+                        "review_draft_pull_requests": true,
+                        "review_on_push": true
+                    },
+                    "required_signatures": false,
+                    "required_linear_history": true,
+                    "non_fast_forward": true
+                }
+            }
+        ],
+        "labels": [
+            {
+                "name": "deploy-dev",
+                "description": "Run dev Terraform plan+apply and deploy the app",
+                "color": "0E8A16"
+            },
+            {
+                "name": "run-prd-plan",
+                "description": "Run prd Terraform plan",
+                "color": "5319E7"
+            }
+        ]
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting",
+                "platform-monitoring"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/craftpledge.org",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-swedencentral/swedencentral",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-shared",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "requires_terraform_state_access": [
+                "platform-hosting",
+                "platform-monitoring"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/craftpledge.org",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
+        }
+    ]
+}
