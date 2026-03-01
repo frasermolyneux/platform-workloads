@@ -98,7 +98,7 @@ resource "azurerm_role_definition" "resource_provider_registrator" {
 
   permissions {
     actions = [
-      "Microsoft.Resources/subscriptions/providers/register/action",
+      "*/register/action",
       "Microsoft.Resources/subscriptions/providers/read"
     ]
     not_actions = []
