@@ -37,7 +37,7 @@ locals {
 data "cloudflare_zone" "lookup" {
   for_each = local.cloudflare_zone_names
 
-  filter {
+  filter = {
     name = each.value
   }
 }
