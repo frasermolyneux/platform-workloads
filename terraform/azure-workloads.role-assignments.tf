@@ -54,6 +54,10 @@ resource "random_uuid" "plan_read_only" {
   for_each = toset(local.plan_role_subscriptions)
 }
 
+resource "random_uuid" "resource_provider_registrator" {
+  for_each = toset(local.plan_role_subscriptions)
+}
+
 resource "azurerm_role_definition" "plan_read_only" {
   for_each = toset(local.plan_role_subscriptions)
 
@@ -78,6 +82,24 @@ resource "azurerm_role_definition" "plan_read_only" {
     ]
     data_actions = [
       "Microsoft.KeyVault/vaults/secrets/getSecret/action"
+    ]
+    not_actions = []
+  }
+
+  assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
+}
+
+resource "azurerm_role_definition" "resource_provider_registrator" {
+  for_each = toset(local.plan_role_subscriptions)
+
+  name        = random_uuid.resource_provider_registrator[each.key].result
+  scope       = data.azurerm_subscription.subscriptions[each.key].id
+  description = "Allows registration and reading of Azure resource providers at subscription scope."
+
+  permissions {
+    actions = [
+      "Microsoft.Resources/subscriptions/providers/register/action",
+      "Microsoft.Resources/subscriptions/providers/read"
     ]
     not_actions = []
   }
@@ -115,5 +137,23 @@ resource "azurerm_role_assignment" "workload_plan_read_only" {
 
   scope              = data.azurerm_subscription.subscriptions[each.value.subscription].id
   role_definition_id = azurerm_role_definition.plan_read_only[each.value.subscription].role_definition_resource_id
+  principal_id       = azuread_service_principal.workload_plan[each.value.env_key].object_id
+}
+
+# Workload SPNs get the Resource Provider Registrator role on their environment subscription.
+resource "azurerm_role_assignment" "workload_provider_registrator" {
+  for_each = { for each in local.workload_environments : each.key => each }
+
+  scope              = data.azurerm_subscription.subscriptions[each.value.subscription].id
+  role_definition_id = azurerm_role_definition.resource_provider_registrator[each.value.subscription].role_definition_resource_id
+  principal_id       = azuread_service_principal.workload[each.key].object_id
+}
+
+# Plan-only SPNs get the Resource Provider Registrator role on all their plan subscriptions.
+resource "azurerm_role_assignment" "workload_plan_provider_registrator" {
+  for_each = { for each in local.plan_role_assignments : each.key => each }
+
+  scope              = data.azurerm_subscription.subscriptions[each.value.subscription].id
+  role_definition_id = azurerm_role_definition.resource_provider_registrator[each.value.subscription].role_definition_resource_id
   principal_id       = azuread_service_principal.workload_plan[each.value.env_key].object_id
 }
