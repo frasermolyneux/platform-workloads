@@ -21,25 +21,14 @@ locals {
   ]))
 }
 
-data "cloudflare_api_token_permission_groups_list" "zone" {
+data "cloudflare_api_token_permission_groups" "all" {
   count = length(local.cloudflare_tokens) > 0 ? 1 : 0
-
-  scope = "com.cloudflare.api.account.zone"
-}
-
-locals {
-  cloudflare_zone_permission_groups = length(local.cloudflare_tokens) > 0 ? {
-    for group in data.cloudflare_api_token_permission_groups_list.zone[0].result :
-    group.name => group.id
-  } : {}
 }
 
 data "cloudflare_zone" "lookup" {
   for_each = local.cloudflare_zone_names
 
-  filter {
-    name = each.value
-  }
+  name = each.value
 }
 
 resource "cloudflare_api_token" "workload" {
@@ -47,19 +36,19 @@ resource "cloudflare_api_token" "workload" {
 
   name = each.value.token_name
 
-  policies = [
-    for policy in each.value.policies : {
+  dynamic "policy" {
+    for_each = each.value.policies
+    content {
       effect = "allow"
       permission_groups = [
-        for pg in policy.permission_groups : {
-          id = local.cloudflare_zone_permission_groups[pg]
-        }
+        for pg in policy.value.permission_groups :
+        data.cloudflare_api_token_permission_groups.all[0].zone[pg]
       ]
       resources = {
-        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[policy.zone].id}" = "*"
+        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[policy.value.zone].id}" = "*"
       }
     }
-  ]
+  }
 }
 
 resource "github_actions_environment_secret" "cloudflare_token" {
