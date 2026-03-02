@@ -107,6 +107,14 @@
                                     "Contributor"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Storage Account Contributor"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -150,6 +158,14 @@
                             {
                                 "roles": [
                                     "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Storage Blob Data Owner",
+                                    "Storage Account Contributor"
                                 ]
                             }
                         ]
