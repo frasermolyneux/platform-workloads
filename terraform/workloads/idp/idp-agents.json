@@ -90,6 +90,7 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "idp-core",
+                "platform-hosting",
                 "platform-monitoring",
                 "platform-workloads"
             ],
@@ -134,6 +135,7 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "idp-core",
+                "platform-hosting",
                 "platform-monitoring",
                 "platform-workloads"
             ],
