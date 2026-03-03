@@ -112,7 +112,9 @@
                             {
                                 "allowed_roles": [
                                     "Storage Blob Data Owner",
-                                    "Storage Account Contributor"
+                                    "Storage Account Contributor",
+                                    "Storage Table Data Contributor",
+                                    "Storage Queue Data Contributor"
                                 ]
                             }
                         ]
@@ -165,7 +167,9 @@
                             {
                                 "allowed_roles": [
                                     "Storage Blob Data Owner",
-                                    "Storage Account Contributor"
+                                    "Storage Account Contributor",
+                                    "Storage Table Data Contributor",
+                                    "Storage Queue Data Contributor"
                                 ]
                             }
                         ]
