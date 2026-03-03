@@ -126,6 +126,7 @@
                             "Search Index Data Contributor",
                             "Search Service Contributor",
                             "Storage Blob Data Contributor",
+                            "Storage Queue Data Contributor",
                             "Reader",
                             "Cost Management Reader"
                         ]
@@ -238,6 +239,7 @@
                             "Search Index Data Contributor",
                             "Search Service Contributor",
                             "Storage Blob Data Contributor",
+                            "Storage Queue Data Contributor",
                             "Reader",
                             "Cost Management Reader"
                         ]
