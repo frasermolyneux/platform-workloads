@@ -124,6 +124,8 @@
                             "Cognitive Services OpenAI User",
                             "Search Index Data Reader",
                             "Search Index Data Contributor",
+                            "Search Service Contributor",
+                            "Storage Blob Data Contributor",
                             "Reader",
                             "Cost Management Reader"
                         ]
@@ -234,6 +236,8 @@
                             "Cognitive Services OpenAI User",
                             "Search Index Data Reader",
                             "Search Index Data Contributor",
+                            "Search Service Contributor",
+                            "Storage Blob Data Contributor",
                             "Reader",
                             "Cost Management Reader"
                         ]
