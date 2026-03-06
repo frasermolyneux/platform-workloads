@@ -97,7 +97,8 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-monitoring"
+                "platform-monitoring",
+                "platform-workloads"
             ],
             "resource_groups": [
                 {
