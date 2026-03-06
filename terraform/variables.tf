@@ -33,6 +33,7 @@ variable "subscriptions" {
     name            = string
     subscription_id = string
     environment     = string
+    monthly_budget  = optional(number, null)
   }))
 }
 
