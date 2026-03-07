@@ -7,6 +7,8 @@ resource "azurerm_user_assigned_identity" "workload_deploy_script" {
   resource_group_name = azurerm_resource_group.rg.name
 
   name = format("spn-%s-%s-scripts", lower(each.value.workload_name), lower(each.value.environment_name))
+
+  tags = var.tags
 }
 
 resource "azurerm_role_assignment" "workload_managed_identity_operator" {
