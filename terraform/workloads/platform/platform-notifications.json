@@ -129,9 +129,11 @@
                             {
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
+                                    "Key Vault Secrets Officer",
                                     "Azure Service Bus Data Sender",
                                     "Azure Service Bus Data Receiver",
-                                    "Storage Blob Data Owner"
+                                    "Storage Blob Data Owner",
+                                    "Communication and Email Service Owner"
                                 ]
                             }
                         ]
@@ -182,9 +184,11 @@
                             {
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
+                                    "Key Vault Secrets Officer",
                                     "Azure Service Bus Data Sender",
                                     "Azure Service Bus Data Receiver",
-                                    "Storage Blob Data Owner"
+                                    "Storage Blob Data Owner",
+                                    "Communication and Email Service Owner"
                                 ]
                             }
                         ]
