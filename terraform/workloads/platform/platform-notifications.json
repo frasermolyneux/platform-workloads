@@ -1,0 +1,224 @@
+{
+    "name": "platform-notifications",
+    "github": {
+        "description": "Centralised email notification platform using Azure Communication Services with domain-granular permissions, deployed with Terraform and GitHub Actions.",
+        "topics": [
+            "azure",
+            "terraform",
+            "github-actions",
+            "azure-functions",
+            "notifications",
+            "email",
+            "azure-communication-services",
+            "api-management"
+        ],
+        "add_sonarcloud_secrets": true,
+        "add_nuget_environment": true,
+        "visibility": "public",
+        "rulesets": [
+            {
+                "name": "main-protection",
+                "target": "branch",
+                "enforcement": "active",
+                "includes": [
+                    "refs/heads/main"
+                ],
+                "excludes": [],
+                "bypass_actors": [
+                    {
+                        "bypass_mode": "always",
+                        "actor_id": 5,
+                        "actor_type": "RepositoryRole"
+                    }
+                ],
+                "rules": {
+                    "required_status_checks": [
+                        {
+                            "context": "SonarCloud Code Analysis",
+                            "integration_id": 12526
+                        },
+                        {
+                            "context": "build-and-test",
+                            "integration_id": 15368
+                        },
+                        {
+                            "context": "quality / Code Quality",
+                            "integration_id": 15368
+                        },
+                        {
+                            "context": "devops-secure-scanning / DevOps Secure Scanning",
+                            "integration_id": 15368
+                        }
+                    ],
+                    "strict_required_status_checks_policy": true,
+                    "do_not_enforce_on_create": false,
+                    "pull_request": {
+                        "allowed_merge_methods": [
+                            "merge",
+                            "rebase",
+                            "squash"
+                        ],
+                        "required_approving_review_count": 0,
+                        "dismiss_stale_reviews_on_push": true,
+                        "require_code_owner_review": false,
+                        "required_review_thread_resolution": true
+                    },
+                    "required_code_scanning": [
+                        {
+                            "tool": "CodeQL",
+                            "alerts_threshold": "errors",
+                            "security_alerts_threshold": "high_or_higher"
+                        },
+                        {
+                            "tool": "SonarCloud",
+                            "alerts_threshold": "errors",
+                            "security_alerts_threshold": "high_or_higher"
+                        }
+                    ],
+                    "copilot_code_review": {
+                        "review_draft_pull_requests": true,
+                        "review_on_push": true
+                    },
+                    "required_signatures": false,
+                    "required_linear_history": true,
+                    "non_fast_forward": true
+                }
+            }
+        ],
+        "labels": [
+            {
+                "name": "deploy-dev",
+                "description": "Run dev Terraform plan+apply and deploy the app",
+                "color": "0E8A16"
+            },
+            {
+                "name": "run-prd-plan",
+                "description": "Run prd Terraform plan",
+                "color": "5319E7"
+            }
+        ]
+    },
+    "environments": [
+        {
+            "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity"
+            ],
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "platform-connectivity"
+            ],
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Azure Service Bus Data Sender",
+                                    "Azure Service Bus Data Receiver",
+                                    "Storage Blob Data Owner"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator",
+                "Directory Readers"
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "roles": [
+                            "Contributor"
+                        ]
+                    }
+                ]
+            }
+        },
+        {
+            "name": "Production",
+            "subscription": "sub-platform-shared",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "plan_additional_subscriptions": [
+                "sub-platform-connectivity"
+            ],
+            "requires_terraform_state_access": [
+                "platform-monitoring",
+                "platform-connectivity"
+            ],
+            "locations": [
+                "uksouth"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}",
+                    "role_assignments": {
+                        "assigned_roles": [
+                            {
+                                "roles": [
+                                    "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Azure Service Bus Data Sender",
+                                    "Azure Service Bus Data Receiver",
+                                    "Storage Blob Data Owner"
+                                ]
+                            }
+                        ]
+                    }
+                }
+            ],
+            "directory_roles": [
+                "Cloud application administrator",
+                "Directory Readers"
+            ],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    }
+                ]
+            },
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "acs-dns",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "xtremeidiots.com"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
