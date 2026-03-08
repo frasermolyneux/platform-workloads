@@ -28,7 +28,9 @@ data "cloudflare_api_token_permission_groups" "all" {
 data "cloudflare_zone" "lookup" {
   for_each = local.cloudflare_zone_names
 
-  name = each.value
+  filter = {
+    name = each.value
+  }
 }
 
 resource "cloudflare_api_token" "workload" {
