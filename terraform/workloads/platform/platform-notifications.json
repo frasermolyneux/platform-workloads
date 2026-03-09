@@ -149,13 +149,33 @@
                         ]
                     },
                     {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01",
+                        "roles": [
+                            "DNS Zone Contributor"
+                        ]
+                    },
+                    {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
                             "Monitoring Reader"
                         ]
                     }
                 ]
-            }
+            },
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "acs-dns",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "xtremeidiots.com"
+                        }
+                    ]
+                }
+            ]
         },
         {
             "name": "Production",
