@@ -19,10 +19,23 @@ locals {
       for policy in token.policies : policy.zone
     ]
   ]))
+
+  cloudflare_permission_group_names = toset(flatten([
+    for token in local.cloudflare_tokens : [
+      for policy in token.policies : policy.permission_groups
+    ]
+  ]))
+
+  cloudflare_permission_group_ids = {
+    for name in local.cloudflare_permission_group_names :
+    name => data.cloudflare_api_token_permission_groups_list.lookup[name].result[0].id
+  }
 }
 
-data "cloudflare_api_token_permission_groups" "all" {
-  count = length(local.cloudflare_tokens) > 0 ? 1 : 0
+data "cloudflare_api_token_permission_groups_list" "lookup" {
+  for_each = length(local.cloudflare_tokens) > 0 ? local.cloudflare_permission_group_names : toset([])
+
+  name = urlencode(each.value)
 }
 
 data "cloudflare_zone" "lookup" {
@@ -38,19 +51,19 @@ resource "cloudflare_api_token" "workload" {
 
   name = each.value.token_name
 
-  dynamic "policy" {
-    for_each = each.value.policies
-    content {
+  policies = [
+    for policy in each.value.policies : {
       effect = "allow"
       permission_groups = [
-        for pg in policy.value.permission_groups :
-        data.cloudflare_api_token_permission_groups.all[0].zone[pg]
+        for pg in policy.permission_groups : {
+          id = local.cloudflare_permission_group_ids[pg]
+        }
       ]
-      resources = {
-        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[policy.value.zone].id}" = "*"
-      }
+      resources = jsonencode({
+        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[policy.zone].id}" = "*"
+      })
     }
-  }
+  ]
 }
 
 resource "github_actions_environment_secret" "cloudflare_token" {
