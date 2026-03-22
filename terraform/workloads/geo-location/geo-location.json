@@ -100,12 +100,20 @@
             }
         ]
     },
+    "gcp": {
+        "project_id": "gcp-mx-io-geo-location",
+        "workload_identity_provider": "projects/518912876139/locations/global/workloadIdentityPools/github-actions/providers/github-provider",
+        "service_account": "terraform-platform@gcp-mx-io-geo-location.iam.gserviceaccount.com"
+    },
     "environments": [
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "gcp": {
+                "enabled": true
+            },
             "requires_terraform_state_access": [
                 "platform-hosting",
                 "platform-monitoring"
@@ -162,6 +170,9 @@
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "gcp": {
+                "enabled": true
+            },
             "requires_terraform_state_access": [
                 "platform-hosting",
                 "platform-monitoring"

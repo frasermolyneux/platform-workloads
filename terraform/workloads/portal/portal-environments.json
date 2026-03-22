@@ -78,12 +78,20 @@
             }
         ]
     },
+    "gcp": {
+        "project_id": "gcp-mx-io-portal-environments",
+        "workload_identity_provider": "projects/298363709846/locations/global/workloadIdentityPools/github-actions/providers/github-provider",
+        "service_account": "terraform-platform@gcp-mx-io-portal-environments.iam.gserviceaccount.com"
+    },
     "environments": [
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "gcp": {
+                "enabled": true
+            },
             "locations": [
                 "swedencentral"
             ],
@@ -129,6 +137,9 @@
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
+            "gcp": {
+                "enabled": true
+            },
             "locations": [
                 "uksouth"
             ],
