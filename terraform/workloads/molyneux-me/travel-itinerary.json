@@ -127,6 +127,14 @@
                                     "Contributor"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -182,6 +190,14 @@
                             {
                                 "roles": [
                                     "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Key Vault Secrets Officer"
                                 ]
                             }
                         ]
