@@ -102,6 +102,14 @@
                                     "Contributor"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -143,6 +151,14 @@
                             {
                                 "roles": [
                                     "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Azure Service Bus Data Receiver",
+                                    "Azure Service Bus Data Sender"
                                 ]
                             }
                         ]
