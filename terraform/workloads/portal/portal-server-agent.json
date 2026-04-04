@@ -161,6 +161,12 @@
                         "roles": [
                             "Application Insights Component Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload:platform-registry/Development",
+                        "roles": [
+                            "AcrPush"
+                        ]
                     }
                 ]
             }
@@ -226,6 +232,12 @@
                         "scope": "workload-rg:portal-core/Production/rg-portal-core-prd-uksouth/uksouth",
                         "roles": [
                             "Application Insights Component Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload:platform-registry/Production",
+                        "roles": [
+                            "AcrPush"
                         ]
                     }
                 ]
