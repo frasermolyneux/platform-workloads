@@ -96,6 +96,13 @@
                                     "Contributor"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "AcrPull"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -120,6 +127,13 @@
                             {
                                 "roles": [
                                     "Contributor"
+                                ]
+                            }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "AcrPull"
                                 ]
                             }
                         ]
