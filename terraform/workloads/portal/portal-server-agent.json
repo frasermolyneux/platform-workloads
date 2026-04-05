@@ -154,7 +154,8 @@
                     {
                         "scope": "workload:platform-monitoring/Development",
                         "roles": [
-                            "Monitoring Reader"
+                            "Monitoring Reader",
+                            "Log Analytics Contributor"
                         ]
                     },
                     {
@@ -227,7 +228,8 @@
                     {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
-                            "Monitoring Reader"
+                            "Monitoring Reader",
+                            "Log Analytics Contributor"
                         ]
                     },
                     {
