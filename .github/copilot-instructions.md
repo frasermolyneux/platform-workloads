@@ -36,7 +36,26 @@ The stack uses `azurerm`, `azapi`, `azuredevops`, and `github` Terraform provide
 
 ## Documentation
 
-Refer to [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), [docs/prerequisites.md](docs/prerequisites.md), [docs/role-assignments.md](docs/role-assignments.md), and [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md) for detailed guidance.
+Refer to [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), [docs/prerequisites.md](docs/prerequisites.md), [docs/role-assignments.md](docs/role-assignments.md), [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md), and [docs/decommissioning.md](docs/decommissioning.md) for detailed guidance.
+
+## Decommissioning Workloads
+
+When decommissioning a workload, **never** simply delete the workload JSON file. The `github_repository.workload` resource has `lifecycle { prevent_destroy = true }` — deleting the JSON without following the process will cause Terraform to error.
+
+Follow the process in [docs/decommissioning.md](docs/decommissioning.md). In summary:
+
+1. Delete the workload JSON from `terraform/workloads/{category}/`.
+2. Add a `removed` block to `terraform/removed.tf`:
+   ```hcl
+   removed {
+     from = github_repository.workload["workload-name"]
+     lifecycle {
+       destroy = false
+     }
+   }
+   ```
+3. Submit as a PR, review the Terraform plan, and merge.
+4. Optionally transfer the repo to `frasermolyneux-archive` afterward.
 
 ## Troubleshooting
 

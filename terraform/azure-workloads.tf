@@ -17,6 +17,10 @@ resource "github_repository" "workload" {
 
   allow_auto_merge       = true
   delete_branch_on_merge = true
+
+  lifecycle {
+    prevent_destroy = true
+  }
 }
 
 locals {
