@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       workload-name:
-        description: "The workload name to detach from Terraform state (e.g. portal-event-ingest)"
+        description: "The workload name to detach from Terraform state (e.g. portal-sync)"
         required: true
         type: string
 

@@ -42,7 +42,7 @@ Run the **Decommission State Rm** workflow:
 
 1. Go to **Actions → Decommission State Rm** in this repository.
 2. Click **Run workflow**.
-3. Enter the workload name — this is the `"name"` value from the workload JSON file (e.g. `portal-event-ingest`).
+3. Enter the workload name — this is the `"name"` value from the workload JSON file (e.g. `portal-sync`).
 4. Wait for the workflow to complete successfully.
 5. Verify the post-removal plan output shows no unexpected changes.
 
@@ -128,3 +128,10 @@ If you need to bring a workload back under management:
 ### Dependent workloads broke after decommission
 
 If another workload referenced the decommissioned one via `requires_terraform_state_access`, it will lose access to the destroyed state storage. Update the dependent workload's JSON to remove the reference, and reconfigure its Terraform backend if needed.
+
+## Decommissioned Workloads
+
+| Workload | Date | Reason | Replaced By |
+|----------|------|--------|-------------|
+| portal-bots | 2025-07 | Replaced by container-based architecture | [portal-server-agent](https://github.com/frasermolyneux/portal-server-agent) |
+| portal-event-ingest | 2025-07 | Replaced by dedicated event processing service | [portal-server-events](https://github.com/frasermolyneux/portal-server-events) |
