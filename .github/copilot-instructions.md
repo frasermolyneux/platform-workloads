@@ -40,22 +40,16 @@ Refer to [docs/architecture.md](docs/architecture.md), [docs/workload-configurat
 
 ## Decommissioning Workloads
 
-When decommissioning a workload, **never** simply delete the workload JSON file. The `github_repository.workload` resource has `lifecycle { prevent_destroy = true }` — deleting the JSON without following the process will cause Terraform to error.
+When decommissioning a workload, **the order of operations is critical**:
 
-Follow the process in [docs/decommissioning.md](docs/decommissioning.md). In summary:
-
-1. Delete the workload JSON from `terraform/workloads/{category}/`.
-2. Add a `removed` block to `terraform/removed.tf`:
-   ```hcl
-   removed {
-     from = github_repository.workload["workload-name"]
-     lifecycle {
-       destroy = false
-     }
-   }
-   ```
+1. **First** — detach the GitHub repo from state by running **Actions → Decommission State Rm** with the workload name.
+2. **Then** — delete the workload JSON from `terraform/workloads/{category}/`.
 3. Submit as a PR, review the Terraform plan, and merge.
 4. Optionally transfer the repo to `frasermolyneux-archive` afterward.
+
+> **⚠️ Never skip step 1.** The `github_repository.workload` resource has `lifecycle { prevent_destroy = true }`. Deleting the JSON without detaching from state first will cause Terraform to error. The `removed` block does **not** work for `for_each` instances — always use the Decommission State Rm workflow.
+
+See [docs/decommissioning.md](docs/decommissioning.md) for the full guide.
 
 ## Troubleshooting
 

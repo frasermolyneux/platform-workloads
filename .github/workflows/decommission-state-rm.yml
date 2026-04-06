@@ -1,0 +1,38 @@
+name: Decommission State Rm
+
+on:
+  workflow_dispatch:
+    inputs:
+      workload-name:
+        description: "The workload name to detach from Terraform state (e.g. portal-event-ingest)"
+        required: true
+        type: string
+
+permissions: {}
+
+concurrency:
+  group: ${{ github.repository }}-prd
+
+jobs:
+  terraform-state-rm-prd:
+    permissions:
+      contents: read
+      id-token: write
+    environment: Production
+    runs-on: ubuntu-latest
+    steps:
+      - uses: frasermolyneux/actions/terraform-state-rm@terraform-state-rm/v1.2
+        with:
+          terraform-folder: "terraform"
+          terraform-var-file: "tfvars/prd.tfvars"
+          terraform-backend-file: "backends/prd.backend.hcl"
+          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          state-addresses: '["github_repository.workload[\"${{ inputs.workload-name }}\"]"]'
+        env:
+          TF_VAR_github_service_connection_pat: ${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}
+          AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
