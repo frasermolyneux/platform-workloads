@@ -156,7 +156,9 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Owner"
+                            "Storage Blob Data Owner",
+                            "Storage Table Data Contributor",
+                            "Storage Queue Data Contributor"
                         ]
                     }
                 ]
@@ -221,7 +223,9 @@
                 "rbac_admin_roles": [
                     {
                         "allowed_roles": [
-                            "Storage Blob Data Owner"
+                            "Storage Blob Data Owner",
+                            "Storage Table Data Contributor",
+                            "Storage Queue Data Contributor"
                         ]
                     }
                 ]
