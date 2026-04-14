@@ -1,5 +1,5 @@
 {
-    "name": "mx-observability-appinsights",
+    "name": "observability-appinsights",
     "github": {
         "description": "MX Observability: Application Insights telemetry filtering, structured audit logging, and job telemetry for .NET 9/10 published to NuGet.",
         "topics": [
