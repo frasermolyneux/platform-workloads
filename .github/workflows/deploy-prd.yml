@@ -25,60 +25,18 @@ jobs:
     runs-on: ubuntu-latest
     concurrency:
       group: ${{ github.repository }}-prd
-    # ---------------------------------------------------------------------
-    # ONE-SHOT BYPASS — see PR removing per-workload AzDO env resources.
-    # The `azuredevops` provider's PAT identity ("Global Addy") lost View
-    # permission on the AzDO Pipeline Environments managed by this stack
-    # (deploy-prd run 24964548130). The accompanying terraform changes
-    # (workload JSON `devops_project` removal + `removed { ... destroy = false }`
-    # blocks) drop those resources from config and forget them from state,
-    # but a normal refresh still fails before the `removed` blocks are
-    # evaluated. This run uses `-refresh=false` on plan so the apply can
-    # process the `removed` blocks and shrink state.
-    # REVERT this whole jobs block back to the single
-    # `frasermolyneux/actions/terraform-plan-and-apply@terraform-plan-and-apply/v1.4`
-    # composite call after the bypass run succeeds.
-    # ---------------------------------------------------------------------
-    env:
-      ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
-      ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-      ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
-      ARM_USE_AZUREAD: "true"
-      ARM_USE_OIDC: "true"
-      TF_VAR_github_service_connection_pat: ${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}
-      AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
-      GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
-      CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-      CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: frasermolyneux/actions/terraform-plan-and-apply@terraform-plan-and-apply/v1.4
         with:
-          fetch-depth: 0
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v4
-        with:
-          terraform_wrapper: false
-
-      - name: Terraform Init
-        working-directory: terraform
-        run: |
-          terraform init \
-            -backend-config=backends/prd.backend.hcl \
-            -var-file=tfvars/prd.tfvars
-
-      - name: Terraform Validate
-        working-directory: terraform
-        run: terraform validate
-
-      - name: Terraform Plan (refresh disabled — one-shot bypass)
-        working-directory: terraform
-        run: |
-          terraform plan \
-            -var-file=tfvars/prd.tfvars \
-            -refresh=false \
-            -out=plan.tfplan
-
-      - name: Terraform Apply
-        working-directory: terraform
-        run: terraform apply -auto-approve plan.tfplan
+          terraform-folder: "terraform"
+          terraform-var-file: "tfvars/prd.tfvars"
+          terraform-backend-file: "backends/prd.backend.hcl"
+          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+        env:
+          TF_VAR_github_service_connection_pat: ${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}
+          AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
+          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
+          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
