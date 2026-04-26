@@ -101,7 +101,6 @@
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
-            "devops_project": "XtremeIdiots",
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
@@ -169,7 +168,6 @@
         {
             "name": "Production",
             "subscription": "sub-xi-portal-prd",
-            "devops_project": "XtremeIdiots",
             "connect_to_github": true,
             "locations": [
                 "uksouth"

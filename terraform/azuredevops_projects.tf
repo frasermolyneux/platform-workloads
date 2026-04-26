@@ -121,15 +121,6 @@ resource "azuredevops_variable_group" "nuget" {
   }
 }
 
-resource "azuredevops_pipeline_authorization" "nuget" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.nuget[each.value.devops_project].id
-
-  type = "variablegroup"
-}
-
 resource "azuredevops_variable_group" "sonarcloud" {
   for_each = { for each in var.azuredevops_projects : each.name => each if each.add_sonarcloud_variable_group }
 
@@ -147,13 +138,4 @@ resource "azuredevops_variable_group" "sonarcloud" {
   variable {
     name = "sonarcloud-token"
   }
-}
-
-resource "azuredevops_pipeline_authorization" "sonarcloud" {
-  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_devops }
-
-  project_id  = azuredevops_project.project[each.value.devops_project].id
-  resource_id = azuredevops_variable_group.sonarcloud[each.value.devops_project].id
-
-  type = "variablegroup"
 }

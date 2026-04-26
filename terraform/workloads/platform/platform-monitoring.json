@@ -82,7 +82,6 @@
         {
             "name": "Development",
             "subscription": "sub-visualstudio-enterprise",
-            "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
@@ -134,7 +133,6 @@
         {
             "name": "Production",
             "subscription": "sub-platform-management",
-            "devops_project": "Molyneux.IO",
             "connect_to_github": true,
             "configure_for_terraform": true,
             "locations": [
