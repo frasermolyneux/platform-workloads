@@ -108,7 +108,9 @@
                                 "allowed_roles": [
                                     "Azure Service Bus Data Receiver",
                                     "Azure Service Bus Data Sender",
-                                    "Monitoring Reader"
+                                    "Monitoring Reader",
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Reader"
                                 ]
                             }
                         ]
@@ -160,7 +162,9 @@
                                 "allowed_roles": [
                                     "Azure Service Bus Data Receiver",
                                     "Azure Service Bus Data Sender",
-                                    "Monitoring Reader"
+                                    "Monitoring Reader",
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Reader"
                                 ]
                             }
                         ]
