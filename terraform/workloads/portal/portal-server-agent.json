@@ -108,12 +108,9 @@
                 "platform-monitoring",
                 "platform-registry",
                 "portal-core",
-                "portal-environments",
-                "portal-sync"
+                "portal-environments"
             ],
             "locations": [
-                "swedencentral"
-            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
@@ -171,14 +168,6 @@
                             "AcrPush"
                         ]
                     }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "scope": "workload-rg:portal-sync/Development/rg-portal-sync-dev-swedencentral/swedencentral",
-                        "allowed_roles": [
-                            "Storage Blob Data Reader"
-                        ]
-                    }
                 ]
             }
         },
@@ -191,8 +180,7 @@
                 "platform-monitoring",
                 "platform-registry",
                 "portal-core",
-                "portal-environments",
-                "portal-sync"
+                "portal-environments"
             ],
             "locations": [
                 "uksouth"
@@ -252,14 +240,6 @@
                         "scope": "workload:platform-registry/Production",
                         "roles": [
                             "AcrPush"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "scope": "workload-rg:portal-sync/Production/rg-portal-sync-prd-uksouth/uksouth",
-                        "allowed_roles": [
-                            "Storage Blob Data Reader"
                         ]
                     }
                 ]
