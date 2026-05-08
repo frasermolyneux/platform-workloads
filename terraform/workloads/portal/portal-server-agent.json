@@ -111,6 +111,8 @@
                 "portal-environments"
             ],
             "locations": [
+                "swedencentral"
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",
