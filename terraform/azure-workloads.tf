@@ -9,7 +9,7 @@ resource "github_repository" "workload" {
   visibility = each.value.github.visibility
 
   has_downloads = try(each.value.github.has_downloads, false)
-  has_issues    = try(each.value.github.has_issues, false)
+  has_issues    = try(each.value.github.has_issues, true)
   has_projects  = try(each.value.github.has_projects, false)
   has_wiki      = try(each.value.github.has_wiki, false)
 

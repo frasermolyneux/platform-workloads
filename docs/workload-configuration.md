@@ -19,7 +19,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
     "topics": ["azure", "terraform", "devops"],
     "visibility": "public",
     "has_downloads": false,
-    "has_issues": false,
+    "has_issues": true,
     "has_projects": false,
     "has_wiki": false,
     "add_sonarcloud_secrets": false,
@@ -69,7 +69,7 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `topics`                 | array   | Yes      | -        | GitHub repository topics                      |
 | `visibility`             | string  | No       | `public` | Repository visibility (`public` or `private`) |
 | `has_downloads`          | boolean | No       | `false`  | Enable downloads section                      |
-| `has_issues`             | boolean | No       | `false`  | Enable issues tracking                        |
+| `has_issues`             | boolean | No       | `true`   | Enable issues tracking                        |
 | `has_projects`           | boolean | No       | `false`  | Enable projects board                         |
 | `has_wiki`               | boolean | No       | `false`  | Enable wiki                                   |
 | `add_sonarcloud_secrets` | boolean | No       | `false`  | Add SonarCloud token secrets                  |
@@ -77,20 +77,20 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 
 ### Environment Section
 
-| Property                          | Type    | Required | Description                                                                                                     |
-| --------------------------------- | ------- | -------- | --------------------------------------------------------------------------------------------------------------- |
-| `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                                            |
-| `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                                                        |
-| `devops_project`                  | string  | No       | Azure DevOps project name                                                                                       |
-| `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                                                   |
-| `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                                                              |
-| `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                                                        |
-| `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                                                  |
-| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                           |
-| `directory_roles`                 | array   | No       | Entra ID directory roles                                                                                        |
-| `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All) |
-| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                          |
-| `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                                         |
+| Property                          | Type    | Required | Description                                                                                                            |
+| --------------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                                                   |
+| `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                                                               |
+| `devops_project`                  | string  | No       | Azure DevOps project name                                                                                              |
+| `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                                                          |
+| `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                                                                     |
+| `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                                                               |
+| `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                                                         |
+| `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                                  |
+| `directory_roles`                 | array   | No       | Entra ID directory roles                                                                                               |
+| `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All)        |
+| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                                 |
+| `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                                                |
 | `cloudflare_tokens`               | array   | No       | Cloudflare API tokens to create and inject as GitHub environment secrets (see [Cloudflare Tokens](#cloudflare-tokens)) |
 
 ### Role Assignments
