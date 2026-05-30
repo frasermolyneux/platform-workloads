@@ -95,6 +95,11 @@
                 "name": "run-prd-plan",
                 "description": "Run prd Terraform plan",
                 "color": "5319E7"
+            },
+            {
+                "name": "coding-agent",
+                "description": "Issue or PR delegated to the GitHub Copilot coding agent",
+                "color": "1D76DB"
             }
         ]
     },
