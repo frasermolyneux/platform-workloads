@@ -81,6 +81,11 @@
                 "name": "coding-agent",
                 "description": "Issue or PR delegated to the GitHub Copilot coding agent",
                 "color": "1D76DB"
+            },
+            {
+                "name": "needs-triage",
+                "description": "Issue or PR awaiting triage by maintainers",
+                "color": "FBCA04"
             }
         ]
     },
