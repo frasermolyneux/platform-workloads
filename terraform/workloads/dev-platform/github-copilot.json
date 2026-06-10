@@ -112,7 +112,7 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "AcrPull"
+                                    "AcrPush"
                                 ]
                             }
                         ]
@@ -139,7 +139,7 @@
                     {
                         "scope": "workload:platform-registry/Development",
                         "roles": [
-                            "AcrPull"
+                            "AcrPush"
                         ]
                     },
                     {
@@ -178,7 +178,7 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "AcrPull"
+                                    "AcrPush"
                                 ]
                             }
                         ]
@@ -205,7 +205,7 @@
                     {
                         "scope": "workload:platform-registry/Production",
                         "roles": [
-                            "AcrPull"
+                            "AcrPush"
                         ]
                     },
                     {
