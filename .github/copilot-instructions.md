@@ -4,6 +4,12 @@
 >
 > Note: This repository is the **origin** of the `platform-workloads` remote state that other platform stacks consume. It does not itself depend on a platform remote state.
 
+## Org conventions via MCP (when available)
+
+If a `frasermolyneux-copilot` MCP server is configured in your client (`.vscode/mcp.json`, the GitHub Copilot coding-agent MCP config at `.github/copilot/mcp_config.json`, or an equivalent stdio MCP wire-up), **prefer its tools** over your own assumptions when answering questions about org standards, branching, workflows, Terraform, .NET projects, Azure patterns, or shared library / platform consumption contracts. The tool surface is `list_instructions`, `get_instruction`, `search_instructions`, plus the matching `_prompts` and `_agents` equivalents (seven tools total). The catalog source-of-truth lives in `frasermolyneux/.github-copilot` — see `mcp-server/README.md` there for the tool contract.
+
+This is **complementary** to the file-load model: if `./.github-copilot/` is checked out in the runner (per `copilot-setup-steps.yml`), continue to read those files directly. If both are available, prefer MCP for freshness. If no MCP server is configured in your client, treat this section as a no-op and fall back to the file paths above.
+
 ## Project Overview
 
 This is a Terraform stack that transforms JSON workload definitions into Azure AD applications, service principals with OIDC federation, GitHub repositories with environments and secrets, Azure DevOps service connections/environments/variable groups, and workload-scoped RBAC role assignments. It is an infrastructure-as-code project using HCL (Terraform) with JSON configuration files.
