@@ -23,3 +23,15 @@ resource "azurerm_role_assignment" "deploy_principal_kv_role_assignment" {
   role_definition_name = "Key Vault Secrets Officer"
   principal_id         = data.azurerm_client_config.current.object_id
 }
+
+resource "azurerm_key_vault_secret" "github_app_pem" {
+  name         = "github-app-pem"
+  value        = "placeholder"
+  key_vault_id = azurerm_key_vault.kv.id
+
+  lifecycle {
+    ignore_changes = [value]
+  }
+
+  depends_on = [azurerm_role_assignment.deploy_principal_kv_role_assignment]
+}
