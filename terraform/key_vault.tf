@@ -30,6 +30,7 @@ resource "azurerm_key_vault_secret" "github_app_pem" {
   name         = "github-app-pem"
   value        = "placeholder"
   key_vault_id = azurerm_key_vault.kv.id
+  content_type = "application/x-pem-file"
 
   lifecycle {
     ignore_changes = [value]
