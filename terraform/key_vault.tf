@@ -26,6 +26,7 @@ resource "azurerm_role_assignment" "deploy_principal_kv_role_assignment" {
 
 # checkov:skip=CKV_AZURE_41: "Ensure that the expiration date is set on all secrets" - This is a manually managed secret by design.
 resource "azurerm_key_vault_secret" "github_app_pem" {
+  # checkov:skip=CKV_AZURE_41: "Ensure that the expiration date is set on all secrets" - This is a manually managed secret by design.
   name         = "github-app-pem"
   value        = "placeholder"
   key_vault_id = azurerm_key_vault.kv.id
