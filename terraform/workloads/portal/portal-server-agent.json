@@ -1,7 +1,7 @@
 {
     "name": "portal-server-agent",
     "github": {
-        "description": "Game server agent for the XtremeIdiots portal — collects events via FTP log tailing and publishes to Service Bus, hosted on Azure Container Apps.",
+        "description": "Game server agent for the XtremeIdiots portal - collects events via FTP log tailing and publishes to Service Bus, hosted on Azure Container Apps.",
         "topics": [
             "azure",
             "terraform",
@@ -33,6 +33,10 @@
                 ],
                 "rules": {
                     "required_status_checks": [
+                        {
+                            "context": "dependabot-policy",
+                            "integration_id": 15368
+                        },
                         {
                             "context": "SonarCloud Code Analysis",
                             "integration_id": 12526

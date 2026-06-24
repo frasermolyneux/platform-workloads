@@ -29,6 +29,11 @@
                 ],
                 "rules": {
                     "required_status_checks": [
+                        
+                        {
+                            "context": "dependabot-policy",
+                            "integration_id": 15368
+                        },
                         {
                             "context": "SonarCloud Code Analysis",
                             "integration_id": 12526
