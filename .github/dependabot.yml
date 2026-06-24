@@ -9,7 +9,7 @@ updates:
       time: "05:30"
       timezone: "Etc/UTC"
     groups:
-      terraform:
+      all-updates:
         patterns:
           - "*"
 
@@ -22,6 +22,6 @@ updates:
       time: "05:30"
       timezone: "Etc/UTC"
     groups:
-      github-actions:
+      all-updates:
         patterns:
           - "*"
