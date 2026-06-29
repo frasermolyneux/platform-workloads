@@ -1,16 +1,15 @@
 {
-    "name": "portal-server-agent",
+    "name": "portal-cod4x-plugin",
     "github": {
-        "description": "Game server agent for the XtremeIdiots portal - collects events via FTP log tailing and publishes to Service Bus, hosted on Azure Container Apps.",
+        "description": "CoD4x server plugin for the XtremeIdiots portal - enhances the in-game experience and reports events to the portal APIs. Built and published to the portal-core artifact storage; installed onto servers by portal-server-agent.",
         "topics": [
-            "azure",
-            "terraform",
+            "cod4",
+            "cod4x",
+            "game-server",
+            "plugin",
             "github-actions",
-            "container-apps",
-            "service-bus",
-            "app-insights",
-            "game-servers",
-            "dotnet"
+            "azure",
+            "storage"
         ],
         "add_sonarcloud_secrets": true,
         "add_nuget_environment": false,
@@ -92,13 +91,8 @@
         "labels": [
             {
                 "name": "deploy-dev",
-                "description": "Run dev Terraform plan+apply and deploy the app",
+                "description": "Build and publish the plugin to the dev artifact storage",
                 "color": "0E8A16"
-            },
-            {
-                "name": "run-prd-plan",
-                "description": "Run prd Terraform plan",
-                "color": "5319E7"
             },
             {
                 "name": "coding-agent",
@@ -119,10 +113,6 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-monitoring",
-                "platform-registry",
-                "portal-core",
-                "portal-cod4x-plugin",
                 "portal-environments"
             ],
             "locations": [
@@ -143,46 +133,19 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Storage Blob Data Owner"
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Reader"
                                 ]
                             }
                         ]
                     }
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator"
-            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
                         "roles": [
                             "Reader"
-                        ]
-                    },
-                    {
-                        "scope": "workload:portal-environments/Development",
-                        "roles": [
-                            "Managed Identity Operator"
-                        ]
-                    },
-                    {
-                        "scope": "workload:platform-monitoring/Development",
-                        "roles": [
-                            "Monitoring Reader",
-                            "Log Analytics Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:portal-core/Development/rg-portal-core-dev-swedencentral/swedencentral",
-                        "roles": [
-                            "Application Insights Component Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload:platform-registry/Development",
-                        "roles": [
-                            "AcrPush"
                         ]
                     }
                 ]
@@ -194,10 +157,6 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-monitoring",
-                "platform-registry",
-                "portal-core",
-                "portal-cod4x-plugin",
                 "portal-environments"
             ],
             "locations": [
@@ -218,46 +177,19 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Storage Blob Data Owner"
+                                    "Storage Blob Data Owner",
+                                    "Storage Blob Data Reader"
                                 ]
                             }
                         ]
                     }
                 }
             ],
-            "directory_roles": [
-                "Cloud application administrator"
-            ],
             "role_assignments": {
                 "assigned_roles": [
                     {
                         "roles": [
                             "Reader"
-                        ]
-                    },
-                    {
-                        "scope": "workload:portal-environments/Production",
-                        "roles": [
-                            "Managed Identity Operator"
-                        ]
-                    },
-                    {
-                        "scope": "workload:platform-monitoring/Production",
-                        "roles": [
-                            "Monitoring Reader",
-                            "Log Analytics Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:portal-core/Production/rg-portal-core-prd-uksouth/uksouth",
-                        "roles": [
-                            "Application Insights Component Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload:platform-registry/Production",
-                        "roles": [
-                            "AcrPush"
                         ]
                     }
                 ]
