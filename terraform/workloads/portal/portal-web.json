@@ -32,7 +32,6 @@
                 ],
                 "rules": {
                     "required_status_checks": [
-                        
                         {
                             "context": "dependabot-policy",
                             "integration_id": 15368
@@ -121,7 +120,8 @@
             "requires_terraform_state_access": [
                 "platform-monitoring",
                 "portal-core",
-                "portal-environments"
+                "portal-environments",
+                "portal-cod4x-plugin"
             ],
             "locations": [
                 "swedencentral"
@@ -191,7 +191,8 @@
             "requires_terraform_state_access": [
                 "platform-monitoring",
                 "portal-core",
-                "portal-environments"
+                "portal-environments",
+                "portal-cod4x-plugin"
             ],
             "resource_groups": [
                 {
