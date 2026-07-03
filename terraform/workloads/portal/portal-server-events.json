@@ -33,7 +33,6 @@
                 ],
                 "rules": {
                     "required_status_checks": [
-                        
                         {
                             "context": "dependabot-policy",
                             "integration_id": 15368
