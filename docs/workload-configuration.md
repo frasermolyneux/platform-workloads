@@ -148,7 +148,7 @@ Environment-level `cloudflare_tokens` create scoped Cloudflare API tokens and in
 - Each token is created with name `spn-{workload}-{env}-{name_suffix}`.
 - The token value is injected as a GitHub environment secret named `CLOUDFLARE_API_KEY`.
 - `permission_groups` must be valid Cloudflare zone-level permission group names.
-- `zone` is the domain name used to look up the Cloudflare zone ID.
+- `zone` (single domain) or `zones` (array of domains) selects the Cloudflare zone(s) the policy applies to. Prefer `zones` to group many domains into one policy — Cloudflare limits a token to **10 policies**, so one policy per domain does not scale.
 - All policies use `allow` effect by convention.
 - The environment must have `connect_to_github: true` for the secret to be injected.
 - Requires `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` GitHub environment secrets on platform-workloads (see [prerequisites](prerequisites.md)).

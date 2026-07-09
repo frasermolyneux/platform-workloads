@@ -16,7 +16,7 @@ locals {
 
   cloudflare_zone_names = toset(flatten([
     for token in local.cloudflare_tokens : [
-      for policy in token.policies : policy.zone
+      for policy in token.policies : try(policy.zones, [policy.zone])
     ]
   ]))
 
@@ -60,7 +60,8 @@ resource "cloudflare_api_token" "workload" {
         }
       ]
       resources = jsonencode({
-        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[policy.zone].id}" = "*"
+        for z in try(policy.zones, [policy.zone]) :
+        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[z].id}" => "*"
       })
     }
   ]

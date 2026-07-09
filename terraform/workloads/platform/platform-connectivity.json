@@ -154,105 +154,23 @@
                                 "DNS Write",
                                 "Zone Read"
                             ],
-                            "zone": "bishopsbees.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "bqba.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "buckfastqueen.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "dm-electricalservices.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "midlr.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "moanclub.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "molyfra.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "mx-mail.io"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "queensforsale.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "talkwithtiles.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "travellingkermit.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "xiredirect.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "xtre.co.uk"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "xtremeidiots.com"
-                        },
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zone": "xtremeidiots.net"
+                            "zones": [
+                                "bishopsbees.co.uk",
+                                "bqba.co.uk",
+                                "buckfastqueen.co.uk",
+                                "dm-electricalservices.co.uk",
+                                "midlr.com",
+                                "moanclub.com",
+                                "molyfra.uk",
+                                "mx-mail.io",
+                                "queensforsale.co.uk",
+                                "talkwithtiles.com",
+                                "travellingkermit.com",
+                                "xiredirect.com",
+                                "xtre.co.uk",
+                                "xtremeidiots.com",
+                                "xtremeidiots.net"
+                            ]
                         }
                     ]
                 }
