@@ -1,7 +1,7 @@
 {
     "name": "dotnet-caching",
     "github": {
-        "description": "MX.Caching: shared .NET 9/10 caching facade over HybridCache with a Table Storage backend and config-driven provider selection, published to NuGet.",
+        "description": "MX.Caching: scaffolded .NET 9/10 caching package boundaries for future NuGet implementation work.",
         "topics": [
             "dotnet",
             "caching",
