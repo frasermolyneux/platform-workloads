@@ -30,6 +30,25 @@ locals {
     for name in local.cloudflare_permission_group_names :
     name => data.cloudflare_api_token_permission_groups_list.lookup[name].result[0].id
   }
+
+  # One entry per workload-environment that has a Cloudflare token (all tokens in
+  # an environment share the account); drives the CLOUDFLARE_ACCOUNT_ID variable.
+  cloudflare_token_environments = {
+    for env_key, tokens in { for t in local.cloudflare_tokens : t.environment_key => t... } :
+    env_key => tokens[0]
+  }
+
+  # Adopted-zone-key activation sets declared per environment in the workload JSON.
+  cloudflare_adopted_zone_key_sets = flatten([
+    for workload in local.all_workloads : [
+      for environment in try(workload.environments, []) : {
+        key               = format("%s-%s", workload.name, environment.name)
+        workload_name     = workload.name
+        adopted_zone_keys = try(environment.cloudflare_adopted_zone_keys, [])
+      }
+      if length(try(environment.cloudflare_adopted_zone_keys, [])) > 0
+    ]
+  ])
 }
 
 data "cloudflare_api_token_permission_groups_list" "lookup" {
@@ -74,4 +93,22 @@ resource "github_actions_environment_secret" "cloudflare_token" {
   environment     = github_repository_environment.workload[each.value.environment_key].environment
   secret_name     = "CLOUDFLARE_API_KEY"
   plaintext_value = cloudflare_api_token.workload[each.key].value
+}
+
+resource "github_actions_environment_variable" "cloudflare_account_id" {
+  for_each = local.cloudflare_token_environments
+
+  repository    = github_repository.workload[each.value.workload_name].name
+  environment   = github_repository_environment.workload[each.value.environment_key].environment
+  variable_name = "CLOUDFLARE_ACCOUNT_ID"
+  value         = data.cloudflare_zone.lookup[try(each.value.policies[0].zones[0], each.value.policies[0].zone)].account.id
+}
+
+resource "github_actions_environment_variable" "cloudflare_adopted_zone_keys" {
+  for_each = { for set in local.cloudflare_adopted_zone_key_sets : set.key => set }
+
+  repository    = github_repository.workload[each.value.workload_name].name
+  environment   = github_repository_environment.workload[each.value.key].environment
+  variable_name = "CLOUDFLARE_ADOPTED_ZONE_KEYS"
+  value         = jsonencode(each.value.adopted_zone_keys)
 }

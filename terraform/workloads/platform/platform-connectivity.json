@@ -145,6 +145,10 @@
                     }
                 ]
             },
+            "cloudflare_adopted_zone_keys": [
+                "tripsidekick.app",
+                "tripsidekick.net"
+            ],
             "cloudflare_tokens": [
                 {
                     "name_suffix": "dns",
