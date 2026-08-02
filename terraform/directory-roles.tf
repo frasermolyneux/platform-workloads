@@ -4,7 +4,9 @@ locals {
     "Directory Writers",
     "Cloud application administrator",
     "Groups Administrator",
-    "Application Administrator"
+    "Application Administrator",
+    "External ID User Flow Administrator",
+    "External Identity Provider Administrator"
   ]
 }
 
