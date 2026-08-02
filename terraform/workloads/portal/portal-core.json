@@ -124,7 +124,8 @@
                                     "Azure Service Bus Data Sender",
                                     "Monitoring Reader",
                                     "Storage Blob Data Owner",
-                                    "Storage Blob Data Reader"
+                                    "Storage Blob Data Reader",
+                                    "Storage Table Data Contributor"
                                 ]
                             }
                         ]
@@ -178,7 +179,8 @@
                                     "Azure Service Bus Data Sender",
                                     "Monitoring Reader",
                                     "Storage Blob Data Owner",
-                                    "Storage Blob Data Reader"
+                                    "Storage Blob Data Reader",
+                                    "Storage Table Data Contributor"
                                 ]
                             }
                         ]
