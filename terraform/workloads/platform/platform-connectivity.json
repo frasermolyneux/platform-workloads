@@ -152,7 +152,10 @@
                         {
                             "permission_groups": [
                                 "DNS Write",
-                                "Zone Read"
+                                "Zone Read",
+                                "Zone Settings Write",
+                                "Zone WAF Write",
+                                "Zone Write"
                             ],
                             "zones": [
                                 "bishopsbees.co.uk",
@@ -165,6 +168,8 @@
                                 "mx-mail.io",
                                 "queensforsale.co.uk",
                                 "talkwithtiles.com",
+                                "tripsidekick.app",
+                                "tripsidekick.net",
                                 "travellingkermit.com",
                                 "xiredirect.com",
                                 "xtre.co.uk",
