@@ -13,9 +13,10 @@ moved {
 //   `use_immutable_subject: false` did not change the effective subject prefix).
 // We therefore register BOTH subject formats as federated credentials so a workload's
 // service principal authenticates correctly regardless of which subject GitHub presents.
-data "github_organization" "current" {
-  name         = "frasermolyneux"
-  summary_only = true // we only need .id; avoid the provider enumerating every repo/member in the org
+// frasermolyneux is a personal user account, not a GitHub organization, so the
+// `github_organization` data source (which reads /orgs/{name}) 404s here - use `github_user`.
+data "github_user" "current" {
+  username = "frasermolyneux"
 }
 
 resource "azuread_application_federated_identity_credential" "github_workload" {
@@ -39,7 +40,7 @@ resource "azuread_application_federated_identity_credential" "github_workload_im
   issuer         = "https://token.actions.githubusercontent.com"
   subject = format(
     "repo:frasermolyneux@%s/%s@%s:environment:%s",
-    data.github_organization.current.id,
+    data.github_user.current.id,
     github_repository.workload[each.value.workload_name].name,
     github_repository.workload[each.value.workload_name].repo_id,
     each.value.environment_name
