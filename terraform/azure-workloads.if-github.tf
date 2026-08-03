@@ -3,6 +3,21 @@ moved {
   to   = azuread_application_federated_identity_credential.github_workload
 }
 
+// GitHub's OIDC `sub` claim format depends on when the repository was created:
+// - Repositories created before GitHub's immutable-subject rollout (2026-07-15) keep the
+//   legacy "repo:{owner}/{repo}:environment:{env}" format unless they explicitly opt in.
+// - Repositories created after that date default to the immutable
+//   "repo:{owner}@{owner_id}/{repo}@{repo_id}:environment:{env}" format, and this cannot be
+//   reliably forced back to the legacy format via the repo-level OIDC customization API
+//   (verified empirically against api.github.com/repos/frasermolyneux/trip-side-kick/actions/oidc/customization/sub -
+//   `use_immutable_subject: false` did not change the effective subject prefix).
+// We therefore register BOTH subject formats as federated credentials so a workload's
+// service principal authenticates correctly regardless of which subject GitHub presents.
+data "github_organization" "current" {
+  name         = "frasermolyneux"
+  summary_only = true // we only need .id; avoid the provider enumerating every repo/member in the org
+}
+
 resource "azuread_application_federated_identity_credential" "github_workload" {
   for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
 
@@ -12,6 +27,23 @@ resource "azuread_application_federated_identity_credential" "github_workload" {
   audiences      = ["api://AzureADTokenExchange"]
   issuer         = "https://token.actions.githubusercontent.com"
   subject        = format("repo:frasermolyneux/%s:environment:%s", lower(each.value.workload_name), each.value.environment_name)
+}
+
+resource "azuread_application_federated_identity_credential" "github_workload_immutable" {
+  for_each = { for each in local.workload_environments : each.key => each if each.connect_to_github }
+
+  application_id = azuread_application.workload[each.key].id
+  display_name   = format("github-%s-%s-immutable", lower(each.value.workload_name), lower(each.value.environment_name))
+  description    = "GitHub Actions (immutable subject claim - see comment on github_workload)"
+  audiences      = ["api://AzureADTokenExchange"]
+  issuer         = "https://token.actions.githubusercontent.com"
+  subject = format(
+    "repo:frasermolyneux@%s/%s@%s:environment:%s",
+    data.github_organization.current.id,
+    github_repository.workload[each.value.workload_name].name,
+    github_repository.workload[each.value.workload_name].repo_id,
+    each.value.environment_name
+  )
 }
 
 resource "github_repository_environment" "workload" {
