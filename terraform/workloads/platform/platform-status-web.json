@@ -211,6 +211,18 @@
                         "allowed_roles": [
                             "Monitoring Reader"
                         ]
+                    },
+                    {
+                        "scope": "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-geo-location-prd-swedencentral/providers/Microsoft.Insights/components/ai-geo-location-prd-swedencentral",
+                        "allowed_roles": [
+                            "Monitoring Reader"
+                        ]
+                    },
+                    {
+                        "scope": "/subscriptions/32444f38-32f4-409f-889c-8e8aa2b5b4d1/resourceGroups/rg-portal-core-prd-uksouth/providers/Microsoft.Insights/components/ai-portal-core-prd-uksouth",
+                        "allowed_roles": [
+                            "Monitoring Reader"
+                        ]
                     }
                 ]
             }
