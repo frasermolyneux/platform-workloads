@@ -161,6 +161,12 @@
                         "roles": [
                             "Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-monitoring/development/rg-platform-monitoring-dev-uksouth/uksouth",
+                        "roles": [
+                            "Monitoring Contributor"
+                        ]
                     }
                 ]
             },
@@ -235,6 +241,12 @@
                         "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
                         "roles": [
                             "Contributor"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:platform-monitoring/production/rg-platform-monitoring-prd-uksouth/uksouth",
+                        "roles": [
+                            "Monitoring Contributor"
                         ]
                     }
                 ]
