@@ -4,11 +4,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 4.80.0"
+      version = "~> 5.0.1"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "~> 2.10.0"
+      version = "~> 2.11.0"
     }
     azuredevops = {
       source  = "microsoft/azuredevops"
@@ -19,8 +19,12 @@ terraform {
       version = "~> 6.13.0"
     }
     cloudflare = {
-      source  = "cloudflare/cloudflare"
-      version = "~> 5.18"
+      source = "cloudflare/cloudflare"
+      # Hold below 5.23.0: that release (Cloudflare Go SDK v7.8.0) regressed
+      # Global API Key auth, returning "Invalid format for X-Auth-Email/X-Auth-Key
+      # header" (Cloudflare API errors 6102/6103) on every zone lookup. Remove this
+      # ceiling once the stack migrates to API Token auth (CLOUDFLARE_API_TOKEN).
+      version = ">= 5.18, < 5.23.0"
     }
   }
 
