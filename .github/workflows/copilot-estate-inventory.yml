@@ -1,0 +1,81 @@
+name: Copilot Estate Inventory
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 6 * * 1"
+
+permissions: {}
+
+concurrency:
+  group: copilot-estate-inventory
+  cancel-in-progress: false
+
+jobs:
+  inventory:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout platform-workloads
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+
+      - name: Set up Python
+        uses: actions/setup-python@42375524e23c412d93fb67b49958b491fce71c38
+        with:
+          python-version: "3.12"
+
+      - name: Run unit tests
+        id: unit-tests
+        continue-on-error: true
+        run: python -m unittest tests.test_copilot_estate_inventory -v
+
+      - name: Run read-only inventory
+        id: inventory
+        if: steps.unit-tests.outcome == 'success'
+        env:
+          GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
+        shell: bash
+        run: |
+          set +e
+          python scripts/copilot_estate_inventory.py \
+            --catalog-root terraform/workloads \
+            --owner frasermolyneux \
+            --output-dir artifacts/copilot-estate-inventory
+          exit_code=$?
+          echo "exit_code=${exit_code}" >> "${GITHUB_OUTPUT}"
+          exit 0
+
+      - name: Record unit test failure
+        if: always() && steps.unit-tests.outcome != 'success'
+        shell: bash
+        run: |
+          {
+            echo "## Copilot estate inventory"
+            echo
+            echo "Result: **unit tests failed; live inventory was not started**"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Upload inventory reports
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: copilot-estate-inventory
+          path: artifacts/copilot-estate-inventory/
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Preserve audit result
+        if: always()
+        env:
+          TEST_OUTCOME: ${{ steps.unit-tests.outcome }}
+          INVENTORY_EXIT: ${{ steps.inventory.outputs.exit_code }}
+        shell: bash
+        run: |
+          if [ "${TEST_OUTCOME}" != "success" ]; then
+            exit 1
+          fi
+          exit "${INVENTORY_EXIT:-2}"
