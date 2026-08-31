@@ -2,7 +2,6 @@
 
 [![Build and Test](https://github.com/frasermolyneux/platform-workloads/actions/workflows/build-and-test.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/build-and-test.yml)
 [![Code Quality](https://github.com/frasermolyneux/platform-workloads/actions/workflows/codequality.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/codequality.yml)
-[![Copilot Setup Steps](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/copilot-setup-steps.yml)
 [![Decommission State Rm](https://github.com/frasermolyneux/platform-workloads/actions/workflows/decommission-state-rm.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/decommission-state-rm.yml)
 [![Dependabot Auto-Merge](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/dependabot-automerge.yml)
 [![Deploy Prd](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-prd.yml/badge.svg)](https://github.com/frasermolyneux/platform-workloads/actions/workflows/deploy-prd.yml)

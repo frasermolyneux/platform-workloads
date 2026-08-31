@@ -1,59 +1,49 @@
 # Copilot Instructions
 
-> Shared conventions: see [`.github-copilot/.github/instructions/terraform.instructions.md`](../../.github-copilot/.github/instructions/terraform.instructions.md) (sibling repo) for the standard Terraform layout, validation commands, and CI/CD workflows.
->
-> Note: This repository is the **origin** of the `platform-workloads` remote state that other platform stacks consume. It does not itself depend on a platform remote state.
+## Repository purpose
 
-## Project Overview
+`platform-workloads` is the production-only Terraform source of workload identity, repository integration, RBAC, optional workload state infrastructure, and repository review governance. Other platform repositories consume its outputs through remote state.
 
-This is a Terraform stack that transforms JSON workload definitions into Azure AD applications, service principals with OIDC federation, GitHub repositories with environments and secrets, Azure DevOps service connections/environments/variable groups, and workload-scoped RBAC role assignments. It is an infrastructure-as-code project using HCL (Terraform) with JSON configuration files.
+## Terraform layout and ownership
 
-## Repository Specifics
+- `terraform/workloads/**/*.json` is the workload and repository-governance catalog; `examples/` is excluded from discovery.
+- `terraform/workloads.load.tf` loads and normalizes JSON into workload/environment keys.
+- `terraform/azure-workloads.tf` and `terraform/azure-workloads.if-*.tf` create Azure AD, GitHub, Azure DevOps, and optional state resources.
+- `terraform/azure-workloads.rbac.tf` manages delegated RBAC.
+- `terraform/azure-workloads.rulesets.tf` owns the repository Copilot review baseline and merges it into enrolled `main-protection` rulesets.
+- `terraform/outputs.tf` is a platform consumption contract.
+- `terraform/backends/prd.backend.hcl` and `terraform/tfvars/prd.tfvars` are the only environment pair.
 
-- `terraform/workloads/` — JSON workload definition files organized by category. Files under `examples/` are excluded.
-- `terraform/workloads.load.tf` — Discovers and loads all workload JSON files, flattening them to `{workload}-{environment}` keys.
-- `terraform/azure-workloads.tf` — Core resource definitions for Azure AD apps, service principals, and GitHub repositories.
-- `terraform/azure-workloads.if-*.tf` — Feature-gated resources toggled by `connect_to_github`, `connect_to_devops`, `configure_for_terraform`, and `add_deploy_script_identity`.
-- `terraform/azure-workloads.rbac.tf` — ABAC-conditioned RBAC admin delegation using allowed role lists.
-- `docs/` — Architecture, workload configuration schema, developer guide, prerequisites, role assignments, and output consumption guides.
+Terraform requires `>= 1.15.6`. Preserve the reviewed constraints in `terraform/providers.tf`, including the bounded Cloudflare range and the AzureRM, AzAPI, AzureAD, Azure DevOps, GitHub, Random, and Time provider boundaries.
 
-## Providers
+Repository-governance entries can manage rulesets without managing repository lifecycle. Preserve the existing automatic Copilot review contract: exactly one `copilot_code_review` rule for enrolled repositories, with draft review and review-on-push disabled. Exceptions require the documented reason. Do not edit owned rulesets directly in GitHub.
 
-In addition to `azurerm` and `azuread`, this stack uses the `azapi`, `azuredevops`, and `github` Terraform providers. See `terraform/providers.tf` for version constraints.
+## Validation and planning
 
-## Key Conventions
+Documentation and Copilot configuration changes require `git diff --check` and link review; they do not require a production plan.
 
-- **Naming**: Service principals follow `spn-{workload}-{environment}` (lowercase). Environments map via `var.environment_map` (Development→dev, Testing→tst, Production→prd).
-- **Scope resolution**: Supports subscription aliases from `var.subscriptions`, raw ARM IDs, and `workload:`/`workload-rg:` helpers. Reader role is auto-added per environment subscription.
-- **OIDC subjects**: GitHub uses `repo:frasermolyneux/{repo}:environment:{Environment}`. Always prefer OIDC over client secrets.
-- **State sharing**: When `configure_for_terraform` is true, per-workload RG/storage/container is created and exposed via outputs; downstream consumers use `use_oidc = true`.
+For Terraform changes:
 
-## Working with This Codebase
+```pwsh
+terraform -chdir=terraform fmt -check -recursive
+terraform -chdir=terraform init -backend=false -upgrade
+terraform -chdir=terraform validate
+```
 
-- Production-only stack: use `backends/prd.backend.hcl` and `tfvars/prd.tfvars`. Use `-target` for scoped plans.
-- To add a workload, create a JSON file under `terraform/workloads/{category}/`. Validate with `terraform plan`. Ensure subscriptions referenced in JSON exist in the `tfvars` alias map.
-- Provider authentication for local runs requires Azure CLI login with Owner at `/`, plus `AZDO_PERSONAL_ACCESS_TOKEN`, `GITHUB_TOKEN`, and optionally `AZDO_GITHUB_SERVICE_CONNECTION_PAT` environment variables.
+Run a state-backed production plan only for infrastructure-affecting changes:
 
-## Documentation
+```pwsh
+terraform -chdir=terraform init -reconfigure -backend-config=backends/prd.backend.hcl
+terraform -chdir=terraform plan -var-file=tfvars/prd.tfvars
+```
 
-Refer to [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), [docs/prerequisites.md](docs/prerequisites.md), [docs/role-assignments.md](docs/role-assignments.md), [docs/consuming-platform-workloads-outputs.md](docs/consuming-platform-workloads-outputs.md), and [docs/decommissioning.md](docs/decommissioning.md) for detailed guidance.
+## Safety
 
-## Decommissioning Workloads
+- Do not change workload JSON, governance membership, provider constraints, backends, variables, resources, outputs, or state as collateral work.
+- Preserve OIDC federation and never introduce client secrets.
+- Treat JSON removal as destructive. Follow [decommissioning.md](../docs/decommissioning.md), including state detachment before deleting workload definitions.
+- Preserve subscription aliases, raw ARM ID handling, `workload:` and `workload-rg:` helpers, and downstream output shapes.
+- Do not apply, import, move, or remove state unless explicitly requested.
+- `.terraform.lock.hcl` is generated by initialization, intentionally ignored, and never committed. Provider constraints are the source-controlled compatibility boundary.
 
-When decommissioning a workload, **the order of operations is critical**:
-
-1. **First** — detach the GitHub repo from state by running **Actions → Decommission State Rm** with the workload name.
-2. **Then** — delete the workload JSON from `terraform/workloads/{category}/`.
-3. Submit as a PR, review the Terraform plan, and merge.
-4. Optionally transfer the repo to `frasermolyneux-archive` afterward.
-
-> **⚠️ Never skip step 1.** The `github_repository.workload` resource has `lifecycle { prevent_destroy = true }`. Deleting the JSON without detaching from state first will cause Terraform to error. The `removed` block does **not** work for `for_each` instances — always use the Decommission State Rm workflow.
-
-See [docs/decommissioning.md](docs/decommissioning.md) for the full guide.
-
-## Troubleshooting
-
-- Scope resolution errors typically indicate alias/ARM ID mismatches in workload JSON.
-- Permission failures usually mean the executing identity lacks Owner at root scope (`/`).
-- Federation errors suggest missing GitHub or Azure DevOps OIDC subjects.
-- Terraform state access requires Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader when state storage is enabled.
+See [architecture.md](../docs/architecture.md), [workload-configuration.md](../docs/workload-configuration.md), [developer-guide.md](../docs/developer-guide.md), and [consuming-platform-workloads-outputs.md](../docs/consuming-platform-workloads-outputs.md).
