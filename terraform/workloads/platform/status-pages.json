@@ -10,12 +10,6 @@
             "yaml"
         ],
         "visibility": "public",
-        "inventory": {
-            "state": "empty",
-            "inspection": "metadata",
-            "review_governance": "exempt",
-            "reason": "Empty repository with no default branch; metadata is inspected and no Copilot review rule is required"
-        },
         "repository_policy": {
             "copilot_code_review": {
                 "enabled": false,

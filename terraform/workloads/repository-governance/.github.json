@@ -5,12 +5,6 @@
         "topics": [],
         "visibility": "public",
         "manage_repository": false,
-        "inventory": {
-            "state": "active",
-            "inspection": "repository",
-            "review_governance": "exempt",
-            "reason": "Default community health repository is inspected for repository-native Copilot configuration but is exempt from automatic review governance"
-        },
         "repository_policy": {
             "copilot_code_review": {
                 "enabled": false,

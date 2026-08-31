@@ -12,8 +12,3 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
-
-# Python and generated inventory reports
-__pycache__/
-*.py[cod]
-artifacts/

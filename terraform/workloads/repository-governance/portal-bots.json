@@ -12,12 +12,6 @@
             "terraform"
         ],
         "visibility": "public",
-        "manage_repository": false,
-        "inventory": {
-            "state": "decommissioned",
-            "inspection": "none",
-            "review_governance": "exempt",
-            "reason": "Repository is decommissioned and ignored by the estate inventory"
-        }
+        "manage_repository": false
     }
 }

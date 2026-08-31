@@ -14,7 +14,6 @@
 * [Architecture Overview](/docs/architecture.md) - End-to-end design and core Terraform patterns.
 * [Workload Configuration](/docs/workload-configuration.md) - JSON schema, scope helpers, and examples.
 * [Developer Guide](/docs/developer-guide.md) - Local commands, targeting, and troubleshooting tips.
-* [Copilot Estate Inventory](/docs/copilot-estate-inventory.md) - Read-only repository configuration and review-governance audit.
 * [Prerequisites](/docs/prerequisites.md) - Required identities, permissions, and environment secrets.
 * [Consuming Outputs](/docs/consuming-platform-workloads-outputs.md) - Reading platform-workloads state from downstream stacks.
 * [Role Assignments](/docs/role-assignments.md) - RBAC behaviors and ABAC rules.

@@ -55,7 +55,6 @@ terraform apply -var-file="tfvars/prd.tfvars"
 - DevOps Secure Scanning runs repository checks.
 - Feature Development drives PR validation.
 - Release to Production runs promotion for mainline changes.
-- Copilot Estate Inventory performs the weekly/manual read-only COP-315 audit; see [Copilot estate inventory](copilot-estate-inventory.md).
 Inspect .github/workflows for triggers and any required environment secrets before depending on them.
 
 ## Troubleshooting Quick Checks

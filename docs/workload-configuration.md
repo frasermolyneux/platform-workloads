@@ -91,7 +91,6 @@ non-workload repositories into `github_repository.workload`.
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
 | `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
-| `inventory` | object | No | active/repository/governed | Terraform-inert COP-315 classification; use only for explicit exceptions |
 
 ### Repository policy defaults
 
@@ -108,12 +107,6 @@ exceptional repositories. Include `exception_reason` so the decision remains
 auditable. Do not add a repository-only catalog entry merely to broaden
 platform-workloads ownership; entries must be approved for central policy
 management.
-
-The optional `github.inventory` object is consumed only by the read-only
-[Copilot estate inventory](copilot-estate-inventory.md); Terraform ignores it.
-Use it to identify explicit `empty`, `excluded`, `decommissioned`, or active
-review-exempt records. Keep repository membership in this catalog rather than
-creating a second inventory list.
 
 ### Environment Section
 
