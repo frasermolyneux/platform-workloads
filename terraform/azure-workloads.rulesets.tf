@@ -1,18 +1,75 @@
 locals {
+  copilot_code_review_baseline = {
+    review_draft_pull_requests = false
+    review_on_push             = false
+  }
+
+  workload_repository_policies = [
+    for workload in local.all_workloads : {
+      workload_name     = workload.name
+      manage_repository = try(workload.github.manage_repository, true)
+      copilot_enabled   = try(workload.github.repository_policy.copilot_code_review.enabled, true)
+      rulesets          = try(workload.github.rulesets, [])
+    }
+  ]
+
   workload_rulesets = flatten([
-    for workload in local.all_workloads : [
-      for ruleset in try(workload.github.rulesets, []) : merge(ruleset, {
-        workload_name = workload.name
-      })
-    ]
+    for policy in local.workload_repository_policies : concat(
+      [
+        for ruleset in policy.rulesets : merge(ruleset, {
+          workload_name     = policy.workload_name
+          manage_repository = policy.manage_repository
+          rules = merge(try(ruleset.rules, {}), {
+            copilot_code_review = (
+              ruleset.name == "main-protection" && policy.copilot_enabled
+              ? local.copilot_code_review_baseline
+              : null
+            )
+          })
+        })
+      ],
+      policy.copilot_enabled && !contains(
+        [for ruleset in policy.rulesets : ruleset.name],
+        "main-protection"
+        ) ? [
+        {
+          workload_name     = policy.workload_name
+          manage_repository = policy.manage_repository
+          name              = "main-protection"
+          target            = "branch"
+          enforcement       = "active"
+          includes          = ["~DEFAULT_BRANCH"]
+          excludes          = []
+          bypass_actors     = []
+          rules = {
+            copilot_code_review = local.copilot_code_review_baseline
+          }
+        }
+      ] : []
+    )
   ])
+}
+
+check "copilot_code_review_exceptions_have_reasons" {
+  assert {
+    condition = alltrue([
+      for workload in local.all_workloads :
+      try(workload.github.repository_policy.copilot_code_review.enabled, true) ||
+      trimspace(try(workload.github.repository_policy.copilot_code_review.exception_reason, "")) != ""
+    ])
+    error_message = "Repositories excluded from automatic Copilot review must define repository_policy.copilot_code_review.exception_reason."
+  }
 }
 
 resource "github_repository_ruleset" "workload" {
   for_each = { for ruleset in local.workload_rulesets : format("%s-%s", ruleset.workload_name, ruleset.name) => ruleset }
 
-  name        = each.value.name
-  repository  = github_repository.workload[each.value.workload_name].name
+  name = each.value.name
+  repository = (
+    each.value.manage_repository
+    ? github_repository.workload[each.value.workload_name].name
+    : each.value.workload_name
+  )
   enforcement = try(each.value.enforcement, "active")
   target      = try(each.value.target, "branch")
 

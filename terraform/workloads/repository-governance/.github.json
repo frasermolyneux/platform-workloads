@@ -1,0 +1,15 @@
+{
+    "name": ".github",
+    "github": {
+        "description": null,
+        "topics": [],
+        "visibility": "public",
+        "manage_repository": false,
+        "repository_policy": {
+            "copilot_code_review": {
+                "enabled": false,
+                "exception_reason": "Default community health repository; retain manual review initially"
+            }
+        }
+    }
+}

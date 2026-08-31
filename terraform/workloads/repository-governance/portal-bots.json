@@ -1,0 +1,17 @@
+{
+    "name": "portal-bots",
+    "github": {
+        "description": "XtremeIdiots portal bots infrastructure and b3 configuration, provisioned with Terraform/PowerShell and CI/CD pipelines.",
+        "topics": [
+            "app-registration",
+            "azure",
+            "game-servers",
+            "github-actions",
+            "key-vault",
+            "powershell",
+            "terraform"
+        ],
+        "visibility": "public",
+        "manage_repository": false
+    }
+}

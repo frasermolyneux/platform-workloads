@@ -1,0 +1,15 @@
+{
+    "name": "CoD4x_Server",
+    "github": {
+        "description": "Extended Call of Duty 4 server",
+        "topics": [],
+        "visibility": "public",
+        "manage_repository": false,
+        "repository_policy": {
+            "copilot_code_review": {
+                "enabled": false,
+                "exception_reason": "External upstream-shaped fork"
+            }
+        }
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "name": ".github-copilot",
+    "github": {
+        "description": "Github agents, prompts and instructions files",
+        "topics": [],
+        "visibility": "public",
+        "manage_repository": false
+    }
+}

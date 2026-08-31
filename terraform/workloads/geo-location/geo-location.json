@@ -82,10 +82,6 @@
                             "security_alerts_threshold": "high_or_higher"
                         }
                     ],
-                    "copilot_code_review": {
-                        "review_draft_pull_requests": true,
-                        "review_on_push": true
-                    },
                     "required_signatures": false,
                     "required_linear_history": true,
                     "non_fast_forward": true

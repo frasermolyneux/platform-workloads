@@ -1,0 +1,15 @@
+{
+    "name": "41-bovet-street",
+    "github": {
+        "description": null,
+        "topics": [],
+        "visibility": "private",
+        "manage_repository": false,
+        "repository_policy": {
+            "copilot_code_review": {
+                "enabled": false,
+                "exception_reason": "Private documentation and design workspace"
+            }
+        }
+    }
+}

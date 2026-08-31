@@ -9,6 +9,13 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 - RBAC assignments at specified scopes
 - Terraform state storage (optional)
 
+Repository-only governance entries use the same catalog under
+`terraform/workloads/repository-governance/`. Setting
+`github.manage_repository` to `false` leaves repository lifecycle and settings
+outside Terraform while allowing repository rulesets to be reconciled through
+the shared policy model. This keeps one repository catalog without importing
+non-workload repositories into `github_repository.workload`.
+
 ## JSON Structure
 
 ```json
@@ -23,7 +30,14 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
     "has_projects": false,
     "has_wiki": false,
     "add_sonarcloud_secrets": false,
-    "add_nuget_environment": false
+    "add_nuget_environment": false,
+    "manage_repository": true,
+    "repository_policy": {
+      "copilot_code_review": {
+        "enabled": true,
+        "exception_reason": null
+      }
+    }
   },
   "environments": [...]
 }
@@ -74,6 +88,25 @@ Workload JSON files in `terraform/workloads/{category}/` drive infrastructure cr
 | `has_wiki`               | boolean | No       | `false`  | Enable wiki                                   |
 | `add_sonarcloud_secrets` | boolean | No       | `false`  | Add SonarCloud token secrets                  |
 | `add_nuget_environment`  | boolean | No       | `false`  | Create NuGet publishing environment           |
+| `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
+| `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
+| `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
+
+### Repository policy defaults
+
+Cataloged repositories receive the automatic Copilot review baseline by
+default. The baseline adds `copilot_code_review` to `main-protection` with
+`review_draft_pull_requests = false` and `review_on_push = false`, so Copilot
+reviews once when a pull request becomes ready for review. If an enrolled
+repository has no `main-protection` ruleset, Terraform creates a minimal
+ruleset targeting `~DEFAULT_BRANCH` that contains only the Copilot rule.
+
+Set `repository_policy.copilot_code_review.enabled` to `false` for archived,
+empty, external/upstream, generated/documentation-only, or otherwise
+exceptional repositories. Include `exception_reason` so the decision remains
+auditable. Do not add a repository-only catalog entry merely to broaden
+platform-workloads ownership; entries must be approved for central policy
+management.
 
 ### Environment Section
 

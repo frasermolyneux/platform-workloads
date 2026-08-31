@@ -1,6 +1,10 @@
-// Assumption is that all workloads will have a GitHub repository
+// Repository-only policy entries remain in the shared catalog but opt out of
+// repository lifecycle management.
 resource "github_repository" "workload" {
-  for_each = { for workload in local.all_workloads : workload.name => workload }
+  for_each = {
+    for workload in local.all_workloads : workload.name => workload
+    if try(workload.github.manage_repository, true)
+  }
 
   name        = each.value.name
   description = each.value.github.description

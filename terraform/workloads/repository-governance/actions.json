@@ -1,0 +1,9 @@
+{
+    "name": "actions",
+    "github": {
+        "description": "Repository for hosting reusable workflows for GitHub Actions",
+        "topics": [],
+        "visibility": "public",
+        "manage_repository": false
+    }
+}
