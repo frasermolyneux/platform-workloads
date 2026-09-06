@@ -4,11 +4,11 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~> 5.0.1"
+      version = "~> 5.3.0"
     }
     azapi = {
       source  = "azure/azapi"
-      version = "~> 2.11.0"
+      version = "~> 2.12.0"
     }
     azuread = {
       source  = "hashicorp/azuread"
@@ -28,7 +28,7 @@ terraform {
       # Global API Key auth, returning "Invalid format for X-Auth-Email/X-Auth-Key
       # header" (Cloudflare API errors 6102/6103) on every zone lookup. Remove this
       # ceiling once the stack migrates to API Token auth (CLOUDFLARE_API_TOKEN).
-      version = ">= 5.18, < 5.23.0"
+      version = ">= 5.18, < 5.24.1"
     }
     random = {
       source  = "hashicorp/random"
