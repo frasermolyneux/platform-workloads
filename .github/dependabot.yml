@@ -12,6 +12,12 @@ updates:
       all-updates:
         patterns:
           - "*"
+    ignore:
+      # Cloudflare 5.23.0+ breaks the Global API Key authentication used by
+      # this stack. Keep this aligned with the ceiling in terraform/providers.tf.
+      - dependency-name: "cloudflare/cloudflare"
+        versions:
+          - ">= 5.23.0"
 
   - package-ecosystem: "github-actions"
     assignees: ["frasermolyneux"]
