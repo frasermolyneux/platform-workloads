@@ -28,7 +28,7 @@ terraform {
       # Global API Key auth, returning "Invalid format for X-Auth-Email/X-Auth-Key
       # header" (Cloudflare API errors 6102/6103) on every zone lookup. Remove this
       # ceiling once the stack migrates to API Token auth (CLOUDFLARE_API_TOKEN).
-      version = ">= 5.18, < 5.24.1"
+      version = ">= 5.18, < 5.23.0"
     }
     random = {
       source  = "hashicorp/random"
