@@ -135,6 +135,11 @@
                                 "allowed_roles": [
                                     "AcrPull"
                                 ]
+                            },
+                            {
+                                "allowed_roles": [
+                                    "AcrPush"
+                                ]
                             }
                         ]
                     }
