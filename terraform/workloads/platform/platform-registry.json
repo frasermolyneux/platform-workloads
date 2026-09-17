@@ -133,11 +133,7 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "AcrPull"
-                                ]
-                            },
-                            {
-                                "allowed_roles": [
+                                    "AcrPull",
                                     "AcrPush"
                                 ]
                             }
