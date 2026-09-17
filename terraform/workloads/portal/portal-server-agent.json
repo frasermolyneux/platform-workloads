@@ -177,12 +177,6 @@
                         "roles": [
                             "Application Insights Component Contributor"
                         ]
-                    },
-                    {
-                        "scope": "workload:platform-registry/Development",
-                        "roles": [
-                            "AcrPush"
-                        ]
                     }
                 ]
             }
