@@ -116,7 +116,10 @@
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
                 "platform-monitoring",
-                "platform-registry",
+                {
+                    "workload": "platform-registry",
+                    "environment": "Production"
+                },
                 "portal-core",
                 "portal-cod4x-plugin",
                 "portal-environments"

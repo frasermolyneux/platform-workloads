@@ -70,7 +70,7 @@ resource "azurerm_role_assignment" "workload_terraform_state_reader" {
       for environment in local.workload_environments : [
         for dependency in environment.requires_terraform_state_access : {
           source_key = environment.key
-          target_key = format("%s-%s", dependency, environment.environment_name)
+          target_key = format("%s-%s", dependency.workload_name, dependency.environment_name)
         }
       ]
     ]) :

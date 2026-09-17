@@ -108,10 +108,15 @@ locals {
           ? [environment.administrative_unit_roles.administrative_unit]
           : []
         )
-        requires_terraform_state_access = try(environment.requires_terraform_state_access, [])
-        locations                       = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]
-        resource_groups                 = try(environment.resource_groups, null)
-        graph_api_permissions           = distinct(try(environment.graph_api_permissions, []))
+        requires_terraform_state_access = [
+          for dependency in try(environment.requires_terraform_state_access, []) : {
+            workload_name    = try(dependency.workload, tostring(dependency))
+            environment_name = try(dependency.environment, environment.name)
+          }
+        ]
+        locations             = [for location in try(coalesce(environment.locations, ["uksouth"]), ["uksouth"]) : lower(location)]
+        resource_groups       = try(environment.resource_groups, null)
+        graph_api_permissions = distinct(try(environment.graph_api_permissions, []))
       }
     ]
   ])

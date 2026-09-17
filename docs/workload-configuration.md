@@ -123,7 +123,7 @@ management.
 | `directory_roles`                 | array   | No       | Entra ID directory roles                                                                                               |
 | `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All)        |
 | `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                                 |
-| `requires_terraform_state_access` | array   | No       | Workload names requiring read access to this workload's Terraform state                                                |
+| `requires_terraform_state_access` | array   | No       | Workload state dependencies as names for the same environment or objects with explicit `workload` and `environment`    |
 | `cloudflare_tokens`               | array   | No       | Cloudflare API tokens to create and inject as GitHub environment secrets (see [Cloudflare Tokens](#cloudflare-tokens)) |
 
 ### Role Assignments
@@ -155,6 +155,20 @@ Environment-level `role_assignments`:
   - Bare values continue to support existing aliases or ARM IDs for backward compatibility.
 - `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.
 - Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
+
+`requires_terraform_state_access` entries use the current environment by default:
+
+```json
+"requires_terraform_state_access": [
+  "platform-monitoring",
+  {
+    "workload": "platform-registry",
+    "environment": "Production"
+  }
+]
+```
+
+Use the object form only for an intentional cross-environment state dependency. Both forms grant `Storage Blob Data Reader` on the target workload environment's Terraform state storage account.
 
 Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. If `scope` is omitted for a resource group role assignment, the resource group ID is used by default.
 
