@@ -141,12 +141,6 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
-                        "scope": "sub-visualstudio-enterprise",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    },
-                    {
                         "scope": "workload:platform-monitoring/Production",
                         "roles": [
                             "Monitoring Contributor"
