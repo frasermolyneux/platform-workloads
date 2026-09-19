@@ -1,0 +1,17 @@
+{
+    "name": "bishops-bees",
+    "github": {
+        "description": "WordPress workload for the production Bishops Bees website hosted on the shared bare-metal platform.",
+        "topics": [
+            "wordpress",
+            "php",
+            "mysql",
+            "docker",
+            "bare-metal",
+            "website"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}
