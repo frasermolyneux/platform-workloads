@@ -141,7 +141,7 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
-                        "scope": "workload:platform-monitoring/Production",
+                        "scope": "workload-rg:platform-monitoring/production/rg-platform-monitoring-prd-uksouth/uksouth",
                         "roles": [
                             "Monitoring Contributor"
                         ]
