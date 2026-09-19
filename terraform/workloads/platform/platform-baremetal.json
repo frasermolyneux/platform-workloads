@@ -139,6 +139,7 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
+                                    "Key Vault Secrets Officer",
                                     "Storage Blob Data Contributor"
                                 ]
                             }
