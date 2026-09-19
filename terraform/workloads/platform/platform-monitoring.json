@@ -161,6 +161,12 @@
                         ]
                     },
                     {
+                        "scope": "sub-visualstudio-enterprise",
+                        "roles": [
+                            "Contributor"
+                        ]
+                    },
+                    {
                         "scope": "/providers/Microsoft.Management/managementGroups/alz",
                         "roles": [
                             "Resource Policy Contributor",
