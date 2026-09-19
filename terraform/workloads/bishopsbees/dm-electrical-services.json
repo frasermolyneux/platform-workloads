@@ -1,0 +1,24 @@
+{
+    "name": "dm-electrical-services",
+    "github": {
+        "description": "WordPress workload for the DM Electrical Services website hosted on the shared bare-metal platform.",
+        "topics": [
+            "wordpress",
+            "php",
+            "mysql",
+            "docker",
+            "bare-metal",
+            "website"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true
+        }
+    ]
+}
