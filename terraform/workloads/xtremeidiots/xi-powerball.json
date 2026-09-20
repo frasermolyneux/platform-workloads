@@ -1,0 +1,16 @@
+{
+    "name": "xi-powerball",
+    "github": {
+        "description": "Node.js donor Powerball workload hosted beneath www.xtremeidiots.com.",
+        "topics": [
+            "nodejs",
+            "docker",
+            "games",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}
