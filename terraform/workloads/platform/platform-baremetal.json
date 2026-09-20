@@ -117,6 +117,20 @@
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "DNS Write",
+                                "Zone Read"
+                            ],
+                            "zone": "xtremeidiots.com"
+                        }
+                    ]
+                }
+            ],
             "requires_terraform_state_access": [
                 "platform-monitoring"
             ],
