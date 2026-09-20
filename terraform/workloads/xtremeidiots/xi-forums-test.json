@@ -1,0 +1,17 @@
+{
+    "name": "xi-forums-test",
+    "github": {
+        "description": "Tailscale-only sanitized test and upgrade rehearsal environment for the XtremeIdiots forums.",
+        "topics": [
+            "invision-community",
+            "php",
+            "mysql",
+            "docker",
+            "testing",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

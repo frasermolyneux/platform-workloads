@@ -1,0 +1,17 @@
+{
+    "name": "xi-freezetag-stats",
+    "github": {
+        "description": "FreezeTag log collection and statistics-generation workload for the XtremeIdiots community.",
+        "topics": [
+            "powershell",
+            "sftp",
+            "statistics",
+            "automation",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

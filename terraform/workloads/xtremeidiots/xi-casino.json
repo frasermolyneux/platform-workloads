@@ -1,0 +1,17 @@
+{
+    "name": "xi-casino",
+    "github": {
+        "description": "Node.js casino and multiplayer games workload hosted beneath www.xtremeidiots.com.",
+        "topics": [
+            "nodejs",
+            "mysql",
+            "docker",
+            "socket-io",
+            "games",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

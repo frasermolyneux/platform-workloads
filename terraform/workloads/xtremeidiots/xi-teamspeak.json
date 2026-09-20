@@ -1,0 +1,17 @@
+{
+    "name": "xi-teamspeak",
+    "github": {
+        "description": "Containerized TeamSpeak 3 voice service for the XtremeIdiots community.",
+        "topics": [
+            "teamspeak",
+            "voice",
+            "docker",
+            "gaming",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

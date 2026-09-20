@@ -1,0 +1,17 @@
+{
+    "name": "xi-dailygames",
+    "github": {
+        "description": "PHP daily games and leaderboard workload hosted beneath www.xtremeidiots.com.",
+        "topics": [
+            "php",
+            "mysql",
+            "docker",
+            "games",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

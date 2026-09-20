@@ -1,0 +1,17 @@
+{
+    "name": "xi-forums",
+    "github": {
+        "description": "Invision Community forum workload for www.xtremeidiots.com on the shared bare-metal platform.",
+        "topics": [
+            "invision-community",
+            "php",
+            "mysql",
+            "docker",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}

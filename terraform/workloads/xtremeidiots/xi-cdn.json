@@ -1,0 +1,17 @@
+{
+    "name": "xi-cdn",
+    "github": {
+        "description": "Static content and download delivery workload for cdn.xtremeidiots.com.",
+        "topics": [
+            "cdn",
+            "static-content",
+            "caddy",
+            "docker",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}
