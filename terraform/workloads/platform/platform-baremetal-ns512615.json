@@ -1,0 +1,16 @@
+{
+    "name": "platform-baremetal-ns512615",
+    "github": {
+        "description": "Delegated operational configuration for the ns512615 bare-metal game server.",
+        "topics": [
+            "linux",
+            "bare-metal",
+            "server-configuration",
+            "infrastructure-as-code",
+            "game-server"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "visibility": "private"
+    }
+}
