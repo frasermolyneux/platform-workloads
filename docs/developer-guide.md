@@ -47,15 +47,18 @@ terraform apply -var-file="tfvars/prd.tfvars"
 
 ## Working with Workloads
 - Add JSON under terraform/workloads/{category}/; examples in terraform/workloads/platform/ and portal/ show production patterns.
+- Choose the definition mode deliberately: environments create workload identity and integration resources; omitting environments creates a managed repository only; `github.manage_repository=false` manages policy on an existing repository only.
+- Keep repository content, collaborator access, runtime configuration, and operator boundaries in the owning repository. `platform-workloads` manages only the resources modeled in the catalog.
 - Files under terraform/workloads/examples/ are ignored by design.
 - Reader is auto-added at the environment subscription when no assignment targets that scope; if an assignment exists, Reader is merged into its roles.
 - Scope inputs accept aliases from var.subscriptions, raw ARM IDs, workload: and workload-rg: helpers (see docs/workload-configuration.md).
 
 ## CI Workflows
-- DevOps Secure Scanning runs repository checks.
-- Feature Development drives PR validation.
-- Release to Production runs promotion for mainline changes.
-Inspect .github/workflows for triggers and any required environment secrets before depending on them.
+- `Build and Test` and `Feature Development` run production-backed plans for matching feature branches.
+- `PR Verify` plans non-draft pull requests.
+- `Deploy Prd` applies Terraform changes pushed to `main` and also runs on its schedule.
+- `Decommission State Rm` is the explicit repository-detachment operation used before deleting a managed repository definition.
+Inspect `.github/workflows` for current triggers and required Production environment credentials before depending on them.
 
 ## Troubleshooting Quick Checks
 - Permission failures: confirm the platform service principal is Owner at / (`az role assignment list --assignee <spn-object-id> --scope /`).

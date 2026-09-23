@@ -2,25 +2,42 @@
 
 ## System Design
 
-**Pattern**: JSON workload definitions → `fileset()` discovery → Terraform generates Azure AD, GitHub, and Azure DevOps resources.
+**Pattern**: JSON catalog definitions → `fileset()` discovery → Terraform conditionally generates repository governance and workload infrastructure.
 
 **Core Flow**:
 ```
 terraform/workloads/**/*.json (excluding examples/)
   ↓ fileset() in workloads.load.tf
   ↓ jsondecode() + flatten()
-  ↓ for_each loops
-  ├→ Azure AD: App registrations + SPNs + OIDC federation
-  ├→ GitHub: Repos + environments + variables
-  ├→ Azure DevOps: Service connections + environments + variable groups
-  └→ Azure RBAC: Role assignments (subscription aliases or ARM IDs)
+  ↓ definition mode
+  ├→ Managed repository: GitHub repository settings + rulesets
+  ├→ Policy-only repository: Rulesets on an existing GitHub repository
+  └→ Environments, when present
+      ├→ Azure AD: App registrations + SPNs + OIDC federation
+      ├→ GitHub: Environments + variables
+      ├→ Azure DevOps: Service connections + variable groups
+      └→ Azure RBAC: Role assignments (subscription aliases or ARM IDs)
 ```
 
-The same catalog also contains `repository-governance/` entries for repositories
-that are policy-managed but are not Azure workloads. These entries set
-`github.manage_repository = false`, so Terraform does not manage repository
-lifecycle or general settings; only explicitly modeled repository policy
-resources are created.
+### Catalog definition modes
+
+- **Environment-backed workload**: includes `environments`; creates identity and
+  integration resources in addition to the managed GitHub repository.
+- **Managed repository only**: omits `environments`; creates the GitHub
+  repository, modeled settings, labels, and rulesets, but no Azure identity,
+  RBAC, state backend, or remote-state output.
+- **Policy-only repository**: sets `github.manage_repository = false`; leaves
+  repository lifecycle and general settings outside Terraform and reconciles
+  only explicitly modeled policy resources.
+
+The catalog includes application source repositories and operational data
+repositories as well as environment-backed workloads. `platform-baremetal`
+remains the central pull-based fleet-management workload for ns346663,
+ns5019527, and ns512615, while `platform-baremetal-ns512615` is the separate
+managed repository-only, data-only definition for delegated ns512615
+operations. This stack owns their repository definitions and review governance,
+not host configuration content, runtime access, or delegated operator
+permissions.
 
 ## Key Implementation Patterns
 
@@ -134,13 +151,13 @@ foreach ($repo in $repos) {
 }
 ```
 
-Confirm that every enrolled active repository has exactly one
-`copilot_code_review` rule with both options `false`; `.github`,
-`41-bovet-street`, `CoD4x_Server`, and `status-pages` have none; the seven
-newly enrolled repositories are present; and no ruleset has duplicate Copilot
-rules. Compare all non-Copilot rule types, parameters, conditions, bypass
-actors, targets, and enforcement against the pre-apply plan/API inventory.
-No direct manual ruleset edit should be required.
+Confirm that every currently enrolled repository has exactly one
+`copilot_code_review` rule with both options `false`, every catalog entry with
+`enabled = false` has none, and no ruleset has duplicate Copilot rules. Derive
+both sets from the current JSON catalog rather than a historical repository
+count or hard-coded exception list. Compare all non-Copilot rule types,
+parameters, conditions, bypass actors, targets, and enforcement against the
+pre-apply plan/API inventory. No direct manual ruleset edit should be required.
 
 **Owner at `/` Scope**: Required for service principal to assign RBAC across multiple subscriptions.
 
