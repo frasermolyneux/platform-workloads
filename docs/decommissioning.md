@@ -1,12 +1,22 @@
 # Decommissioning a Workload
 
-This guide explains how to safely decommission a workload managed by `platform-workloads`. The process removes all Azure infrastructure, identity, and CI/CD resources while **preserving the GitHub repository**.
+This guide explains how to safely remove a catalog definition managed by
+`platform-workloads`. Environment-backed definitions remove their modeled
+Azure, identity, and CI/CD resources. Managed repository-only definitions have
+no environment infrastructure to remove. In both cases the process
+**preserves the GitHub repository**.
 
-> **⚠️ Important:** The order of operations matters. You **must** detach the GitHub repository from Terraform state **before** deleting the workload JSON. Doing it in the wrong order will cause Terraform to error due to `prevent_destroy`. See the [step-by-step process](#step-by-step-process) below.
+> **⚠️ Important:** For definitions where `github.manage_repository` is `true`
+> or omitted, you **must** detach the GitHub repository from Terraform state
+> **before** deleting the JSON. Doing it in the wrong order will cause Terraform
+> to error due to `prevent_destroy`. Policy-only definitions with
+> `github.manage_repository = false` have no `github_repository.workload`
+> instance to detach.
 
 ## What Gets Destroyed
 
-When a workload is decommissioned, Terraform destroys:
+Depending on the definition, Terraform destroys the modeled resources that
+exist:
 
 - Azure AD application and service principal (per environment)
 - OIDC federated identity credentials (GitHub and Azure DevOps)
@@ -20,6 +30,9 @@ When a workload is decommissioned, Terraform destroys:
 - Directory role assignments and administrative unit memberships
 - Graph API permission grants
 
+Repository-only definitions normally remove only modeled labels and rulesets.
+Policy-only definitions remove only their modeled rulesets.
+
 ## What Is Preserved
 
 - **The GitHub repository itself** — code, history, issues, pull requests, and wiki are all retained. The repository is detached from Terraform management but continues to exist on GitHub.
@@ -28,15 +41,20 @@ When a workload is decommissioned, Terraform destroys:
 
 Before decommissioning, ensure:
 
-1. **No active workloads depend on this one** — check whether any other workload JSON references this workload via `requires_terraform_state_access` or `workload:` scope prefixes in role assignments. Decommissioning will destroy the Terraform state storage that dependents rely on.
-2. **The workload's own Terraform stack has been destroyed first** — if the workload has its own `terraform/` folder with deployed infrastructure, run `terraform destroy` on that stack before decommissioning from `platform-workloads`. Otherwise, the service principal and state storage needed to manage that infrastructure will be deleted.
+1. **No active workloads depend on this one** — for environment-backed definitions, check whether any other workload JSON references this workload via `requires_terraform_state_access` or `workload:` scope prefixes in role assignments. Decommissioning can destroy state storage and scopes that dependents rely on.
+2. **The workload's own Terraform stack has been destroyed first** — when the definition has environments and its own deployed Terraform stack, run `terraform destroy` there before decommissioning from `platform-workloads`. Otherwise, the service principal and state storage needed to manage that infrastructure will be deleted.
 3. **You have a clean `main` branch** — the decommission should be done via a pull request to allow plan review.
 
 ## Step-by-Step Process
 
 ### Step 1 — Detach the GitHub Repository from State
 
-> **This must be done first.** The `github_repository.workload` resource has `lifecycle { prevent_destroy = true }`, which means Terraform will refuse to destroy it. You must remove it from state before deleting the workload JSON, otherwise the Terraform plan will fail.
+> **This must be done first for managed repositories.** The
+> `github_repository.workload` resource has `lifecycle { prevent_destroy =
+> true }`, which means Terraform will refuse to destroy it. You must remove it
+> from state before deleting the workload JSON, otherwise the Terraform plan
+> will fail. Skip this step only when the definition explicitly has
+> `github.manage_repository = false`.
 
 Run the **Decommission State Rm** workflow:
 
@@ -73,8 +91,8 @@ git push origin decommission/{workload-name}
 
 The PR verification workflow will run a Terraform plan. Review it carefully and confirm:
 
-- ✅ The GitHub repository is **not** in the destroy list — it was already detached from state in step 1
-- ✅ All expected Azure/identity/CI-CD resources are marked for destruction
+- ✅ For a managed repository, the GitHub repository is **not** in the destroy list — it was already detached from state in step 1
+- ✅ Only resources modeled by the definition are marked for destruction; repository-only and policy-only entries should not show Azure identity or infrastructure
 - ✅ No unexpected resources are affected
 
 > **If the plan shows the repository being destroyed**, step 1 was not completed. Go back and run the **Decommission State Rm** workflow first, then re-trigger the PR plan.
@@ -97,7 +115,7 @@ This requires the GitHub CLI (`gh`) and a token with admin access to both organi
 
 | Step | Action | How |
 |------|--------|-----|
-| 1 | Detach repo from state | **Actions → Decommission State Rm** → enter workload name |
+| 1 | Detach managed repo from state | **Actions → Decommission State Rm** → enter workload name; skip only for `manage_repository = false` |
 | 2 | Delete workload JSON | `git rm terraform/workloads/{category}/{name}.json` |
 | 3 | Open PR | Branch, commit, push |
 | 4 | Review plan | Check PR plan — repo should NOT appear in destroy list |

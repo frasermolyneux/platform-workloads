@@ -2,12 +2,14 @@
 
 ## Schema Overview
 
-Workload JSON files in `terraform/workloads/{category}/` drive infrastructure creation. Each file generates:
-- Azure AD service principal with OIDC federation
-- GitHub repository + environments
-- Azure DevOps service connections + variable groups
-- RBAC assignments at specified scopes
-- Terraform state storage (optional)
+JSON files in `terraform/workloads/{category}/` form a shared workload and
+repository catalog. Resources depend on the definition shape:
+
+| Definition mode | Required shape | Managed resources |
+| --- | --- | --- |
+| Environment-backed workload | One or more `environments` | Managed GitHub repository plus per-environment identity, integrations, RBAC, and optional state infrastructure |
+| Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, and rulesets only |
+| Policy-only repository | `github.manage_repository: false` | Rulesets on an existing repository; no repository lifecycle management |
 
 Repository-only governance entries use the same catalog under
 `terraform/workloads/repository-governance/`. Setting
@@ -15,6 +17,12 @@ Repository-only governance entries use the same catalog under
 outside Terraform while allowing repository rulesets to be reconciled through
 the shared policy model. This keeps one repository catalog without importing
 non-workload repositories into `github_repository.workload`.
+
+Omitting `environments` is intentional for repository-only definitions and
+creates no Azure application, service principal, RBAC, state backend, or
+remote-state output. Repository content, collaborators, runtime access, host
+bindings, and application deployment configuration remain owned by the target
+repository or its operational control plane.
 
 ## JSON Structure
 
@@ -107,6 +115,26 @@ exceptional repositories. Include `exception_reason` so the decision remains
 auditable. Do not add a repository-only catalog entry merely to broaden
 platform-workloads ownership; entries must be approved for central policy
 management.
+
+### Repository onboarding decisions
+
+Before adding a definition:
+
+1. Use an environment-backed workload only when this stack must create workload
+   identity, integration, RBAC, or state resources.
+2. Use a managed repository-only definition when Terraform should create and
+   retain the repository but the repository is data-only or has no Azure
+   environment.
+3. Use a policy-only definition only for an existing repository whose lifecycle
+   and general settings must remain outside this stack.
+4. Record operator access and operational ownership in the target repository;
+   this catalog does not manage collaborators or grant access to platform
+   namespaces.
+
+`platform-baremetal-ns512615` is the current managed repository-only pattern:
+it is a private, data-only delegated-operations repository. Its lack of
+`environments` prevents accidental creation of workload identities or Azure
+infrastructure.
 
 ### Environment Section
 
