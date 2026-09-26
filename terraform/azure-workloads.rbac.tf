@@ -32,6 +32,27 @@ locals {
               ),
               role_name
             )
+            scope = (
+              coalesce(try(entry.scope, null), environment.subscription) == null
+              ? data.azurerm_subscription.subscriptions[environment.subscription].id
+              : (
+                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+                ? coalesce(try(entry.scope, null), environment.subscription)
+                : (
+                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
+                  ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
+                  : (
+                    startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
+                    ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
+                    : (
+                      startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
+                      ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
+                      : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
+                    )
+                  )
+                )
+              )
+            )
             role_name = role_name
           }
         ]
@@ -39,11 +60,7 @@ locals {
     ])) :
     request.key => {
       role_name = request.role_name
-      scope = (
-        startswith(lower(split("|", request.key)[0]), "workload-rg:")
-        ? local.workload_resource_group_scope_map[replace(lower(split("|", request.key)[0]), "workload-rg:", "")]
-        : split("|", request.key)[0]
-      )
+      scope     = request.scope
     }
   }
 
@@ -58,6 +75,27 @@ locals {
               lower(coalesce(entry.scope, format("workload-rg:%s", resource_group.key))),
               role_name
             )
+            scope = (
+              coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id) == null
+              ? azapi_resource.workload_resource_group[resource_group.key].id
+              : (
+                startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+                ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
+                : (
+                  startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
+                  ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:", "")].id
+                  : (
+                    startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:")
+                    ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:", "")]
+                    : (
+                      startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:")
+                      ? local.workload_resource_group_scope_map[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:", "")]
+                      : data.azurerm_subscription.subscriptions[coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)].id
+                    )
+                  )
+                )
+              )
+            )
             role_name = role_name
           }
         ]
@@ -65,11 +103,7 @@ locals {
     ]) :
     request.key => {
       role_name = request.role_name
-      scope = (
-        startswith(lower(split("|", request.key)[0]), "workload-rg:")
-        ? local.workload_resource_group_scope_map[replace(lower(split("|", request.key)[0]), "workload-rg:", "")]
-        : split("|", request.key)[0]
-      )
+      scope     = request.scope
     }
   }
 
