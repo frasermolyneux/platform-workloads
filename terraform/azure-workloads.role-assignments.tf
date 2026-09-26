@@ -66,7 +66,7 @@ resource "random_uuid" "workload_secret_synchronizer" {
 resource "azurerm_role_definition" "workload_secret_synchronizer" {
   for_each = toset(local.workload_subscriptions)
 
-  name               = "Workload Key Vault Secret Synchronizer"
+  name               = "Workload Key Vault Secret Synchronizer ${substr(data.azurerm_subscription.subscriptions[each.key].subscription_id, 0, 8)}"
   role_definition_id = random_uuid.workload_secret_synchronizer[each.key].result
   scope              = data.azurerm_subscription.subscriptions[each.key].id
   description        = "Allows setting secret values without reading, listing, deleting, recovering, or purging secrets."
