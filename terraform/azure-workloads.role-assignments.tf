@@ -87,8 +87,6 @@ resource "azurerm_role_assignment" "workload" {
   scope                = each.value.resolved_scope
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
-
-  depends_on = [azurerm_role_definition.workload_secret_synchronizer]
 }
 
 resource "azurerm_role_assignment" "workload_deploy_script" {

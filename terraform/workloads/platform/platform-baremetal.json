@@ -112,7 +112,7 @@
                             {
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
-                                    "Workload Key Vault Secret Synchronizer 6cad03c1"
+                                    "Workload Key Vault Secret Synchronizer"
                                 ]
                             }
                         ]
@@ -163,7 +163,7 @@
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
                                     "Storage Blob Data Contributor",
-                                    "Workload Key Vault Secret Synchronizer 7760848c"
+                                    "Workload Key Vault Secret Synchronizer"
                                 ]
                             }
                         ]
