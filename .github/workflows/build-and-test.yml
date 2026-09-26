@@ -13,26 +13,20 @@ on:
 permissions: {}
 
 jobs:
-  terraform-plan-prd:
+  terraform-validate:
     permissions:
       contents: read
-      id-token: write
     runs-on: ubuntu-latest
-    environment: Production
-    concurrency:
-      group: ${{ github.repository }}-prd
     steps:
-      - uses: frasermolyneux/actions/terraform-plan@terraform-plan/v1.4
-        with:
-          terraform-folder: "terraform"
-          terraform-var-file: "tfvars/prd.tfvars"
-          terraform-backend-file: "backends/prd.backend.hcl"
-          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
-          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-        env:
-          TF_VAR_github_service_connection_pat: ${{ secrets.AZDO_GITHUB_SERVICE_CONNECTION_PAT }}
-          AZDO_PERSONAL_ACCESS_TOKEN: ${{ secrets.AZDO_PERSONAL_ACCESS_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
-          CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
-          CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+      - uses: actions/checkout@v6
+
+      - uses: hashicorp/setup-terraform@dfe3c3f87815947d99a8997f908cb6525fc44e9e
+
+      - name: Check Terraform formatting
+        run: terraform -chdir=terraform fmt -check -recursive
+
+      - name: Initialize Terraform without backend
+        run: terraform -chdir=terraform init -backend=false -input=false
+
+      - name: Validate Terraform
+        run: terraform -chdir=terraform validate
