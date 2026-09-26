@@ -39,6 +39,11 @@ locals {
     ])) :
     request.key => {
       role_name = request.role_name
+      scope = (
+        startswith(lower(split("|", request.key)[0]), "workload-rg:")
+        ? local.workload_resource_group_scope_map[replace(lower(split("|", request.key)[0]), "workload-rg:", "")]
+        : split("|", request.key)[0]
+      )
     }
   }
 
@@ -60,6 +65,11 @@ locals {
     ]) :
     request.key => {
       role_name = request.role_name
+      scope = (
+        startswith(lower(split("|", request.key)[0]), "workload-rg:")
+        ? local.workload_resource_group_scope_map[replace(lower(split("|", request.key)[0]), "workload-rg:", "")]
+        : split("|", request.key)[0]
+      )
     }
   }
 
@@ -182,7 +192,8 @@ locals {
 data "azurerm_role_definition" "workload_rbac_allowed" {
   for_each = local.workload_rbac_allowed_role_map
 
-  name = each.value.role_name
+  name  = each.value.role_name
+  scope = each.value.scope
 
   depends_on = [azurerm_role_definition.workload_secret_synchronizer]
 }

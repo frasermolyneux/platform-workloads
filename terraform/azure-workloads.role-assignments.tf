@@ -59,10 +59,16 @@ resource "azurerm_role_definition" "resource_provider_registrator" {
   assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
 }
 
+resource "random_uuid" "workload_secret_synchronizer" {
+  for_each = toset(local.workload_subscriptions)
+}
+
 resource "azurerm_role_definition" "workload_secret_synchronizer" {
+  for_each = toset(local.workload_subscriptions)
+
   name               = "Workload Key Vault Secret Synchronizer"
-  role_definition_id = "b0942f07-4e14-46d7-9b8a-e58d78dc6584"
-  scope              = "/subscriptions/${var.subscription_id}"
+  role_definition_id = random_uuid.workload_secret_synchronizer[each.key].result
+  scope              = data.azurerm_subscription.subscriptions[each.key].id
   description        = "Allows setting secret values without reading, listing, deleting, recovering, or purging secrets."
 
   permissions {
@@ -72,10 +78,7 @@ resource "azurerm_role_definition" "workload_secret_synchronizer" {
     not_data_actions = []
   }
 
-  assignable_scopes = [
-    for subscription in values(var.subscriptions) :
-    "/subscriptions/${subscription.subscription_id}"
-  ]
+  assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
 }
 
 resource "azurerm_role_assignment" "workload" {
