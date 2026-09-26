@@ -26,12 +26,12 @@ Audience: senior engineers designing or reviewing workload configuration.
 - A `Reader` assignment is auto-added at the environment subscription scope; if you already target that scope, `Reader` is merged into its roles.
 - Scopes accept subscription aliases (resolved via `data.azurerm_subscription`) or full ARM IDs.
 - `rbac_admin_roles` grant `Role Based Access Control Administrator` on the resolved scope with a condition limiting which role definitions can be written/deleted (the `allowed_roles`).
-- `Workload Key Vault Secret Synchronizer <subscription-prefix>` is a
-  platform-defined custom role in each managed subscription that permits only
-  `Microsoft.KeyVault/vaults/secrets/setSecret/action`. Use the role matching
-  the target subscription when a deployment identity must delegate secret
-  synchronization without granting read, list, delete, recover, or purge
-  access.
+- Workload JSON uses the stable symbolic identifier `Workload Key Vault Secret
+  Synchronizer`. Terraform resolves that identifier at the target RBAC scope
+  to the subscription-local Azure role named `Workload Key Vault Secret
+  Synchronizer <subscription-prefix>`. Each role permits only
+  `Microsoft.KeyVault/vaults/secrets/setSecret/action`, allowing secret
+  synchronization without read, list, delete, recover, or purge access.
 - Bare-metal workload vaults delegate `Key Vault Secrets User` so the
   platform deployment can assign vault read access to the hosting Arc
   machine's managed identity. This is a Key Vault data-plane assignment; it
