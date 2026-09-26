@@ -59,6 +59,28 @@ resource "azurerm_role_definition" "resource_provider_registrator" {
   assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
 }
 
+resource "random_uuid" "workload_secret_synchronizer" {
+  for_each = toset(local.workload_subscriptions)
+}
+
+resource "azurerm_role_definition" "workload_secret_synchronizer" {
+  for_each = toset(local.workload_subscriptions)
+
+  name               = "Workload Key Vault Secret Synchronizer ${substr(data.azurerm_subscription.subscriptions[each.key].subscription_id, 0, 8)}"
+  role_definition_id = random_uuid.workload_secret_synchronizer[each.key].result
+  scope              = data.azurerm_subscription.subscriptions[each.key].id
+  description        = "Allows setting secret values without reading, listing, deleting, recovering, or purging secrets."
+
+  permissions {
+    actions          = []
+    not_actions      = []
+    data_actions     = ["Microsoft.KeyVault/vaults/secrets/setSecret/action"]
+    not_data_actions = []
+  }
+
+  assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
+}
+
 resource "azurerm_role_assignment" "workload" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each }
 
