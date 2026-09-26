@@ -183,6 +183,8 @@ data "azurerm_role_definition" "workload_rbac_allowed" {
   for_each = local.workload_rbac_allowed_role_map
 
   name = each.value.role_name
+
+  depends_on = [azurerm_role_definition.workload_secret_synchronizer]
 }
 
 locals {

@@ -59,12 +59,33 @@ resource "azurerm_role_definition" "resource_provider_registrator" {
   assignable_scopes = [data.azurerm_subscription.subscriptions[each.key].id]
 }
 
+resource "azurerm_role_definition" "workload_secret_synchronizer" {
+  name               = "Workload Key Vault Secret Synchronizer"
+  role_definition_id = "b0942f07-4e14-46d7-9b8a-e58d78dc6584"
+  scope              = "/subscriptions/${var.subscription_id}"
+  description        = "Allows setting secret values without reading, listing, deleting, recovering, or purging secrets."
+
+  permissions {
+    actions          = []
+    not_actions      = []
+    data_actions     = ["Microsoft.KeyVault/vaults/secrets/setSecret/action"]
+    not_data_actions = []
+  }
+
+  assignable_scopes = [
+    for subscription in values(var.subscriptions) :
+    "/subscriptions/${subscription.subscription_id}"
+  ]
+}
+
 resource "azurerm_role_assignment" "workload" {
   for_each = { for each in local.workload_role_assignments : each.role_assignment_key => each }
 
   scope                = each.value.resolved_scope
   role_definition_name = each.value.role_definition_name
   principal_id         = azuread_service_principal.workload[each.value.workload_environment_key].object_id
+
+  depends_on = [azurerm_role_definition.workload_secret_synchronizer]
 }
 
 resource "azurerm_role_assignment" "workload_deploy_script" {

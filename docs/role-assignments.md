@@ -26,6 +26,10 @@ Audience: senior engineers designing or reviewing workload configuration.
 - A `Reader` assignment is auto-added at the environment subscription scope; if you already target that scope, `Reader` is merged into its roles.
 - Scopes accept subscription aliases (resolved via `data.azurerm_subscription`) or full ARM IDs.
 - `rbac_admin_roles` grant `Role Based Access Control Administrator` on the resolved scope with a condition limiting which role definitions can be written/deleted (the `allowed_roles`).
+- `Workload Key Vault Secret Synchronizer` is a platform-defined custom role
+  that permits only `Microsoft.KeyVault/vaults/secrets/setSecret/action`.
+  Use it when a deployment identity must delegate secret synchronization
+  without granting read, list, delete, recover, or purge access.
 
 ### Resource-group level
 
