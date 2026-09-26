@@ -30,6 +30,10 @@ Audience: senior engineers designing or reviewing workload configuration.
   that permits only `Microsoft.KeyVault/vaults/secrets/setSecret/action`.
   Use it when a deployment identity must delegate secret synchronization
   without granting read, list, delete, recover, or purge access.
+- Bare-metal workload vaults delegate `Key Vault Secrets User` so the
+  platform deployment can assign vault read access to the hosting Arc
+  machine's managed identity. This is a Key Vault data-plane assignment; it
+  does not require `Azure Connected Machine Resource Metadata Reader`.
 
 ### Resource-group level
 
