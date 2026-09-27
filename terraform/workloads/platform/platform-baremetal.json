@@ -187,13 +187,13 @@
                     {
                         "scope": "workload-rg:baremetal-workload-canary/production/rg-baremetal-workload-canary-prd-swedencentral/swedencentral",
                         "roles": [
-                            "Contributor"
+                            "Key Vault Contributor"
                         ]
                     },
                     {
                         "scope": "workload-rg:xi-powerball/production/rg-xi-powerball-prd-swedencentral/swedencentral",
                         "roles": [
-                            "Contributor"
+                            "Key Vault Contributor"
                         ]
                     }
                 ],
