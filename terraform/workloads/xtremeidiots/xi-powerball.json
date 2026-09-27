@@ -12,5 +12,20 @@
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
         "visibility": "private"
-    }
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}"
+                }
+            ]
+        }
+    ]
 }
