@@ -1,82 +1,92 @@
 locals {
-  // Environment-scoped RBAC roles (all values known at plan time)
-  workload_rbac_allowed_role_map_env = {
-    for request in distinct(flatten([
-      for environment in local.workload_environments : [
-        for entry in try(environment.role_assignments.rbac_admin_roles, []) : [
-          for role_name in distinct(compact(flatten([
-            try(entry.allowed_roles, [])
-            ]))) : {
-            key = format(
-              "%s|%s",
-              lower(coalesce(try(entry.scope, null), environment.subscription)),
-              role_name
-            )
-            scope = (
-              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
-              ? coalesce(try(entry.scope, null), environment.subscription)
+  // Keep keys independent from apply-time scope IDs so new resource groups can
+  // participate in the same plan.
+  workload_rbac_allowed_role_requests_env = flatten([
+    for environment in local.workload_environments : [
+      for entry in try(environment.role_assignments.rbac_admin_roles, []) : [
+        for role_name in distinct(compact(flatten([
+          try(entry.allowed_roles, [])
+          ]))) : {
+          key = format(
+            "%s|%s",
+            lower(coalesce(try(entry.scope, null), environment.subscription)),
+            role_name
+          )
+          scope = (
+            startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+            ? coalesce(try(entry.scope, null), environment.subscription)
+            : (
+              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
+              ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
               : (
-                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
-                ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:", "")].id
+                startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
+                ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
                 : (
-                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:")
-                  ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload:", "")]
-                  : (
-                    startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
-                    ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
-                    : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
-                  )
+                  startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:")
+                  ? local.workload_resource_group_scope_map[replace(lower(coalesce(try(entry.scope, null), environment.subscription)), "workload-rg:", "")]
+                  : data.azurerm_subscription.subscriptions[coalesce(try(entry.scope, null), environment.subscription)].id
                 )
               )
             )
-            role_name = role_name
-          }
-        ]
+          )
+          role_name = role_name
+        }
       ]
-    ])) :
+    ]
+  ])
+  workload_rbac_allowed_role_groups_env = {
+    for request in local.workload_rbac_allowed_role_requests_env :
     request.key => {
       role_name = request.role_name
       scope     = request.scope
-    }
+    }...
+  }
+  workload_rbac_allowed_role_map_env = {
+    for key, requests in local.workload_rbac_allowed_role_groups_env :
+    key => requests[0]
   }
 
-  // Resource-group-scoped RBAC roles (scope IDs resolve after apply, but keys are fully known at plan time)
-  workload_rbac_allowed_role_map_rg = {
-    for request in flatten([
-      for resource_group in local.workload_environment_resource_groups : [
-        for entry in try(resource_group.role_assignments.rbac_admin_roles, []) : [
-          for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) : {
-            key = format(
-              "%s|%s",
-              lower(coalesce(entry.scope, format("workload-rg:%s", resource_group.key))),
-              role_name
-            )
-            scope = (
-              startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
-              ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
+  workload_rbac_allowed_role_requests_rg = flatten([
+    for resource_group in local.workload_environment_resource_groups : [
+      for entry in try(resource_group.role_assignments.rbac_admin_roles, []) : [
+        for role_name in distinct(compact(flatten([try(entry.allowed_roles, [])]))) : {
+          key = format(
+            "%s|%s",
+            lower(coalesce(entry.scope, format("workload-rg:%s", resource_group.key))),
+            role_name
+          )
+          scope = (
+            startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+            ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
+            : (
+              startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
+              ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:", "")].id
               : (
-                startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
-                ? data.azurerm_subscription.subscriptions[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:", "")].id
+                startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:")
+                ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:", "")]
                 : (
-                  startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:")
-                  ? local.workload_environment_subscription_id_by_name[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload:", "")]
-                  : (
-                    startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:")
-                    ? local.workload_resource_group_scope_map[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:", "")]
-                    : data.azurerm_subscription.subscriptions[coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)].id
-                  )
+                  startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:")
+                  ? local.workload_resource_group_scope_map[replace(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "workload-rg:", "")]
+                  : data.azurerm_subscription.subscriptions[coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)].id
                 )
               )
             )
-            role_name = role_name
-          }
-        ]
+          )
+          role_name = role_name
+        }
       ]
-    ]) :
+    ]
+  ])
+  workload_rbac_allowed_role_groups_rg = {
+    for request in local.workload_rbac_allowed_role_requests_rg :
     request.key => {
       role_name = request.role_name
       scope     = request.scope
-    }
+    }...
+  }
+  workload_rbac_allowed_role_map_rg = {
+    for key, requests in local.workload_rbac_allowed_role_groups_rg :
+    key => requests[0]
   }
 
   workload_rbac_allowed_role_map = merge(
