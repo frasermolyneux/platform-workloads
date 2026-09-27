@@ -12,6 +12,8 @@ resource "github_repository" "workload" {
 
   visibility = each.value.github.visibility
 
+  auto_init = try(each.value.github.auto_init, false)
+
   has_downloads = try(each.value.github.has_downloads, false)
   has_issues    = try(each.value.github.has_issues, true)
   has_projects  = try(each.value.github.has_projects, false)
