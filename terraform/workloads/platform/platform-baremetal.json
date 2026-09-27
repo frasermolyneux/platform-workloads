@@ -189,11 +189,24 @@
                         "roles": [
                             "Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload-rg:xi-powerball/production/rg-xi-powerball-prd-swedencentral/swedencentral",
+                        "roles": [
+                            "Key Vault Contributor"
+                        ]
                     }
                 ],
                 "rbac_admin_roles": [
                     {
                         "scope": "workload-rg:baremetal-workload-canary/production/rg-baremetal-workload-canary-prd-swedencentral/swedencentral",
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Workload Key Vault Secret Synchronizer"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:xi-powerball/production/rg-xi-powerball-prd-swedencentral/swedencentral",
                         "allowed_roles": [
                             "Key Vault Secrets User",
                             "Workload Key Vault Secret Synchronizer"
