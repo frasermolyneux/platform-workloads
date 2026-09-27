@@ -107,6 +107,14 @@
                                     "Key Vault Secrets Officer"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Workload Key Vault Secret Synchronizer"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -153,9 +161,9 @@
                         "rbac_admin_roles": [
                             {
                                 "allowed_roles": [
-                                    "Key Vault Secrets Officer",
                                     "Key Vault Secrets User",
-                                    "Storage Blob Data Contributor"
+                                    "Storage Blob Data Contributor",
+                                    "Workload Key Vault Secret Synchronizer"
                                 ]
                             }
                         ]
