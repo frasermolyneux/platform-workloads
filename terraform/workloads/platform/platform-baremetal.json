@@ -187,7 +187,7 @@
                     {
                         "scope": "workload-rg:baremetal-workload-canary/production/rg-baremetal-workload-canary-prd-swedencentral/swedencentral",
                         "roles": [
-                            "Key Vault Contributor"
+                            "Contributor"
                         ]
                     },
                     {
