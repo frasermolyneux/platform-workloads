@@ -134,7 +134,9 @@
                             {
                                 "allowed_roles": [
                                     "AcrPull",
-                                    "AcrPush"
+                                    "AcrPush",
+                                    "Container Registry Repository Reader",
+                                    "Container Registry Repository Writer"
                                 ]
                             }
                         ]
