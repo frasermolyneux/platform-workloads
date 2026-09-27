@@ -13,7 +13,7 @@ locals {
             role_name
           )
           scope = (
-            startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+            startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/")
             ? coalesce(try(entry.scope, null), environment.subscription)
             : (
               startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
@@ -56,7 +56,7 @@ locals {
             role_name
           )
           scope = (
-            startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+            startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/")
             ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
             : (
               startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
@@ -109,7 +109,7 @@ locals {
             coalesce(try(entry.scope, null), environment.subscription) == null
             ? data.azurerm_subscription.subscriptions[environment.subscription].id
             : (
-              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/subscriptions/")
+              startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "/")
               ? coalesce(try(entry.scope, null), environment.subscription)
               : (
                 startswith(lower(coalesce(try(entry.scope, null), environment.subscription)), "sub:")
@@ -152,7 +152,7 @@ locals {
             coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id) == null
             ? azapi_resource.workload_resource_group[resource_group.key].id
             : (
-              startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/subscriptions/")
+              startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "/")
               ? coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)
               : (
                 startswith(lower(coalesce(entry.scope, azapi_resource.workload_resource_group[resource_group.key].id)), "sub:")
