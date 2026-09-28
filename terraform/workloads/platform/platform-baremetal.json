@@ -201,6 +201,12 @@
                         "roles": [
                             "Key Vault Contributor"
                         ]
+                    },
+                    {
+                        "scope": "workload-rg:xi-casino/production/rg-xi-casino-prd-swedencentral/swedencentral",
+                        "roles": [
+                            "Key Vault Contributor"
+                        ]
                     }
                 ],
                 "rbac_admin_roles": [
@@ -220,6 +226,13 @@
                     },
                     {
                         "scope": "workload-rg:xi-freezetag-stats/production/rg-xi-freezetag-stats-prd-swedencentral/swedencentral",
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Workload Key Vault Secret Synchronizer"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:xi-casino/production/rg-xi-casino-prd-swedencentral/swedencentral",
                         "allowed_roles": [
                             "Key Vault Secrets User",
                             "Workload Key Vault Secret Synchronizer"
