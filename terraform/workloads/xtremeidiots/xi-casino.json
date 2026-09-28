@@ -26,14 +26,6 @@
                 {
                     "name": "rg-{workload}-{env}-{location}"
                 }
-            ],
-            "role_assignments": [
-                {
-                    "scope": "workload:platform-registry/Production",
-                    "roles": [
-                        "AcrPush"
-                    ]
-                }
             ]
         }
     ]
