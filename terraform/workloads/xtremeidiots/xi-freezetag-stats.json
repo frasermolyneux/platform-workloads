@@ -18,7 +18,15 @@
         {
             "name": "Production",
             "subscription": "sub-platform-management",
-            "connect_to_github": true
+            "connect_to_github": true,
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}"
+                }
+            ]
         }
     ]
 }
