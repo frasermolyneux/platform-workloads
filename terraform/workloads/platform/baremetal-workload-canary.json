@@ -1,9 +1,10 @@
 {
     "name": "baremetal-workload-canary",
     "github": {
-        "description": "Disposable private canary for the constrained bare-metal workload contract.",
+        "description": "Archived validation repository for the constrained bare-metal workload contract.",
         "topics": [
             "bare-metal",
+            "archived",
             "canary",
             "containers",
             "platform"
@@ -12,20 +13,5 @@
         "add_nuget_environment": false,
         "auto_init": true,
         "visibility": "private"
-    },
-    "environments": [
-        {
-            "name": "Production",
-            "subscription": "sub-platform-management",
-            "connect_to_github": true,
-            "locations": [
-                "swedencentral"
-            ],
-            "resource_groups": [
-                {
-                    "name": "rg-{workload}-{env}-{location}"
-                }
-            ]
-        }
-    ]
+    }
 }

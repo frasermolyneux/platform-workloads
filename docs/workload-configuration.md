@@ -38,6 +38,7 @@ repository or its operational control plane.
     "has_projects": false,
     "has_wiki": false,
     "auto_init": false,
+    "is_template": false,
     "add_sonarcloud_secrets": false,
     "add_nuget_environment": false,
     "manage_repository": true,
@@ -96,6 +97,7 @@ repository or its operational control plane.
 | `has_projects`           | boolean | No       | `false`  | Enable projects board                         |
 | `has_wiki`               | boolean | No       | `false`  | Enable wiki                                   |
 | `auto_init`              | boolean | No       | `false`  | Create an initial README commit for a new repository |
+| `is_template`            | boolean | No       | `false`  | Mark the managed GitHub repository as a template |
 | `add_sonarcloud_secrets` | boolean | No       | `false`  | Add SonarCloud token secrets                  |
 | `add_nuget_environment`  | boolean | No       | `false`  | Create NuGet publishing environment           |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
