@@ -1,0 +1,20 @@
+{
+    "name": "baremetal-workload-template",
+    "github": {
+        "description": "Canonical constrained bare-metal workload contract and application archetypes.",
+        "topics": [
+            "bare-metal",
+            "containers",
+            "dotnet",
+            "nodejs",
+            "php",
+            "static-site",
+            "template"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "auto_init": true,
+        "is_template": true,
+        "visibility": "private"
+    }
+}
