@@ -1,0 +1,20 @@
+{
+    "name": "platform-devex",
+    "github": {
+        "description": "Internal developer platform automation: scheduled workflows for PR self-healing, stale-branch updates, and Copilot delegation on failed checks across frasermolyneux repositories.",
+        "topics": [
+            "github-actions",
+            "automation",
+            "developer-experience",
+            "dependabot",
+            "copilot"
+        ],
+        "visibility": "public",
+        "auto_init": true,
+        "github_app": {
+            "enabled": true,
+            "app_id": "2973523",
+            "installation_id": "113093932"
+        }
+    }
+}
