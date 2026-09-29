@@ -41,6 +41,11 @@ repository or its operational control plane.
     "is_template": false,
     "add_sonarcloud_secrets": false,
     "add_nuget_environment": false,
+    "github_app": {
+      "enabled": false,
+      "app_id": null,
+      "installation_id": null
+    },
     "manage_repository": true,
     "repository_policy": {
       "copilot_code_review": {
@@ -100,9 +105,17 @@ repository or its operational control plane.
 | `is_template`            | boolean | No       | `false`  | Mark the managed GitHub repository as a template |
 | `add_sonarcloud_secrets` | boolean | No       | `false`  | Add SonarCloud token secrets                  |
 | `add_nuget_environment`  | boolean | No       | `false`  | Create NuGet publishing environment           |
+| `github_app.enabled`     | boolean | No       | `false`  | Broker the organization-owned GitHub App credentials into the repository |
+| `github_app.app_id`      | string  | When enabled | -     | GitHub App ID exposed as the `GH_APP_ID` repository variable |
+| `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
 | `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
+
+When `github_app.enabled` is true, Terraform also writes the Key Vault-backed
+App private key to the repository Actions secret `GH_APP_PEM`. Workflows should
+mint short-lived installation tokens and request only the permissions needed
+for that operation; they must not expose or persist the private key.
 
 ### Repository policy defaults
 

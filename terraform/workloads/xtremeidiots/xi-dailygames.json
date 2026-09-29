@@ -12,6 +12,11 @@
         ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
+        "github_app": {
+            "enabled": true,
+            "app_id": "2973523",
+            "installation_id": "113093932"
+        },
         "visibility": "private"
     },
     "environments": [
