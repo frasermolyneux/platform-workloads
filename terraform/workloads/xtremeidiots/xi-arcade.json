@@ -1,0 +1,37 @@
+{
+    "name": "xi-arcade",
+    "github": {
+        "description": "Node.js arcade games and leaderboard workload hosted beneath www.xtremeidiots.com.",
+        "topics": [
+            "nodejs",
+            "mysql",
+            "docker",
+            "socket-io",
+            "games",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": false,
+        "github_app": {
+            "enabled": true,
+            "app_id": "2973523",
+            "installation_id": "113093932"
+        },
+        "visibility": "private"
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}"
+                }
+            ]
+        }
+    ]
+}
