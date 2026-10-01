@@ -66,6 +66,60 @@ removed {
   lifecycle { destroy = false }
 }
 
+# Detach the remaining project-level Azure DevOps resources and their supporting
+# Azure/Entra resources. The deployed objects are intentionally preserved for
+# manual cleanup after consumers have been confirmed as migrated.
+
+removed {
+  from = azuredevops_project.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuredevops_serviceendpoint_github.github_connection_pipelines
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuread_application.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuread_service_principal.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azurerm_role_assignment.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuread_application_federated_identity_credential.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuredevops_serviceendpoint_azurerm.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuredevops_pipeline_authorization.project
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuredevops_variable_group.nuget
+  lifecycle { destroy = false }
+}
+
+removed {
+  from = azuredevops_variable_group.sonarcloud
+  lifecycle { destroy = false }
+}
+
 removed {
   from = azuread_application_federated_identity_credential.devops_workload
   lifecycle { destroy = false }
