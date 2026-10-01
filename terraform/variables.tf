@@ -37,31 +37,6 @@ variable "subscriptions" {
   }))
 }
 
-variable "azuredevops_projects" {
-  type = list(object({
-    name        = string
-    description = string
-
-    visibility = optional(string, "private")
-
-    version_control    = optional(string, "Git")
-    work_item_template = optional(string, "Agile")
-
-    add_nuget_variable_group      = optional(bool, false)
-    add_sonarcloud_variable_group = optional(bool, false)
-
-    features = optional(map(string), {
-      "boards"       = "enabled"
-      "repositories" = "enabled"
-      "pipelines"    = "enabled"
-      "testplans"    = "enabled"
-      "artifacts"    = "enabled"
-    })
-  }))
-}
-
-
-
 variable "environment_map" {
   default = {
     Development = "dev"
@@ -90,10 +65,4 @@ variable "administrative_units" {
       display_name = "Molyneux.IO Production"
     }
   }
-}
-
-variable "github_service_connection_pat" {
-  description = "Personal access token used for Azure DevOps GitHub service connections"
-  type        = string
-  sensitive   = true
 }

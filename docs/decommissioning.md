@@ -19,12 +19,11 @@ Depending on the definition, Terraform destroys the modeled resources that
 exist:
 
 - Azure AD application and service principal (per environment)
-- OIDC federated identity credentials (GitHub and Azure DevOps)
+- GitHub OIDC federated identity credentials
 - RBAC role assignments (all scopes)
 - Terraform state storage (resource group, storage account, container)
 - GitHub repository environments, secrets, and environment variables
 - GitHub issue labels and repository rulesets
-- Azure DevOps service connections, environments, and variable groups
 - Cloudflare API tokens (if configured)
 - Azure resource groups created by the workload definition
 - Directory role assignments and administrative unit memberships

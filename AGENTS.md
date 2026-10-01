@@ -1,6 +1,6 @@
 # AGENTS.md - platform-workloads
 
-This production-only Terraform repository converts workload and repository-governance JSON into Azure identity, GitHub, Azure DevOps, Cloudflare, RBAC, and optional workload state infrastructure. It is the source of remote-state outputs consumed by other platform repositories.
+This production-only Terraform repository converts workload and repository-governance JSON into Azure identity, GitHub, Cloudflare, RBAC, and optional workload state infrastructure. It is the source of remote-state outputs consumed by other platform repositories.
 
 ## Key locations
 

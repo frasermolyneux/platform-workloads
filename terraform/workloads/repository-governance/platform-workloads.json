@@ -1,7 +1,7 @@
 {
     "name": "platform-workloads",
     "github": {
-        "description": "Manually Managed. This repository manages Azure DevOps, GitHub and the Azure Workloads.",
+        "description": "Manually Managed. This repository manages GitHub and Azure workloads.",
         "topics": [],
         "visibility": "public",
         "manage_repository": false

@@ -21,7 +21,7 @@
 
 ## Overview
 
-This repository contains a production Terraform catalog for workload infrastructure and repository governance. Definitions with environments can provision Azure AD applications, service principals with OIDC federation, GitHub environments and secrets, Azure DevOps integration, workload-scoped RBAC, and optional Terraform state infrastructure. Managed repository-only definitions omit environments and provision GitHub repository settings and review governance without creating Azure identities or runtime infrastructure. Policy-only entries set `github.manage_repository = false` and reconcile rulesets on an existing repository without taking over its lifecycle. Outputs expose environment-backed resource groups, Terraform backends, service principals, and administrative units for consumption by downstream stacks via remote state.
+This repository contains a production Terraform catalog for workload infrastructure and repository governance. Definitions with environments can provision Azure AD applications, service principals with OIDC federation, GitHub environments and secrets, workload-scoped RBAC, and optional Terraform state infrastructure. Managed repository-only definitions omit environments and provision GitHub repository settings and review governance without creating Azure identities or runtime infrastructure. Policy-only entries set `github.manage_repository = false` and reconcile rulesets on an existing repository without taking over its lifecycle. Outputs expose environment-backed resource groups, Terraform backends, service principals, and administrative units for consumption by downstream stacks via remote state.
 
 ## Contributing
 

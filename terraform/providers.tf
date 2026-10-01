@@ -14,10 +14,6 @@ terraform {
       source  = "hashicorp/azuread"
       version = "~> 3.9.0"
     }
-    azuredevops = {
-      source  = "microsoft/azuredevops"
-      version = "~> 1.16.0"
-    }
     github = {
       source  = "integrations/github"
       version = "~> 6.13.0"
@@ -52,10 +48,6 @@ provider "azurerm" {
 }
 
 provider "azapi" {
-}
-
-provider "azuredevops" {
-  org_service_url = "https://dev.azure.com/frasermolyneux/"
 }
 
 provider "github" {

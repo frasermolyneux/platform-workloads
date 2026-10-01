@@ -8,13 +8,13 @@
 
 - `terraform/workloads/**/*.json` is the workload and repository-governance catalog; `examples/` is excluded from discovery.
 - `terraform/workloads.load.tf` loads and normalizes JSON into workload/environment keys.
-- `terraform/azure-workloads.tf` and `terraform/azure-workloads.if-*.tf` create Azure AD, GitHub, Azure DevOps, and optional state resources.
+- `terraform/azure-workloads.tf` and `terraform/azure-workloads.if-*.tf` create Azure AD, GitHub, and optional state resources.
 - `terraform/azure-workloads.rbac.tf` manages delegated RBAC.
 - `terraform/azure-workloads.rulesets.tf` owns the repository Copilot review baseline and merges it into enrolled `main-protection` rulesets.
 - `terraform/outputs.tf` is a platform consumption contract.
 - `terraform/backends/prd.backend.hcl` and `terraform/tfvars/prd.tfvars` are the only environment pair.
 
-Terraform requires `>= 1.15.6`. Preserve the reviewed constraints in `terraform/providers.tf`, including the bounded Cloudflare range and the AzureRM, AzAPI, AzureAD, Azure DevOps, GitHub, Random, and Time provider boundaries.
+Terraform requires `>= 1.15.6`. Preserve the reviewed constraints in `terraform/providers.tf`, including the bounded Cloudflare range and the AzureRM, AzAPI, AzureAD, GitHub, Random, and Time provider boundaries.
 
 Repository-governance entries can manage rulesets without managing repository lifecycle. Preserve the existing automatic Copilot review contract: exactly one `copilot_code_review` rule for enrolled repositories, with draft review and review-on-push disabled. Exceptions require the documented reason. Do not edit owned rulesets directly in GitHub.
 
