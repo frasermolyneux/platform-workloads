@@ -15,7 +15,6 @@ terraform/workloads/**/*.json (excluding examples/)
   └→ Environments, when present
       ├→ Azure AD: App registrations + SPNs + OIDC federation
       ├→ GitHub: Environments + variables
-      ├→ Azure DevOps: Service connections + variable groups
       └→ Azure RBAC: Role assignments (subscription aliases or ARM IDs)
 ```
 
@@ -68,7 +67,6 @@ resource "azuread_application" "workload" {
 ### OIDC Federation Subjects
 
 **GitHub**: `repo:frasermolyneux/{repo}:environment:{Environment}`
-**Azure DevOps**: Dynamic from `azuredevops_serviceendpoint_azurerm.workload[].workload_identity_federation_subject`
 
 ### Role Assignment Scope Resolution
 
@@ -92,7 +90,7 @@ EOT
 
 **JSON over HCL**: Enables non-Terraform users to add workloads. Trade-off: less type safety.
 
-**OIDC over Secrets**: Eliminates secret rotation. Workload identity federation for both GitHub and Azure DevOps.
+**OIDC over Secrets**: Eliminates secret rotation for GitHub Actions workload authentication.
 
 **Conditional Resources via `if` in for_each**: Files named `azure-workloads.if-{feature}.tf` contain resources gated by flags (`connect_to_github`, `configure_for_terraform`, etc.).
 

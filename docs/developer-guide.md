@@ -5,8 +5,8 @@ Audience: senior engineers running and evolving platform-workloads Terraform.
 ## Environment Setup
 - Terraform >= 1.15.6
 - Azure CLI logged in (az login) and subscription set to match the tfvars backend/alias you plan to use.
-- Environment variables: AZDO_PERSONAL_ACCESS_TOKEN, GITHUB_TOKEN, and optionally AZDO_GITHUB_SERVICE_CONNECTION_PAT (used for github_service_connection_pat).
-- PATs must have rights for the Azure DevOps and GitHub providers; the platform service principal must be Owner at / scope.
+- Environment variable: GITHUB_TOKEN with rights for the GitHub provider.
+- The platform service principal must be Owner at / scope.
 
 ## Provider Dependency Policy
 
@@ -26,10 +26,10 @@ change must be visible in initialization and plan output.
 terraform init -backend-config="backends/prd.backend.hcl"
 ```
 
-3. Plan (include the GitHub service connection PAT if required):
+3. Plan:
 
 ```bash
-terraform plan -var-file="tfvars/prd.tfvars" -var "github_service_connection_pat=$env:AZDO_GITHUB_SERVICE_CONNECTION_PAT"
+terraform plan -var-file="tfvars/prd.tfvars"
 ```
 
 4. Apply after review:
@@ -63,5 +63,5 @@ Inspect `.github/workflows` for current triggers and required Production environ
 ## Troubleshooting Quick Checks
 - Permission failures: confirm the platform service principal is Owner at / (`az role assignment list --assignee <spn-object-id> --scope /`).
 - Scope resolution errors: ensure the alias exists in tfvars/prd.tfvars or supply a full ARM ID.
-- OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}; Azure DevOps issuer/subject come from the service endpoint.
+- OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.
 - Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.

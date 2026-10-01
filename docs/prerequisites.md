@@ -13,7 +13,6 @@
 
 | Secret                       | Purpose                                           |
 | ---------------------------- | ------------------------------------------------- |
-| `AZDO_PERSONAL_ACCESS_TOKEN` | Azure DevOps provider authentication              |
 | `AZURE_CLIENT_ID`            | App registration client ID                        |
 | `AZURE_SUBSCRIPTION_ID`      | Management subscription ID                        |
 | `AZURE_TENANT_ID`            | Tenant ID: `e56a6947-bb9a-4a6e-846a-1f118d1c3a14` |

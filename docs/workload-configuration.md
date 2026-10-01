@@ -64,9 +64,7 @@ repository or its operational control plane.
 {
   "name": "Development",
   "subscription": "sub-visualstudio-enterprise",
-  "devops_project": "ProjectName",
   "connect_to_github": true,
-  "connect_to_devops": true,
   "configure_for_terraform": true,
   "add_deploy_script_identity": true,
   "role_assignments": {
@@ -159,9 +157,7 @@ infrastructure.
 | --------------------------------- | ------- | -------- | ---------------------------------------------------------------------------------------------------------------------- |
 | `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                                                   |
 | `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                                                               |
-| `devops_project`                  | string  | No       | Azure DevOps project name                                                                                              |
 | `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                                                          |
-| `connect_to_devops`               | boolean | No       | Automatically set if `devops_project` is specified                                                                     |
 | `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                                                               |
 | `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                                                         |
 | `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                                  |
