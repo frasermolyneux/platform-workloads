@@ -215,6 +215,12 @@
                         ]
                     },
                     {
+                        "scope": "workload-rg:xi-bank/production/rg-xi-bank-prd-swedencentral/swedencentral",
+                        "roles": [
+                            "Key Vault Contributor"
+                        ]
+                    },
+                    {
                         "scope": "workload-rg:baremetal-workload-template/production/rg-baremetal-workload-template-prd-swedencentral/swedencentral",
                         "roles": [
                             "Key Vault Contributor"
@@ -252,6 +258,13 @@
                     },
                     {
                         "scope": "workload-rg:xi-arcade/production/rg-xi-arcade-prd-swedencentral/swedencentral",
+                        "allowed_roles": [
+                            "Key Vault Secrets User",
+                            "Workload Key Vault Secret Synchronizer"
+                        ]
+                    },
+                    {
+                        "scope": "workload-rg:xi-bank/production/rg-xi-bank-prd-swedencentral/swedencentral",
                         "allowed_roles": [
                             "Key Vault Secrets User",
                             "Workload Key Vault Secret Synchronizer"
