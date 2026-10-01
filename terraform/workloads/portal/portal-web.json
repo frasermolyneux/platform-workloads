@@ -1,12 +1,12 @@
 {
     "name": "portal-web",
     "github": {
-        "description": "XtremeIdiots portal web app (ASP.NET Core MVC) with Azure resources defined in Bicep and deployed via Azure DevOps.",
+        "description": "XtremeIdiots portal web app (ASP.NET Core MVC) with Azure resources defined in Bicep and deployed via GitHub Actions.",
         "topics": [
             "azure",
             "aspnet-core",
             "bicep",
-            "azure-devops-pipelines",
+            "github-actions",
             "app-service",
             "app-insights",
             "key-vault"
