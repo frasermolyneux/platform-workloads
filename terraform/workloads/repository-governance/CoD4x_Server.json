@@ -1,6 +1,20 @@
 {
     "name": "CoD4x_Server",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "upstream-fork",
+                    "reason": "Preserve upstream ownership and workflow behavior",
+                    "reevaluate": "The owner adopts this fork as a maintained standalone workload"
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        },
         "description": "Extended Call of Duty 4 server",
         "topics": [],
         "visibility": "public",

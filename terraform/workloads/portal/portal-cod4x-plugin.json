@@ -1,6 +1,54 @@
 {
     "name": "portal-cod4x-plugin",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "cpp",
+                    "powershell",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "cpp",
+                    "projectKey": "frasermolyneux_portal-cod4x-plugin",
+                    "sourceDirectory": ".",
+                    "coverage": "not-applicable"
+                },
+                "build": {
+                    "kind": "cmake",
+                    "configureArgs": [
+                        "-DCMAKE_BUILD_TYPE=Release",
+                        "-DCMAKE_EXPORT_COMPILE_COMMANDS=ON",
+                        "-DPORTAL_COD4X_BUILD_PLUGIN_BINARY=OFF"
+                    ],
+                    "buildArgs": [
+                        "--config",
+                        "Release"
+                    ],
+                    "testArgs": [
+                        "--output-on-failure",
+                        "--build-config",
+                        "Release"
+                    ]
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "CoD4x server plugin for the XtremeIdiots portal - enhances the in-game experience and reports events to the portal APIs. Built and published to the portal-core artifact storage; installed onto servers by portal-server-agent.",
         "topics": [
             "cod4",

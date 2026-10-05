@@ -1,6 +1,27 @@
 {
     "name": "platform-devex",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "javascript"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Internal developer platform automation: scheduled workflows for PR self-healing, stale-branch updates, and Copilot delegation on failed checks across frasermolyneux repositories.",
         "topics": [
             "github-actions",

@@ -30,3 +30,6 @@ jobs:
 
       - name: Validate Terraform
         run: terraform -chdir=terraform validate
+
+      - name: Validate the complete repository analysis catalog without provider reads
+        run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/repository-analysis.tftest.hcl

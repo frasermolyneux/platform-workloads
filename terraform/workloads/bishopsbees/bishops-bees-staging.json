@@ -1,6 +1,28 @@
 {
     "name": "bishops-bees-staging",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "javascript",
+                    "php"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "WordPress workload for the public Bishops Bees staging website hosted on the shared bare-metal platform.",
         "topics": [
             "wordpress",

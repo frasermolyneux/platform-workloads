@@ -1,6 +1,29 @@
 {
     "name": "bishops-bees",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "javascript",
+                    "php",
+                    "shell"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "WordPress workload for the production Bishops Bees website hosted on the shared bare-metal platform.",
         "topics": [
             "wordpress",

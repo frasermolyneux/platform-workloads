@@ -1,6 +1,46 @@
 {
     "name": "demo-manager",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_demo-manager",
+                    "sourceDirectory": "src",
+                    "coverage": "not-applicable"
+                },
+                "build": {
+                    "kind": "netfx",
+                    "sdk": [
+                        "10.0.x"
+                    ],
+                    "globalJson": null,
+                    "solution": "DemoManager.sln",
+                    "skipFormat": true,
+                    "tests": false
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "ClickOnce desktop application for managing Call of Duty demo recordings and downloads, deployed via GitHub Actions with Terraform-managed infrastructure.",
         "topics": [
             "desktop",

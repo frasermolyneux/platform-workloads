@@ -25,6 +25,13 @@ This repository contains a production Terraform catalog for workload infrastruct
 
 ## Contributing
 
+The catalog also owns source analysis profiles, preserved build/scanner recipes and
+daily/weekly cadence declarations for applicable non-`xi-*` repositories. Their GitHub
+variables are projected without importing policy-only repository lifecycles or changing
+visibility, deployment triggers or provider methods. Exemptions remain explicit catalog
+dispositions; variable provisioning is not completed scanner adoption or current results.
+See the [analysis policy reference](/docs/workload-configuration.md#repository-analysis-policy).
+
 Please read the [contributing](CONTRIBUTING.md) guidance; this is a learning and development project.
 
 ## Security

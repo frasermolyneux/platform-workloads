@@ -1,6 +1,20 @@
 {
     "name": "portal-bots",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "archived",
+                    "reason": "Archived repository; no active scanning",
+                    "reevaluate": "The owner unarchives the repository"
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        },
         "description": "XtremeIdiots portal bots infrastructure and b3 configuration, provisioned with Terraform/PowerShell and CI/CD pipelines.",
         "topics": [
             "app-registration",

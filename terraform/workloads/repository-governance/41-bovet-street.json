@@ -1,6 +1,20 @@
 {
     "name": "41-bovet-street",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "documentation-only",
+                    "reason": "No executable source or workflows observed",
+                    "reevaluate": "Executable source or a workflow is added"
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        },
         "description": null,
         "topics": [],
         "visibility": "private",

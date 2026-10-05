@@ -1,6 +1,43 @@
 {
     "name": "actions",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "javascript",
+                    "powershell",
+                    "python",
+                    "shell"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "cli",
+                    "projectKey": "frasermolyneux_actions",
+                    "sourceDirectory": ".",
+                    "coverage": "not-applicable"
+                },
+                "build": {
+                    "kind": "script",
+                    "nodeVersion": "22",
+                    "npmInstall": false
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Repository for hosting reusable workflows for GitHub Actions",
         "topics": [],
         "visibility": "public",

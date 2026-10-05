@@ -40,6 +40,21 @@ terraform apply -var-file="tfvars/prd.tfvars"
 
 5. Keep formatting clean before committing: `terraform fmt -recursive`.
 
+### Analysis catalog validation
+
+After backend-disabled initialization, validate the scoped analysis contract without
+Azure/GitHub provider reads:
+
+```powershell
+terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-analysis.tftest.hcl'
+```
+
+This metadata-only test targets the built-in contract resource and checks all 50
+current dispositions, the 142 declared variables, private publication boundaries
+and exclusions. It does not replace the full production state-backed plan or justify
+targeted production applies. Analysis variables are configuration, not proof of
+scanner execution or estate caller adoption.
+
 ### Targeted Operations
 - Validate a new workload file: `Get-Content terraform/workloads/platform/new-workload.json | ConvertFrom-Json`
 - Plan a single resource to reduce noise: `terraform plan -var-file="tfvars/prd.tfvars" -target='github_repository.workload["portal-core"]'`
@@ -54,7 +69,8 @@ terraform apply -var-file="tfvars/prd.tfvars"
 - Scope inputs accept aliases from var.subscriptions, raw ARM IDs, workload: and workload-rg: helpers (see docs/workload-configuration.md).
 
 ## CI Workflows
-- `Build and Test` and `Feature Development` run production-backed plans for matching feature branches.
+- `Build and Test` performs formatting, backend-disabled initialization, validation and the metadata-only analysis catalog test for matching feature branches.
+- `Feature Development` runs production-backed plans for matching feature branches.
 - `PR Verify` plans non-draft pull requests.
 - `Deploy Prd` applies Terraform changes pushed to `main` and also runs on its schedule.
 - `Decommission State Rm` is the explicit repository-detachment operation used before deleting a managed repository definition.
