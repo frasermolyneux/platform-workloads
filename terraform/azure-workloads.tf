@@ -189,7 +189,11 @@ resource "github_actions_environment_secret" "nuget_api_key" {
 resource "github_actions_secret" "sonar_token" {
   for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_sonarcloud_secrets, false) }
 
-  repository      = github_repository.workload[each.value.name].name
+  repository = (
+    try(each.value.github.manage_repository, true)
+    ? github_repository.workload[each.value.name].name
+    : each.value.name
+  )
   secret_name     = "SONAR_TOKEN"
   plaintext_value = data.azurerm_key_vault_secret.sonarcloud_token.value
 }
@@ -197,7 +201,11 @@ resource "github_actions_secret" "sonar_token" {
 resource "github_dependabot_secret" "sonar_token" {
   for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_sonarcloud_secrets, false) }
 
-  repository      = github_repository.workload[each.value.name].name
+  repository = (
+    try(each.value.github.manage_repository, true)
+    ? github_repository.workload[each.value.name].name
+    : each.value.name
+  )
   secret_name     = "SONAR_TOKEN"
   plaintext_value = data.azurerm_key_vault_secret.sonarcloud_token.value
 }

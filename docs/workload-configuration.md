@@ -9,13 +9,15 @@ repository catalog. Resources depend on the definition shape:
 | --- | --- | --- |
 | Environment-backed workload | One or more `environments` | Managed GitHub repository plus per-environment identity, integrations, RBAC, and optional state infrastructure |
 | Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, and rulesets only |
-| Policy-only repository | `github.manage_repository: false` | Rulesets on an existing repository; no repository lifecycle management |
+| Policy-only repository | `github.manage_repository: false` | Rulesets and explicitly opted-in existing Sonar token projection; no repository lifecycle management |
 
 Repository-only governance entries use the same catalog under
 `terraform/workloads/repository-governance/`. Setting
 `github.manage_repository` to `false` leaves repository lifecycle and settings
 outside Terraform while allowing repository rulesets to be reconciled through
-the shared policy model. This keeps one repository catalog without importing
+the shared policy model. An explicit `add_sonarcloud_secrets` opt-in can also project
+the existing Key Vault-backed Sonar token to the named repository without importing
+its lifecycle or general settings. This keeps one repository catalog without importing
 non-workload repositories into `github_repository.workload`.
 
 Omitting `environments` is intentional for repository-only definitions and
@@ -101,7 +103,7 @@ repository or its operational control plane.
 | `has_wiki`               | boolean | No       | `false`  | Enable wiki                                   |
 | `auto_init`              | boolean | No       | `false`  | Create an initial README commit for a new repository |
 | `is_template`            | boolean | No       | `false`  | Mark the managed GitHub repository as a template |
-| `add_sonarcloud_secrets` | boolean | No       | `false`  | Add SonarCloud token secrets                  |
+| `add_sonarcloud_secrets` | boolean | No       | `false`  | Project the existing Key Vault-backed Sonar token to Actions and Dependabot, including explicit policy-only opt-ins |
 | `add_nuget_environment`  | boolean | No       | `false`  | Create NuGet publishing environment           |
 | `github_app.enabled`     | boolean | No       | `false`  | Broker the organization-owned GitHub App credentials into the repository |
 | `github_app.app_id`      | string  | When enabled | -     | GitHub App ID exposed as the `GH_APP_ID` repository variable |
@@ -114,6 +116,12 @@ When `github_app.enabled` is true, Terraform also writes the Key Vault-backed
 App private key to the repository Actions secret `GH_APP_PEM`. Workflows should
 mint short-lived installation tokens and request only the permissions needed
 for that operation; they must not expose or persist the private key.
+
+The public `actions` policy entry opts into the existing Sonar token broker as a
+prerequisite for its repository-owned CI analysis replacement. This does not create
+a credential, purchase a plan, import the repository, change visibility, enable a
+new analyzer or disable Automatic Analysis. The owning analysis workstream must
+separately accept and govern the caller and provider-method cutover.
 
 ### Repository policy defaults
 
