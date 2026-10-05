@@ -8,6 +8,7 @@ This production-only Terraform repository converts workload and repository-gover
 - `terraform/workloads.load.tf` - JSON discovery and normalization.
 - `terraform/azure-workloads*.tf` - identities, repositories, integrations, state, and RBAC.
 - `terraform/azure-workloads.rulesets.tf` - central repository review-governance implementation.
+- `terraform/azure-workloads.repository-analysis.tf` - validated scoped source policy and lifecycle-safe GitHub analysis variables.
 - `terraform/providers.tf` - reviewed provider compatibility boundary.
 - `docs/` - architecture, schema, operations, output consumption, and decommissioning.
 
@@ -25,6 +26,7 @@ For Terraform changes:
 terraform -chdir=terraform fmt -check -recursive
 terraform -chdir=terraform init -backend=false -upgrade
 terraform -chdir=terraform validate
+terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-analysis.tftest.hcl'
 ```
 
 Run the production state-backed plan only for infrastructure-affecting changes:
@@ -43,5 +45,8 @@ terraform -chdir=terraform plan -var-file=tfvars/prd.tfvars
 - Follow the documented state-first decommissioning sequence before deleting workload JSON.
 - Never add client secrets or credentials.
 - `.terraform.lock.hcl` is generated locally, ignored, and not committed.
+- Non-`xi-*` catalog rows require an analysis profile or explicit exemption; private source must never select public Sonar execution.
+- Analysis contract tests target only built-in metadata and need no provider reads. Production plans/applies must still cover the complete configuration.
+- Do not cancel running stateful plans/applies. Recover only a confirmed orphaned state-lock ID with explicit operator approval.
 
 See [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), and [docs/decommissioning.md](docs/decommissioning.md).

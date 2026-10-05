@@ -1,6 +1,20 @@
 {
     "name": "status-pages",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "empty",
+                    "reason": "Repository has no committed source",
+                    "reevaluate": "Initial executable source or workflows are committed"
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        },
         "description": "Configuration and incident content for multi-tenant public status pages.",
         "topics": [
             "status-page",

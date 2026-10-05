@@ -1,6 +1,48 @@
 {
     "name": "portal-web",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "javascript",
+                    "powershell",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_portal-web",
+                    "sourceDirectory": "src",
+                    "coverage": "cobertura"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "10.0.x"
+                    ],
+                    "globalJson": "global.json",
+                    "solution": ".",
+                    "skipFormat": true,
+                    "tests": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "XtremeIdiots portal web app (ASP.NET Core MVC) with Azure resources defined in Bicep and deployed via GitHub Actions.",
         "topics": [
             "azure",

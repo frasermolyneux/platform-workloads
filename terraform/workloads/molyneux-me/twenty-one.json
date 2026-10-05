@@ -1,6 +1,41 @@
 {
     "name": "twenty-one",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "javascript",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "cli",
+                    "projectKey": "frasermolyneux_twenty-one",
+                    "sourceDirectory": "src",
+                    "coverage": "not-applicable"
+                },
+                "build": {
+                    "kind": "script",
+                    "nodeVersion": "20.x",
+                    "npmInstall": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Static Blackjack practice site deployed as an Azure Static Web App.",
         "topics": [
             "azure",

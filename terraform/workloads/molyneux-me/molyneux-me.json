@@ -1,6 +1,27 @@
 {
     "name": "molyneux-me",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "terraform"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Personal molyneux.me site built with Jekyll and deployed as an Azure Static Web App via GitHub Actions.",
         "topics": [
             "azure",

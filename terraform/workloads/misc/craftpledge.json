@@ -1,6 +1,47 @@
 {
     "name": "craftpledge",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "javascript",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_craftpledge",
+                    "sourceDirectory": "src",
+                    "coverage": "not-applicable"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "10.0.x"
+                    ],
+                    "globalJson": "global.json",
+                    "solution": ".",
+                    "skipFormat": true,
+                    "tests": false
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "CraftPledge - a certification brand for human-made work in the age of AI. Made by humans. Verified.",
         "topics": [
             "azure",

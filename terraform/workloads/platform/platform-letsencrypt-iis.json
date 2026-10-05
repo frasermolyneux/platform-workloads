@@ -1,6 +1,27 @@
 {
     "name": "platform-letsencrypt-iis",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "powershell"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Automation scripts for issuing, renewing, and binding Let's Encrypt certificates on IIS.",
         "topics": [
             "letsencrypt",

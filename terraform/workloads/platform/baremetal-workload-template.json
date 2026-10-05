@@ -1,6 +1,32 @@
 {
     "name": "baremetal-workload-template",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "dockerfile",
+                    "javascript",
+                    "php",
+                    "python",
+                    "shell"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Canonical constrained bare-metal workload contract and application archetypes.",
         "topics": [
             "bare-metal",

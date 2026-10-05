@@ -1,6 +1,29 @@
 {
     "name": "platform-registry",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "bicep",
+                    "powershell",
+                    "terraform"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Shared Azure Container Registry for platform Bicep modules, provisioned with Terraform and published via GitHub Actions.",
         "topics": [
             "azure",

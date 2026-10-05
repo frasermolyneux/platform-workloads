@@ -1,6 +1,46 @@
 {
     "name": "api-client-abstractions",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_api-client-abstractions",
+                    "sourceDirectory": "src",
+                    "coverage": "cobertura"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "9.0.x",
+                        "10.0.x"
+                    ],
+                    "globalJson": "global.json",
+                    "solution": ".",
+                    "skipFormat": true,
+                    "tests": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "MX API Abstractions: shared API envelopes, RestSharp + Polly client stack, and ASP.NET Core helpers for consistent .NET 9/10 API providers and consumers published to NuGet.",
         "topics": [
             "dotnet",

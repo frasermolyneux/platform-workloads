@@ -1,6 +1,46 @@
 {
     "name": "portal-repository-func",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_portal-repository-func",
+                    "sourceDirectory": "src",
+                    "coverage": "cobertura"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "10.0.x"
+                    ],
+                    "globalJson": "global.json",
+                    "solution": ".",
+                    "skipFormat": true,
+                    "tests": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Background functions for the XtremeIdiots Repository API handling maintenance, telemetry, and subscription tasks, deployed with Terraform and GitHub Actions.",
         "topics": [
             "azure",

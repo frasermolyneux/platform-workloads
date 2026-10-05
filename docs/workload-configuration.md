@@ -8,8 +8,8 @@ repository catalog. Resources depend on the definition shape:
 | Definition mode | Required shape | Managed resources |
 | --- | --- | --- |
 | Environment-backed workload | One or more `environments` | Managed GitHub repository plus per-environment identity, integrations, RBAC, and optional state infrastructure |
-| Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, and rulesets only |
-| Policy-only repository | `github.manage_repository: false` | Rulesets and explicitly opted-in existing Sonar token projection; no repository lifecycle management |
+| Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, rulesets and applicable analysis variables; no Azure workload resources |
+| Policy-only repository | `github.manage_repository: false` | Rulesets, applicable analysis variables and explicitly opted-in existing Sonar token projection; no repository lifecycle management |
 
 Repository-only governance entries use the same catalog under
 `terraform/workloads/repository-governance/`. Setting
@@ -18,7 +18,8 @@ outside Terraform while allowing repository rulesets to be reconciled through
 the shared policy model. An explicit `add_sonarcloud_secrets` opt-in can also project
 the existing Key Vault-backed Sonar token to the named repository without importing
 its lifecycle or general settings. This keeps one repository catalog without importing
-non-workload repositories into `github_repository.workload`.
+non-workload repositories into `github_repository.workload`. Applicable analysis metadata
+uses the same lifecycle-safe repository-name resolution.
 
 Omitting `environments` is intentional for repository-only definitions and
 creates no Azure application, service principal, RBAC, state backend, or
@@ -49,6 +50,24 @@ repository or its operational control plane.
       "installation_id": null
     },
     "manage_repository": true,
+    "repository_analysis": {
+      "profile": {
+        "version": "repository-analysis-v1",
+        "languages": ["actions", "terraform"],
+        "sonar": false
+      },
+      "sonar": null,
+      "cadence": {
+        "dailyFreshness": true,
+        "fullRescanMaximumHours": 168,
+        "defaultBranchCancellation": false,
+        "dispatch": {
+          "expectedRevision": true,
+          "force": true,
+          "defaultBranchOnly": true
+        }
+      }
+    },
     "repository_policy": {
       "copilot_code_review": {
         "enabled": true,
@@ -59,6 +78,10 @@ repository or its operational control plane.
   "environments": [...]
 }
 ```
+
+The analysis profile above illustrates an Actions/Terraform repository. Classify
+the actual maintained source when adding an entry; use a reasoned exemption for
+an empty, archived, documentation-only or upstream-fork repository instead.
 
 ### Environment Configuration
 
@@ -109,6 +132,7 @@ repository or its operational control plane.
 | `github_app.app_id`      | string  | When enabled | -     | GitHub App ID exposed as the `GH_APP_ID` repository variable |
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
+| `repository_analysis` | object | Non-`xi-*` catalog rows | - | Validated source profile, scanner/build recipe and analysis cadence, or explicit applicability exemption |
 | `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
 | `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
 
@@ -122,6 +146,33 @@ prerequisite for its repository-owned CI analysis replacement. This does not cre
 a credential, purchase a plan, import the repository, change visibility, enable a
 new analyzer or disable Automatic Analysis. The owning analysis workstream must
 separately accept and govern the caller and provider-method cutover.
+
+### Repository analysis policy
+
+`github.repository_analysis` is the catalog authority for the estate analysis contract.
+It contains `profile` (`repository-analysis-v1`, actual source languages, Sonar selection
+and optional reasoned exemption), `sonar` (scanner/build declarations or `null`) and
+`cadence` (daily freshness, a 168-hour maximum full-rescan age and exact-revision,
+force-capable, default-branch-only dispatch). Exemptions require a kind, reason and
+re-evaluation condition and retain `sonar`/`cadence: null`.
+
+Terraform validates every non-`xi-*` row before creating analysis variables. It projects
+`REPOSITORY_ANALYSIS_PROFILE` and `REPOSITORY_ANALYSIS_CADENCE` only to applicable
+repositories; substantive public Sonar targets also receive
+`REPOSITORY_ANALYSIS_SONAR_RECIPE` and `REPOSITORY_ANALYSIS_BUILD`. SDK selections,
+Framework absent-test policy, original CMake arguments and static-site non-testing
+dispositions remain declared, not inferred from successful commands.
+
+These variables contain configuration, never credentials, source excerpts or findings.
+Private repositories select permitted local analysis and no public Sonar recipe.
+Runtime selection must still recheck live visibility and execution/publication entitlement;
+a catalog visibility value is not authorization. Exempt and excluded repositories receive
+no analysis-variable writes, and policy-only entries are not lifecycle-imported.
+
+Projection does not install a caller, activate a scanner, change provider methods, modify
+rulesets, merge identity or deployment triggers, or claim current analysis acceptance.
+The owning alignment workstream separately governs immutable caller adoption and bootstrap.
+No new Azure identity, RBAC, subscription, environment or cost-bearing resource is needed.
 
 ### Repository policy defaults
 

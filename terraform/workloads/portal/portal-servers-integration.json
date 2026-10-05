@@ -1,6 +1,47 @@
 {
     "name": "portal-servers-integration",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "terraform"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_portal-servers-integration",
+                    "sourceDirectory": "src",
+                    "coverage": "cobertura"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "9.0.x",
+                        "10.0.x"
+                    ],
+                    "globalJson": "global.json",
+                    "solution": ".",
+                    "skipFormat": true,
+                    "tests": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Game server integration service for the XtremeIdiots portal (RCON and query endpoints) deployed with Bicep and GitHub Actions.",
         "topics": [
             "azure",

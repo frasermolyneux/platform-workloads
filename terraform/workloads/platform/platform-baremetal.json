@@ -1,6 +1,32 @@
 {
     "name": "platform-baremetal",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "ansible",
+                    "php",
+                    "powershell",
+                    "python",
+                    "shell",
+                    "terraform"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Secure, automated management of dedicated Linux servers, shared services, monitoring, backups, and recovery.",
         "topics": [
             "linux",

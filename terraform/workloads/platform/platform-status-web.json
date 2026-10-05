@@ -1,6 +1,48 @@
 {
     "name": "platform-status-web",
     "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "csharp",
+                    "javascript",
+                    "terraform",
+                    "typescript"
+                ],
+                "sonar": true
+            },
+            "sonar": {
+                "recipe": {
+                    "version": 1,
+                    "driver": "dotnet",
+                    "projectKey": "frasermolyneux_platform-status-web",
+                    "sourceDirectory": "src",
+                    "coverage": "cobertura"
+                },
+                "build": {
+                    "kind": "dotnet",
+                    "sdk": [
+                        "10.0.x"
+                    ],
+                    "globalJson": "src/global.json",
+                    "solution": ".",
+                    "skipFormat": false,
+                    "tests": true
+                }
+            },
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
         "description": "Public status pages for frasermolyneux platforms (XtremeIdiots, Molyneux personal). Generic multi-site app reading App Insights availability telemetry + GitHub Issues, served via Azure Static Web Apps.",
         "topics": [
             "azure",
