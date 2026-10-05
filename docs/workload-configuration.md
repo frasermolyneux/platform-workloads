@@ -8,7 +8,7 @@ repository catalog. Resources depend on the definition shape:
 | Definition mode | Required shape | Managed resources |
 | --- | --- | --- |
 | Environment-backed workload | One or more `environments` | Managed GitHub repository plus per-environment identity, integrations, RBAC, and optional state infrastructure |
-| Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, and rulesets only |
+| Managed repository only | `github.manage_repository` omitted or `true`; no `environments` | GitHub repository settings, labels, rulesets and applicable analysis variables; no Azure workload resources |
 | Policy-only repository | `github.manage_repository: false` | Rulesets, applicable analysis variables and explicitly opted-in existing Sonar token projection; no repository lifecycle management |
 
 Repository-only governance entries use the same catalog under
@@ -50,6 +50,24 @@ repository or its operational control plane.
       "installation_id": null
     },
     "manage_repository": true,
+    "repository_analysis": {
+      "profile": {
+        "version": "repository-analysis-v1",
+        "languages": ["actions", "terraform"],
+        "sonar": false
+      },
+      "sonar": null,
+      "cadence": {
+        "dailyFreshness": true,
+        "fullRescanMaximumHours": 168,
+        "defaultBranchCancellation": false,
+        "dispatch": {
+          "expectedRevision": true,
+          "force": true,
+          "defaultBranchOnly": true
+        }
+      }
+    },
     "repository_policy": {
       "copilot_code_review": {
         "enabled": true,
@@ -60,6 +78,10 @@ repository or its operational control plane.
   "environments": [...]
 }
 ```
+
+The analysis profile above illustrates an Actions/Terraform repository. Classify
+the actual maintained source when adding an entry; use a reasoned exemption for
+an empty, archived, documentation-only or upstream-fork repository instead.
 
 ### Environment Configuration
 
