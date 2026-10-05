@@ -4,6 +4,7 @@
         "description": "Repository for hosting reusable workflows for GitHub Actions",
         "topics": [],
         "visibility": "public",
-        "manage_repository": false
+        "manage_repository": false,
+        "add_sonarcloud_secrets": true
     }
 }
