@@ -72,11 +72,13 @@ scanner execution or estate caller adoption.
 - `Build and Test` performs formatting, backend-disabled initialization, validation and the metadata-only analysis catalog test for matching feature branches.
 - `Feature Development` runs production-backed plans for matching feature branches.
 - `PR Verify` plans non-draft pull requests.
+- Running Terraform PR plans are not cancelled by a new push; production jobs retain their shared concurrency group so state locks can be released normally.
 - `Deploy Prd` applies Terraform changes pushed to `main` and also runs on its schedule.
 - `Decommission State Rm` is the explicit repository-detachment operation used before deleting a managed repository definition.
 Inspect `.github/workflows` for current triggers and required Production environment credentials before depending on them.
 
 ## Troubleshooting Quick Checks
+- An orphaned Terraform state lock requires explicit operator approval after confirming its exact ID and that the owning job and other state writers have stopped. Do not disable locking or force-unlock an active operation.
 - Permission failures: confirm the platform service principal is Owner at / (`az role assignment list --assignee <spn-object-id> --scope /`).
 - Scope resolution errors: ensure the alias exists in tfvars/prd.tfvars or supply a full ARM ID.
 - OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.

@@ -47,5 +47,6 @@ terraform -chdir=terraform plan -var-file=tfvars/prd.tfvars
 - `.terraform.lock.hcl` is generated locally, ignored, and not committed.
 - Non-`xi-*` catalog rows require an analysis profile or explicit exemption; private source must never select public Sonar execution.
 - Analysis contract tests target only built-in metadata and need no provider reads. Production plans/applies must still cover the complete configuration.
+- Do not cancel running stateful plans/applies. Recover only a confirmed orphaned state-lock ID with explicit operator approval.
 
 See [docs/architecture.md](docs/architecture.md), [docs/workload-configuration.md](docs/workload-configuration.md), [docs/developer-guide.md](docs/developer-guide.md), and [docs/decommissioning.md](docs/decommissioning.md).
