@@ -43,13 +43,14 @@
                 }
             }
         },
-        "description": "Public status pages for frasermolyneux platforms (XtremeIdiots, Molyneux personal). Generic multi-site app reading App Insights availability telemetry + GitHub Issues, served via Azure Static Web Apps.",
+        "description": "Independent multi-brand status pages with durable local publications, PostgreSQL replication, Entra operations, and private Azure monitoring evidence.",
         "topics": [
             "azure",
             "terraform",
             "github-actions",
-            "azure-functions",
-            "azure-static-web-apps",
+            "aspnet-core",
+            "postgresql",
+            "bare-metal",
             "status-page",
             "availability",
             "monitoring"
@@ -228,6 +229,12 @@
             ],
             "role_assignments": {
                 "assigned_roles": [
+                    {
+                        "scope": "workload:platform-registry/Production",
+                        "roles": [
+                            "AcrPush"
+                        ]
+                    },
                     {
                         "scope": "sub-xi-portal-prd",
                         "roles": [
