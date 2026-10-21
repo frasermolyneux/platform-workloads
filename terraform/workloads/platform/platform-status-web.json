@@ -230,12 +230,6 @@
             "role_assignments": {
                 "assigned_roles": [
                     {
-                        "scope": "workload:platform-registry/Production",
-                        "roles": [
-                            "AcrPush"
-                        ]
-                    },
-                    {
                         "scope": "sub-xi-portal-prd",
                         "roles": [
                             "Reader",
