@@ -68,6 +68,14 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "directory_roles": ["Cloud application administrator", "Directory Readers"],
+            "role_assignments": {
+                "assigned_roles": [
+                    {
+                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.io",
+                        "roles": ["DNS Zone Contributor"]
+                    }
+                ]
+            },
             "locations": ["uksouth"],
             "resource_groups": [
                 {
