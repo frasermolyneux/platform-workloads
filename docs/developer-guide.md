@@ -49,8 +49,8 @@ Azure/GitHub provider reads:
 terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-analysis.tftest.hcl'
 ```
 
-This metadata-only test targets the built-in contract resource and checks all 50
-current dispositions, the 142 declared variables, private publication boundaries
+This metadata-only test targets the built-in contract resource and checks all 51
+current dispositions, the 144 declared variables, private publication boundaries
 and exclusions. It does not replace the full production state-backed plan or justify
 targeted production applies. Analysis variables are configuration, not proof of
 scanner execution or estate caller adoption.
