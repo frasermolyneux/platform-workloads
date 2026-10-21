@@ -73,7 +73,7 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "directory_roles": ["Cloud application administrator", "Directory Readers"],
-            "graph_api_permissions": ["AppRoleAssignment.ReadWrite.All", "Application.Read.All"],
+            "graph_api_permissions": ["AppRoleAssignment.ReadWrite.All", "Application.Read.All", "Application.ReadWrite.OwnedBy"],
             "role_assignments": {
                 "assigned_roles": [
                     {
