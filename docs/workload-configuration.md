@@ -256,6 +256,13 @@ Environment-level `role_assignments`:
 - `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.
 - Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
 
+Sitewatch's Flex Consumption runtime requires `Storage Blob Data Owner` on its
+own host storage account. Its CI delegation allows that role alongside the
+existing blob contributor, queue contributor and secrets reader roles, only
+within its existing Development and regional Production resource groups.
+The owning workload stack creates the storage-scoped runtime assignment; this
+catalog allowance is not a direct data-plane grant or subscription delegation.
+
 `requires_terraform_state_access` entries use the current environment by default:
 
 ```json
