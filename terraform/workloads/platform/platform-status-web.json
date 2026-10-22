@@ -212,6 +212,7 @@
                                 "Zone Read",
                                 "DNS Read",
                                 "Zone Settings Read",
+                                "Config Settings Write",
                                 "SSL and Certificates Write"
                             ],
                             "zones": [
