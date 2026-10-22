@@ -94,6 +94,7 @@
                             {
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
+                                    "Key Vault Certificates Officer",
                                     "Workload Key Vault Secret Synchronizer",
                                     "Cognitive Services OpenAI User"
                                 ]
