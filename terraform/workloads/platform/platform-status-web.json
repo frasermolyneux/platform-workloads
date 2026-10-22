@@ -203,6 +203,35 @@
             "requires_terraform_state_access": [
                 "platform-monitoring"
             ],
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "edge",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "Zone Read",
+                                "SSL and Certificates Write"
+                            ],
+                            "zones": [
+                                "mxstatus.io",
+                                "xtremeidiots.com"
+                            ]
+                        },
+                        {
+                            "permission_groups": [
+                                "Load Balancers Write"
+                            ],
+                            "zone": "mxstatus.io"
+                        },
+                        {
+                            "permission_groups": [
+                                "Load Balancing: Monitors and Pools Write"
+                            ],
+                            "account_from_zone": "mxstatus.io"
+                        }
+                    ]
+                }
+            ],
             "resource_groups": [
                 {
                     "name": "rg-{workload}-{env}-{location}",

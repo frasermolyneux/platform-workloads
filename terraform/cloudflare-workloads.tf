@@ -16,7 +16,7 @@ locals {
 
   cloudflare_zone_names = toset(flatten([
     for token in local.cloudflare_tokens : [
-      for policy in token.policies : try(policy.zones, [policy.zone])
+      for policy in token.policies : try([policy.account_from_zone], policy.zones, [policy.zone])
     ]
   ]))
 
@@ -29,6 +29,14 @@ locals {
   cloudflare_permission_group_ids = {
     for name in local.cloudflare_permission_group_names :
     name => data.cloudflare_api_token_permission_groups_list.lookup[name].result[0].id
+  }
+
+  cloudflare_token_accounts = {
+    for token in local.cloudflare_tokens : token.key => toset([
+      for zone in flatten([
+        for policy in token.policies : try([policy.account_from_zone], policy.zones, [policy.zone])
+      ]) : data.cloudflare_zone.lookup[zone].account.id
+    ])
   }
 
   # One entry per workload-environment that has a Cloudflare token (all tokens in
@@ -78,12 +86,30 @@ resource "cloudflare_api_token" "workload" {
           id = local.cloudflare_permission_group_ids[pg]
         }
       ]
-      resources = jsonencode({
-        for z in try(policy.zones, [policy.zone]) :
-        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[z].id}" => "*"
+      resources = jsonencode(can(policy.account_from_zone) ? {
+        "com.cloudflare.api.account.${data.cloudflare_zone.lookup[policy.account_from_zone].account.id}" = "*"
+        } : {
+        for zone in try(policy.zones, [policy.zone]) :
+        "com.cloudflare.api.account.zone.${data.cloudflare_zone.lookup[zone].id}" => "*"
       })
     }
   ]
+
+  lifecycle {
+    precondition {
+      condition = alltrue([
+        for policy in each.value.policies :
+        can(policy.account_from_zone)
+        ? (!can(policy.zone) && !can(policy.zones))
+        : (can(policy.zone) != can(policy.zones))
+      ])
+      error_message = "Each Cloudflare token policy must select exactly one of zone, zones, or account_from_zone."
+    }
+    precondition {
+      condition     = length(local.cloudflare_token_accounts[each.key]) == 1
+      error_message = "All policies in a workload Cloudflare token must belong to one account."
+    }
+  }
 }
 
 resource "github_actions_environment_secret" "cloudflare_token" {
@@ -101,7 +127,7 @@ resource "github_actions_environment_variable" "cloudflare_account_id" {
   repository    = github_repository.workload[each.value.workload_name].name
   environment   = github_repository_environment.workload[each.value.environment_key].environment
   variable_name = "CLOUDFLARE_ACCOUNT_ID"
-  value         = data.cloudflare_zone.lookup[try(each.value.policies[0].zones[0], each.value.policies[0].zone)].account.id
+  value         = one(local.cloudflare_token_accounts[each.value.key])
 }
 
 resource "github_actions_environment_variable" "cloudflare_adopted_zone_keys" {
