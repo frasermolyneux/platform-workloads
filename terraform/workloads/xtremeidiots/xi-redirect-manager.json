@@ -1,0 +1,38 @@
+{
+    "name": "xi-redirect-manager",
+    "github": {
+        "description": "HTTPS map catalogue and redirect file management API with forum OAuth and Entra portal integrations.",
+        "topics": [
+            "dotnet",
+            "razor-pages",
+            "maps",
+            "docker",
+            "bare-metal",
+            "xtremeidiots"
+        ],
+        "add_sonarcloud_secrets": false,
+        "add_nuget_environment": true,
+        "auto_init": true,
+        "github_app": {
+            "enabled": true,
+            "app_id": "2973523",
+            "installation_id": "113093932"
+        },
+        "visibility": "private"
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "locations": [
+                "swedencentral"
+            ],
+            "resource_groups": [
+                {
+                    "name": "rg-{workload}-{env}-{location}"
+                }
+            ]
+        }
+    ]
+}
