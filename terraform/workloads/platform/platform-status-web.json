@@ -210,6 +210,8 @@
                         {
                             "permission_groups": [
                                 "Zone Read",
+                                "DNS Read",
+                                "Zone Settings Read",
                                 "SSL and Certificates Write"
                             ],
                             "zones": [
