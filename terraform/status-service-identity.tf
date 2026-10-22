@@ -105,14 +105,13 @@ resource "azuread_service_principal_delegated_permission_grant" "status_operator
   claim_values                         = ["Status.Access"]
 }
 
-resource "azuread_service_principal" "status_secure_webhook_sender" {
-  client_id    = "461e8683-5575-4561-ac7f-899cc907d62a"
-  use_existing = true
+data "azuread_service_principal" "status_secure_webhook_sender" {
+  client_id = "461e8683-5575-4561-ac7f-899cc907d62a"
 }
 
 resource "azuread_app_role_assignment" "status_secure_webhook_sender" {
   app_role_id         = random_uuid.status_service_role["Status.Ingest"].result
-  principal_object_id = azuread_service_principal.status_secure_webhook_sender.object_id
+  principal_object_id = data.azuread_service_principal.status_secure_webhook_sender.object_id
   resource_object_id  = azuread_service_principal.status_service.object_id
 }
 
@@ -139,6 +138,6 @@ output "status_service_identity" {
     tenant_id            = data.azuread_client_config.current.tenant_id
     role_ids             = { for name, role in random_uuid.status_service_role : name => role.result }
     scope                = "${azuread_application_identifier_uri.status_service.identifier_uri}/Status.Access"
-    webhook_client_id    = azuread_service_principal.status_secure_webhook_sender.client_id
+    webhook_client_id    = data.azuread_service_principal.status_secure_webhook_sender.client_id
   }
 }
