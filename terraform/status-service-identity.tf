@@ -10,6 +10,11 @@ locals {
       description = "Publish status incidents and maintenance updates."
       members     = ["User"]
     }
+    "Status.TrafficOperator" = {
+      name        = "Status traffic operator"
+      description = "Explicitly enable or restore maintenance interception for approved public hostnames."
+      members     = ["User"]
+    }
     "Status.Ingest" = {
       name        = "Status evidence ingestion"
       description = "Submit private Azure Monitor evidence without public publishing access."
@@ -94,6 +99,12 @@ resource "azuread_service_principal" "status_service" {
 
 resource "azuread_app_role_assignment" "status_operator" {
   app_role_id         = random_uuid.status_service_role["Status.Operator"].result
+  principal_object_id = data.azuread_user.status_operator.object_id
+  resource_object_id  = azuread_service_principal.status_service.object_id
+}
+
+resource "azuread_app_role_assignment" "status_traffic_operator" {
+  app_role_id         = random_uuid.status_service_role["Status.TrafficOperator"].result
   principal_object_id = data.azuread_user.status_operator.object_id
   resource_object_id  = azuread_service_principal.status_service.object_id
 }

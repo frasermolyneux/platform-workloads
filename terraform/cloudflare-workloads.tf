@@ -8,6 +8,7 @@ locals {
           environment_name = environment.name
           environment_key  = format("%s-%s", workload.name, environment.name)
           token_name       = format("spn-%s-%s-%s", workload.name, lookup(var.environment_map, environment.name, lower(environment.name)), token.name_suffix)
+          secret_name      = upper(try(token.secret_name, "CLOUDFLARE_API_KEY"))
           policies         = token.policies
         }
       ]
@@ -117,8 +118,17 @@ resource "github_actions_environment_secret" "cloudflare_token" {
 
   repository      = github_repository.workload[each.value.workload_name].name
   environment     = github_repository_environment.workload[each.value.environment_key].environment
-  secret_name     = "CLOUDFLARE_API_KEY"
+  secret_name     = each.value.secret_name
   plaintext_value = cloudflare_api_token.workload[each.key].value
+  lifecycle {
+    precondition {
+      condition = length([
+        for token in local.cloudflare_tokens : token.key
+        if token.environment_key == each.value.environment_key && token.secret_name == each.value.secret_name
+      ]) == 1
+      error_message = "Cloudflare tokens in one workload environment must use distinct GitHub secret names."
+    }
+  }
 }
 
 resource "github_actions_environment_variable" "cloudflare_account_id" {
