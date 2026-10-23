@@ -160,7 +160,10 @@
                                 "DNS Write",
                                 "Zone Read"
                             ],
-                            "zone": "xtremeidiots.com"
+                            "zones": [
+                                "xtremeidiots.com",
+                                "xtremeidiots.net"
+                            ]
                         }
                     ]
                 }
