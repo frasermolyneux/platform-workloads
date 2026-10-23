@@ -281,7 +281,11 @@ Resource group `role_assignments` follow the same shape inside each `resource_gr
 
 ### Cloudflare Tokens
 
-Environment-level `cloudflare_tokens` create scoped Cloudflare API tokens and inject them as GitHub environment secrets:
+Environment-level `cloudflare_tokens` create scoped Cloudflare API tokens and inject them as GitHub environment secrets.
+An optional `secret_name` selects a separate destination (default
+`CLOUDFLARE_API_KEY`); destinations must be unique within an environment. This
+allows separate deployment and runtime tokens without broadening an existing
+credential or overwriting it:
 
 ```json
 {

@@ -166,10 +166,40 @@
                             ]
                         }
                     ]
+                },
+                {
+                    "name_suffix": "traffic",
+                    "secret_name": "CLOUDFLARE_TRAFFIC_API_TOKEN",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "Workers Routes Write",
+                                "DNS Read"
+                            ],
+                            "zones": [
+                                "bishopsbees.co.uk",
+                                "bqba.co.uk",
+                                "buckfastqueen.co.uk",
+                                "dm-electricalservices.co.uk",
+                                "moanclub.com",
+                                "mx-mail.io",
+                                "queensforsale.co.uk",
+                                "xtremeidiots.com",
+                                "xtremeidiots.net"
+                            ]
+                        },
+                        {
+                            "permission_groups": [
+                                "Account Analytics Read"
+                            ],
+                            "account_from_zone": "xtremeidiots.com"
+                        }
+                    ]
                 }
             ],
             "requires_terraform_state_access": [
-                "platform-monitoring"
+                "platform-monitoring",
+                "platform-connectivity"
             ],
             "locations": [
                 "uksouth"

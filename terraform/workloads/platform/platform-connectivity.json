@@ -6,6 +6,7 @@
                 "version": "repository-analysis-v1",
                 "languages": [
                     "actions",
+                    "javascript",
                     "terraform"
                 ],
                 "sonar": false
@@ -203,6 +204,12 @@
                                 "Config Settings Write"
                             ],
                             "zone": "xtremeidiots.net"
+                        },
+                        {
+                            "permission_groups": [
+                                "Workers Scripts Write"
+                            ],
+                            "account_from_zone": "xtremeidiots.com"
                         }
                     ]
                 }
