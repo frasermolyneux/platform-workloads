@@ -98,6 +98,10 @@
                                     "Workload Key Vault Secret Synchronizer",
                                     "Cognitive Services OpenAI User"
                                 ]
+                            },
+                            {
+                                "scope": "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-radar-prd-uksouth/providers/Microsoft.CognitiveServices/accounts/ai-radar-prd-5203d0/projects/radar",
+                                "allowed_roles": ["Foundry User"]
                             }
                         ]
                     }
