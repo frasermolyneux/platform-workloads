@@ -91,7 +91,9 @@ def b64(value):
 def verify_authentication(app, tenant, certificate, key, now):
     endpoint = f"https://login.microsoftonline.com/{tenant}/oauth2/v2.0/token"
     der = command("openssl", "x509", "-in", str(certificate), "-outform", "DER", binary=True)
-    header = b64(json.dumps({"alg": "RS256", "typ": "JWT", "x5t": b64(hashlib.sha1(der).digest())}).encode())
+    # Entra's x5t certificate identifier is SHA-1; the assertion signature is RS256.
+    thumbprint = hashlib.sha1(der, usedforsecurity=False).digest()
+    header = b64(json.dumps({"alg": "RS256", "typ": "JWT", "x5t": b64(thumbprint)}).encode())
     claims = b64(json.dumps({
         "aud": endpoint, "iss": app["appId"], "sub": app["appId"], "jti": str(uuid.uuid4()),
         "nbf": int(now.timestamp()) - 30, "exp": int(now.timestamp()) + 600
