@@ -2,6 +2,7 @@
 
 import argparse
 import base64
+from contextlib import contextmanager
 import html
 import importlib.util
 import json
@@ -67,8 +68,32 @@ def az_json(*arguments):
     result = subprocess.run([executable, *arguments, "--only-show-errors", "--output", "json"],
                             capture_output=True, text=True, check=False)
     if result.returncode:
-        raise BootstrapError("Azure CLI failed; check az login, subscription and Key Vault permissions.")
-    return json.loads(result.stdout)
+        raise BootstrapError("Azure CLI failed; check az login, subscription, Key Vault and bootstrap-storage permissions. Another bootstrap may hold the shared lock.")
+    return json.loads(result.stdout) if result.stdout.strip() else None
+
+
+@contextmanager
+def bootstrap_lock():
+    backend = (ROOT / "terraform" / "backends" / "prd.backend.hcl").read_text(encoding="utf-8")
+    storage = dict(re.findall(r'(?m)^\s*(storage_account_name|container_name)\s*=\s*"([^"]+)"', backend))
+    if set(storage) != {"storage_account_name", "container_name"}:
+        raise BootstrapError("The production backend must declare a literal storage account and container for the bootstrap lock.")
+    arguments = ("--account-name", storage["storage_account_name"], "--container-name", storage["container_name"],
+                 "--auth-mode", "login")
+    blob = "runtime-github-app-bootstrap.lock"
+    if not az_json("storage", "blob", "exists", *arguments, "--name", blob)["exists"]:
+        with tempfile.TemporaryDirectory(prefix="runtime-app-lock-") as directory:
+            marker = Path(directory) / "marker"
+            marker.write_text("Runtime GitHub App bootstrap mutex", encoding="utf-8")
+            az_json("storage", "blob", "upload", *arguments, "--name", blob, "--file", str(marker), "--overwrite", "false")
+    arguments += ("--blob-name", blob)
+    lease = az_json("storage", "blob", "lease", "acquire", *arguments, "--lease-duration", "-1")
+    try:
+        def verify():
+            az_json("storage", "blob", "lease", "renew", *arguments, "--lease-id", lease)
+        yield verify
+    finally:
+        az_json("storage", "blob", "lease", "release", *arguments, "--lease-id", lease)
 
 
 def load_app(workload, name):
@@ -294,6 +319,11 @@ def save_registration(path, catalog, name, identity, installation):
 
 
 def bootstrap(workload, name, *, browser=True):
+    with bootstrap_lock() as verify_lock:
+        bootstrap_locked(workload, name, browser=browser, verify_lock=verify_lock)
+
+
+def bootstrap_locked(workload, name, *, browser, verify_lock):
     path, catalog, app = load_app(workload, name)
     if importlib.util.find_spec("cryptography") is None:
         raise BootstrapError("Install scripts/requirements-github-apps.txt before bootstrapping.")
@@ -305,12 +335,15 @@ def bootstrap(workload, name, *, browser=True):
             raise BootstrapError("A registered App has no active key. Restore or rotate it explicitly; bootstrap will not create a replacement App.")
         identity = create_app(app, browser=browser)
         validate_identity(identity, app)
+        verify_lock()
+        token = az_json("account", "get-access-token", "--resource", "https://vault.azure.net")["accessToken"]
         if read_existing(vault, app, workload, name, token) is not None:
             raise BootstrapError("A key appeared during registration. Refusing to overwrite it; review the newly created App manually.")
         vault_request("PUT", vault, app["key_vault_secret_name"], token, {
             "value": identity["pem"], "contentType": "application/x-pem-file", "attributes": {"enabled": True},
             "tags": {"managed-by": "platform-workloads", "workload": workload, "runtime-app": name,
                      "app-id": str(identity["id"]), "app-slug": identity["slug"]}})
+        verify_lock()
         save_registration(path, catalog, name, identity, None)
         print(f"Stored the App key in {vault}/{app['key_vault_secret_name']}; no key was written locally.", flush=True)
     else:
@@ -319,6 +352,7 @@ def bootstrap(workload, name, *, browser=True):
         if registered and (registered["app_id"] != str(identity["id"]) or registered["slug"] != identity["slug"]):
             raise BootstrapError("The existing key and catalog registration disagree. Explicit recovery is required.")
     installation = wait_installation(identity, app, browser=browser)
+    verify_lock()
     save_registration(path, catalog, name, identity, installation)
     print(f"Verified App {identity['slug']} ({identity['id']}), installation {installation}. Review the catalog diff before Terraform apply.")
 

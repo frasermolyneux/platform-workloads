@@ -15,7 +15,9 @@ does not create the App or read its private key.
 Use Python 3.10 or later, Azure CLI and an authenticated browser on the same machine.
 Run `az login` and select the subscription containing the workload's runtime vault.
 The signed-in Azure identity needs to list vaults and read/write secrets in the
-target vault (for example, Key Vault Secrets Officer).
+target vault (for example, Key Vault Secrets Officer), and **Storage Blob Data
+Contributor** access to the existing production Terraform backend container.
+Storage commands use Entra login, never account keys.
 
 From the repository root:
 
@@ -39,6 +41,14 @@ locally, put in Actions secrets or passed through Terraform state. The registrat
 code is exchanged in memory. Temporary installation-verification tokens are revoked.
 `--no-browser` prints the links instead of opening them automatically.
 
+All bootstraps share an exclusive lease on `runtime-github-app-bootstrap.lock` in
+the existing backend container. The lease covers catalog reads, approvals, key
+storage and registration updates across processes and machines. Only one bootstrap
+can run at a time; a second attempt fails before registering an App. The Terraform
+state blob itself is never locked or modified. No new Azure resources are required.
+The lease is checked before writes and released on normal completion, errors and
+keyboard cancellation. Vault credentials are refreshed after browser approval.
+
 The workload owner must separately review the read-only container secret mount,
 host allowlist and runtime App settings. Registration is not a runtime deployment.
 The service must mint short-lived installation tokens restricted to its configured
@@ -51,6 +61,12 @@ owner, permissions, events and exact installed repositories. It does not rotate 
 existing key or register a replacement for a known App. If installation times out,
 the key is already safe in Key Vault and the catalog contains a partial registration;
 rerun bootstrap after completing installation.
+
+If a bootstrap process terminates without releasing its lease, do not start another
+bootstrap until its operator confirms that the original process has stopped.
+Then explicitly break only `runtime-github-app-bootstrap.lock` using
+`az storage blob lease break --account-name <backend-account> --container-name <backend-container> --blob-name runtime-github-app-bootstrap.lock --auth-mode login`.
+Never break the Terraform state lease as part of App-bootstrap recovery.
 
 Unknown, disabled, expiring or soft-deleted keys require explicit recovery.
 Correct an overbroad installation selection in GitHub and rerun. A key that was

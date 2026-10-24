@@ -101,7 +101,8 @@ class GitHubAppBootstrapTests(unittest.TestCase):
                 bootstrap.read_existing("vault", self.app, "workload", "status-incidents", "token")
 
     def test_resume_reuses_vault_key_without_creating_or_writing_another_key(self):
-        with patch.object(bootstrap, "load_app", return_value=(Path("catalog"), {}, self.app)), \
+        with patch.object(bootstrap, "bootstrap_lock"), \
+             patch.object(bootstrap, "load_app", return_value=(Path("catalog"), {}, self.app)), \
              patch.object(bootstrap, "discover_vault", return_value="vault"), \
              patch.object(bootstrap, "az_json", return_value={"accessToken": "azure-token"}), \
              patch.object(bootstrap, "read_existing", return_value=self.identity), \
@@ -115,6 +116,61 @@ class GitHubAppBootstrapTests(unittest.TestCase):
             vault.assert_not_called()
             self.assertEqual(save.call_args.args[-1], 100)
             self.assertNotIn("PRIVATE_KEY_FIXTURE", output.getvalue())
+
+    def test_registration_refreshes_vault_credentials_after_browser_approval(self):
+        with patch.object(bootstrap, "bootstrap_lock"), \
+             patch.object(bootstrap, "load_app", return_value=(Path("catalog"), {}, self.app)), \
+             patch.object(bootstrap, "discover_vault", return_value="vault"), \
+             patch.object(bootstrap, "az_json", side_effect=[{"accessToken": "old"}, {"accessToken": "fresh"}]), \
+             patch.object(bootstrap, "read_existing", return_value=None) as existing, \
+             patch.object(bootstrap, "create_app", return_value=self.identity), \
+             patch.object(bootstrap, "validate_identity"), \
+             patch.object(bootstrap, "wait_installation", return_value=100), \
+             patch.object(bootstrap, "save_registration"), \
+             patch.object(bootstrap, "vault_request") as vault, patch("sys.stdout", new_callable=io.StringIO):
+            bootstrap.bootstrap("workload", "status-incidents", browser=False)
+            self.assertEqual(existing.call_args.args[-1], "fresh")
+            self.assertEqual(vault.call_args.args[3], "fresh")
+
+    def test_shared_lease_blocks_other_bootstraps_and_is_released_after_failure(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            backend = root / "terraform" / "backends"
+            backend.mkdir(parents=True)
+            (backend / "prd.backend.hcl").write_text(
+                'storage_account_name = "fixtureaccount"\ncontainer_name = "tfstate"\n', encoding="utf-8")
+            held = False
+            released = 0
+
+            def storage(*arguments):
+                nonlocal held, released
+                self.assertIn("login", arguments)
+                if arguments[:3] == ("storage", "blob", "exists"):
+                    return {"exists": True}
+                action = arguments[3]
+                if action == "acquire":
+                    if held:
+                        raise bootstrap.BootstrapError("Another bootstrap holds the lock.")
+                    held = True
+                    return "fixture-lease"
+                self.assertTrue(held)
+                self.assertEqual(arguments[-1], "fixture-lease")
+                if action == "release":
+                    held = False
+                    released += 1
+
+            with patch.object(bootstrap, "ROOT", root), patch.object(bootstrap, "az_json", side_effect=storage), \
+                 patch.object(bootstrap, "load_app") as load:
+                with self.assertRaisesRegex(bootstrap.BootstrapError, "fixture failure"):
+                    with bootstrap.bootstrap_lock() as verify:
+                        verify()
+                        with self.assertRaisesRegex(bootstrap.BootstrapError, "Another bootstrap"):
+                            bootstrap.bootstrap("another-workload", "another-app", browser=False)
+                        load.assert_not_called()
+                        self.assertTrue(held)
+                        raise bootstrap.BootstrapError("fixture failure")
+                self.assertFalse(held)
+                self.assertEqual(released, 1)
 
     def test_registration_preserves_unrelated_concurrent_edits_and_does_not_write_the_key(self):
         with tempfile.TemporaryDirectory() as directory:
