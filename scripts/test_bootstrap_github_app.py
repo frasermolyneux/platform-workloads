@@ -95,7 +95,7 @@ class GitHubAppBootstrapTests(unittest.TestCase):
                     self.assertEqual(api.call_args.kwargs["token"], "temporary")
 
     def test_existing_unknown_key_is_not_adopted_or_overwritten(self):
-        with patch.object(bootstrap, "az_json", return_value=[{"name": self.app["key_vault_secret_name"]}]), \
+        with patch.object(bootstrap, "az_json", return_value=[{"name": self.app["key_vault_secret_name"].upper()}]), \
              patch.object(bootstrap, "vault_request", return_value={"value": "unowned", "attributes": {"enabled": True}}):
             with self.assertRaises(bootstrap.BootstrapError):
                 bootstrap.read_existing("vault", self.app, "workload", "status-incidents", "token")
@@ -143,7 +143,7 @@ class GitHubAppBootstrapTests(unittest.TestCase):
             self.assertNotIn("PRIVATE", str(result.exception))
 
     def test_soft_deleted_key_blocks_registration_instead_of_losing_the_new_key(self):
-        with patch.object(bootstrap, "az_json", side_effect=[[], [{"name": self.app["key_vault_secret_name"]}]]), \
+        with patch.object(bootstrap, "az_json", side_effect=[[], [{"name": self.app["key_vault_secret_name"].upper()}]]), \
              patch.object(bootstrap, "vault_request") as vault:
             with self.assertRaises(bootstrap.BootstrapError):
                 bootstrap.read_existing("vault", self.app, "workload", "status-incidents", "token")
@@ -167,11 +167,28 @@ class GitHubAppBootstrapTests(unittest.TestCase):
     def test_declaration_rejects_secret_path_and_unbounded_repository_selection(self):
         for changed in ({"key_vault_secret_name": "../secret"}, {"repositories": []},
                         {"repositories": ["status-pages", "status-pages"]},
+                        {"repositories": ["status-pages", "Status-Pages"]},
                         {"homepage_url": "https://user:password@example.com"},
                         {"owner": "owner/unsafe"}, {"repository_permissions": {"issues": "admin"}}):
             with self.subTest(changed=changed):
                 with self.assertRaises(bootstrap.BootstrapError):
                     bootstrap.validate_app(self.app | changed)
+
+    def test_exact_repository_selection_can_span_multiple_pages_and_always_revokes_its_token(self):
+        app = self.app | {"repositories": [f"repo-{index}" for index in range(101)]}
+        names = [{"full_name": f"fixture/{name}"} for name in app["repositories"]]
+        for last in (names[100:], [{"full_name": "fixture/unapproved"}]):
+            with self.subTest(last=last), patch.object(bootstrap, "app_jwt", return_value="jwt"), \
+                 patch.object(bootstrap, "request_json", side_effect=[
+                     {"token": "temporary"}, {"total_count": 101, "repositories": names[:100]},
+                     {"total_count": 101, "repositories": last}, None]) as api:
+                if last == names[100:]:
+                    bootstrap.verify_installation(self.identity, app, self.installation)
+                else:
+                    with self.assertRaises(bootstrap.BootstrapError):
+                        bootstrap.verify_installation(self.identity, app, self.installation)
+                self.assertEqual(api.call_args_list[2].args[1], f"{bootstrap.API}/installation/repositories?per_page=100&page=2")
+                self.assertEqual(api.call_args.args, ("DELETE", f"{bootstrap.API}/installation/token"))
 
 
 if __name__ == "__main__":

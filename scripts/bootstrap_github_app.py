@@ -97,7 +97,7 @@ def validate_app(app):
             or not app.get("repository_permissions")
             or any(value not in ("read", "write") for value in app["repository_permissions"].values())
             or not app.get("repositories")
-            or len(set(app["repositories"])) != len(app["repositories"])
+            or len({repo.lower() for repo in app["repositories"]}) != len(app["repositories"])
             or any(not re.fullmatch(r"[A-Za-z0-9_.-]+", repo) for repo in app["repositories"])):
         raise BootstrapError("Invalid runtime GitHub App declaration.")
     url = urlparse(app.get("homepage_url", ""))
@@ -129,9 +129,9 @@ def vault_request(method, vault, name, token, data=None):
 
 def read_existing(vault, app, workload, name, token):
     metadata = az_json("keyvault", "secret", "list", "--vault-name", vault)
-    if not any(secret["name"] == app["key_vault_secret_name"] for secret in metadata):
+    if not any(secret["name"].lower() == app["key_vault_secret_name"].lower() for secret in metadata):
         deleted = az_json("keyvault", "secret", "list-deleted", "--vault-name", vault)
-        if any(secret["name"] == app["key_vault_secret_name"] for secret in deleted):
+        if any(secret["name"].lower() == app["key_vault_secret_name"].lower() for secret in deleted):
             raise BootstrapError("The App key is soft-deleted. Recover it explicitly before resuming bootstrap.")
         return None
     stored = vault_request("GET", vault, app["key_vault_secret_name"], token)
@@ -241,10 +241,16 @@ def verify_installation(identity, app, installation):
     token = request_json("POST", f"{API}/app/installations/{installation['id']}/access_tokens",
                          token=app_jwt(identity))["token"]
     try:
-        response = request_json("GET", f"{API}/installation/repositories?per_page=100", token=token)
         expected = {f"{app['owner']}/{repo}".lower() for repo in app["repositories"]}
-        actual = {repo["full_name"].lower() for repo in response["repositories"]}
-        if actual != expected or response["total_count"] != len(expected):
+        actual = set()
+        for page in range(1, (len(expected) + 99) // 100 + 1):
+            response = request_json("GET", f"{API}/installation/repositories?per_page=100&page={page}", token=token)
+            if response["total_count"] != len(expected):
+                raise BootstrapError("The installation repository selection differs from the declaration. Correct it in GitHub and rerun bootstrap.")
+            actual.update(repo["full_name"].lower() for repo in response["repositories"])
+            if len(response["repositories"]) < 100:
+                break
+        if actual != expected:
             raise BootstrapError("The installation repository selection differs from the declaration. Correct it in GitHub and rerun bootstrap.")
     finally:
         request_json("DELETE", f"{API}/installation/token", token=token)

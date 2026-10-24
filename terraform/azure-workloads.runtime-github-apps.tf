@@ -25,7 +25,7 @@ locals {
       length(trimspace(app.display_name)) > 0 && length(trimspace(app.description)) > 0 &&
       length(app.repository_permissions) > 0 &&
       alltrue([for value in values(app.repository_permissions) : contains(["read", "write"], value)]) &&
-      length(app.repositories) > 0 && length(distinct(app.repositories)) == length(app.repositories) &&
+      length(app.repositories) > 0 && length(distinct([for name in app.repositories : lower(name)])) == length(app.repositories) &&
       alltrue([for name in app.repositories : can(regex("^[A-Za-z0-9_.-]+$", name))]) &&
       (app.registration == null ? true : (
         length(setsubtract(keys(app.registration), ["app_id", "installation_id", "slug"])) == 0 &&
@@ -68,7 +68,7 @@ resource "terraform_data" "runtime_github_apps_contract" {
     precondition {
       condition = length(distinct([
         for app in values(local.runtime_github_apps) :
-        "${app.workload_name}/${app.environment}/${app.key_vault_secret_name}"
+        "${app.workload_name}/${app.environment}/${lower(app.key_vault_secret_name)}"
       ])) == length(local.runtime_github_apps)
       error_message = "Each runtime GitHub App must have its own workload Key Vault secret."
     }
@@ -78,7 +78,7 @@ resource "terraform_data" "runtime_github_apps_contract" {
 resource "github_actions_variable" "runtime_github_app" {
   for_each = local.runtime_github_app_variables
 
-  repository    = each.value.repository
+  repository    = try(github_repository.workload[each.value.repository].name, each.value.repository)
   variable_name = each.value.name
   value         = each.value.value
 
