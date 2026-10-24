@@ -2,6 +2,7 @@ import copy
 import io
 import json
 from pathlib import Path
+import socket
 import tempfile
 import threading
 import unittest
@@ -48,12 +49,13 @@ class GitHubAppBootstrapTests(unittest.TestCase):
         def open_browser(link):
             def browse():
                 try:
-                    with urlopen(link, timeout=5) as page:
-                        document = page.read().decode()
+                    origin = urlparse(link)
+                    with socket.create_connection((origin.hostname, origin.port), timeout=5):
+                        with urlopen(link, timeout=10) as page:
+                            document = page.read().decode()
                     self.assertIn("issues", document)
                     self.assertIn("write", document)
                     self.assertIn('method="post"', document)
-                    origin = urlparse(link)
                     state = parse_qs(origin.query)["state"][0]
                     with urlopen(f"http://{origin.netloc}/callback?state={state}&code=approval-code", timeout=5) as callback:
                         self.assertEqual(callback.status, 200)

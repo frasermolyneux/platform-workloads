@@ -192,6 +192,8 @@ def create_app(app, *, browser=True, timeout=900):
     result = {}
 
     class Handler(BaseHTTPRequestHandler):
+        timeout = 5
+
         def log_message(self, *_arguments):
             pass
 
