@@ -12,3 +12,7 @@ override.tf.json
 *_override.tf.json
 .terraformrc
 terraform.rc
+
+# Python bootstrap tools
+__pycache__/
+.venv/

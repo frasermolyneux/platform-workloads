@@ -1,5 +1,18 @@
 version: 2
 updates:
+  - package-ecosystem: "pip"
+    assignees: ["frasermolyneux"]
+    directory: "/scripts"
+    schedule:
+      interval: "weekly"
+      day: "sunday"
+      time: "05:30"
+      timezone: "Etc/UTC"
+    groups:
+      all-updates:
+        patterns:
+          - "*"
+
   - package-ecosystem: "terraform"
     assignees: ["frasermolyneux"]
     directory: "/terraform"

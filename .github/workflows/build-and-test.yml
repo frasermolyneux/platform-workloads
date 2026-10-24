@@ -8,6 +8,7 @@ on:
       - "hotfix/**"
     paths:
       - 'terraform/**'
+      - 'scripts/**'
       - '.github/workflows/build-and-test.yml'
 
 permissions: {}
@@ -33,3 +34,11 @@ jobs:
 
       - name: Validate the complete repository analysis catalog without provider reads
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/repository-analysis.tftest.hcl
+
+      - name: Validate runtime GitHub App declarations without provider reads
+        run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/runtime-github-apps.tftest.hcl
+
+      - name: Test runtime GitHub App bootstrap
+        run: |
+          python3 -m pip install --requirement scripts/requirements-github-apps.txt
+          python3 -m unittest discover -s scripts -p 'test_*.py'
