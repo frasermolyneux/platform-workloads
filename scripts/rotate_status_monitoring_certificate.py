@@ -38,7 +38,8 @@ def command(*arguments, binary=False):
 
 
 def az_json(*arguments):
-    return json.loads(command("az", *arguments, "--only-show-errors", "--output", "json"))
+    output = command("az", *arguments, "--only-show-errors", "--output", "json")
+    return json.loads(output) if output.strip() else None
 
 
 def request(method, url, token=None, document=None, *, missing_ok=False, form=False):

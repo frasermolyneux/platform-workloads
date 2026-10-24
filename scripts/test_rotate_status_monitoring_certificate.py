@@ -8,6 +8,10 @@ import rotate_status_monitoring_certificate as rotation
 
 
 class ReaderCertificateTests(unittest.TestCase):
+    def test_successful_empty_cli_response_is_not_a_json_failure(self):
+        with patch.object(rotation, "command", return_value=""):
+            self.assertIsNone(rotation.az_json("ad", "app", "credential", "delete"))
+
     def setUp(self):
         self.now = datetime(2026, 1, 1, tzinfo=timezone.utc)
         self.app = {"id": "application-object", "appId": "client-id"}
