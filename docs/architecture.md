@@ -117,7 +117,9 @@ existing secret. Previous public certificates remain valid until expiry plus
 seven days; only expired keys with the managed prefix can be removed. Temporary
 key files are runner-local and deleted on exit. Terraform state, logs and GitHub
 artifacts must never receive the private key. Fleet policy mounts the versionless
-secret into the status service only; the consumer reloads it on each refresh.
+secret into the status service only. Existing fleet reconciliation rebinds changed
+secret versions; inode replacement alone is not visible through a file bind mount.
+The consumer reloads its mounted certificate on each refresh.
 
 **Conditional Resources via `if` in for_each**: Files named `azure-workloads.if-{feature}.tf` contain resources gated by flags (`connect_to_github`, `configure_for_terraform`, etc.).
 
