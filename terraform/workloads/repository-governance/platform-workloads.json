@@ -6,6 +6,7 @@
                 "version": "repository-analysis-v1",
                 "languages": [
                     "actions",
+                    "python",
                     "terraform"
                 ],
                 "sonar": false

@@ -141,6 +141,12 @@ App private key to the repository Actions secret `GH_APP_PEM`. Workflows should
 mint short-lived installation tokens and request only the permissions needed
 for that operation; they must not expose or persist the private key.
 
+Dedicated service identities use `github.runtime_apps`, not the shared CI key.
+See [Runtime GitHub Apps](runtime-github-apps.md) for the manifest bootstrap,
+exact repository-scope verification, direct workload Key Vault storage and
+non-secret registration metadata. Incomplete registrations create no Actions
+variables; private keys are never imported into Terraform state.
+
 The public `actions` policy entry opts into the existing Sonar token broker as a
 prerequisite for its repository-owned CI analysis replacement. This does not create
 a credential, purchase a plan, import the repository, change visibility, enable a

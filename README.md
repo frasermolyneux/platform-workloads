@@ -17,6 +17,7 @@
 * [Prerequisites](/docs/prerequisites.md) - Required identities, permissions, and environment secrets.
 * [Consuming Outputs](/docs/consuming-platform-workloads-outputs.md) - Reading platform-workloads state from downstream stacks.
 * [Role Assignments](/docs/role-assignments.md) - RBAC behaviors and ABAC rules.
+* [Runtime GitHub Apps](/docs/runtime-github-apps.md) - Dedicated Apps, manifest bootstrap and workload Key Vault credentials.
 * [Decommissioning](/docs/decommissioning.md) - State-first removal for managed repositories and policy-only entries.
 
 ## Overview
