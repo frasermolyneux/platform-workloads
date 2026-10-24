@@ -2,6 +2,14 @@ environment = "prd"
 location    = "uksouth"
 instance    = "01"
 
+status_monitoring_resource_ids = [
+  "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-sitewatch-func-prd-uksouth/providers/Microsoft.Insights/components/ai-platform-sitewatch-func-prd-uksouth",
+  "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-sitewatch-func-prd-eastus/providers/Microsoft.Insights/components/ai-platform-sitewatch-func-prd-eastus",
+  "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-sitewatch-func-prd-westeurope/providers/Microsoft.Insights/components/ai-platform-sitewatch-func-prd-westeurope",
+  "/subscriptions/32444f38-32f4-409f-889c-8e8aa2b5b4d1/resourceGroups/rg-portal-core-prd-uksouth/providers/Microsoft.Insights/components/ai-portal-core-prd-uksouth",
+  "/subscriptions/903b6685-c12a-4703-ac54-7ec1ff15ca43/resourceGroups/rg-geo-location-prd-swedencentral/providers/Microsoft.Insights/components/ai-geo-location-prd-swedencentral",
+]
+
 status_operator_user_principal_name = "fraser@molyneux.io"
 
 subscription_id = "7760848c-794d-4a19-8cb2-52f71a21ac2b"
