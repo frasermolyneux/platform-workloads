@@ -44,6 +44,12 @@ terraform -chdir=terraform plan -var-file=tfvars/prd.tfvars
 - Preserve OIDC subjects, remote-state outputs, scope helpers, and state addresses.
 - Follow the documented state-first decommissioning sequence before deleting workload JSON.
 - Never add client secrets or credentials.
+- The on-premises status monitoring reader is a dedicated certificate-authenticated
+  daemon with exact Application Insights resource scopes, no directory API permissions
+  and no deployment credentials. Terraform owns its app, principal and RBAC, never its
+  certificate private keys. The rotation workflow registers and authenticates the
+  public certificate before publishing its private PEM to the approved status vault.
+  Preserve prior public keys until expiry plus grace; never replace unrelated keys.
 - `.terraform.lock.hcl` is generated locally, ignored, and not committed.
 - Non-`xi-*` catalog rows require an analysis profile or explicit exemption; private source must never select public Sonar execution.
 - Analysis contract tests target only built-in metadata and need no provider reads. Production plans/applies must still cover the complete configuration.

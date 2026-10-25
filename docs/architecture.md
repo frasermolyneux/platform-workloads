@@ -92,6 +92,35 @@ EOT
 
 **OIDC over Secrets**: Eliminates secret rotation for GitHub Actions workload authentication.
 
+### Dedicated on-premises status monitoring reader
+
+`status-monitoring-reader.tf` owns a separate daemon application/service principal
+and Monitoring Reader assignments on exact Application Insights resources. It has
+no directory API permissions, redirects or client secrets. The public output
+`status_monitoring_reader_identity` and status Production environment variables
+expose identifiers only; the interactive status login application is unchanged.
+
+The on-premises service cannot use an Azure-host managed identity. Its exception
+is a certificate reader, not mounted deployment credentials. The existing
+privileged platform-workloads GitHub OIDC identity performs lifecycle management;
+no additional management privileges are granted to the reader or hosts.
+`status-monitoring-certificate.yml` runs after successful production deployment,
+weekly and on explicit dispatch. The script discovers exactly one dedicated app
+and tagged status runtime vault, checks ownership/lifecycle metadata, and renews
+180-day RSA certificates when 30 days remain or the registered public key is
+missing. It never reads an existing private secret.
+
+Registration uses append semantics, then verifies Entra client-credential
+authentication before publishing the combined private PEM through the Key Vault
+ARM secret endpoint. Registration/authentication failures do not replace the
+existing secret. Previous public certificates remain valid until expiry plus
+seven days; only expired keys with the managed prefix can be removed. Temporary
+key files are runner-local and deleted on exit. Terraform state, logs and GitHub
+artifacts must never receive the private key. Fleet policy mounts the versionless
+secret into the status service only. Existing fleet reconciliation rebinds changed
+secret versions; inode replacement alone is not visible through a file bind mount.
+The consumer reloads its mounted certificate on each refresh.
+
 **Conditional Resources via `if` in for_each**: Files named `azure-workloads.if-{feature}.tf` contain resources gated by flags (`connect_to_github`, `configure_for_terraform`, etc.).
 
 ### Personal-account repository governance
