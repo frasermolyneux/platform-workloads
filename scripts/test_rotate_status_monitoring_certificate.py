@@ -65,6 +65,26 @@ class ReaderCertificateTests(unittest.TestCase):
             rotation.rotate(self.app, "tenant", "/vault", "token", self.now)
             publish.assert_called_once()
 
+    def test_public_registration_waits_for_directory_visibility_without_registering_again(self):
+        with patch.object(rotation, "credentials", side_effect=[[], [], [self.key]]) as read, \
+                patch.object(rotation.time, "sleep") as sleep:
+            result = rotation.registered_certificate(self.app, self.key["displayName"],
+                                                     self.now + timedelta(days=90))
+            self.assertEqual(result, self.key)
+            self.assertEqual(read.call_count, 3)
+            self.assertEqual(sleep.call_args_list, [unittest.mock.call(5), unittest.mock.call(5)])
+
+    def test_unverified_or_short_lived_registration_never_passes_after_bounded_retries(self):
+        for registered in ([], [self.key]):
+            with self.subTest(registered=registered), \
+                    patch.object(rotation, "credentials", return_value=registered) as read, \
+                    patch.object(rotation.time, "sleep") as sleep:
+                with self.assertRaises(rotation.RotationError):
+                    rotation.registered_certificate(self.app, self.key["displayName"],
+                                                    self.now + timedelta(days=180))
+                self.assertEqual(read.call_count, 12)
+                self.assertEqual(sleep.call_count, 11)
+
     def test_failed_publication_does_not_delete_any_previous_credentials(self):
         with patch.object(rotation, "request", return_value=None), \
                 patch.object(rotation, "credentials", return_value=[self.key]), \
