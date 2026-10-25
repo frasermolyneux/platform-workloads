@@ -85,6 +85,16 @@ def credentials(app):
     return az_json("ad", "app", "credential", "list", "--id", app["id"], "--cert")
 
 
+def registered_certificate(app, name, expiry):
+    for attempt in range(12):
+        registered = [entry for entry in credentials(app) if entry.get("displayName") == name]
+        if len(registered) == 1 and timestamp(registered[0]["endDateTime"]) >= expiry:
+            return registered[0]
+        if attempt < 11:
+            time.sleep(5)
+    raise RotationError("The new public certificate registration could not be verified; no secret was published.")
+
+
 def b64(value):
     return base64.urlsafe_b64encode(value).decode().rstrip("=")
 
@@ -136,14 +146,12 @@ def publish_certificate(app, tenant, url, token, now):
         name = PREFIX + str(uuid.uuid4())
         az_json("ad", "app", "credential", "reset", "--id", app["id"], "--append",
                 "--cert", f"@{certificate}", "--display-name", name, "--end-date", expiry.strftime("%Y-%m-%dT%H:%M:%SZ"))
-        registered = [entry for entry in credentials(app) if entry.get("displayName") == name]
-        if len(registered) != 1 or timestamp(registered[0]["endDateTime"]) < expiry:
-            raise RotationError("The new public certificate registration could not be verified; no secret was published.")
+        registered = registered_certificate(app, name, expiry)
         verify_authentication(app, tenant, certificate, key, now)
         request("PUT", url, token, {
             "tags": {"managed-by": OWNER, "purpose": "status-monitoring-reader",
                      "application-id": app["appId"], "application-object-id": app["id"],
-                     "credential-key-id": registered[0]["keyId"]},
+                     "credential-key-id": registered["keyId"]},
             "properties": {
                 "contentType": "application/x-pem-file",
                 "value": certificate.read_text(encoding="ascii") + "\n" + key.read_text(encoding="ascii"),
