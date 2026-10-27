@@ -221,6 +221,14 @@
                                     "Contributor"
                                 ]
                             }
+                        ],
+                        "rbac_admin_roles": [
+                            {
+                                "allowed_roles": [
+                                    "Key Vault Secrets User",
+                                    "Key Vault Secrets Officer"
+                                ]
+                            }
                         ]
                     }
                 }
@@ -251,7 +259,24 @@
                         ]
                     }
                 ]
-            }
+            },
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "origin-tls",
+                    "secret_name": "CLOUDFLARE_ORIGIN_API_TOKEN",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "SSL and Certificates Write",
+                                "Zone Read"
+                            ],
+                            "zones": [
+                                "talkwithtiles.com"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
