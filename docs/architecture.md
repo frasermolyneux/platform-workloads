@@ -155,6 +155,18 @@ review-MCP settings remain repository-local and must be inspected during each
 repository migration. Direct ruleset edits in GitHub may be overwritten by
 Terraform and should be avoided.
 
+### Managed repository standards declaration
+
+`azure-workloads.repository-standards.tf` derives standards enrollment from the
+validated non-`xi-*` repository analysis catalog. Applicable profiles receive a
+strict `REPOSITORY_STANDARDS` Actions variable; analysis exemptions receive no
+variable. Terraform selects the fixed Checkov profile sequence from declared
+languages and admits only bounded, rule-specific generated-content exceptions.
+
+This is the desired-state declaration boundary. The separate platform-devex
+reconciler is not active merely because the variable exists; its own rollout must
+be merged and deployed before managed files are reconciled.
+
 Copilot review effort is not represented in the GitHub Terraform provider
 ruleset schema or a documented GitHub REST setting. Lite remains the GitHub
 product default. Configure **Balanced** manually for `actions` and `portal-web`

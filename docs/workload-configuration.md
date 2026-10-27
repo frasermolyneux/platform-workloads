@@ -76,6 +76,16 @@ alone does not establish a deployed runtime.
         }
       }
     },
+    "repository_standards": {
+      "checkov": {
+        "exceptions": [
+          {
+            "rule": "CKV_OPENAPI_21",
+            "reason": "Generated OpenAPI content cannot express this reviewed constraint; runtime validation enforces it."
+          }
+        ]
+      }
+    },
     "repository_policy": {
       "copilot_code_review": {
         "enabled": true,
@@ -141,6 +151,7 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_analysis` | object | Non-`xi-*` catalog rows | - | Validated source profile, scanner/build recipe and analysis cadence, or explicit applicability exemption |
+| `repository_standards` | object | No | - | Optional bounded exceptions for centrally managed repository standards; profile selection is derived from `repository_analysis` |
 | `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
 | `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
 
@@ -187,6 +198,31 @@ Projection does not install a caller, activate a scanner, change provider method
 rulesets, merge identity or deployment triggers, or claim current analysis acceptance.
 The owning alignment workstream separately governs immutable caller adoption and bootstrap.
 No new Azure identity, RBAC, subscription, environment or cost-bearing resource is needed.
+
+### Repository standards policy
+
+Applicable non-`xi-*` repository analysis profiles receive one
+`REPOSITORY_STANDARDS` Actions variable. Analysis exemptions receive no standards
+variable. The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
+entry at `checkov-v1`.
+
+Every applicable repository receives the `base` profile. Repositories whose declared
+analysis languages include `terraform` or `bicep` additionally receive, in order,
+`cost-optimised`, `public-endpoints`, `app-service-standard`, and
+`central-observability`. Workload JSON cannot replace this profile selection.
+
+Exceptional generated content may declare only
+`github.repository_standards.checkov.exceptions`. Each list item must contain exactly
+`rule` and `reason`. The only approved rules are `CKV_OPENAPI_21` and `CKV_SECRET_6`.
+The trimmed reason must contain 10 to 600 characters without U+0000-U+001F,
+U+007F-U+009F, U+2028, U+2029, U+FFFE, or U+FFFF. This includes tabs, line
+breaks, and all C0/C1 controls. Terraform HCL strings and `jsondecode` expose
+Unicode scalar values, so unpaired UTF-16 surrogates are not representable at
+this producer boundary. Exceptions are sorted deterministically before projection.
+
+This stack declares desired state only. It does not install or activate the separate
+platform-devex reconciliation workflow; that behavior becomes active only after its
+own implementation is merged and deployed.
 
 ### Repository policy defaults
 

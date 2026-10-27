@@ -45,6 +45,16 @@
                 }
             }
         },
+        "repository_standards": {
+            "checkov": {
+                "exceptions": [
+                    {
+                        "rule": "CKV_OPENAPI_21",
+                        "reason": "src/MX.TripSideKick.Web/ClientApp/openapi.json is generated from the ASP.NET Core minimal OpenAPI pipeline and consumed by openapi-typescript to produce client types. maxItems is not emitted by the generator and adding it by hand would be overwritten on every regeneration; array bounds are enforced in the API models/validation, not in the schema document."
+                    }
+                ]
+            }
+        },
         "description": "Trip Side Kick travel-itinerary PWA and API/BFF with Microsoft Entra External ID sign-in (B2B + self-service sign-up), Azure SQL, and private Blob Storage, deployed with Terraform and GitHub Actions.",
         "topics": [
             "react",
