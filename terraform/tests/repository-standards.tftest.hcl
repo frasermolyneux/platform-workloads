@@ -53,7 +53,8 @@ run "validate_repository_standards_projection" {
         for exception in local.repository_standards_documents["trip-side-kick"].managedFiles.checkov.exceptions :
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
-        length(exception.reason) <= 600
+        length(exception.reason) <= 600 &&
+        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
       ]) &&
       jsonencode(local.repository_standards_documents["trip-side-kick"].managedFiles.checkov.exceptions) == jsonencode([
         {

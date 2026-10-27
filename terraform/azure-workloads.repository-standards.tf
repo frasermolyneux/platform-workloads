@@ -29,7 +29,8 @@ locals {
         can(regex("^CKV2?_[A-Z0-9]+(_[A-Z0-9]+)*_[0-9]+$", exception.rule)) &&
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
-        length(exception.reason) <= 600
+        length(exception.reason) <= 600 &&
+        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
       ]),
       false
     )
@@ -96,7 +97,8 @@ locals {
         can(regex("^CKV2?_[A-Z0-9]+(_[A-Z0-9]+)*_[0-9]+$", exception.rule)) &&
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
-        length(exception.reason) <= 600
+        length(exception.reason) <= 600 &&
+        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
       ]),
       false
     )
