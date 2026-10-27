@@ -49,6 +49,19 @@ and exclusions. It does not replace the full production state-backed plan or jus
 targeted production applies. Analysis variables are configuration, not proof of
 scanner execution or estate caller adoption.
 
+### Repository standards validation
+
+Validate the managed Checkov declaration contract without provider reads:
+
+```powershell
+terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-standards.tftest.hcl'
+```
+
+The test checks applicable public and private counts, deterministic profile
+selection, the Trip Side Kick generated OpenAPI exception, and exclusion of
+analysis exemptions and `xi-*` repositories. It validates desired-state
+projection only; platform-devex reconciliation is a separate rollout.
+
 ### Targeted Operations
 - Validate a new workload file: `Get-Content terraform/workloads/platform/new-workload.json | ConvertFrom-Json`
 - Plan a single resource to reduce noise: `terraform plan -var-file="tfvars/prd.tfvars" -target='github_repository.workload["portal-core"]'`
