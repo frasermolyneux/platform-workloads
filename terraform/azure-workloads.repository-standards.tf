@@ -6,6 +6,10 @@ locals {
     "app-service-standard",
     "central-observability",
   ]
+  repository_standards_checkov_exception_allowlist = [
+    "CKV_OPENAPI_21",
+    "CKV_SECRET_6",
+  ]
   repository_standards_workloads = {
     for name, policy in local.repository_analysis_policies : name => local.analysis_scoped_workloads[name]
     if !can(policy.profile.exemption)
@@ -27,10 +31,11 @@ locals {
         length(setsubtract(keys(exception), ["rule", "reason"])) == 0 &&
         length(setsubtract(["rule", "reason"], keys(exception))) == 0 &&
         can(regex("^CKV2?_[A-Z0-9]+(_[A-Z0-9]+)*_[0-9]+$", exception.rule)) &&
+        contains(local.repository_standards_checkov_exception_allowlist, exception.rule) &&
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
-        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
+        !can(regex("[\u0000-\u001F\u0085\u2028\u2029]", exception.reason))
       ]),
       false
     )
@@ -95,10 +100,11 @@ locals {
         length(keys(exception)) == 2 &&
         length(setsubtract(keys(exception), ["rule", "reason"])) == 0 &&
         can(regex("^CKV2?_[A-Z0-9]+(_[A-Z0-9]+)*_[0-9]+$", exception.rule)) &&
+        contains(local.repository_standards_checkov_exception_allowlist, exception.rule) &&
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
-        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
+        !can(regex("[\u0000-\u001F\u0085\u2028\u2029]", exception.reason))
       ]),
       false
     )

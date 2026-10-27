@@ -213,8 +213,9 @@ analysis languages include `terraform` or `bicep` additionally receive, in order
 
 Exceptional generated content may declare only
 `github.repository_standards.checkov.exceptions`. Each list item must contain exactly
-`rule` and `reason`; the rule must be a Checkov ID and the trimmed reason must contain
-10 to 600 characters without CR, LF, U+0085, U+2028, or U+2029 line separators.
+`rule` and `reason`. The only approved rules are `CKV_OPENAPI_21` and `CKV_SECRET_6`.
+The trimmed reason must contain 10 to 600 characters without any U+0000-U+001F
+C0 control (including tabs and line breaks), U+0085, U+2028, or U+2029.
 Exceptions are sorted deterministically before projection.
 
 This stack declares desired state only. It does not install or activate the separate

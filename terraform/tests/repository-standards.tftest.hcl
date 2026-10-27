@@ -47,14 +47,19 @@ run "validate_repository_standards_projection" {
 
   assert {
     condition = (
+      jsonencode(local.repository_standards_checkov_exception_allowlist) == jsonencode([
+        "CKV_OPENAPI_21",
+        "CKV_SECRET_6",
+      ]) &&
       local.repository_standards_documents["trip-side-kick"].version == "repository-standards-v1" &&
       local.repository_standards_documents["trip-side-kick"].managedFiles.checkov.version == "checkov-v1" &&
       alltrue([
         for exception in local.repository_standards_documents["trip-side-kick"].managedFiles.checkov.exceptions :
+        contains(local.repository_standards_checkov_exception_allowlist, exception.rule) &&
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
-        !can(regex("[\r\n\u0085\u2028\u2029]", exception.reason))
+        !can(regex("[\u0000-\u001F\u0085\u2028\u2029]", exception.reason))
       ]) &&
       jsonencode(local.repository_standards_documents["trip-side-kick"].managedFiles.checkov.exceptions) == jsonencode([
         {
@@ -63,7 +68,7 @@ run "validate_repository_standards_projection" {
         }
       ])
     )
-    error_message = "Trip Side Kick must retain its reviewed generated OpenAPI exception in the managed Checkov contract."
+    error_message = "The exact Checkov exception allowlist and Trip Side Kick generated OpenAPI exception must remain valid in the managed contract."
   }
 
   assert {
