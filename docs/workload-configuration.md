@@ -206,6 +206,13 @@ Applicable non-`xi-*` repository analysis profiles receive one
 variable. The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
 entry at `checkov-v1`.
 
+Terraform also projects the complete deterministic repository-name-to-contract map
+to `platform-devex` as `REPOSITORY_STANDARDS_CATALOG`. The platform-devex reconciler
+reads that aggregate from its own `vars` context, while the per-target
+`REPOSITORY_STANDARDS` variables remain available for repository-local tooling and
+future consumers. Contract validation requires exact key parity, valid documents,
+`platform-devex` applicability, and a conservative 48,000-byte maximum encoded size.
+
 Every applicable repository receives the `base` profile. Repositories whose declared
 analysis languages include `terraform` or `bicep` additionally receive, in order,
 `cost-optimised`, `public-endpoints`, `app-service-standard`, and

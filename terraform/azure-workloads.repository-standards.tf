@@ -109,6 +109,19 @@ locals {
       false
     )
   }
+  repository_standards_catalog = {
+    for name in sort(keys(local.repository_standards_documents)) :
+    name => local.repository_standards_documents[name]
+  }
+  repository_standards_catalog_json              = jsonencode(local.repository_standards_catalog)
+  repository_standards_catalog_max_bytes         = 48000
+  repository_standards_catalog_base64_length     = length(base64encode(local.repository_standards_catalog_json))
+  repository_standards_catalog_max_base64_length = 4 * ceil(local.repository_standards_catalog_max_bytes / 3)
+  repository_standards_catalog_variable = {
+    repository = "platform-devex"
+    name       = "REPOSITORY_STANDARDS_CATALOG"
+    value      = local.repository_standards_catalog_json
+  }
   repository_standards_variables = {
     for name, document in local.repository_standards_documents : name => {
       repository = name
@@ -122,6 +135,7 @@ resource "terraform_data" "repository_standards_contract" {
   input = sha256(jsonencode({
     overrides = local.repository_standards_overrides
     documents = local.repository_standards_documents
+    catalog   = local.repository_standards_catalog
     variables = local.repository_standards_variables
   }))
 
@@ -131,6 +145,13 @@ resource "terraform_data" "repository_standards_contract" {
         length(setsubtract(keys(local.repository_standards_overrides), keys(local.repository_standards_workloads))) == 0 &&
         alltrue(values(local.repository_standards_overrides_valid)) &&
         alltrue(values(local.repository_standards_documents_valid)) &&
+        jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_workloads))) &&
+        alltrue([
+          for name in keys(local.repository_standards_catalog) :
+          local.repository_standards_catalog[name] == local.repository_standards_documents[name]
+        ]) &&
+        contains(keys(local.repository_standards_workloads), local.repository_standards_catalog_variable.repository) &&
+        local.repository_standards_catalog_base64_length <= local.repository_standards_catalog_max_base64_length &&
         jsonencode(sort(keys(local.repository_standards_variables))) == jsonencode(sort(keys(local.repository_standards_workloads))) &&
         alltrue([
           for name in keys(local.repository_standards_variables) :
@@ -138,7 +159,7 @@ resource "terraform_data" "repository_standards_contract" {
           !can(local.repository_analysis_policies[name].profile.exemption)
         ])
       )
-      error_message = "Repository standards require exact repository-standards-v1/checkov-v1 keys, deterministic supported profiles, bounded Checkov rule exceptions, and projection only to applicable non-xi analysis catalog rows."
+      error_message = "Repository standards require exact repository-standards-v1/checkov-v1 keys, deterministic supported profiles, bounded Checkov rule exceptions, an applicable platform-devex aggregate catalog below 48 KB, and projection only to applicable non-xi analysis catalog rows."
     }
   }
 }
@@ -151,5 +172,14 @@ resource "github_actions_variable" "repository_standards" {
   ) : each.key
   variable_name = each.value.name
   value         = each.value.value
+  depends_on    = [terraform_data.repository_standards_contract]
+}
+
+resource "github_actions_variable" "repository_standards_catalog" {
+  repository = try(local.repository_standards_workloads[local.repository_standards_catalog_variable.repository].github.manage_repository, true) ? (
+    github_repository.workload[local.repository_standards_catalog_variable.repository].name
+  ) : local.repository_standards_catalog_variable.repository
+  variable_name = local.repository_standards_catalog_variable.name
+  value         = local.repository_standards_catalog_variable.value
   depends_on    = [terraform_data.repository_standards_contract]
 }
