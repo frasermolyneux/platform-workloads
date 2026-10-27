@@ -1,5 +1,6 @@
 {
     "name": "dm-electrical-services",
+    "environment": "Production",
     "github": {
         "repository_analysis": {
             "profile": {

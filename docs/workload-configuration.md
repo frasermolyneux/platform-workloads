@@ -27,6 +27,14 @@ remote-state output. Repository content, collaborators, runtime access, host
 bindings, and application deployment configuration remain owned by the target
 repository or its operational control plane.
 
+Repository-only entries may declare a singular top-level `environment` string
+as runtime inventory metadata (for example `Production` or `Staging`). Radar uses
+this to validate authenticated deployment observations. It is not the plural
+`environments` provisioning array: it creates no GitHub environment, Azure identity,
+RBAC, state backend or remote-state environment output. The native host policy
+still independently enrolls the service and its environment; catalog metadata
+alone does not establish a deployed runtime.
+
 ## JSON Structure
 
 ```json

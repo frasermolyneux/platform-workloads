@@ -1,5 +1,6 @@
 {
     "name": "bqba",
+    "environment": "Production",
     "github": {
         "repository_analysis": {
             "profile": {
