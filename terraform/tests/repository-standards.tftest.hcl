@@ -12,6 +12,15 @@ run "validate_repository_standards_projection" {
 
   assert {
     condition = (
+      length(local.repository_standards_catalog) == 48 &&
+      jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_workloads))) &&
+      jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_documents)))
+    )
+    error_message = "The aggregate catalog must contain exactly the applicable repository standards workload keys."
+  }
+
+  assert {
+    condition = (
       length([
         for name in keys(local.repository_standards_workloads) : name
         if local.repository_standards_workloads[name].github.visibility == "public"
@@ -69,6 +78,34 @@ run "validate_repository_standards_projection" {
       ])
     )
     error_message = "The exact Checkov exception allowlist and Trip Side Kick generated OpenAPI exception must remain valid in the managed contract."
+  }
+
+  assert {
+    condition = (
+      local.repository_standards_catalog["actions"] == local.repository_standards_documents["actions"] &&
+      local.repository_standards_catalog["platform-workloads"] == local.repository_standards_documents["platform-workloads"] &&
+      local.repository_standards_catalog["trip-side-kick"] == local.repository_standards_documents["trip-side-kick"]
+    )
+    error_message = "Representative aggregate catalog entries must exactly equal their per-repository contracts."
+  }
+
+  assert {
+    condition = (
+      local.repository_standards_catalog_variable.repository == "platform-devex" &&
+      local.repository_standards_catalog_variable.name == "REPOSITORY_STANDARDS_CATALOG" &&
+      contains(keys(local.repository_standards_workloads), "platform-devex") &&
+      local.repository_standards_catalog["platform-devex"] == local.repository_standards_documents["platform-devex"]
+    )
+    error_message = "platform-devex must be an applicable catalog repository and the aggregate variable target."
+  }
+
+  assert {
+    condition = (
+      local.repository_standards_catalog_variable.value == jsonencode(local.repository_standards_catalog) &&
+      local.repository_standards_catalog_base64_length <= local.repository_standards_catalog_max_base64_length &&
+      local.repository_standards_catalog_max_bytes == 48000
+    )
+    error_message = "The deterministic aggregate catalog must remain below the conservative 48,000-byte GitHub variable bound."
   }
 
   assert {

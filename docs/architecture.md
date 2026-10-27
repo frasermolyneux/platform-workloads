@@ -162,6 +162,11 @@ validated non-`xi-*` repository analysis catalog. Applicable profiles receive a
 strict `REPOSITORY_STANDARDS` Actions variable; analysis exemptions receive no
 variable. Terraform selects the fixed Checkov profile sequence from declared
 languages and admits only bounded, rule-specific generated-content exceptions.
+The same complete desired-state map is deterministically encoded in
+`REPOSITORY_STANDARDS_CATALOG` on `platform-devex`, allowing its reconciler to
+consume the catalog from its own `vars` context without target-repository
+Variables permission. Per-target variables remain projected for repository-local
+tooling and future use.
 
 This is the desired-state declaration boundary. The separate platform-devex
 reconciler is not active merely because the variable exists; its own rollout must

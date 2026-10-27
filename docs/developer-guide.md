@@ -58,9 +58,13 @@ terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\rep
 ```
 
 The test checks applicable public and private counts, deterministic profile
-selection, the Trip Side Kick generated OpenAPI exception, and exclusion of
-analysis exemptions and `xi-*` repositories. It validates desired-state
-projection only; platform-devex reconciliation is a separate rollout.
+selection, the Trip Side Kick generated OpenAPI exception, exclusion of analysis
+exemptions and `xi-*` repositories, and exact aggregate-catalog key/document parity.
+It also verifies the `platform-devex` target and conservative encoded-size bound.
+The aggregate is consumed from platform-devex's own `vars` context; per-target
+variables remain projected for repository-local tooling and future use. The test
+validates desired-state projection only; platform-devex reconciliation is a
+separate rollout.
 
 ### Targeted Operations
 - Validate a new workload file: `Get-Content terraform/workloads/platform/new-workload.json | ConvertFrom-Json`
