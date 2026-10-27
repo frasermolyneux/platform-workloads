@@ -80,3 +80,22 @@ resource "github_actions_environment_variable" "tenant_id" {
   variable_name = "AZURE_TENANT_ID"
   value         = "e56a6947-bb9a-4a6e-846a-1f118d1c3a14"
 }
+
+resource "github_actions_environment_variable" "container_registry_name" {
+  for_each = {
+    for environment in local.workload_environments : environment.key => environment
+    if environment.connect_to_github && environment.container_registry_name != null
+  }
+
+  repository    = github_repository.workload[each.value.workload_name].name
+  environment   = github_repository_environment.workload[each.key].environment
+  variable_name = "WORKLOAD_ACR_NAME"
+  value         = each.value.container_registry_name
+
+  lifecycle {
+    precondition {
+      condition     = can(regex("^[a-z0-9]{5,50}$", each.value.container_registry_name))
+      error_message = "Container registry names must be explicit lower-case Azure registry names."
+    }
+  }
+}

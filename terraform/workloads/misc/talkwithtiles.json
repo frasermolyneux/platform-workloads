@@ -53,6 +53,11 @@
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,
+        "github_app": {
+            "enabled": true,
+            "app_id": "2973523",
+            "installation_id": "113093932"
+        },
         "visibility": "public",
         "rulesets": [
             {
@@ -195,6 +200,7 @@
         },
         {
             "name": "Production",
+            "container_registry_name": "acr7ca0fd3326df",
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
