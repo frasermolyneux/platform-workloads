@@ -214,9 +214,11 @@ analysis languages include `terraform` or `bicep` additionally receive, in order
 Exceptional generated content may declare only
 `github.repository_standards.checkov.exceptions`. Each list item must contain exactly
 `rule` and `reason`. The only approved rules are `CKV_OPENAPI_21` and `CKV_SECRET_6`.
-The trimmed reason must contain 10 to 600 characters without any U+0000-U+001F
-C0 control (including tabs and line breaks), U+0085, U+2028, or U+2029.
-Exceptions are sorted deterministically before projection.
+The trimmed reason must contain 10 to 600 characters without U+0000-U+001F,
+U+007F-U+009F, U+2028, U+2029, U+FFFE, or U+FFFF. This includes tabs, line
+breaks, and all C0/C1 controls. Terraform HCL strings and `jsondecode` expose
+Unicode scalar values, so unpaired UTF-16 surrogates are not representable at
+this producer boundary. Exceptions are sorted deterministically before projection.
 
 This stack declares desired state only. It does not install or activate the separate
 platform-devex reconciliation workflow; that behavior becomes active only after its

@@ -35,7 +35,7 @@ locals {
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
-        !can(regex("[\u0000-\u001F\u0085\u2028\u2029]", exception.reason))
+        !can(regex("[\u0000-\u001F\u007F-\u009F\u2028\u2029\uFFFE\uFFFF]", exception.reason))
       ]),
       false
     )
@@ -104,7 +104,7 @@ locals {
         exception.reason == trimspace(exception.reason) &&
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
-        !can(regex("[\u0000-\u001F\u0085\u2028\u2029]", exception.reason))
+        !can(regex("[\u0000-\u001F\u007F-\u009F\u2028\u2029\uFFFE\uFFFF]", exception.reason))
       ]),
       false
     )
