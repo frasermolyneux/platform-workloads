@@ -223,6 +223,7 @@ infrastructure.
 | `name`                            | string  | Yes      | Environment name (e.g., `Development`, `Production`)                                                                   |
 | `subscription`                    | string  | Yes      | Subscription alias (e.g., `sub-visualstudio-enterprise`)                                                               |
 | `connect_to_github`               | boolean | No       | Create GitHub environment and OIDC federation                                                                          |
+| `container_registry_name`         | string  | No       | Project the reviewed registry name as `WORKLOAD_ACR_NAME` for an OIDC image publisher; registry RBAC remains owned by `platform-registry` |
 | `configure_for_terraform`         | boolean | No       | Create Terraform state storage resources                                                                               |
 | `add_deploy_script_identity`      | boolean | No       | Create managed identity for deployment scripts                                                                         |
 | `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                                  |

@@ -58,6 +58,7 @@ locals {
         environment_name           = environment.name
         environment_tag            = lookup(var.environment_map, environment.name, lower(environment.name))
         connect_to_github          = try(environment.connect_to_github, false)
+        container_registry_name    = try(environment.container_registry_name, null)
         add_deploy_script_identity = try(environment.add_deploy_script_identity, false)
         configure_for_terraform    = try(environment.configure_for_terraform, false)
         subscription               = environment.subscription
