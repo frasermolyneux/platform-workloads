@@ -1,5 +1,6 @@
 {
     "name": "bishops-bees-staging",
+    "environment": "Staging",
     "github": {
         "repository_analysis": {
             "profile": {
