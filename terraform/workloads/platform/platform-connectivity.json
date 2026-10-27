@@ -210,6 +210,12 @@
                         },
                         {
                             "permission_groups": [
+                                "Page Rules Write"
+                            ],
+                            "zone": "talkwithtiles.com"
+                        },
+                        {
+                            "permission_groups": [
                                 "Workers Scripts Write"
                             ],
                             "account_from_zone": "xtremeidiots.com"
