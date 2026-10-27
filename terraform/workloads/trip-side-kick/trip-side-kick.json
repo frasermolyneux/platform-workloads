@@ -151,6 +151,11 @@
             }
         ]
     },
+    "gcp": {
+        "project_id": "gcp-mx-io-travel-itinerary",
+        "workload_identity_provider": "projects/776197093213/locations/global/workloadIdentityPools/github-actions/providers/github-provider",
+        "service_account": "terraform-platform@gcp-mx-io-travel-itinerary.iam.gserviceaccount.com"
+    },
     "environments": [
         {
             "name": "Development",
@@ -236,6 +241,9 @@
         {
             "name": "Production",
             "container_registry_name": "acr7ca0fd3326df",
+            "gcp": {
+                "enabled": true
+            },
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
@@ -298,6 +306,22 @@
                 ]
             },
             "cloudflare_tokens": [
+                {
+                    "name_suffix": "origin-tls",
+                    "secret_name": "CLOUDFLARE_ORIGIN_API_TOKEN",
+                    "policies": [
+                        {
+                            "permission_groups": [
+                                "SSL and Certificates Write",
+                                "Zone Read"
+                            ],
+                            "zones": [
+                                "tripsidekick.app",
+                                "tripsidekick.net"
+                            ]
+                        }
+                    ]
+                },
                 {
                     "name_suffix": "dns",
                     "policies": [
