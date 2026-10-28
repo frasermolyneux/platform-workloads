@@ -5,7 +5,7 @@
             "checkov": {
                 "exceptions": [],
                 "resource_scoped_checks": [
-                    "CKV2_AZURE_33"
+                    "CKV_AZURE_109"
                 ]
             }
         },
