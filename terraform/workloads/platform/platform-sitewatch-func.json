@@ -1,6 +1,14 @@
 {
     "name": "platform-sitewatch-func",
     "github": {
+        "repository_standards": {
+            "checkov": {
+                "exceptions": [],
+                "resource_scoped_checks": [
+                    "CKV_AZURE_225"
+                ]
+            }
+        },
         "repository_analysis": {
             "profile": {
                 "version": "repository-analysis-v1",
