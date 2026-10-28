@@ -10,6 +10,16 @@ locals {
     "CKV_OPENAPI_21",
     "CKV_SECRET_6",
   ]
+  repository_standards_resource_scoped_profiles = {
+    cost-optimised = {
+      rule    = "CKV_AZURE_225"
+      profile = "cost-optimised-resource-scoped"
+    }
+    public-endpoints = {
+      rule    = "CKV2_AZURE_33"
+      profile = "public-endpoints-resource-scoped"
+    }
+  }
   repository_standards_workloads = {
     for name, policy in local.repository_analysis_policies : name => local.analysis_scoped_workloads[name]
     if !can(policy.profile.exemption)
@@ -22,9 +32,19 @@ locals {
     for name, override in local.repository_standards_overrides : name => try(
       length(keys(override)) == 1 &&
       length(setsubtract(keys(override), ["checkov"])) == 0 &&
-      length(keys(override.checkov)) == 1 &&
-      length(setsubtract(keys(override.checkov), ["exceptions"])) == 0 &&
+      contains([1, 2], length(keys(override.checkov))) &&
+      length(setsubtract(keys(override.checkov), ["exceptions", "resource_scoped_checks"])) == 0 &&
+      can(override.checkov.exceptions) &&
       length(distinct([for exception in override.checkov.exceptions : exception.rule])) == length(override.checkov.exceptions) &&
+      length(distinct(try(override.checkov.resource_scoped_checks, []))) == length(try(override.checkov.resource_scoped_checks, [])) &&
+      alltrue([
+        for rule in try(override.checkov.resource_scoped_checks, []) :
+        contains([for variant in values(local.repository_standards_resource_scoped_profiles) : variant.rule], rule)
+      ]) &&
+      (length(try(override.checkov.resource_scoped_checks, [])) == 0 || length(setintersection(
+        local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
+        ["terraform", "bicep"]
+      )) > 0) &&
       alltrue([
         for exception in override.checkov.exceptions :
         length(keys(exception)) == 2 &&
@@ -40,7 +60,7 @@ locals {
       false
     )
   }
-  repository_standards_profiles = {
+  repository_standards_default_profiles = {
     for name, workload in local.repository_standards_workloads : name => (
       length(setintersection(
         workload.github.repository_analysis.profile.languages,
@@ -49,6 +69,15 @@ locals {
         "base",
       ]
     )
+  }
+  repository_standards_profiles = {
+    for name, profiles in local.repository_standards_default_profiles : name => [
+      for profile in profiles :
+      contains(
+        try(local.repository_standards_overrides[name].checkov.resource_scoped_checks, []),
+        try(local.repository_standards_resource_scoped_profiles[profile].rule, "")
+      ) ? local.repository_standards_resource_scoped_profiles[profile].profile : profile
+    ]
   }
   repository_standards_exceptions = {
     for name in keys(local.repository_standards_workloads) : name => try([
@@ -83,17 +112,21 @@ locals {
       length(keys(document.managedFiles.checkov)) == 3 &&
       length(setsubtract(keys(document.managedFiles.checkov), ["version", "profiles", "exceptions"])) == 0 &&
       document.managedFiles.checkov.version == "checkov-v1" &&
-      jsonencode(document.managedFiles.checkov.profiles) == jsonencode(
-        length(setintersection(
-          local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
-          ["terraform", "bicep"]
-          )) > 0 ? local.repository_standards_profile_order : [
-          "base",
-        ]
-      ) &&
+      jsonencode([
+        for profile in document.managedFiles.checkov.profiles : trimsuffix(profile, "-resource-scoped")
+      ]) == jsonencode(local.repository_standards_default_profiles[name]) &&
       alltrue([
         for profile in document.managedFiles.checkov.profiles :
-        contains(local.repository_standards_profile_order, profile)
+        contains(local.repository_standards_profile_order, profile) || anytrue([
+          for variant in values(local.repository_standards_resource_scoped_profiles) :
+          profile == variant.profile &&
+          contains(try(local.repository_standards_overrides[name].checkov.resource_scoped_checks, []), variant.rule)
+        ])
+      ]) &&
+      alltrue([
+        for original, variant in local.repository_standards_resource_scoped_profiles :
+        !contains(try(local.repository_standards_overrides[name].checkov.resource_scoped_checks, []), variant.rule) ||
+        (contains(document.managedFiles.checkov.profiles, variant.profile) && !contains(document.managedFiles.checkov.profiles, original))
       ]) &&
       alltrue([
         for exception in document.managedFiles.checkov.exceptions :
