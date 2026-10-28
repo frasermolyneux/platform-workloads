@@ -16,7 +16,7 @@ locals {
       profile = "cost-optimised-resource-scoped"
     }
     public-endpoints = {
-      rule    = "CKV2_AZURE_33"
+      rule    = "CKV_AZURE_109"
       profile = "public-endpoints-resource-scoped"
     }
   }

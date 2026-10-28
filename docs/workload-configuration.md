@@ -220,7 +220,7 @@ analysis languages include `terraform` or `bicep` additionally receive, in order
 
 An infrastructure repository may set
 `github.repository_standards.checkov.resource_scoped_checks` alongside `exceptions`
-to a unique list containing only `CKV_AZURE_225` and/or `CKV2_AZURE_33`. These select
+to a unique list containing only `CKV_AZURE_225` and/or `CKV_AZURE_109`. These select
 `cost-optimised-resource-scoped` and `public-endpoints-resource-scoped`, respectively,
 in the original profile slots. Each variant preserves every original exemption except
 the named control, which remains enforced unless an individual resource carries a

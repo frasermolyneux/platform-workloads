@@ -69,6 +69,7 @@ run "validate_repository_standards_projection" {
         jsonencode(profiles) == jsonencode(local.repository_standards_default_profiles[name])
       ]) &&
       alltrue(values(local.repository_standards_overrides_valid)) &&
+      jsonencode(local.repository_standards_overrides["platform-baremetal"].checkov.resource_scoped_checks) == jsonencode(["CKV_AZURE_109"]) &&
       alltrue(values(local.repository_standards_documents_valid)) &&
       jsonencode(local.repository_standards_exceptions["platform-baremetal"]) == "[]" &&
       jsonencode(local.repository_standards_exceptions["platform-sitewatch-func"]) == "[]"
