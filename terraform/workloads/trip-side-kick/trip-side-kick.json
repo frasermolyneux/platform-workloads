@@ -55,7 +55,7 @@
                 ]
             }
         },
-        "description": "Trip Side Kick travel-itinerary PWA and API/BFF with Microsoft Entra External ID sign-in (B2B + self-service sign-up), Azure SQL, and private Blob Storage, deployed with Terraform and GitHub Actions.",
+        "description": "Trip Side Kick PWA and API/BFF with Microsoft Entra ID (B2B + self-service sign-up), PostgreSQL and persistent local documents, deployed as constrained containers with Cloudflare ingress and verified off-server backups.",
         "topics": [
             "react",
             "pwa",
@@ -63,9 +63,8 @@
             "aspnet-core",
             "dotnet",
             "entra-external-id",
-            "azure-sql",
-            "app-service",
-            "blob-storage",
+            "postgresql",
+            "docker",
             "cloudflare",
             "terraform",
             "github-actions"
@@ -168,87 +167,6 @@
     },
     "environments": [
         {
-            "name": "Development",
-            "subscription": "sub-visualstudio-enterprise",
-            "connect_to_github": true,
-            "configure_for_terraform": true,
-            "requires_terraform_state_access": [
-                "platform-hosting",
-                "platform-monitoring"
-            ],
-            "locations": [
-                "swedencentral"
-            ],
-            "resource_groups": [
-                {
-                    "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": {
-                        "assigned_roles": [
-                            {
-                                "roles": [
-                                    "Contributor"
-                                ]
-                            }
-                        ],
-                        "rbac_admin_roles": [
-                            {
-                                "allowed_roles": [
-                                    "Key Vault Secrets User",
-                                    "Key Vault Secrets Officer",
-                                    "Storage Blob Data Contributor"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Directory Readers",
-                "External ID User Flow Administrator",
-                "External Identity Provider Administrator"
-            ],
-            "graph_api_permissions": [
-                "Application.ReadWrite.OwnedBy",
-                "Policy.ReadWrite.AuthenticationFlows",
-                "IdentityUserFlow.ReadWrite.All",
-                "IdentityProvider.ReadWrite.All"
-            ],
-            "role_assignments": {
-                "assigned_roles": [
-                    {
-                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-swedencentral/swedencentral",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:platform-monitoring/development/rg-platform-monitoring-dev-uksouth/uksouth",
-                        "roles": [
-                            "Monitoring Contributor"
-                        ]
-                    }
-                ]
-            },
-            "cloudflare_tokens": [
-                {
-                    "name_suffix": "dns",
-                    "policies": [
-                        {
-                            "permission_groups": [
-                                "DNS Write",
-                                "Zone Read"
-                            ],
-                            "zones": [
-                                "tripsidekick.app",
-                                "tripsidekick.net"
-                            ]
-                        }
-                    ]
-                }
-            ]
-        },
-        {
             "name": "Production",
             "container_registry_name": "acr7ca0fd3326df",
             "gcp": {
@@ -258,7 +176,6 @@
             "connect_to_github": true,
             "configure_for_terraform": true,
             "requires_terraform_state_access": [
-                "platform-hosting",
                 "platform-monitoring"
             ],
             "locations": [
@@ -279,8 +196,7 @@
                             {
                                 "allowed_roles": [
                                     "Key Vault Secrets User",
-                                    "Key Vault Secrets Officer",
-                                    "Storage Blob Data Contributor"
+                                    "Key Vault Secrets Officer"
                                 ]
                             }
                         ]
@@ -301,12 +217,6 @@
             ],
             "role_assignments": {
                 "assigned_roles": [
-                    {
-                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    },
                     {
                         "scope": "workload-rg:platform-monitoring/production/rg-platform-monitoring-prd-uksouth/uksouth",
                         "roles": [

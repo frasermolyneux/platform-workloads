@@ -43,13 +43,14 @@
                 }
             }
         },
-        "description": "Online Scrabble-like word game platform with Microsoft Entra ID sign-in and Azure Table Storage backend.",
+        "description": "Online Scrabble-like word game with organisational and personal Microsoft sign-in, PostgreSQL persistence and constrained containers behind Cloudflare, with verified off-server backups.",
         "topics": [
             "azure",
             "aspnet-core",
-            "table-storage",
+            "postgresql",
             "entra-id",
-            "app-service",
+            "docker",
+            "cloudflare",
             "github-actions"
         ],
         "add_sonarcloud_secrets": true,
@@ -145,69 +146,12 @@
     },
     "environments": [
         {
-            "name": "Development",
-            "subscription": "sub-visualstudio-enterprise",
-            "connect_to_github": true,
-            "configure_for_terraform": true,
-            "requires_terraform_state_access": [
-                "platform-hosting",
-                "platform-monitoring"
-            ],
-            "locations": [
-                "swedencentral"
-            ],
-            "resource_groups": [
-                {
-                    "name": "rg-{workload}-{env}-{location}",
-                    "role_assignments": {
-                        "assigned_roles": [
-                            {
-                                "roles": [
-                                    "Contributor"
-                                ]
-                            }
-                        ]
-                    }
-                }
-            ],
-            "directory_roles": [
-                "Cloud application administrator",
-                "Directory Readers"
-            ],
-            "role_assignments": {
-                "assigned_roles": [
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                        "roles": [
-                            "DNS Zone Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:platform-hosting/development/rg-platform-hosting-dev-swedencentral/swedencentral",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Table Data Contributor"
-                        ]
-                    }
-                ]
-            }
-        },
-        {
             "name": "Production",
             "container_registry_name": "acr7ca0fd3326df",
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
-            "requires_terraform_state_access": [
-                "platform-hosting",
-                "platform-monitoring"
-            ],
+            "requires_terraform_state_access": [],
             "locations": [
                 "swedencentral"
             ],
@@ -237,29 +181,6 @@
                 "Cloud application administrator",
                 "Directory Readers"
             ],
-            "role_assignments": {
-                "assigned_roles": [
-                    {
-                        "scope": "/subscriptions/db34f572-8b71-40d6-8f99-f29a27612144/resourceGroups/rg-platform-dns-prd-uksouth-01/providers/Microsoft.Network/dnszones/molyneux.me",
-                        "roles": [
-                            "DNS Zone Contributor"
-                        ]
-                    },
-                    {
-                        "scope": "workload-rg:platform-hosting/production/rg-platform-hosting-prd-swedencentral/swedencentral",
-                        "roles": [
-                            "Contributor"
-                        ]
-                    }
-                ],
-                "rbac_admin_roles": [
-                    {
-                        "allowed_roles": [
-                            "Storage Table Data Contributor"
-                        ]
-                    }
-                ]
-            },
             "cloudflare_tokens": [
                 {
                     "name_suffix": "origin-tls",
