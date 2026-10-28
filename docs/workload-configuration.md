@@ -151,7 +151,7 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_analysis` | object | Non-`xi-*` catalog rows | - | Validated source profile, scanner/build recipe and analysis cadence, or explicit applicability exemption |
-| `repository_standards` | object | No | - | Optional bounded exceptions for centrally managed repository standards; profile selection is derived from `repository_analysis` |
+| `repository_standards` | object | No | - | Optional bounded exceptions and resource-scoped controls for centrally managed repository standards; default profiles derive from `repository_analysis` |
 | `repository_policy.copilot_code_review.enabled` | boolean | No | `true` | Enroll the repository in the automatic Copilot review baseline |
 | `repository_policy.copilot_code_review.exception_reason` | string | No | - | Required explanation when automatic review is explicitly disabled |
 
@@ -216,7 +216,18 @@ future consumers. Contract validation requires exact key parity, valid documents
 Every applicable repository receives the `base` profile. Repositories whose declared
 analysis languages include `terraform` or `bicep` additionally receive, in order,
 `cost-optimised`, `public-endpoints`, `app-service-standard`, and
-`central-observability`. Workload JSON cannot replace this profile selection.
+`central-observability`. Workload JSON cannot arbitrarily replace this profile selection.
+
+An infrastructure repository may set
+`github.repository_standards.checkov.resource_scoped_checks` alongside `exceptions`
+to a unique list containing only `CKV_AZURE_225` and/or `CKV_AZURE_109`. These select
+`cost-optimised-resource-scoped` and `public-endpoints-resource-scoped`, respectively,
+in the original profile slots. Each variant preserves every original exemption except
+the named control, which remains enforced unless an individual resource carries a
+reviewed inline Checkov exception. Baremetal selects the latter for workload secret
+vaults, retaining management/runtime vault firewall checks; Sitewatch selects the
+former for its FC1-only exception, retaining checks on other service plans. Other
+repositories keep their original profiles. These controls are not global exceptions.
 
 Exceptional generated content may declare only
 `github.repository_standards.checkov.exceptions`. Each list item must contain exactly

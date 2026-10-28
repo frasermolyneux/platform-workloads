@@ -46,12 +46,35 @@ run "validate_repository_standards_projection" {
       jsonencode(local.repository_standards_profiles["platform-baremetal"]) == jsonencode([
         "base",
         "cost-optimised",
+        "public-endpoints-resource-scoped",
+        "app-service-standard",
+        "central-observability",
+      ]) &&
+      jsonencode(local.repository_standards_profiles["platform-sitewatch-func"]) == jsonencode([
+        "base",
+        "cost-optimised-resource-scoped",
         "public-endpoints",
         "app-service-standard",
         "central-observability",
       ])
     )
     error_message = "Profile selection must be deterministic for base-only, policy-only infrastructure, and private infrastructure repositories."
+  }
+
+  assert {
+    condition = (
+      alltrue([
+        for name, profiles in local.repository_standards_profiles :
+        contains(["platform-baremetal", "platform-sitewatch-func"], name) ||
+        jsonencode(profiles) == jsonencode(local.repository_standards_default_profiles[name])
+      ]) &&
+      alltrue(values(local.repository_standards_overrides_valid)) &&
+      jsonencode(local.repository_standards_overrides["platform-baremetal"].checkov.resource_scoped_checks) == jsonencode(["CKV_AZURE_109"]) &&
+      alltrue(values(local.repository_standards_documents_valid)) &&
+      jsonencode(local.repository_standards_exceptions["platform-baremetal"]) == "[]" &&
+      jsonencode(local.repository_standards_exceptions["platform-sitewatch-func"]) == "[]"
+    )
+    error_message = "Only the two declared resource-scoped variants may change profile selection; neither control may become a global exception."
   }
 
   assert {

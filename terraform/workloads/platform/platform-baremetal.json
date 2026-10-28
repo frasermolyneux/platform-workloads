@@ -1,6 +1,14 @@
 {
     "name": "platform-baremetal",
     "github": {
+        "repository_standards": {
+            "checkov": {
+                "exceptions": [],
+                "resource_scoped_checks": [
+                    "CKV_AZURE_109"
+                ]
+            }
+        },
         "repository_analysis": {
             "profile": {
                 "version": "repository-analysis-v1",
