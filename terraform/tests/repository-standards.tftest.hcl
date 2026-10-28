@@ -6,13 +6,13 @@ run "validate_repository_standards_projection" {
   }
 
   assert {
-    condition     = length(local.repository_standards_variables) == 48
-    error_message = "All 48 applicable non-xi repository analysis profiles must receive repository standards."
+    condition     = length(local.repository_standards_variables) == 47
+    error_message = "All 47 applicable non-xi repository analysis profiles must receive repository standards."
   }
 
   assert {
     condition = (
-      length(local.repository_standards_catalog) == 48 &&
+      length(local.repository_standards_catalog) == 47 &&
       jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_workloads))) &&
       jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_documents)))
     )
@@ -24,7 +24,7 @@ run "validate_repository_standards_projection" {
       length([
         for name in keys(local.repository_standards_workloads) : name
         if local.repository_standards_workloads[name].github.visibility == "public"
-      ]) == 39 &&
+      ]) == 38 &&
       length([
         for name in keys(local.repository_standards_workloads) : name
         if local.repository_standards_workloads[name].github.visibility == "private"

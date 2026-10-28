@@ -150,6 +150,7 @@ If another workload referenced the decommissioned one via `requires_terraform_st
 
 | Workload | Date | Reason | Replaced By |
 |----------|------|--------|-------------|
+| travel-itinerary | 2026-10 | Owned stacks destroyed, retired Google trust revoked and repository detached before catalog removal; transfer to archive follows apply | [trip-side-kick](https://github.com/frasermolyneux/trip-side-kick) |
 | baremetal-workload-canary | 2026-09 | Validation complete; canonical template now owns the reusable pattern | [baremetal-workload-template](https://github.com/frasermolyneux/baremetal-workload-template) |
 | portal-bots | 2025-07 | Replaced by container-based architecture | [portal-server-agent](https://github.com/frasermolyneux/portal-server-agent) |
 | portal-event-ingest | 2025-07 | Replaced by dedicated event processing service | [portal-server-events](https://github.com/frasermolyneux/portal-server-events) |
