@@ -151,8 +151,8 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
 | `actions_runner.enabled` | boolean | No | `false` | Enroll a private repository in the ARC runner catalog |
 | `actions_runner.host` | string | When enabled | - | Stable bare-metal host identifier that owns the isolated runner VM |
-| `actions_runner.scale_set_name` | string | When enabled | - | Unique ARC scale-set label, projected as `COPILOT_CODE_REVIEW_RUNNER` |
-| `actions_runner.copilot_code_review` | boolean | When enabled | - | Must be `true`; the initial contract is limited to Copilot code review |
+| `actions_runner.scale_set_name` | string | When enabled | - | Unique ARC scale-set label, projected as `ACTIONS_RUNNER` |
+| `actions_runner.copilot_code_review` | boolean | When enabled | - | Also project the backwards-compatible `COPILOT_CODE_REVIEW_RUNNER` alias |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_analysis` | object | Non-`xi-*` catalog rows | - | Validated source profile, scanner/build recipe and analysis cadence, or explicit applicability exemption |
 | `repository_standards` | object | No | - | Optional bounded exceptions and resource-scoped controls for centrally managed repository standards; default profiles derive from `repository_analysis` |
@@ -171,11 +171,14 @@ non-secret registration metadata. Incomplete registrations create no Actions
 variables; private keys are never imported into Terraform state.
 
 `github.actions_runner` is the desired-state boundary for repository-scoped ARC
-scale sets. The initial contract accepts private repositories only and routes
-Copilot code review through an ephemeral runner label. `platform-baremetal`
-consumes the resulting remote-state output and owns the isolated virtual machine,
-Kubernetes runtime, resource limits, credentials, and network controls. The
-catalog never contains the fine-grained GitHub token.
+scale sets. The contract accepts private repositories only and routes workflow
+jobs through the `ACTIONS_RUNNER` ephemeral runner label. Repositories using
+Copilot review also receive the legacy purpose-specific alias.
+`platform-baremetal` consumes the resulting remote-state output and owns the
+isolated virtual machine, Kubernetes runtime, resource limits, credentials,
+Docker-in-Docker mode, and network controls. The catalog never contains the
+fine-grained GitHub token. Bare-metal control repositories are deliberately not
+enrolled, preserving an independent recovery and deployment path.
 
 The public `actions` policy entry opts into the existing Sonar token broker as a
 prerequisite for its repository-owned CI analysis replacement. This does not create

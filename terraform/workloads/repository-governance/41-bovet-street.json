@@ -18,6 +18,12 @@
         "description": null,
         "topics": [],
         "visibility": "private",
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-41-bovet-street",
+            "copilot_code_review": false
+        },
         "manage_repository": false,
         "repository_policy": {
             "copilot_code_review": {
