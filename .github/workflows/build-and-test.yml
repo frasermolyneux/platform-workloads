@@ -40,6 +40,9 @@ jobs:
       - name: Validate runtime GitHub App declarations without provider reads
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/runtime-github-apps.tftest.hcl
 
+      - name: Validate Actions runner enrollments without provider reads
+        run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/actions-runners.tftest.hcl
+
       - name: Test runtime GitHub App bootstrap
         run: |
           python3 -m pip install --requirement scripts/requirements-github-apps.txt

@@ -45,6 +45,12 @@
             "app_id": "2973523",
             "installation_id": "113093932"
         },
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-baremetal-workload-template",
+            "copilot_code_review": true
+        },
         "is_template": true,
         "visibility": "private"
     },

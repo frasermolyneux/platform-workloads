@@ -149,6 +149,10 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | `github_app.enabled`     | boolean | No       | `false`  | Broker the organization-owned GitHub App credentials into the repository |
 | `github_app.app_id`      | string  | When enabled | -     | GitHub App ID exposed as the `GH_APP_ID` repository variable |
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |
+| `actions_runner.enabled` | boolean | No | `false` | Enroll a private repository in the ARC runner catalog |
+| `actions_runner.host` | string | When enabled | - | Stable bare-metal host identifier that owns the isolated runner VM |
+| `actions_runner.scale_set_name` | string | When enabled | - | Unique ARC scale-set label, projected as `COPILOT_CODE_REVIEW_RUNNER` |
+| `actions_runner.copilot_code_review` | boolean | When enabled | - | Must be `true`; the initial contract is limited to Copilot code review |
 | `manage_repository`      | boolean | No       | `true`   | Manage repository lifecycle/settings; set `false` for policy-only catalog entries |
 | `repository_analysis` | object | Non-`xi-*` catalog rows | - | Validated source profile, scanner/build recipe and analysis cadence, or explicit applicability exemption |
 | `repository_standards` | object | No | - | Optional bounded exceptions and resource-scoped controls for centrally managed repository standards; default profiles derive from `repository_analysis` |
@@ -165,6 +169,13 @@ See [Runtime GitHub Apps](runtime-github-apps.md) for the manifest bootstrap,
 exact repository-scope verification, direct workload Key Vault storage and
 non-secret registration metadata. Incomplete registrations create no Actions
 variables; private keys are never imported into Terraform state.
+
+`github.actions_runner` is the desired-state boundary for repository-scoped ARC
+scale sets. The initial contract accepts private repositories only and routes
+Copilot code review through an ephemeral runner label. `platform-baremetal`
+consumes the resulting remote-state output and owns the isolated virtual machine,
+Kubernetes runtime, resource limits, credentials, and network controls. The
+catalog never contains the fine-grained GitHub token.
 
 The public `actions` policy entry opts into the existing Sonar token broker as a
 prerequisite for its repository-owned CI analysis replacement. This does not create
