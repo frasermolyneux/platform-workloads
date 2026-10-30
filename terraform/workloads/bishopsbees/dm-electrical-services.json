@@ -35,6 +35,12 @@
         ],
         "add_sonarcloud_secrets": false,
         "add_nuget_environment": false,
-        "visibility": "private"
+        "visibility": "private",
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-dm-electrical-services",
+            "copilot_code_review": true
+        }
     }
 }

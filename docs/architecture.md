@@ -155,12 +155,15 @@ review-MCP settings remain repository-local and must be inspected during each
 repository migration. Direct ruleset edits in GitHub may be overwritten by
 Terraform and should be avoided.
 
-Private repositories can additionally opt into the repository-scoped ARC catalog
-through `github.actions_runner`. Terraform validates a unique scale-set name,
-projects that label as `COPILOT_CODE_REVIEW_RUNNER`, and publishes the non-secret
-enrollment map for `platform-baremetal` through remote state. The runner host,
-KVM isolation boundary, ARC lifecycle, credential materialization, and egress
-policy remain outside this repository.
+Active private repositories can additionally opt into the repository-scoped ARC
+catalog through `github.actions_runner`. Terraform validates a unique scale-set
+name, projects that label as `ACTIONS_RUNNER`, retains
+`COPILOT_CODE_REVIEW_RUNNER` where Copilot review is enabled, and publishes the
+non-secret enrollment map for `platform-baremetal` through remote state. The
+bare-metal control repositories remain excluded so their recovery path does not
+depend on the runner service they manage. The runner host, KVM isolation
+boundary, ARC lifecycle, credential materialization, and egress policy remain
+outside this repository.
 
 ### Managed repository standards declaration
 

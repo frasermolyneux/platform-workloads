@@ -18,7 +18,13 @@
             "app_id": "2973523",
             "installation_id": "113093932"
         },
-        "visibility": "private"
+        "visibility": "private",
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-xi-redirect-manager",
+            "copilot_code_review": true
+        }
     },
     "environments": [
         {

@@ -19,18 +19,29 @@ locals {
       local.all_workloads[index(local.all_workloads[*].name, name)].github.visibility == "private" &&
       can(regex("^[a-z0-9][a-z0-9-]{0,62}$", enrollment.host)) &&
       can(regex("^[a-z0-9][a-z0-9-]{0,44}$", enrollment.scale_set_name)) &&
-      enrollment.copilot_code_review == true,
+      enrollment.copilot_code_review == true || enrollment.copilot_code_review == false,
       false
     )
   }
 
-  actions_runner_variables = {
-    for name, enrollment in local.actions_runner_enrollments : name => {
-      repository = name
-      name       = "COPILOT_CODE_REVIEW_RUNNER"
-      value      = enrollment.scale_set_name
-    }
-  }
+  actions_runner_variables = merge([
+    for name, enrollment in local.actions_runner_enrollments : merge(
+      {
+        "${name}:actions" = {
+          repository = name
+          name       = "ACTIONS_RUNNER"
+          value      = enrollment.scale_set_name
+        }
+      },
+      enrollment.copilot_code_review ? {
+        "${name}:copilot" = {
+          repository = name
+          name       = "COPILOT_CODE_REVIEW_RUNNER"
+          value      = enrollment.scale_set_name
+        }
+      } : {}
+    )
+  ]...)
 }
 
 resource "terraform_data" "actions_runner_contract" {
@@ -42,7 +53,7 @@ resource "terraform_data" "actions_runner_contract" {
   lifecycle {
     precondition {
       condition     = alltrue(values(local.actions_runner_enrollments_valid))
-      error_message = "Actions runner enrollments must target private repositories, use valid host and scale-set names, enable Copilot code review, and contain only supported properties."
+      error_message = "Actions runner enrollments must target private repositories, use valid host and scale-set names, declare Copilot code review usage, and contain only supported properties."
     }
 
     precondition {
@@ -58,9 +69,9 @@ resource "terraform_data" "actions_runner_contract" {
 resource "github_actions_variable" "actions_runner" {
   for_each = local.actions_runner_variables
 
-  repository = try(local.all_workloads[index(local.all_workloads[*].name, each.key)].github.manage_repository, true) ? (
-    github_repository.workload[each.key].name
-  ) : each.key
+  repository = try(local.all_workloads[index(local.all_workloads[*].name, each.value.repository)].github.manage_repository, true) ? (
+    github_repository.workload[each.value.repository].name
+  ) : each.value.repository
   variable_name = each.value.name
   value         = each.value.value
   depends_on    = [terraform_data.actions_runner_contract]

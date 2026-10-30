@@ -4,6 +4,12 @@
         "description": "MX.IO IDP: private developer estate inventory, delivery evidence, environment management and engineering insights.",
         "topics": ["dotnet", "react", "developer-portal", "internal-developer-platform", "terraform"],
         "visibility": "private",
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-platform-developer-portal",
+            "copilot_code_review": true
+        },
         "auto_init": true,
         "add_sonarcloud_secrets": false,
         "github_app": {
