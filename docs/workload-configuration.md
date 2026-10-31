@@ -76,24 +76,6 @@ alone does not establish a deployed runtime.
         }
       }
     },
-    "repository_standards": {
-      "checkov": {
-        "exceptions": [
-          {
-            "rule": "CKV_OPENAPI_21",
-            "reason": "Generated OpenAPI content cannot express this reviewed constraint; runtime validation enforces it."
-          }
-        ]
-      },
-      "sonar": {
-        "exclusions": [
-          {
-            "pattern": "Web/wwwroot/vendor/**",
-            "reason": "This reviewed path contains third-party source retained for the application build."
-          }
-        ]
-      }
-    },
     "repository_policy": {
       "copilot_code_review": {
         "enabled": true,

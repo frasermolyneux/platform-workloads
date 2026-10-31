@@ -75,17 +75,28 @@ locals {
         length(keys(override.sonar)) == 1 &&
         length(setsubtract(keys(override.sonar), ["exclusions"])) == 0 &&
         can(override.sonar.exclusions) &&
-        length(override.sonar.exclusions) <= 64 &&
+        length(override.sonar.exclusions) <= 59 &&
         length(distinct([for exclusion in override.sonar.exclusions : exclusion.pattern])) == length(override.sonar.exclusions) &&
         alltrue([
           for exclusion in override.sonar.exclusions :
           length(keys(exclusion)) == 2 &&
           length(setsubtract(keys(exclusion), ["pattern", "reason"])) == 0 &&
           can(regex("^[A-Za-z0-9._*?/-]+$", exclusion.pattern)) &&
+          length(exclusion.pattern) <= 240 &&
           !startswith(exclusion.pattern, "/") &&
+          !startswith(exclusion.pattern, "**/") &&
           !strcontains(exclusion.pattern, "\\") &&
           !strcontains(exclusion.pattern, ",") &&
+          !contains(split("/", exclusion.pattern), ".") &&
           !contains(split("/", exclusion.pattern), "..") &&
+          length(split("/", exclusion.pattern)) >= 3 &&
+          (
+            element(reverse(split("/", exclusion.pattern)), 0) != "**" ||
+            contains(
+              ["less", "scss", "vendor", "lib"],
+              element(reverse(split("/", exclusion.pattern)), 1)
+            )
+          ) &&
           exclusion.reason == trimspace(exclusion.reason) &&
           length(exclusion.reason) >= 10 &&
           length(exclusion.reason) <= 240 &&
