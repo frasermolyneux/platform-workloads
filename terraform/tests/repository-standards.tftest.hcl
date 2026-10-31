@@ -105,6 +105,30 @@ run "validate_repository_standards_projection" {
 
   assert {
     condition = (
+      local.repository_standards_editorconfig_profile == "curated-low-noise" &&
+      length([
+        for name, document in local.repository_standards_documents : name
+        if can(document.managedFiles.editorconfig)
+      ]) == 24 &&
+      alltrue([
+        for name, document in local.repository_standards_documents :
+        can(document.managedFiles.editorconfig) == contains(
+          local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
+          "csharp"
+        )
+      ]) &&
+      local.repository_standards_documents["dotnet-caching"].managedFiles.editorconfig.version == "dotnet-editorconfig-v1" &&
+      jsonencode(local.repository_standards_documents["dotnet-caching"].managedFiles.editorconfig.profiles) == jsonencode([
+        "curated-low-noise",
+      ]) &&
+      !can(local.repository_standards_documents["actions"].managedFiles.editorconfig) &&
+      !can(local.repository_standards_documents["platform-workloads"].managedFiles.editorconfig)
+    )
+    error_message = "Exactly the 24 declared C# repositories must receive the canonical curated editorconfig policy."
+  }
+
+  assert {
+    condition = (
       local.repository_standards_catalog["actions"] == local.repository_standards_documents["actions"] &&
       local.repository_standards_catalog["platform-workloads"] == local.repository_standards_documents["platform-workloads"] &&
       local.repository_standards_catalog["trip-side-kick"] == local.repository_standards_documents["trip-side-kick"]

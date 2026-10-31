@@ -218,7 +218,8 @@ No new Azure identity, RBAC, subscription, environment or cost-bearing resource 
 Applicable non-`xi-*` repository analysis profiles receive one
 `REPOSITORY_STANDARDS` Actions variable. Analysis exemptions receive no standards
 variable. The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
-entry at `checkov-v1`.
+entry at `checkov-v1`. Profiles declaring `csharp` additionally receive the
+`dotnet-editorconfig-v1` `curated-low-noise` profile.
 
 Terraform also projects the complete deterministic repository-name-to-contract map
 to `platform-devex` as `REPOSITORY_STANDARDS_CATALOG`. The platform-devex reconciler
@@ -251,6 +252,14 @@ U+007F-U+009F, U+2028, U+2029, U+FFFE, or U+FFFF. This includes tabs, line
 breaks, and all C0/C1 controls. Terraform HCL strings and `jsondecode` expose
 Unicode scalar values, so unpaired UTF-16 surrogates are not representable at
 this producer boundary. Exceptions are sorted deterministically before projection.
+
+The editorconfig profile is fixed by declared source language rather than workload
+overrides. It owns a marked section in repository `.editorconfig` files that suppresses
+the approved low-value documentation, code-style, ConfigureAwait and logging
+micro-optimisation diagnostics. Correctness, nullability, resource-usage, test,
+reliability and security diagnostics remain enabled. Repository-specific formatting,
+generated-code handling and stricter rule choices outside the marked section remain
+repository-owned.
 
 This stack declares desired state only. It does not install or activate the separate
 platform-devex reconciliation workflow; that behavior becomes active only after its
