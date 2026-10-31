@@ -51,14 +51,15 @@ scanner execution or estate caller adoption.
 
 ### Repository standards validation
 
-Validate the managed Checkov declaration contract without provider reads:
+Validate the managed Checkov, analyzer, Sonar and ESLint declaration contract without provider reads:
 
 ```powershell
 terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-standards.tftest.hcl'
 ```
 
 The test checks applicable public and private counts, deterministic profile
-selection, the Trip Side Kick generated OpenAPI exception, exclusion of analysis
+selection, the Trip Side Kick generated OpenAPI exception, Portal Server Agent fixture
+exception, Geo Location vendor exclusions, exclusion of analysis
 exemptions and `xi-*` repositories, and exact aggregate-catalog key/document parity.
 It also verifies the `platform-devex` target and conservative encoded-size bound.
 The aggregate is consumed from platform-devex's own `vars` context; per-target

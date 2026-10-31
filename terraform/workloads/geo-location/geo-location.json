@@ -43,6 +43,24 @@
                 }
             }
         },
+        "repository_standards": {
+            "sonar": {
+                "exclusions": [
+                    {
+                        "pattern": "MX.GeoLocation.Web/wwwroot/less/**",
+                        "reason": "This path contains vendored theme source retained to build the application stylesheet."
+                    },
+                    {
+                        "pattern": "MX.GeoLocation.Web/wwwroot/scss/**",
+                        "reason": "This path contains vendored theme source retained to build the application stylesheet."
+                    },
+                    {
+                        "pattern": "MX.GeoLocation.Web/wwwroot/css/all.css",
+                        "reason": "This file is a generated vendor stylesheet distribution asset rather than maintained source."
+                    }
+                ]
+            }
+        },
         "description": "MaxMind-backed GeoLocation service with caching: ASP.NET API, web UI, and client library published behind API Management; deployed with Terraform and GitHub Actions.",
         "topics": [
             "azure",

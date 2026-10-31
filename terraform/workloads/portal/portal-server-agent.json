@@ -42,6 +42,16 @@
                 }
             }
         },
+        "repository_standards": {
+            "checkov": {
+                "exceptions": [
+                    {
+                        "rule": "CKV_SECRET_6",
+                        "reason": "The matching values are inert placeholders in JSON test fixtures under src/XtremeIdiots.Portal.Server.Agent.App.Tests/Agents/Fixtures and are never used as credentials."
+                    }
+                ]
+            }
+        },
         "description": "Game server agent for the XtremeIdiots portal - collects events via FTP log tailing and publishes to Service Bus, hosted on Azure Container Apps.",
         "topics": [
             "azure",
