@@ -72,9 +72,15 @@ run "validate_repository_standards_projection" {
       jsonencode(local.repository_standards_overrides["platform-baremetal"].checkov.resource_scoped_checks) == jsonencode(["CKV_AZURE_109"]) &&
       alltrue(values(local.repository_standards_documents_valid)) &&
       jsonencode(local.repository_standards_exceptions["platform-baremetal"]) == "[]" &&
-      jsonencode(local.repository_standards_exceptions["platform-sitewatch-func"]) == "[]"
+      jsonencode(local.repository_standards_exceptions["platform-sitewatch-func"]) == "[]" &&
+      jsonencode(local.repository_standards_exceptions["portal-server-agent"]) == jsonencode([
+        {
+          rule   = "CKV_SECRET_6"
+          reason = "The matching values are inert placeholders in JSON test fixtures under src/XtremeIdiots.Portal.Server.Agent.App.Tests/Agents/Fixtures and are never used as credentials."
+        }
+      ])
     )
-    error_message = "Only the two declared resource-scoped variants may change profile selection; neither control may become a global exception."
+    error_message = "Only the declared resource-scoped variants and reviewed Portal Server Agent fixture exception may change Checkov projection."
   }
 
   assert {
@@ -105,7 +111,10 @@ run "validate_repository_standards_projection" {
 
   assert {
     condition = (
-      local.repository_standards_editorconfig_profile == "curated-low-noise" &&
+      jsonencode(local.repository_standards_editorconfig_profiles) == jsonencode([
+        "curated-low-noise",
+        "actionable-only",
+      ]) &&
       length([
         for name, document in local.repository_standards_documents : name
         if can(document.managedFiles.editorconfig)
@@ -120,11 +129,71 @@ run "validate_repository_standards_projection" {
       local.repository_standards_documents["dotnet-caching"].managedFiles.editorconfig.version == "dotnet-editorconfig-v1" &&
       jsonencode(local.repository_standards_documents["dotnet-caching"].managedFiles.editorconfig.profiles) == jsonencode([
         "curated-low-noise",
+        "actionable-only",
       ]) &&
       !can(local.repository_standards_documents["actions"].managedFiles.editorconfig) &&
       !can(local.repository_standards_documents["platform-workloads"].managedFiles.editorconfig)
     )
-    error_message = "Exactly the 24 declared C# repositories must receive the canonical curated editorconfig policy."
+    error_message = "Exactly the 24 declared C# repositories must receive both canonical low-noise editorconfig profiles."
+  }
+
+  assert {
+    condition = (
+      jsonencode(local.repository_standards_sonar_profiles) == jsonencode([
+        "actionable-only",
+        "common-vendor-assets",
+      ]) &&
+      length([
+        for name, document in local.repository_standards_documents : name
+        if can(document.managedFiles.sonar)
+      ]) == 24 &&
+      alltrue([
+        for name, document in local.repository_standards_documents :
+        can(document.managedFiles.sonar) ==
+        local.repository_standards_workloads[name].github.repository_analysis.profile.sonar
+      ]) &&
+      jsonencode(local.repository_standards_documents["geo-location"].managedFiles.sonar.exclusions) == jsonencode([
+        {
+          pattern = "MX.GeoLocation.Web/wwwroot/css/all.css"
+          reason  = "This file is a generated vendor stylesheet distribution asset rather than maintained source."
+        },
+        {
+          pattern = "MX.GeoLocation.Web/wwwroot/less/**"
+          reason  = "This path contains vendored theme source retained to build the application stylesheet."
+        },
+        {
+          pattern = "MX.GeoLocation.Web/wwwroot/scss/**"
+          reason  = "This path contains vendored theme source retained to build the application stylesheet."
+        },
+      ]) &&
+      jsonencode(local.repository_standards_documents["portal-repository"].managedFiles.sonar.exclusions) == "[]" &&
+      !can(local.repository_standards_documents["platform-workloads"].managedFiles.sonar)
+    )
+    error_message = "Exactly the 24 Sonar-enabled repositories must receive the actionable policy with only reviewed targeted exclusions."
+  }
+
+  assert {
+    condition = (
+      jsonencode(local.repository_standards_eslint_profiles) == jsonencode([
+        "common-vendor-assets",
+      ]) &&
+      length([
+        for name, document in local.repository_standards_documents : name
+        if can(document.managedFiles.eslint)
+      ]) == 18 &&
+      alltrue([
+        for name, document in local.repository_standards_documents :
+        can(document.managedFiles.eslint) == (
+          length(setintersection(
+            local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
+            ["javascript", "typescript"]
+          )) > 0
+        )
+      ]) &&
+      can(local.repository_standards_documents["actions"].managedFiles.eslint) &&
+      !can(local.repository_standards_documents["dotnet-caching"].managedFiles.eslint)
+    )
+    error_message = "Exactly the 18 JavaScript or TypeScript repositories must receive the managed ESLint vendor exclusions."
   }
 
   assert {

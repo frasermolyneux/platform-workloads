@@ -172,8 +172,12 @@ validated non-`xi-*` repository analysis catalog. Applicable profiles receive a
 strict `REPOSITORY_STANDARDS` Actions variable; analysis exemptions receive no
 variable. Terraform selects the fixed Checkov profile sequence from declared
 languages and admits only bounded, rule-specific generated-content exceptions.
-C# profiles also receive the fixed `dotnet-editorconfig-v1` curated low-noise
-analyzer profile; workload declarations cannot broaden its suppression set.
+C# profiles also receive the fixed `dotnet-editorconfig-v1` curated and
+actionable-only analyzer profiles. Sonar-enabled profiles receive the fixed
+`sonar-policy-v1` actionable and vendor-asset profiles, while JavaScript or
+TypeScript profiles receive the fixed `eslint-ignore-v1` vendor-asset profile.
+Workload declarations cannot broaden rule suppression; they may add only bounded,
+reasoned Sonar path exclusions for reviewed third-party assets.
 The same complete desired-state map is deterministically encoded in
 `REPOSITORY_STANDARDS_CATALOG` on `platform-devex`, allowing its reconciler to
 consume the catalog from its own `vars` context without target-repository

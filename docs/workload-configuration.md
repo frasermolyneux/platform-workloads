@@ -84,6 +84,14 @@ alone does not establish a deployed runtime.
             "reason": "Generated OpenAPI content cannot express this reviewed constraint; runtime validation enforces it."
           }
         ]
+      },
+      "sonar": {
+        "exclusions": [
+          {
+            "pattern": "Web/wwwroot/vendor/**",
+            "reason": "This reviewed path contains third-party source retained for the application build."
+          }
+        ]
       }
     },
     "repository_policy": {
@@ -219,7 +227,10 @@ Applicable non-`xi-*` repository analysis profiles receive one
 `REPOSITORY_STANDARDS` Actions variable. Analysis exemptions receive no standards
 variable. The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
 entry at `checkov-v1`. Profiles declaring `csharp` additionally receive the
-`dotnet-editorconfig-v1` `curated-low-noise` profile.
+`dotnet-editorconfig-v1` `curated-low-noise` and `actionable-only` profiles.
+Sonar-enabled profiles receive `sonar-policy-v1` with `actionable-only` and
+`common-vendor-assets`; JavaScript or TypeScript profiles receive the
+`eslint-ignore-v1` `common-vendor-assets` profile.
 
 Terraform also projects the complete deterministic repository-name-to-contract map
 to `platform-devex` as `REPOSITORY_STANDARDS_CATALOG`. The platform-devex reconciler
@@ -253,13 +264,24 @@ breaks, and all C0/C1 controls. Terraform HCL strings and `jsondecode` expose
 Unicode scalar values, so unpaired UTF-16 surrogates are not representable at
 this producer boundary. Exceptions are sorted deterministically before projection.
 
-The editorconfig profile is fixed by declared source language rather than workload
-overrides. It owns a marked section in repository `.editorconfig` files that suppresses
-the approved low-value documentation, code-style, ConfigureAwait and logging
-micro-optimisation diagnostics. Correctness, nullability, resource-usage, test,
-reliability and security diagnostics remain enabled. Repository-specific formatting,
-generated-code handling and stricter rule choices outside the marked section remain
-repository-owned.
+The editorconfig profiles are fixed by declared source language rather than workload
+overrides. They own a marked section in repository `.editorconfig` files and suppress
+the reviewed documentation, convention, modernisation and micro-performance backlog.
+Compiler, nullability, cancellation, resource-lifetime, test-lifecycle, reliability and
+security diagnostics remain enabled. Repository-specific formatting, generated-code
+handling and stricter rule choices outside the marked section remain repository-owned.
+
+The Sonar rule profiles are also fixed. A Sonar-enabled workload may add
+`github.repository_standards.sonar.exclusions` only for reviewed third-party or generated
+paths. Each item contains exactly `pattern` and `reason`; patterns are safe relative globs
+without traversal, commas, backslashes or whitespace, and reasons are trimmed and bounded
+to 10–240 characters. Exclusions are sorted deterministically. The current targeted
+exception covers Geo Location's vendored theme sources and generated stylesheet; maintained
+Portal Repository API clients remain analyzed.
+
+The ESLint profile is selected only from declared JavaScript or TypeScript languages and
+excludes package-manager, vendor, `wwwroot/lib` and minified JavaScript assets. First-party
+DOM and injection findings remain visible.
 
 This stack declares desired state only. It does not install or activate the separate
 platform-devex reconciliation workflow; that behavior becomes active only after its
