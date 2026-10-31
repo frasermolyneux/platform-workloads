@@ -10,6 +10,7 @@ locals {
     "CKV_OPENAPI_21",
     "CKV_SECRET_6",
   ]
+  repository_standards_editorconfig_profile = "curated-low-noise"
   repository_standards_resource_scoped_profiles = {
     cost-optimised = {
       rule    = "CKV_AZURE_225"
@@ -93,13 +94,21 @@ locals {
   repository_standards_documents = {
     for name in keys(local.repository_standards_workloads) : name => {
       version = "repository-standards-v1"
-      managedFiles = {
+      managedFiles = merge({
         checkov = {
           version    = "checkov-v1"
           profiles   = local.repository_standards_profiles[name]
           exceptions = local.repository_standards_exceptions[name]
         }
-      }
+        }, contains(
+        local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
+        "csharp"
+        ) ? {
+        editorconfig = {
+          version  = "dotnet-editorconfig-v1"
+          profiles = [local.repository_standards_editorconfig_profile]
+        }
+      } : {})
     }
   }
   repository_standards_documents_valid = {
@@ -107,8 +116,8 @@ locals {
       length(keys(document)) == 2 &&
       length(setsubtract(keys(document), ["version", "managedFiles"])) == 0 &&
       document.version == "repository-standards-v1" &&
-      length(keys(document.managedFiles)) == 1 &&
-      length(setsubtract(keys(document.managedFiles), ["checkov"])) == 0 &&
+      contains([1, 2], length(keys(document.managedFiles))) &&
+      length(setsubtract(keys(document.managedFiles), ["checkov", "editorconfig"])) == 0 &&
       length(keys(document.managedFiles.checkov)) == 3 &&
       length(setsubtract(keys(document.managedFiles.checkov), ["version", "profiles", "exceptions"])) == 0 &&
       document.managedFiles.checkov.version == "checkov-v1" &&
@@ -138,7 +147,23 @@ locals {
         length(exception.reason) >= 10 &&
         length(exception.reason) <= 600 &&
         !can(regex("[\u0000-\u001F\u007F-\u009F\u2028\u2029\uFFFE\uFFFF]", exception.reason))
-      ]),
+      ]) &&
+      (
+        contains(
+          local.repository_standards_workloads[name].github.repository_analysis.profile.languages,
+          "csharp"
+        ) == can(document.managedFiles.editorconfig)
+      ) &&
+      (
+        !can(document.managedFiles.editorconfig) || (
+          length(keys(document.managedFiles.editorconfig)) == 2 &&
+          length(setsubtract(keys(document.managedFiles.editorconfig), ["version", "profiles"])) == 0 &&
+          document.managedFiles.editorconfig.version == "dotnet-editorconfig-v1" &&
+          jsonencode(document.managedFiles.editorconfig.profiles) == jsonencode([
+            local.repository_standards_editorconfig_profile
+          ])
+        )
+      ),
       false
     )
   }
@@ -192,7 +217,7 @@ resource "terraform_data" "repository_standards_contract" {
           !can(local.repository_analysis_policies[name].profile.exemption)
         ])
       )
-      error_message = "Repository standards require exact repository-standards-v1/checkov-v1 keys, deterministic supported profiles, bounded Checkov rule exceptions, an applicable platform-devex aggregate catalog below 48 KB, and projection only to applicable non-xi analysis catalog rows."
+      error_message = "Repository standards require exact repository-standards-v1 managed-file keys, deterministic Checkov and .NET editorconfig profiles, bounded Checkov rule exceptions, an applicable platform-devex aggregate catalog below 48 KB, and projection only to applicable non-xi analysis catalog rows."
     }
   }
 }
