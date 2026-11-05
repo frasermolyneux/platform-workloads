@@ -150,6 +150,7 @@ If another workload referenced the decommissioned one via `requires_terraform_st
 
 | Workload | Date | Reason | Replaced By |
 |----------|------|--------|-------------|
+| .github-copilot | 2026-11 | Repository retired; policy-only governance removed before archive transfer | — |
 | CoD4x_Server | 2026-11 | Archived upstream-shaped fork; repository transferred to archive | — |
 | ado-pipeline-templates | 2026-11 | No active default-branch consumers; repository archived and transferred to archive | — |
 | travel-itinerary | 2026-10 | Owned stacks destroyed, retired Google trust revoked and repository detached before catalog removal; repository transferred to archive | [trip-side-kick](https://github.com/frasermolyneux/trip-side-kick) |

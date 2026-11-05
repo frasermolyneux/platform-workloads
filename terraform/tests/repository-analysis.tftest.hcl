@@ -6,13 +6,13 @@ run "validate_complete_scoped_catalog" {
   }
 
   assert {
-    condition     = length(local.repository_analysis_policies) == 51 && alltrue(values(local.repository_analysis_valid))
-    error_message = "All 51 scoped catalog rows must carry valid source profiles or explicit exemptions."
+    condition     = length(local.repository_analysis_policies) == 47 && alltrue(values(local.repository_analysis_valid))
+    error_message = "All 47 scoped catalog rows must carry valid source profiles or explicit exemptions."
   }
 
   assert {
-    condition     = length(local.repository_analysis_variables) == 142
-    error_message = "Expected profile/cadence projection to 47 applicable repositories and build/Sonar recipes to 24 public source repositories."
+    condition     = length(local.repository_analysis_variables) == 138
+    error_message = "Expected profile/cadence projection to 45 applicable repositories and build/Sonar recipes to 24 public source repositories."
   }
 
   assert {
