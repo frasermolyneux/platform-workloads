@@ -150,6 +150,8 @@ If another workload referenced the decommissioned one via `requires_terraform_st
 
 | Workload | Date | Reason | Replaced By |
 |----------|------|--------|-------------|
+| CoD4x_Server | 2026-11 | Archived upstream-shaped fork; repository transferred to archive | — |
+| ado-pipeline-templates | 2026-11 | No active default-branch consumers; repository archived and transferred to archive | — |
 | travel-itinerary | 2026-10 | Owned stacks destroyed, retired Google trust revoked and repository detached before catalog removal; repository transferred to archive | [trip-side-kick](https://github.com/frasermolyneux/trip-side-kick) |
 | baremetal-workload-canary | 2026-09 | Validation complete; canonical template now owns the reusable pattern; repository transferred to archive | [baremetal-workload-template](https://github.com/frasermolyneux/baremetal-workload-template) |
 | portal-bots | 2025-07 | Replaced by container-based architecture | [portal-server-agent](https://github.com/frasermolyneux/portal-server-agent) |
