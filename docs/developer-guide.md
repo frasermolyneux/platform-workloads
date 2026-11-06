@@ -97,3 +97,4 @@ Inspect `.github/workflows` for current triggers and required Production environ
 - Scope resolution errors: ensure the alias exists in tfvars/prd.tfvars or supply a full ARM ID.
 - OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.
 - Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.
+- Each Terraform-enabled workload environment has private `tfstate` and `tfplan` containers in its storage account. Account-scoped blob grants also apply to both containers.
