@@ -20,6 +20,11 @@
 | `CLOUDFLARE_API_KEY`         | Cloudflare Global API Key                         |
 | `CLOUDFLARE_EMAIL`           | Cloudflare account email                          |
 
+4. **Saved plan storage**: The separately bootstrapped production backend
+   storage account must have a private `tfplan` container. The Production OIDC
+   identity needs Storage Blob Data Contributor access to that container; the
+   existing account-scoped grant also satisfies this requirement.
+
 ## Owner Role Assignment
 
 ```powershell

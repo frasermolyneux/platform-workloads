@@ -84,6 +84,8 @@ separate rollout.
 - `Build and Test` performs formatting, backend-disabled initialization, validation and the metadata-only analysis catalog test for matching feature branches.
 - `Feature Development` runs production-backed plans for matching feature branches.
 - `PR Verify` plans non-draft pull requests.
+- PR comments report status and change counts, not resource-level plan details. Review the Terraform Plan step's workflow logs for the complete plan.
+- Plan and deploy jobs store saved plans in the production backend account's private `tfplan` container using OIDC. Storage failure fails the job and prevents deployment.
 - Running Terraform PR plans are not cancelled by a new push; production jobs retain their shared concurrency group so state locks can be released normally.
 - `Deploy Prd` applies Terraform changes pushed to `main` and also runs on its schedule.
 - `Decommission State Rm` is the explicit repository-detachment operation used before deleting a managed repository definition.

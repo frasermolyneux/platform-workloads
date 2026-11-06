@@ -88,7 +88,9 @@ git push origin decommission/{workload-name}
 
 ### Step 4 — Review the Terraform Plan
 
-The PR verification workflow will run a Terraform plan. Review it carefully and confirm:
+The PR verification workflow will run a Terraform plan. The PR comment contains
+only a summary; review the Terraform Plan step's workflow logs for resource-level
+details and confirm:
 
 - ✅ For a managed repository, the GitHub repository is **not** in the destroy list — it was already detached from state in step 1
 - ✅ Only resources modeled by the definition are marked for destruction; repository-only and policy-only entries should not show Azure identity or infrastructure
@@ -117,7 +119,7 @@ This requires the GitHub CLI (`gh`) and a token with admin access to both organi
 | 1 | Detach managed repo from state | **Actions → Decommission State Rm** → enter workload name; skip only for `manage_repository = false` |
 | 2 | Delete workload JSON | `git rm terraform/workloads/{category}/{name}.json` |
 | 3 | Open PR | Branch, commit, push |
-| 4 | Review plan | Check PR plan — repo should NOT appear in destroy list |
+| 4 | Review plan | Check PR workflow plan logs — repo should NOT appear in destroy list |
 | 5 | Merge | Merge PR → `deploy-prd` applies automatically |
 | 6 | Archive (optional) | `gh repo transfer` to `frasermolyneux-archive` |
 
