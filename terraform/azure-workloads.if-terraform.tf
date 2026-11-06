@@ -28,7 +28,45 @@ resource "azurerm_storage_account" "workload" {
   local_user_enabled        = false
   shared_access_key_enabled = false
 
+  blob_properties {
+    versioning_enabled = true
+
+    delete_retention_policy {
+      days = 7
+    }
+  }
+
   tags = merge(var.tags, { Workload = each.value.workload_name, Environment = each.value.environment_name })
+}
+
+resource "azurerm_storage_management_policy" "workload_tfplan" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  storage_account_id = azurerm_storage_account.workload[each.key].id
+
+  rule {
+    name    = "expire-tfplan"
+    enabled = true
+
+    filters {
+      blob_types   = ["blockBlob"]
+      prefix_match = ["tfplan/"]
+    }
+
+    actions {
+      base_blob {
+        delete_after_days_since_modification_greater_than = 30
+      }
+
+      snapshot {
+        delete_after_days_since_creation_greater_than = 30
+      }
+
+      version {
+        delete_after_days_since_creation = 30
+      }
+    }
+  }
 }
 
 resource "azurerm_storage_container" "workload" {
