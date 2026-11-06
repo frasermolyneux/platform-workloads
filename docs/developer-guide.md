@@ -98,3 +98,6 @@ Inspect `.github/workflows` for current triggers and required Production environ
 - OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.
 - Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.
 - Each Terraform-enabled workload environment has private `tfstate` and `tfplan` containers in its storage account. Account-scoped blob grants also apply to both containers.
+- Workload storage accounts enable blob versioning and seven-day blob soft delete at the account level, covering both containers and any other blobs in the account. The seven-day period matches the separately bootstrapped platform-workloads backend's existing setting; this stack does not manage that backend's blob settings.
+- A lifecycle rule scoped to `tfplan/` deletes block blobs after 30 days since modification and their snapshots and previous versions after 30 days since creation. Azure evaluates lifecycle rules asynchronously, and soft-deleted blobs, snapshots, and versions remain recoverable for seven days after deletion.
+- No lifecycle deletion applies to `tfstate` or its previous versions. Versioning can therefore increase storage usage over time; review state-version growth separately.
