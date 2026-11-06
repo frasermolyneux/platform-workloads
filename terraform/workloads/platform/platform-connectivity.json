@@ -219,6 +219,14 @@
                         },
                         {
                             "permission_groups": [
+                                "Dynamic URL Redirects Write"
+                            ],
+                            "zones": [
+                                "xtremeidiots.com"
+                            ]
+                        },
+                        {
+                            "permission_groups": [
                                 "Workers Scripts Write"
                             ],
                             "account_from_zone": "xtremeidiots.com"
