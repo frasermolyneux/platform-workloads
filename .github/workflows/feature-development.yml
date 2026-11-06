@@ -24,9 +24,10 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
 
-      - uses: frasermolyneux/actions/terraform-plan@8ab4194c3a77a7b974cb5c24ce2e5a5f64db1f1d # terraform-plan/v4.0.0
+      - uses: frasermolyneux/actions/terraform-plan@027d7e31bb32b734090aaed01b36d74f1d658b61 # terraform-plan/v5.0.0
         with:
           terraform-folder: "terraform"
+          terraform-version: "1.17.0"
           terraform-var-file: "tfvars/prd.tfvars"
           terraform-backend-file: "backends/prd.backend.hcl"
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}

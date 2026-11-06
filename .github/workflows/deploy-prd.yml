@@ -26,9 +26,10 @@ jobs:
     concurrency:
       group: ${{ github.repository }}-prd
     steps:
-      - uses: frasermolyneux/actions/terraform-plan-and-apply@8ab4194c3a77a7b974cb5c24ce2e5a5f64db1f1d # terraform-plan-and-apply/v4.0.0
+      - uses: frasermolyneux/actions/terraform-plan-and-apply@027d7e31bb32b734090aaed01b36d74f1d658b61 # terraform-plan-and-apply/v5.0.0
         with:
           terraform-folder: "terraform"
+          terraform-version: "1.17.0"
           terraform-var-file: "tfvars/prd.tfvars"
           terraform-backend-file: "backends/prd.backend.hcl"
           AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}

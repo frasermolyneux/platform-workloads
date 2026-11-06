@@ -35,9 +35,10 @@ jobs:
       AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
       AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
     steps:
-      - uses: frasermolyneux/actions/terraform-plan@8ab4194c3a77a7b974cb5c24ce2e5a5f64db1f1d # terraform-plan/v4.0.0
+      - uses: frasermolyneux/actions/terraform-plan@027d7e31bb32b734090aaed01b36d74f1d658b61 # terraform-plan/v5.0.0
         with:
           terraform-folder: "terraform"
+          terraform-version: "1.17.0"
           terraform-var-file: "tfvars/prd.tfvars"
           terraform-backend-file: "backends/prd.backend.hcl"
           AZURE_CLIENT_ID: ${{ env.AZURE_CLIENT_ID }}
