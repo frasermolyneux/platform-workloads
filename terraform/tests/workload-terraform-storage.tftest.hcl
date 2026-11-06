@@ -13,6 +13,22 @@ override_resource {
   }
 }
 
+override_resource {
+  target          = azurerm_storage_account.workload["platform-hosting-Development"]
+  override_during = plan
+  values = {
+    id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test/providers/Microsoft.Storage/storageAccounts/testdev"
+  }
+}
+
+override_resource {
+  target          = azurerm_storage_account.workload["platform-hosting-Production"]
+  override_during = plan
+  values = {
+    id = "/subscriptions/00000000-0000-0000-0000-000000000000/resourceGroups/test/providers/Microsoft.Storage/storageAccounts/testprd"
+  }
+}
+
 run "terraform_enabled_environments_have_private_storage_containers" {
   command = plan
 
@@ -21,6 +37,18 @@ run "terraform_enabled_environments_have_private_storage_containers" {
       azurerm_storage_container.workload,
       azurerm_storage_container.workload_tfplan,
     ]
+  }
+
+  assert {
+    condition = (
+      azurerm_storage_account.workload["platform-hosting-Development"].id !=
+      azurerm_storage_account.workload["platform-hosting-Production"].id &&
+      azurerm_storage_account.workload["platform-hosting-Development"].id !=
+      azurerm_storage_account.workload["platform-monitoring-Development"].id &&
+      azurerm_storage_account.workload["platform-hosting-Production"].id !=
+      azurerm_storage_account.workload["platform-monitoring-Development"].id
+    )
+    error_message = "The test must use distinct storage account IDs for the selected environments."
   }
 
   assert {
