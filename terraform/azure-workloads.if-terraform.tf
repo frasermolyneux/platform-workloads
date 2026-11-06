@@ -39,6 +39,14 @@ resource "azurerm_storage_container" "workload" {
   container_access_type = "private"
 }
 
+resource "azurerm_storage_container" "workload_tfplan" {
+  for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
+
+  name                  = "tfplan"
+  storage_account_id    = azurerm_storage_account.workload[each.key].id
+  container_access_type = "private"
+}
+
 // Rather annoyingly, we need to allow the service principal to query for storage account keys; even though we're not using them and using OIDC.
 resource "azurerm_role_assignment" "workload_storage_blob_key_operator" {
   for_each = { for each in local.workload_environments : each.key => each if each.configure_for_terraform }
