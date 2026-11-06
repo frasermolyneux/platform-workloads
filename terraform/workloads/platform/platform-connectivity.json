@@ -212,7 +212,10 @@
                             "permission_groups": [
                                 "Page Rules Write"
                             ],
-                            "zone": "talkwithtiles.com"
+                            "zones": [
+                                "talkwithtiles.com",
+                                "xtremeidiots.com"
+                            ]
                         },
                         {
                             "permission_groups": [
