@@ -227,22 +227,6 @@
             },
             "cloudflare_tokens": [
                 {
-                    "name_suffix": "origin-tls",
-                    "secret_name": "CLOUDFLARE_ORIGIN_API_TOKEN",
-                    "policies": [
-                        {
-                            "permission_groups": [
-                                "SSL and Certificates Write",
-                                "Zone Read"
-                            ],
-                            "zones": [
-                                "tripsidekick.app",
-                                "tripsidekick.net"
-                            ]
-                        }
-                    ]
-                },
-                {
                     "name_suffix": "dns",
                     "policies": [
                         {
