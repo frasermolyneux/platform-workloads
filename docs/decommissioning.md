@@ -152,6 +152,7 @@ If another workload referenced the decommissioned one via `requires_terraform_st
 
 | Workload | Date | Reason | Replaced By |
 |----------|------|--------|-------------|
+| platform-letsencrypt-iis | 2026-11 | IIS certificate rotation retired; no Windows/IIS servers remain | — |
 | .github-copilot | 2026-11 | Repository retired; policy-only governance removed before archive transfer | — |
 | CoD4x_Server | 2026-11 | Archived upstream-shaped fork; repository transferred to archive | — |
 | ado-pipeline-templates | 2026-11 | No active default-branch consumers; repository archived and transferred to archive | — |
