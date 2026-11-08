@@ -4,7 +4,8 @@ This document describes how GCP projects are set up for workloads that need Goog
 
 ## Overview
 
-GCP projects are created **manually** because the personal GCP account has no organisation, and the Terraform `google_project` resource requires an `org_id` or `folder_id`. Everything inside a project (APIs, service accounts, WIF, API keys) is managed by Terraform in the consuming workloads.
+GCP projects and the initial identity federation are bootstrapped manually. The
+consuming workload manages its API keys and any resources it declares in Terraform.
 
 Platform-workloads distributes the GCP configuration to consuming repos via GitHub environment variables, using the `gcp` block in workload JSON definitions.
 
@@ -24,21 +25,14 @@ platform-workloads (this repo)
 └── gcp-workloads.tf: pushes GCP_PROJECT_ID, GCP_WORKLOAD_IDENTITY_PROVIDER, GCP_SERVICE_ACCOUNT
     as GitHub environment variables to consuming repos
 
-Consuming workload (e.g. portal-environments, travel-itinerary, geo-location)
-├── Authenticates to GCP via OIDC (google-github-actions/auth@v2)
+Consuming workload
+├── Authenticates to GCP via OIDC
 ├── Creates google_apikeys_key with URL restrictions
 └── Stores key in Azure Key Vault for runtime consumption
 ```
 
-## Current GCP Projects
-
-| Workload | GCP Project ID | Project Number | Service Account |
-|---|---|---|---|
-| portal-environments | `gcp-mx-io-portal-environments` | 298363709846 | `terraform-platform@gcp-mx-io-portal-environments.iam.gserviceaccount.com` |
-| travel-itinerary | `gcp-mx-io-travel-itinerary` | 776197093213 | `terraform-platform@gcp-mx-io-travel-itinerary.iam.gserviceaccount.com` |
-| geo-location | `gcp-mx-io-geo-location` | 518912876139 | `terraform-platform@gcp-mx-io-geo-location.iam.gserviceaccount.com` |
-
-Billing account: `01A0B4-212B1F-46CD27`
+Current project and identity settings are in the [workload catalog](../terraform/workloads/).
+Verify the intended billing account in GCP before linking a new project.
 
 ## IAM Roles Granted to Service Accounts
 
@@ -65,7 +59,7 @@ To add GCP support for a new workload:
 
 ```powershell
 gcloud projects create gcp-mx-io-NEW-WORKLOAD --name="GCP New Workload"
-gcloud billing projects link gcp-mx-io-NEW-WORKLOAD --billing-account=01A0B4-212B1F-46CD27
+gcloud billing projects link gcp-mx-io-NEW-WORKLOAD --billing-account=BILLING_ACCOUNT_ID
 ```
 
 ### 2. Enable APIs
@@ -117,7 +111,8 @@ gcloud iam workload-identity-pools providers describe github-provider --workload
 
 ### 8. Update workload JSON
 
-Add the `gcp` block to the workload JSON in `terraform/workloads/`:
+Merge the relevant fields below into the existing workload JSON in
+`terraform/workloads/`; this is a fragment, not a complete workload definition:
 
 ```json
 {
@@ -130,6 +125,8 @@ Add the `gcp` block to the workload JSON in `terraform/workloads/`:
     "environments": [
         {
             "name": "Development",
+            "subscription": "sub-visualstudio-enterprise",
+            "connect_to_github": true,
             "gcp": { "enabled": true }
         }
     ]
@@ -138,4 +135,6 @@ Add the `gcp` block to the workload JSON in `terraform/workloads/`:
 
 ### 9. Deploy platform-workloads
 
-This pushes `GCP_PROJECT_ID`, `GCP_WORKLOAD_IDENTITY_PROVIDER`, and `GCP_SERVICE_ACCOUNT` as GitHub environment variables to the consuming repo.
+After a reviewed deployment, `gcp-workloads.tf` projects `GCP_PROJECT_ID`,
+`GCP_WORKLOAD_IDENTITY_PROVIDER`, and `GCP_SERVICE_ACCOUNT` to each enabled
+environment that also has `connect_to_github: true`.

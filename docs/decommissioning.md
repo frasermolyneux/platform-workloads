@@ -30,7 +30,8 @@ exist:
 - Graph API permission grants
 
 Repository-only definitions normally remove only modeled labels and rulesets.
-Policy-only definitions remove only their modeled rulesets.
+Policy-only definitions remove their modeled rulesets and any opted-in
+repository variables and secrets. Review the plan for the complete set.
 
 ## What Is Preserved
 
@@ -43,6 +44,10 @@ Before decommissioning, ensure:
 1. **No active workloads depend on this one** — for environment-backed definitions, check whether any other workload JSON references this workload via `requires_terraform_state_access` or `workload:` scope prefixes in role assignments. Decommissioning can destroy state storage and scopes that dependents rely on.
 2. **The workload's own Terraform stack has been destroyed first** — when the definition has environments and its own deployed Terraform stack, run `terraform destroy` there before decommissioning from `platform-workloads`. Otherwise, the service principal and state storage needed to manage that infrastructure will be deleted.
 3. **You have a clean `main` branch** — the decommission should be done via a pull request to allow plan review.
+4. **Coordinate production applies** — after detachment and before the catalog
+   removal is applied, the still-present definition causes a plan to propose
+   recreating the repository. Do not apply that intermediate plan. Coordinate
+   with other operators and account for scheduled production deployments.
 
 ## Step-by-Step Process
 
@@ -61,7 +66,8 @@ Run the **Decommission State Rm** workflow:
 2. Click **Run workflow**.
 3. Enter the workload name — this is the `"name"` value from the workload JSON file (e.g. `portal-sync`).
 4. Wait for the workflow to complete successfully.
-5. Verify the post-removal plan output shows no unexpected changes.
+5. Confirm the state removal succeeded in the workflow logs. The workflow does
+   not produce a post-removal plan.
 
 The workflow runs `terraform state rm 'github_repository.workload["<workload-name>"]'` against the production state, detaching the repository without deleting it.
 
@@ -100,7 +106,8 @@ details and confirm:
 
 ### Step 5 — Merge and Apply
 
-Once the plan looks correct, merge the PR. The `deploy-prd` workflow will apply the changes automatically.
+Once the plan looks correct, merge the PR. A qualifying change to `terraform/`
+triggers the `deploy-prd` workflow; verify that its apply succeeds.
 
 ### Step 6 (Optional) — Transfer Repository to Archive
 

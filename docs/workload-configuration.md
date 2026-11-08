@@ -114,7 +114,10 @@ an empty, archived, documentation-only or upstream-fork repository instead.
   },
   "directory_roles": [...],
   "graph_api_permissions": ["AppRoleAssignment.ReadWrite.All"],
-  "administrative_unit_roles": [...],
+  "administrative_unit_roles": {
+    "administrative_unit": "molyneux-io-dev",
+    "roles": ["Groups Administrator"]
+  },
   "requires_terraform_state_access": [...]
 }
 ```
@@ -127,7 +130,7 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | ------------------------ | ------- | -------- | -------- | --------------------------------------------- |
 | `description`            | string  | Yes      | -        | GitHub repository description                 |
 | `topics`                 | array   | Yes      | -        | GitHub repository topics                      |
-| `visibility`             | string  | No       | `public` | Repository visibility (`public` or `private`) |
+| `visibility`             | string  | Yes for managed repositories | - | Repository visibility (`public` or `private`) |
 | `has_downloads`          | boolean | No       | `false`  | Enable downloads section                      |
 | `has_issues`             | boolean | No       | `true`   | Enable issues tracking                        |
 | `has_projects`           | boolean | No       | `false`  | Enable projects board                         |
@@ -178,7 +181,9 @@ separately accept and govern the caller and provider-method cutover.
 
 ### Repository analysis policy
 
-`github.repository_analysis` is the catalog authority for the estate analysis contract.
+`github.repository_analysis` is the catalog authority for each repository's
+analysis declaration; [`azure-workloads.repository-analysis.tf`](../terraform/azure-workloads.repository-analysis.tf)
+validates the supported contract.
 It contains `profile` (`repository-analysis-v1`, actual source languages, Sonar selection
 and optional reasoned exemption), `sonar` (scanner/build declarations or `null`) and
 `cadence` (daily freshness, a 168-hour maximum full-rescan age and exact-revision,
@@ -207,7 +212,9 @@ No new Azure identity, RBAC, subscription, environment or cost-bearing resource 
 
 Applicable non-`xi-*` repository analysis profiles receive one
 `REPOSITORY_STANDARDS` Actions variable. Analysis exemptions receive no standards
-variable. The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
+variable. [`azure-workloads.repository-standards.tf`](../terraform/azure-workloads.repository-standards.tf)
+is authoritative for profile selection, constraints and allowed exceptions.
+The JSON contract is `repository-standards-v1` with a `managedFiles.checkov`
 entry at `checkov-v1`. Profiles declaring `csharp` additionally receive the
 `dotnet-editorconfig-v1` `curated-low-noise` and `actionable-only` profiles.
 Sonar-enabled profiles receive `sonar-policy-v1` with `actionable-only` and
@@ -318,7 +325,7 @@ infrastructure.
 | `role_assignments`                | object  | No       | Azure RBAC role assignments (roles, RBAC admin rules)                                                                  |
 | `directory_roles`                 | array   | No       | Entra ID directory roles                                                                                               |
 | `graph_api_permissions`           | array   | No       | Microsoft Graph application permissions to assign (e.g., AppRoleAssignment.ReadWrite.All, Application.Read.All)        |
-| `administrative_unit_roles`       | array   | No       | Entra ID roles scoped to the workload Administrative Unit (e.g., Groups Administrator)                                 |
+| `administrative_unit_roles`       | object  | No       | Administrative Unit key and Entra ID roles scoped to it (e.g., Groups Administrator)                                 |
 | `requires_terraform_state_access` | array   | No       | Workload state dependencies as names for the same environment or objects with explicit `workload` and `environment`    |
 | `cloudflare_tokens`               | array   | No       | Cloudflare API tokens to create and inject as GitHub environment secrets (see [Cloudflare Tokens](#cloudflare-tokens)) |
 
@@ -339,18 +346,18 @@ Environment-level `role_assignments`:
 ```
 
 - If `scope` is omitted, the environment `subscription` is used.
-- A `Reader` assignment is automatically added on the environment subscription; if a role already targets that scope, `Reader` is merged into its roles.
+- A `Reader` assignment is automatically added on the environment subscription; if an entry uses the environment's subscription alias (or omits its scope), `Reader` is merged into its roles.
 - `assigned_roles.roles` accept any Azure RBAC role name.
 - `graph_api_permissions` are applied to the workload service principal (and deploy script identity when enabled) against Microsoft Graph; values must match Graph app role values such as `AppRoleAssignment.ReadWrite.All` or `Application.Read.All`.
 - Scope input options (case-insensitive prefixes):
-  - Raw ARM IDs starting with `/` are passed through as-is (e.g., `/providers/Microsoft.Management/managementGroups/alz`, `/subscriptions/.../resourceGroups/...`).
+  - Raw ARM IDs starting with `/` are passed through for environment-level assignments and RBAC administrator entries. Resource-group `assigned_roles` accepts raw IDs beginning with `/subscriptions/`.
   - `sub:<alias>` resolves to a subscription from `var.subscriptions` (e.g., `sub:sub-visualstudio-enterprise`).
   - `/subscriptions/...` uses a raw ARM ID (any level: subscription, RG, or resource).
   - `workload:<workload>/<Environment>` targets another workload environment’s subscription (e.g., `workload:portal-core/Production`).
-  - `workload-rg:<workload>/<Environment>/<rg-name>/<location>` targets a workload resource group after templating (e.g., `workload-rg:portal-core/Production/rg-portal-core-prd-app-uksouth`).
-  - Bare values continue to support existing aliases or ARM IDs for backward compatibility.
-- `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution matches `assigned_roles`.
-- Assignments apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity.
+  - `workload-rg:<workload>/<Environment>/<rg-name>/<location>` targets a workload resource group after templating (e.g., `workload-rg:portal-core/Production/rg-portal-core-prd-app-uksouth/uksouth`).
+  - Unprefixed subscription aliases remain supported for backward compatibility.
+- `rbac_admin_roles.allowed_roles` list the roles that the workload principal may assign; scope resolution uses the options above.
+- Environment `assigned_roles` apply to the workload service principal and, when `add_deploy_script_identity` is enabled, also to the deploy script identity. Resource-group `assigned_roles` and `rbac_admin_roles` at either level apply only to the workload service principal.
 
 Sitewatch's Flex Consumption runtime requires `Storage Blob Data Owner` on its
 own host storage account. Its CI delegation allows that role alongside the
@@ -371,7 +378,11 @@ catalog allowance is not a direct data-plane grant or subscription delegation.
 ]
 ```
 
-Use the object form only for an intentional cross-environment state dependency. Both forms grant `Storage Blob Data Reader` on the target workload environment's Terraform state storage account.
+Use the object form only for an intentional cross-environment state dependency.
+Both forms grant `Storage Blob Data Reader` on the target workload environment's
+Terraform state storage account when that account exists in the configuration.
+Missing or non-Terraform-enabled targets are skipped, not granted access; check
+the target and the plan when adding a dependency.
 
 Resource group `role_assignments` follow the same shape inside each `resource_groups` entry. If `scope` is omitted for a resource group role assignment, the resource group ID is used by default.
 

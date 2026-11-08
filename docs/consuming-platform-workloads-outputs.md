@@ -1,12 +1,12 @@
 ## Consuming platform-workloads outputs from remote state
 
-This guide shows how a downstream workload (e.g., platform-sitewatch-func) reads platform-workloads state to reuse resource groups, Terraform backends, and Administrative Units (AU) without re-deriving names. The upstream state exposes three keyed outputs:
+This guide shows how a downstream workload reads platform-workloads state to reuse resource groups, Terraform backends, and Administrative Units (AU) without re-deriving names. These are examples of the keyed outputs in [`outputs.tf`](../terraform/outputs.tf):
 
 - `workload_resource_groups[workload][env_tag]`: resource group objects keyed by location.
 - `workload_terraform_backends[workload][env_tag]`: Terraform backend metadata when `configure_for_terraform=true` in the workload JSON.
 - `workload_administrative_units[workload][env_tag]`: AU identifiers when the workload has an administrative unit configured.
 
-`env_tag` is the lowercase environment alias from `var.environment_map` (Development → `dev`, Testing → `tst`, Production → `prd`). Always index with the tag, not the display name.
+`env_tag` is the environment alias from [`var.environment_map`](../terraform/variables.tf), falling back to the lowercase environment name. Index with the tag, not the display name.
 
 ### Remote state wiring (OIDC)
 
@@ -40,6 +40,7 @@ data "terraform_remote_state" "platform_workloads" {
     subscription_id      = var.platform_workloads_state.subscription_id
     tenant_id            = var.platform_workloads_state.tenant_id
     use_oidc             = true
+    use_azuread_auth     = true
   }
 }
 ```
@@ -53,22 +54,18 @@ locals {
   # Resource groups keyed by location
   workload_rgs = {
     for location in var.locations :
-    location => data.terraform_remote_state.platform_workloads.outputs
-      .workload_resource_groups[var.workload_name][var.environment]
-      .resource_groups[lower(location)]
+    location => data.terraform_remote_state.platform_workloads.outputs.workload_resource_groups[var.workload_name][var.environment].resource_groups[lower(location)]
   }
 
   # Terraform backend metadata (only present if configure_for_terraform=true upstream)
   workload_backend = try(
-    data.terraform_remote_state.platform_workloads.outputs
-      .workload_terraform_backends[var.workload_name][var.environment],
+    data.terraform_remote_state.platform_workloads.outputs.workload_terraform_backends[var.workload_name][var.environment],
     null
   )
 
   # Administrative Unit identifiers (present when the workload defines an AU)
   workload_au = try(
-    data.terraform_remote_state.platform_workloads.outputs
-      .workload_administrative_units[var.workload_name][var.environment],
+    data.terraform_remote_state.platform_workloads.outputs.workload_administrative_units[var.workload_name][var.environment],
     null
   )
 }
@@ -118,5 +115,7 @@ resource "azuread_directory_role_assignment" "au_reader" {
 - Normalize `locations` to lowercase when indexing `resource_groups`.
 - Keep `environment` as the tag (`dev`/`tst`/`prd`); the upstream output already carries the full display name separately.
 - Prefer `use_oidc=true` instead of storage account keys when reading remote state.
+- Remote-state access grants access to the whole state snapshot, not only the
+  outputs. Grant storage access only to trusted consumers.
 - Reuse upstream tags on downstream resources to keep cost/monitoring views aligned.
 - Guard optional outputs (`workload_terraform_backends`, `workload_administrative_units`) with `try(...)` to stay resilient when a workload has not enabled those features.

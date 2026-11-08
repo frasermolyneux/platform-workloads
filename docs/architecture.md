@@ -40,29 +40,16 @@ permissions.
 
 ## Key Implementation Patterns
 
-### Workload Discovery (`workloads.load.tf`)
+### Workload Discovery
 
-```hcl
-locals {
-  workload_json_files = [
-    for file_path in fileset("${path.module}/workloads", "**/*.json") :
-    file_path if !startswith(file_path, "examples/")
-  ]
-  workloads_from_files = [for f in local.workload_json_files : jsondecode(file(f))]
-}
-```
-
-**Critical**: `examples/` exclusion happens at discovery, not in resource creation.
+[`workloads.load.tf`](../terraform/workloads.load.tf) discovers and decodes the
+catalog. `examples/` is excluded at discovery, not during resource creation.
 
 ### Environment Keying
 
-All resources use `"{workload-name}-{environment-name}"` as `for_each` key:
-```hcl
-resource "azuread_application" "workload" {
-  for_each = { for e in local.workload_environments : e.key => e }
-  display_name = format("spn-%s-%s", lower(e.value.workload_name), lower(e.value.environment_name))
-}
-```
+Environment-backed resources commonly use `"{workload-name}-{environment-name}"`
+as their key; individual resources may use more specific keys. See
+[`azure-workloads.tf`](../terraform/azure-workloads.tf).
 
 ### OIDC Federation Subjects
 
@@ -70,21 +57,13 @@ resource "azuread_application" "workload" {
 
 ### Role Assignment Scope Resolution
 
-```hcl
-scope = startswith(each.value.scope, "/subscriptions/") 
-  ? each.value.scope  # Full ARM resource ID
-  : data.azurerm_subscription.subscriptions[each.value.scope].id  # Subscription alias
-```
+Scopes accept subscription aliases, ARM IDs and workload helpers, with some
+differences by assignment type. See [Role Assignments](role-assignments.md).
 
 ### RBAC Administrator ABAC Conditions
 
-Generated conditions restrict role assignment/deletion to specific role definition GUIDs:
-```hcl
-condition = <<EOT
-@Request[Microsoft.Authorization/roleAssignments:RoleDefinitionId] 
-  ForAnyOfAnyValues:GuidEquals {${join(", ", role_guids)}}
-EOT
-```
+Generated conditions restrict role assignment and deletion to specific role
+definition GUIDs. See [`azure-workloads.rbac.tf`](../terraform/azure-workloads.rbac.tf).
 
 ## Design Decisions
 
@@ -105,16 +84,16 @@ is a certificate reader, not mounted deployment credentials. The existing
 privileged platform-workloads GitHub OIDC identity performs lifecycle management;
 no additional management privileges are granted to the reader or hosts.
 `status-monitoring-certificate.yml` runs after successful production deployment,
-weekly and on explicit dispatch. The script discovers exactly one dedicated app
-and tagged status runtime vault, checks ownership/lifecycle metadata, and renews
-180-day RSA certificates when 30 days remain or the registered public key is
-missing. It never reads an existing private secret.
+weekly and on explicit dispatch. The [rotation script](../scripts/rotate_status_monitoring_certificate.py)
+discovers the dedicated app and tagged status runtime vault, checks
+ownership/lifecycle metadata, and renews certificates when due or when the
+registered public key is missing. It never reads an existing private secret.
 
 Registration uses append semantics, then verifies Entra client-credential
 authentication before publishing the combined private PEM through the Key Vault
 ARM secret endpoint. Registration/authentication failures do not replace the
-existing secret. Previous public certificates remain valid until expiry plus
-seven days; only expired keys with the managed prefix can be removed. Temporary
+existing secret. Previous public certificates remain valid through the script's
+expiry grace period; only expired keys with the managed prefix can be removed. Temporary
 key files are runner-local and deleted on exit. Terraform state, logs and GitHub
 artifacts must never receive the private key. Fleet policy mounts the versionless
 secret into the status service only. Existing fleet reconciliation rebinds changed
@@ -188,11 +167,8 @@ This is the desired-state declaration boundary. The separate platform-devex
 reconciler is not active merely because the variable exists; its own rollout must
 be merged and deployed before managed files are reconciled.
 
-Copilot review effort is not represented in the GitHub Terraform provider
-ruleset schema or a documented GitHub REST setting. Lite remains the GitHub
-product default. Configure **Balanced** manually for `actions` and `portal-web`
-at **Repository settings → Copilot → Code review → Review effort level**; do
-not add unsupported API automation.
+Copilot review effort is not configured by this stack. Do not add unsupported
+API automation for repository settings.
 
 ### Post-apply reconciliation
 
@@ -221,7 +197,9 @@ pre-apply plan/API inventory. No direct manual ruleset edit should be required.
 
 **Owner at `/` Scope**: Required for service principal to assign RBAC across multiple subscriptions.
 
-**Dual Role Assignments**: Service principal AND deploy script identity (managed identity) receive identical RBAC assignments when `add_deploy_script_identity: true`.
+**Role Assignments**: Environment-level assigned roles also go to the deploy
+script identity when enabled. Resource-group assignments and conditional RBAC
+administrator delegation go to the workload service principal only.
 
 ## File Organization
 

@@ -3,7 +3,7 @@
 Audience: senior engineers running and evolving platform-workloads Terraform.
 
 ## Environment Setup
-- Terraform >= 1.15.6
+- Select the exact Terraform CLI version in [`terraform/.terraform-version`](../terraform/.terraform-version); the compatibility constraint is in [`providers.tf`](../terraform/providers.tf).
 - Azure CLI logged in (az login) and subscription set to match the tfvars backend/alias you plan to use.
 - Environment variable: GITHUB_TOKEN with rights for the GitHub provider.
 - The platform service principal must be Owner at / scope.
@@ -43,9 +43,9 @@ Azure/GitHub provider reads:
 terraform -chdir=terraform test '-var-file=tfvars\prd.tfvars' '-filter=tests\repository-analysis.tftest.hcl'
 ```
 
-This metadata-only test targets the built-in contract resource and checks all 51
-current dispositions, the 144 declared variables, private publication boundaries
-and exclusions. It does not replace the full production state-backed plan or justify
+This metadata-only test targets the built-in contract resource and checks catalog
+dispositions, declared variables, private publication boundaries and exclusions.
+It does not replace the full production state-backed plan or justify
 targeted production applies. Analysis variables are configuration, not proof of
 scanner execution or estate caller adoption.
 
@@ -77,17 +77,17 @@ separate rollout.
 - Choose the definition mode deliberately: environments create workload identity and integration resources; omitting environments creates a managed repository only; `github.manage_repository=false` manages policy on an existing repository only.
 - Keep repository content, collaborator access, runtime configuration, and operator boundaries in the owning repository. `platform-workloads` manages only the resources modeled in the catalog.
 - Files under terraform/workloads/examples/ are ignored by design.
-- Reader is auto-added at the environment subscription when no assignment targets that scope; if an assignment exists, Reader is merged into its roles.
+- Reader is auto-added at the environment subscription; see [Role Assignments](role-assignments.md) for how existing entries are matched.
 - Scope inputs accept aliases from var.subscriptions, raw ARM IDs, workload: and workload-rg: helpers (see docs/workload-configuration.md).
 
 ## CI Workflows
-- `Build and Test` performs formatting, backend-disabled initialization, validation and the metadata-only analysis catalog test for matching feature branches.
+- `Build and Test` runs formatting, backend-disabled initialization, validation, selected Terraform contract tests and the GitHub App bootstrap tests for matching branch and path filters.
 - `Feature Development` runs production-backed plans for matching feature branches.
 - `PR Verify` plans non-draft pull requests.
 - PR comments report status and change counts, not resource-level plan details. Review the Terraform Plan step's workflow logs for the complete plan.
 - Plan and deploy jobs store saved plans in the production backend account's private `tfplan` container using OIDC. Storage failure fails the job and prevents deployment.
 - Running Terraform PR plans are not cancelled by a new push; production jobs retain their shared concurrency group so state locks can be released normally.
-- `Deploy Prd` applies Terraform changes pushed to `main` and also runs on its schedule.
+- `Deploy Prd` applies qualifying changes pushed to `main`, and also runs on its schedule or by dispatch.
 - `Decommission State Rm` is the explicit repository-detachment operation used before deleting a managed repository definition.
 Inspect `.github/workflows` for current triggers and required Production environment credentials before depending on them.
 
@@ -98,6 +98,6 @@ Inspect `.github/workflows` for current triggers and required Production environ
 - OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.
 - Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.
 - Each Terraform-enabled workload environment has private `tfstate` and `tfplan` containers in its storage account. Account-scoped blob grants also apply to both containers.
-- Workload storage accounts enable blob versioning and seven-day blob soft delete at the account level, covering both containers and any other blobs in the account. The seven-day period matches the separately bootstrapped platform-workloads backend's existing setting; this stack does not manage that backend's blob settings.
-- A lifecycle rule scoped to `tfplan/` deletes block blobs after 30 days since modification and their snapshots and previous versions after 30 days since creation. Azure evaluates lifecycle rules asynchronously, and soft-deleted blobs, snapshots, and versions remain recoverable for seven days after deletion.
+- Workload storage accounts enable blob versioning and account-level blob soft delete, covering both containers and other blobs in the account. This stack does not manage the separately bootstrapped platform-workloads backend's blob settings.
+- A lifecycle rule scoped to `tfplan/` deletes old block blobs, snapshots and previous versions. Azure evaluates lifecycle rules asynchronously; see [`azure-workloads.if-terraform.tf`](../terraform/azure-workloads.if-terraform.tf) for the current retention settings.
 - No lifecycle deletion applies to `tfstate` or its previous versions. Versioning can therefore increase storage usage over time; review state-version growth separately.
