@@ -130,7 +130,7 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 | ------------------------ | ------- | -------- | -------- | --------------------------------------------- |
 | `description`            | string  | Yes      | -        | GitHub repository description                 |
 | `topics`                 | array   | Yes      | -        | GitHub repository topics                      |
-| `visibility`             | string  | Yes for managed repositories | - | Repository visibility (`public` or `private`) |
+| `visibility`             | string  | Yes for managed repositories and non-`xi-*` policy-only entries | - | Repository visibility (`public` or `private`) |
 | `has_downloads`          | boolean | No       | `false`  | Enable downloads section                      |
 | `has_issues`             | boolean | No       | `true`   | Enable issues tracking                        |
 | `has_projects`           | boolean | No       | `false`  | Enable projects board                         |
