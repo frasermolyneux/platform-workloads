@@ -161,7 +161,8 @@
             "configure_for_terraform": true,
             "cloudflare_tokens": [
                 {
-                    "name_suffix": "dns",
+                    "name_suffix": "acme-dns",
+                    "secret_name": "CLOUDFLARE_ACME_DNS_API_TOKEN",
                     "policies": [
                         {
                             "permission_groups": [
@@ -170,14 +171,15 @@
                             ],
                             "zones": [
                                 "xtremeidiots.com",
-                                "xtremeidiots.net"
+                                "xtremeidiots.net",
+                                "mxstatus.io"
                             ]
                         }
                     ]
                 },
                 {
-                    "name_suffix": "traffic",
-                    "secret_name": "CLOUDFLARE_TRAFFIC_API_TOKEN",
+                    "name_suffix": "maintenance-traffic",
+                    "secret_name": "CLOUDFLARE_MAINTENANCE_TRAFFIC_API_TOKEN",
                     "policies": [
                         {
                             "permission_groups": [

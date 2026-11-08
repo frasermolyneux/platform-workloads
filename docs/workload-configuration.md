@@ -400,7 +400,7 @@ credential or overwriting it:
 ```
 
 - Each token is created with name `spn-{workload}-{env}-{name_suffix}`.
-- The token value is injected as a GitHub environment secret named `CLOUDFLARE_API_KEY`.
+- The token value is injected as the configured `secret_name`, or `CLOUDFLARE_API_KEY` by default.
 - `permission_groups` must be valid Cloudflare permission group names for the selected resource scope.
 - `zone` (single domain) or `zones` (array of domains) selects the Cloudflare zone(s) the policy applies to. Prefer `zones` to group many domains into one policy — Cloudflare limits a token to **10 policies**, so one policy per domain does not scale.
 - Account-level permissions instead use `account_from_zone`: the name of an existing zone whose account is discovered at plan time. The policy grants only its named permission groups on that account, not zone permissions or access to other accounts. Use exactly one of `zone`, `zones`, or `account_from_zone` per policy; every policy in a token must resolve to the same account.
@@ -408,6 +408,12 @@ credential or overwriting it:
 - All policies use `allow` effect by convention.
 - The environment must have `connect_to_github: true` for the secret to be injected.
 - Requires `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` GitHub environment secrets on platform-workloads (see [prerequisites](prerequisites.md)).
+
+The platform-baremetal Production environment uses `CLOUDFLARE_ACME_DNS_API_TOKEN`
+for ACME DNS challenges on `xtremeidiots.com`, `xtremeidiots.net`, and
+`mxstatus.io`. `CLOUDFLARE_MAINTENANCE_TRAFFIC_API_TOKEN` is a separate token
+for maintenance routes and account analytics. These are distinct from the
+platform-workloads provider's Global API Key and platform-status-web's edge token.
 
 ## Examples
 
