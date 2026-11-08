@@ -14,7 +14,7 @@
 - `terraform/outputs.tf` is a platform consumption contract.
 - `terraform/backends/prd.backend.hcl` and `terraform/tfvars/prd.tfvars` are the only environment pair.
 
-Terraform requires `>= 1.15.6`. Preserve the reviewed constraints in `terraform/providers.tf`, including the bounded Cloudflare range and the AzureRM, AzAPI, AzureAD, GitHub, Random, and Time provider boundaries.
+Select the exact Terraform CLI version in `terraform/.terraform-version`. Preserve the reviewed constraints in `terraform/providers.tf`, including the bounded Cloudflare range and the AzureRM, AzAPI, AzureAD, GitHub, Random, and Time provider boundaries.
 
 Repository-governance entries can manage rulesets without managing repository lifecycle. Preserve the existing automatic Copilot review contract: exactly one `copilot_code_review` rule for enrolled repositories, with draft review and review-on-push disabled. Exceptions require the documented reason. Do not edit owned rulesets directly in GitHub.
 

@@ -9,13 +9,16 @@
 2. **Federated Credential**: GitHub Actions deploying Azure resources
    - Subject: `repo:frasermolyneux/platform-workloads:environment:Production`
 
-3. **GitHub Environment Secrets** (`Production`):
+3. **GitHub Environment Variables and Secrets** (`Production`):
 
-| Secret                       | Purpose                                           |
+| Variable                     | Purpose                                           |
 | ---------------------------- | ------------------------------------------------- |
 | `AZURE_CLIENT_ID`            | App registration client ID                        |
 | `AZURE_SUBSCRIPTION_ID`      | Management subscription ID                        |
-| `AZURE_TENANT_ID`            | Tenant ID: `e56a6947-bb9a-4a6e-846a-1f118d1c3a14` |
+| `AZURE_TENANT_ID`            | Entra tenant ID                                   |
+
+| Secret                       | Purpose                                           |
+| ---------------------------- | ------------------------------------------------- |
 | `TERRAFORM_GITHUB_TOKEN`     | GitHub provider authentication                    |
 | `CLOUDFLARE_API_KEY`         | Cloudflare Global API Key                         |
 | `CLOUDFLARE_EMAIL`           | Cloudflare account email                          |
@@ -28,8 +31,8 @@
 ## Owner Role Assignment
 
 ```powershell
-az role assignment create --scope '/' --role 'Owner' \
-  --assignee-object-id $(az ad sp list --display-name "spn-platform-workloads-production" --query '[].id' -o tsv) \
+az role assignment create --scope '/' --role 'Owner' `
+  --assignee-object-id $(az ad sp list --display-name "spn-platform-workloads-production" --query '[].id' -o tsv) `
   --assignee-principal-type ServicePrincipal
 ```
 
@@ -41,6 +44,10 @@ The following tokens must be stored in the platform-workloads Key Vault. First-t
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
 | `nuget-token`                          | NuGet API key injected into workload GitHub environment secrets (for workloads with `add_nuget_environment`)     |
 | `sonarcloud-token`                     | SonarCloud token injected into workload GitHub secrets (for workloads with `add_sonarcloud_secrets`)             |
+
+Terraform also creates a `github-app-pem` placeholder whose value is managed
+outside Terraform. Replace it with the shared App's private key before enabling
+the shared GitHub App integration. See [`key_vault.tf`](../terraform/key_vault.tf).
 
 ## Cloudflare Authentication
 
