@@ -180,23 +180,6 @@
             "directory_roles": [
                 "Cloud application administrator",
                 "Directory Readers"
-            ],
-            "cloudflare_tokens": [
-                {
-                    "name_suffix": "origin-tls",
-                    "secret_name": "CLOUDFLARE_ORIGIN_API_TOKEN",
-                    "policies": [
-                        {
-                            "permission_groups": [
-                                "SSL and Certificates Write",
-                                "Zone Read"
-                            ],
-                            "zones": [
-                                "talkwithtiles.com"
-                            ]
-                        }
-                    ]
-                }
             ]
         }
     ]
