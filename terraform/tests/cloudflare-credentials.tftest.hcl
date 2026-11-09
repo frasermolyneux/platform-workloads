@@ -111,4 +111,14 @@ run "validate_connectivity_zone_permissions" {
     }
     error_message = "The connectivity Production DNS token must preserve its existing Workers Scripts account policy."
   }
+
+  assert {
+    condition = contains(one([
+      for policy in one([
+        for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+        if token.name_suffix == "dns"
+      ]).policies : policy if can(policy.zones)
+    ]).zones, "mxstatus.io")
+    error_message = "The connectivity Production DNS token must include the mxstatus.io zone."
+  }
 }
