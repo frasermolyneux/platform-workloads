@@ -170,6 +170,10 @@
                         {
                             "permission_groups": [
                                 "DNS Write",
+                                "Cache Settings Write",
+                                "Config Settings Write",
+                                "Dynamic URL Redirects Write",
+                                "Page Rules Write",
                                 "Zone Read",
                                 "Zone Settings Write",
                                 "Zone WAF Write",
@@ -184,6 +188,7 @@
                                 "moanclub.com",
                                 "molyfra.uk",
                                 "mx-mail.io",
+                                "mxstatus.io",
                                 "queensforsale.co.uk",
                                 "talkwithtiles.com",
                                 "tripsidekick.app",
@@ -194,30 +199,6 @@
                                 "xtremeidiots.com",
                                 "xtremeidiots.net"
                             ]
-                        },
-                        {
-                            "permission_groups": [
-                                "Config Settings Write"
-                            ],
-                            "zones": [
-                                "xtremeidiots.net",
-                                "talkwithtiles.com"
-                            ]
-                        },
-                        {
-                            "permission_groups": [
-                                "Page Rules Write"
-                            ],
-                            "zones": [
-                                "talkwithtiles.com",
-                                "xtremeidiots.com"
-                            ]
-                        },
-                        {
-                            "permission_groups": [
-                                "Dynamic URL Redirects Write"
-                            ],
-                            "zone": "xtremeidiots.com"
                         },
                         {
                             "permission_groups": [
