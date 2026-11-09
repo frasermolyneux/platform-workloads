@@ -64,3 +64,66 @@ run "validate_baremetal_cloudflare_credentials" {
     error_message = "The baremetal Production environment must have exactly two Cloudflare tokens."
   }
 }
+
+run "validate_connectivity_redirect_permission" {
+  command = plan
+
+  plan_options {
+    target = [terraform_data.repository_analysis_contract]
+  }
+
+  assert {
+    condition = try(one([
+      for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+      if token.name_suffix == "dns"
+    ]).secret_name, "CLOUDFLARE_API_KEY") == "CLOUDFLARE_API_KEY"
+    error_message = "The connectivity Production DNS token must populate the CLOUDFLARE_API_KEY environment secret."
+  }
+
+  assert {
+    condition = one([
+      for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+      if token.name_suffix == "dns"
+      ]).policies == [
+      {
+        permission_groups = ["DNS Write", "Zone Read", "Zone Settings Write", "Zone WAF Write", "Zone Write"]
+        zones = [
+          "bishopsbees.co.uk",
+          "bqba.co.uk",
+          "buckfastqueen.co.uk",
+          "dm-electricalservices.co.uk",
+          "midlr.com",
+          "moanclub.com",
+          "molyfra.uk",
+          "mx-mail.io",
+          "queensforsale.co.uk",
+          "talkwithtiles.com",
+          "tripsidekick.app",
+          "tripsidekick.net",
+          "travellingkermit.com",
+          "xiredirect.com",
+          "xtre.co.uk",
+          "xtremeidiots.com",
+          "xtremeidiots.net"
+        ]
+      },
+      {
+        permission_groups = ["Config Settings Write"]
+        zones             = ["xtremeidiots.net", "talkwithtiles.com"]
+      },
+      {
+        permission_groups = ["Page Rules Write"]
+        zones             = ["talkwithtiles.com", "xtremeidiots.com"]
+      },
+      {
+        permission_groups = ["Dynamic URL Redirects Write"]
+        zone              = "xtremeidiots.com"
+      },
+      {
+        permission_groups = ["Workers Scripts Write"]
+        account_from_zone = "xtremeidiots.com"
+      }
+    ]
+    error_message = "The connectivity Production token must retain its existing policies and restrict Single Redirect write access to xtremeidiots.com."
+  }
+}
