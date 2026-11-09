@@ -73,10 +73,10 @@ run "validate_connectivity_zone_permissions" {
   }
 
   assert {
-    condition = try(one([
+    condition = upper(try(one([
       for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
       if token.name_suffix == "dns"
-    ]).secret_name, "CLOUDFLARE_API_KEY") == "CLOUDFLARE_API_KEY"
+    ]).secret_name, "CLOUDFLARE_API_KEY")) == "CLOUDFLARE_API_KEY"
     error_message = "The connectivity Production DNS token must populate the CLOUDFLARE_API_KEY environment secret."
   }
 
@@ -84,19 +84,28 @@ run "validate_connectivity_zone_permissions" {
     condition = length(one([
       for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
       if token.name_suffix == "dns"
-      ]).policies) == 2 && length([
+    ]).policies) == 2
+    error_message = "The connectivity Production DNS token must have one zone policy and one account policy."
+  }
+
+  assert {
+    condition = length([
       for policy in one([
         for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
         if token.name_suffix == "dns"
-      ]).policies : policy
-      if can(policy.zones)
-      ]) == 1 && toset(one([
-        for policy in one([
-          for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
-          if token.name_suffix == "dns"
-        ]).policies : policy if can(policy.zones)
+      ]).policies : policy if can(policy.zones)
+    ]) == 1
+    error_message = "The connectivity Production DNS token must have exactly one multi-zone policy."
+  }
+
+  assert {
+    condition = toset(one([
+      for policy in one([
+        for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+        if token.name_suffix == "dns"
+      ]).policies : policy if can(policy.zones)
     ]).permission_groups) == toset(["DNS Write", "Cache Settings Write", "Config Settings Write", "Dynamic URL Redirects Write", "Page Rules Write", "Zone Read", "Zone Settings Write", "Zone WAF Write", "Zone Write"])
-    error_message = "The connectivity Production DNS token must grant its zone management permissions consistently in one zone policy."
+    error_message = "The connectivity Production DNS token must grant the required zone permissions consistently."
   }
 
   assert {
@@ -105,11 +114,18 @@ run "validate_connectivity_zone_permissions" {
         for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
         if token.name_suffix == "dns"
       ]).policies : policy if can(policy.account_from_zone)
-      ]) == {
-      permission_groups = ["Workers Scripts Write"]
-      account_from_zone = "xtremeidiots.com"
-    }
-    error_message = "The connectivity Production DNS token must preserve its existing Workers Scripts account policy."
+    ]).account_from_zone == "xtremeidiots.com"
+    error_message = "The connectivity Production DNS token must preserve its existing account scope."
+  }
+
+  assert {
+    condition = toset(one([
+      for policy in one([
+        for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+        if token.name_suffix == "dns"
+      ]).policies : policy if can(policy.account_from_zone)
+    ]).permission_groups) == toset(["Workers Scripts Write"])
+    error_message = "The connectivity Production DNS token must preserve only Workers Scripts Write in its account policy."
   }
 
   assert {

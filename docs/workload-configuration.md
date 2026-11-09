@@ -422,7 +422,8 @@ credential or overwriting it:
 
 The platform-connectivity Production deployment token grants DNS, zone settings,
 WAF, cache rules, configuration rules, Single Redirects, and Page Rules
-permissions uniformly across its explicitly listed zones. This broadens the
+permissions uniformly across its explicitly listed zones (`Cache Settings Write`
+and `Config Settings Write` cover the respective rules). This broadens the
 impact of a compromised token to those capabilities on every listed zone;
 permission does not establish resource ownership. Configuration must still
 respect other stacks' DNS records, status-edge configuration rules, and
