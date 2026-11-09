@@ -108,7 +108,10 @@ resource "terraform_data" "cost_budget_contract" {
     precondition {
       condition = alltrue([
         for environment in local.workload_environments :
-        contains(keys(local.workload_cost_budget_policies), environment.key) ? environment.cost_budget_exemption == null : try(length(trimspace(environment.cost_budget_exemption)) > 0, false)
+        contains(keys(local.workload_cost_budget_policies), environment.key) ? environment.cost_budget_exemption == null : try(
+          environment.cost_budget_exemption == tostring(environment.cost_budget_exemption) &&
+          length(trimspace(environment.cost_budget_exemption)) > 0, false
+        )
       ])
       error_message = "Every workload environment requires either a cost_budget policy or an explicit non-empty cost_budget_exemption, never both."
     }
