@@ -46,18 +46,6 @@ locals {
     for env_key, tokens in { for t in local.cloudflare_tokens : t.environment_key => t... } :
     env_key => tokens[0]
   }
-
-  # Adopted-zone-key activation sets declared per environment in the workload JSON.
-  cloudflare_adopted_zone_key_sets = flatten([
-    for workload in local.all_workloads : [
-      for environment in try(workload.environments, []) : {
-        key               = format("%s-%s", workload.name, environment.name)
-        workload_name     = workload.name
-        adopted_zone_keys = try(environment.cloudflare_adopted_zone_keys, [])
-      }
-      if length(try(environment.cloudflare_adopted_zone_keys, [])) > 0
-    ]
-  ])
 }
 
 data "cloudflare_api_token_permission_groups_list" "lookup" {
@@ -140,11 +128,11 @@ resource "github_actions_environment_variable" "cloudflare_account_id" {
   value         = one(local.cloudflare_token_accounts[each.value.key])
 }
 
-resource "github_actions_environment_variable" "cloudflare_adopted_zone_keys" {
-  for_each = { for set in local.cloudflare_adopted_zone_key_sets : set.key => set }
+removed {
+  from = github_actions_environment_variable.cloudflare_adopted_zone_keys
 
-  repository    = github_repository.workload[each.value.workload_name].name
-  environment   = github_repository_environment.workload[each.value.key].environment
-  variable_name = "CLOUDFLARE_ADOPTED_ZONE_KEYS"
-  value         = jsonencode(each.value.adopted_zone_keys)
+  # The consumer removes this gate separately; keep the existing variable untouched.
+  lifecycle {
+    destroy = false
+  }
 }
