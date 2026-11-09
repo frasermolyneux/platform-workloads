@@ -54,11 +54,25 @@ run "catalog_budget_contract" {
   assert {
     condition = alltrue([
       for policy in concat(values(local.subscription_cost_budget_policies), values(local.workload_cost_budget_policies)) :
-      policy.contact_emails == tolist(["frasermolyneux@mx-mail.io"]) &&
+      tolist(policy.contact_emails) == tolist(["frasermolyneux@mx-mail.io"]) &&
       tolist(policy.actual_thresholds) == tolist([50, 80, 100]) &&
       tolist(policy.forecast_thresholds) == tolist([100])
     ])
     error_message = "Every policy must inherit the explicit recipient and actual/forecast defaults."
+  }
+
+  assert {
+    condition = (
+      can([for workload in local.all_workloads : workload if workload.name == "platform-notifications"][0].cost_budget.actual_thresholds) &&
+      can([for workload in local.all_workloads : workload if workload.name == "platform-notifications"][0].cost_budget.contact_emails) &&
+      can([for environment in local.workload_environments : environment if environment.key == "portal-core-Production"][0].cost_budget.forecast_thresholds) &&
+      can([for environment in local.workload_environments : environment if environment.key == "portal-core-Production"][0].cost_budget.contact_emails) &&
+      tolist(local.workload_cost_budget_policies["platform-notifications-Development"].actual_thresholds) == tolist([50, 80, 100]) &&
+      tolist(local.workload_cost_budget_policies["platform-notifications-Production"].contact_emails) == tolist(["frasermolyneux@mx-mail.io"]) &&
+      tolist(local.workload_cost_budget_policies["portal-core-Production"].forecast_thresholds) == tolist([100]) &&
+      tolist(local.workload_cost_budget_policies["portal-core-Production"].contact_emails) == tolist(["frasermolyneux@mx-mail.io"])
+    )
+    error_message = "Mixed scalar/list policy objects must support both workload-level and environment-level explicit notification overrides."
   }
 
   assert {

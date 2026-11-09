@@ -46,7 +46,7 @@ locals {
         for resource_group in local.workload_environment_resource_groups :
         resource_group.name if resource_group.workload_environment_key == environment.key
       ]))
-    } if length(coalesce(environment.cost_budget, {})) > 0
+    } if try(length(environment.cost_budget), 0) > 0
   }
 
   cost_budget_policies = {
