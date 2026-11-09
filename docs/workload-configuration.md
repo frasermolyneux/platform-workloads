@@ -420,6 +420,11 @@ credential or overwriting it:
 - The environment must have `connect_to_github: true` for the secret to be injected.
 - Requires `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` GitHub environment secrets on platform-workloads (see [prerequisites](prerequisites.md)).
 
+The platform-connectivity Production deployment token includes `Dynamic URL
+Redirects Write` only for `xtremeidiots.com` to manage its Single Redirect
+ruleset. This is separate from the token's existing zone, WAF, Page Rules, and
+Workers permissions.
+
 The platform-baremetal Production environment uses `CLOUDFLARE_ACME_DNS_API_TOKEN`
 for ACME DNS challenges on `xtremeidiots.com`, `xtremeidiots.net`, and
 `mxstatus.io`. `CLOUDFLARE_MAINTENANCE_TRAFFIC_API_TOKEN` is a separate token

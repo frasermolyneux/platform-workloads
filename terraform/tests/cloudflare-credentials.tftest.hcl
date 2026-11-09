@@ -64,3 +64,33 @@ run "validate_baremetal_cloudflare_credentials" {
     error_message = "The baremetal Production environment must have exactly two Cloudflare tokens."
   }
 }
+
+run "validate_connectivity_redirect_permission" {
+  command = plan
+
+  plan_options {
+    target = [terraform_data.repository_analysis_contract]
+  }
+
+  assert {
+    condition = try(one([
+      for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+      if token.name_suffix == "dns"
+    ]).secret_name, "CLOUDFLARE_API_KEY") == "CLOUDFLARE_API_KEY"
+    error_message = "The connectivity Production DNS token must populate the CLOUDFLARE_API_KEY environment secret."
+  }
+
+  assert {
+    condition = [
+      for policy in one([
+        for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+        if token.name_suffix == "dns"
+      ]).policies : policy
+      if contains(policy.permission_groups, "Dynamic URL Redirects Write")
+      ] == [{
+        permission_groups = ["Dynamic URL Redirects Write"]
+        zone              = "xtremeidiots.com"
+    }]
+    error_message = "The connectivity Production DNS token must grant Dynamic URL Redirects Write only in a dedicated policy for xtremeidiots.com."
+  }
+}
