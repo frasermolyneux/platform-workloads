@@ -113,6 +113,10 @@
     "environments": [
         {
             "name": "Development",
+            "cost_budget": {
+                "monthly_budget": 35,
+                "rationale": "October RG actual GBP 25.81, rounded up with buffer to GBP 35; one sample, review after a complete ordinary month."
+            },
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
@@ -168,6 +172,10 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 85,
+                "rationale": "October RG actual GBP 68.16, rounded up with modest buffer to GBP 85; review after a complete ordinary month."
+            },
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "locations": [

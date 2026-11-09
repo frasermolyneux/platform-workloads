@@ -1,4 +1,8 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5,
+        "rationale": "Reviewable initial GBP 5 combined monthly alert allowance across all declared Azure regions; no reliable recurring RG baseline supplied. Not an estimate or spending limit; review after one ordinary full month."
+    },
     "name": "platform-sitewatch-func",
     "github": {
         "repository_standards": {

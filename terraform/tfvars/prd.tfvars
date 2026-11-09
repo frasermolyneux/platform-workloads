@@ -24,6 +24,13 @@ tags = {
   Git         = "https://github.com/frasermolyneux/platform-workloads"
 }
 
+cost_budget_defaults = {
+  actual_thresholds   = [50, 80, 100]
+  forecast_thresholds = [100]
+  contact_emails      = ["frasermolyneux@mx-mail.io"]
+  start_date          = "2026-11-01T00:00:00Z"
+}
+
 subscriptions = {
   sub-enterprise-devtest-legacy = {
     name            = "sub-enterprise-devtest-legacy"
@@ -48,6 +55,9 @@ subscriptions = {
     subscription_id = "db34f572-8b71-40d6-8f99-f29a27612144"
     environment     = "prd"
     monthly_budget  = 20
+    cost_budget = {
+      rationale = "Retain GBP 20: GBP 15 workload allowance plus GBP 5 unallocated headroom. October GBP 8.78 DNS and November 1-8 GBP 2.28 are cross-checks, not an extrapolated baseline."
+    }
   },
   sub-platform-identity = {
     name            = "sub-platform-identity"
@@ -59,13 +69,19 @@ subscriptions = {
     name            = "sub-platform-management"
     subscription_id = "7760848c-794d-4a19-8cb2-52f71a21ac2b"
     environment     = "prd"
-    monthly_budget  = 50
+    monthly_budget  = 150
+    cost_budget = {
+      rationale = "GBP 110 configured workload allowances plus GBP 40 shared/unallocated headroom = GBP 150. October actual GBP 44.37 is lower than cautious initial allowances; November 1-8 GBP 7.66 is not extrapolated. Headroom is not a measured cost estimate."
+    }
   },
   sub-platform-shared = {
     name            = "sub-platform-shared"
     subscription_id = "903b6685-c12a-4703-ac54-7ec1ff15ca43"
     environment     = "prd"
-    monthly_budget  = 150
+    monthly_budget  = 75
+    cost_budget = {
+      rationale = "GBP 55 configured workload allowances plus GBP 20 shared/unallocated headroom = GBP 75. October GBP 106.30 less GBP 76.71 incident leaves GBP 29.59; November 1-8 GBP 3.64 is not extrapolated. No recurring notifications baseline inferred."
+    }
   },
   sub-talkwithtiles-prd = {
     name            = "sub-talkwithtiles-prd"
@@ -78,6 +94,9 @@ subscriptions = {
     subscription_id = "6cad03c1-9e98-4160-8ebe-64dd30f1bbc7"
     environment     = "dev"
     monthly_budget  = 200
+    cost_budget = {
+      rationale = "Retain GBP 200 safe coverage: GBP 130 configured workload allowances plus GBP 70 shared/unallocated development headroom. October GBP 45.70 and November 1-8 GBP 18.42 are cross-checks, not linearly extrapolated estimates."
+    }
   },
   sub-visualstudio-enterprise-legacy = {
     name            = "sub-visualstudio-enterprise-legacy"
@@ -95,7 +114,10 @@ subscriptions = {
     name            = "sub-xi-portal-prd"
     subscription_id = "32444f38-32f4-409f-889c-8e8aa2b5b4d1"
     environment     = "prd"
-    monthly_budget  = 100
+    monthly_budget  = 200
+    cost_budget = {
+      rationale = "GBP 160 configured workload allowances plus GBP 40 shared/unallocated headroom = GBP 200. October GBP 120.57 is consistent with lower actual use than cautious allowances; November 1-8 GBP 23.83 is not extrapolated."
+    }
   },
   sub-finances-prd = {
     name            = "sub-finances-prd"

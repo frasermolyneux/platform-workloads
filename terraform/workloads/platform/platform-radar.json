@@ -75,6 +75,13 @@
     "environments": [
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 10,
+                "scope": "resource-group",
+                "budget_name": "radar-monthly",
+                "start_date": "2026-10-01T00:00:00Z",
+                "rationale": "Preserve the existing GBP 10 alert allowance and budget identity; October RG GBP 4.92 is one sample, not a stable recurring baseline."
+            },
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,

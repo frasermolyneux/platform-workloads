@@ -94,3 +94,9 @@ output "subscriptions" {
   description = "Master list of all subscriptions managed by platform-workloads. Access: subscriptions[name].subscription_id."
   value       = var.subscriptions
 }
+
+output "cost_budget_policies" {
+  description = "Versioned alert-only monthly budget policies for platform-monitoring. Subscription policies are unfiltered; workload-environment policies require the complete resource_group_names filter. Amounts are in subscription billing currency."
+  value       = local.cost_budget_policies
+  depends_on  = [terraform_data.cost_budget_contract]
+}

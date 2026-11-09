@@ -1,4 +1,5 @@
 {
+    "cost_budget_exemption": "No workload resource groups are declared; subscription-scoped landing-zone and shared/unallocated costs remain covered by subscription budgets. Do not invent a workload filter or assume zero cost.",
     "name": "platform-landing-zones",
     "github": {
         "repository_analysis": {

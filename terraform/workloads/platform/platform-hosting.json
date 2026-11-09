@@ -1,4 +1,8 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5,
+        "rationale": "Reviewable initial GBP 5 monthly alerting allowance for low or unmeasured usage, not a measured recurring baseline or spending limit."
+    },
     "name": "platform-hosting",
     "github": {
         "repository_analysis": {
@@ -124,6 +128,10 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 25,
+                "rationale": "October RG actual GBP 19.07, rounded up with buffer to GBP 25; review after a complete ordinary month."
+            },
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,

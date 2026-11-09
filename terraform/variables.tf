@@ -34,7 +34,36 @@ variable "subscriptions" {
     subscription_id = string
     environment     = string
     monthly_budget  = optional(number, null)
+    cost_budget = optional(object({
+      actual_thresholds   = optional(list(number))
+      forecast_thresholds = optional(list(number))
+      contact_emails      = optional(list(string))
+      budget_name         = optional(string)
+      start_date          = optional(string, "2026-04-01T00:00:00Z")
+      rationale           = string
+    }))
   }))
+
+  validation {
+    condition = alltrue([
+      for subscription in var.subscriptions :
+      subscription.monthly_budget == null ? subscription.cost_budget == null : (
+        subscription.monthly_budget > 0 &&
+        (subscription.cost_budget == null ? true : length(trimspace(subscription.cost_budget.rationale)) > 0)
+      )
+    ])
+    error_message = "Subscription monthly_budget must be positive; cost_budget requires a monthly_budget and a non-empty rationale."
+  }
+}
+
+variable "cost_budget_defaults" {
+  description = "Shared alert-only monthly budget notification defaults, overridable by subscription or workload/environment policy. Amounts use the subscription billing currency (GBP in this estate)."
+  type = object({
+    actual_thresholds   = list(number)
+    forecast_thresholds = list(number)
+    contact_emails      = list(string)
+    start_date          = string
+  })
 }
 
 variable "environment_map" {

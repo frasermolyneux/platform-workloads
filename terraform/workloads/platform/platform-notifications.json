@@ -1,4 +1,8 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5,
+        "rationale": "Reviewable initial GBP 5 monthly alerting allowance, not a recurring baseline. October GBP 77.39 RG spend was incident-dominated (GBP 76.71 incident); no reliable normal-month RG evidence supplied. Review after one ordinary full month."
+    },
     "name": "platform-notifications",
     "github": {
         "repository_analysis": {
