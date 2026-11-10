@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "platform-monitoring",
     "github": {
         "repository_analysis": {
@@ -153,6 +156,9 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 35
+            },
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,

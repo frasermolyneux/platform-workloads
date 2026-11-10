@@ -113,6 +113,9 @@
     "environments": [
         {
             "name": "Development",
+            "cost_budget": {
+                "monthly_budget": 35
+            },
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
@@ -168,6 +171,11 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 85,
+                "forecast_thresholds": [110],
+                "contact_emails": ["frasermolyneux@mx-mail.io"]
+            },
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "locations": [

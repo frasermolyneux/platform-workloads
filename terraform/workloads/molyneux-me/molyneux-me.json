@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "molyneux-me",
     "github": {
         "repository_analysis": {

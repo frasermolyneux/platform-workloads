@@ -75,6 +75,12 @@
     "environments": [
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 10,
+                "scope": "resource-group",
+                "budget_name": "idp-monthly-notification",
+                "start_date": "2026-10-01T00:00:00Z"
+            },
             "subscription": "sub-platform-management",
             "connect_to_github": true,
             "configure_for_terraform": true,

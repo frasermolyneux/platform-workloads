@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "xi-redirect-manager",
     "github": {
         "description": "HTTPS map catalogue and redirect file management API with forum OAuth and Entra portal integrations.",

@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "talkwithtiles",
     "github": {
         "repository_analysis": {

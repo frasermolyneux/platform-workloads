@@ -93,6 +93,13 @@ an empty, archived, documentation-only or upstream-fork repository instead.
 
 ### Environment Configuration
 
+Optional workload-level and environment-level `cost_budget` declarations set
+monthly alerting allowances, notification thresholds and recipients. Environment
+fields override workload defaults. See [cost budget policy](cost-budget-policy.md)
+for the schema, scope rules and adoption order.
+Every environment needs a budget or a non-empty `cost_budget_exemption` reason;
+repository-only definitions have no Azure environment to budget.
+
 ```json
 {
   "name": "Development",

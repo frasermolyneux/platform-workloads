@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "platform-connectivity",
     "github": {
         "repository_analysis": {
@@ -134,6 +137,9 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 15
+            },
             "subscription": "sub-platform-connectivity",
             "connect_to_github": true,
             "configure_for_terraform": true,

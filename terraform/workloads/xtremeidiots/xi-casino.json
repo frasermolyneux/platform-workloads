@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "xi-casino",
     "github": {
         "description": "Node.js casino and multiplayer games workload hosted beneath www.xtremeidiots.com.",

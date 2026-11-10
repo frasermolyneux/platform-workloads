@@ -1,4 +1,8 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5,
+        "rationale": "Excludes external baremetal charges."
+    },
     "name": "platform-baremetal",
     "github": {
         "repository_standards": {

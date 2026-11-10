@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "xi-powerball",
     "github": {
         "description": "Node.js donor Powerball workload hosted beneath www.xtremeidiots.com.",

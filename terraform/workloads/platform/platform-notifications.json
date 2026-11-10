@@ -1,4 +1,10 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5,
+        "actual_thresholds": [95],
+        "contact_emails": ["frasermolyneux@mx-mail.io"],
+        "rationale": "Reviewable initial allowance."
+    },
     "name": "platform-notifications",
     "github": {
         "repository_analysis": {

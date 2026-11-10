@@ -1,4 +1,5 @@
 {
+    "cost_budget_exemption": "No workload RG filter is declared; costs remain covered by subscription budgets.",
     "name": "platform-landing-zones",
     "github": {
         "repository_analysis": {

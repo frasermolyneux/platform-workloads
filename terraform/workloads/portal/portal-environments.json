@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "portal-environments",
     "github": {
         "repository_analysis": {
@@ -167,6 +170,9 @@
         },
         {
             "name": "Production",
+            "cost_budget": {
+                "monthly_budget": 35
+            },
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,
             "gcp": {

@@ -5,6 +5,13 @@ This guide shows how a downstream workload reads platform-workloads state to reu
 - `workload_resource_groups[workload][env_tag]`: resource group objects keyed by location.
 - `workload_terraform_backends[workload][env_tag]`: Terraform backend metadata when `configure_for_terraform=true` in the workload JSON.
 - `workload_administrative_units[workload][env_tag]`: AU identifiers when the workload has an administrative unit configured.
+- `cost_budget_policies`: versioned monthly alert policy for platform-monitoring
+  and display consumers. `subscriptions[alias]` retains subscription identity;
+  `workload_environments["workload-Environment"]` uses existing case-sensitive
+  workload-environment keys, not `env_tag`. Each workload policy includes an
+  explicit ARM scope and complete resource-group filter. See
+  [cost budget policy](cost-budget-policy.md) for the fields, configuration
+  inheritance and adoption requirements.
 
 `env_tag` is the environment alias from [`var.environment_map`](../terraform/variables.tf), falling back to the lowercase environment name. Index with the tag, not the display name.
 

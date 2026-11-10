@@ -62,6 +62,8 @@ locals {
         add_deploy_script_identity = try(environment.add_deploy_script_identity, false)
         configure_for_terraform    = try(environment.configure_for_terraform, false)
         subscription               = environment.subscription
+        cost_budget                = try(merge(try(workload.cost_budget, {}), try(environment.cost_budget, {})), null)
+        cost_budget_exemption      = try(environment.cost_budget_exemption, workload.cost_budget_exemption, null)
         role_assignments = {
           assigned_roles = [
             for assignment in concat(

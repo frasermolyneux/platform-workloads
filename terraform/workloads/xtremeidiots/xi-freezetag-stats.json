@@ -1,4 +1,7 @@
 {
+    "cost_budget": {
+        "monthly_budget": 5
+    },
     "name": "xi-freezetag-stats",
     "github": {
         "description": "FreezeTag log collection and statistics-generation workload for the XtremeIdiots community.",
