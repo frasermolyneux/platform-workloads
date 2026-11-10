@@ -11,7 +11,7 @@ This guide shows how a downstream workload reads platform-workloads state to reu
   workload-environment keys, not `env_tag`. Each workload policy includes an
   explicit ARM scope and complete resource-group filter. See
   [cost budget policy](cost-budget-policy.md) for the fields, configuration
-  inheritance and adoption requirements.
+  inheritance and deployment requirements.
 
 `env_tag` is the environment alias from [`var.environment_map`](../terraform/variables.tf), falling back to the lowercase environment name. Index with the tag, not the display name.
 

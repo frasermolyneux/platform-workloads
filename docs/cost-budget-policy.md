@@ -35,7 +35,7 @@ Supported workload fields:
 | `actual_thresholds`, `forecast_thresholds` | Arrays of percentages; inherit shared defaults when omitted |
 | `contact_emails` | Recipient array; inherit shared defaults when omitted |
 | `scope` | `subscription` by default, or `resource-group` for a single declared RG |
-| `budget_name`, `start_date` | Optional identity overrides for adoption; preserve these during ownership transfers |
+| `budget_name`, `start_date` | Optional identity overrides; preserve configured values to avoid budget replacement |
 
 Optional subscription `cost_budget` overrides support notification arrays,
 `budget_name`, `start_date` and optional `rationale`. See the typed schema in
@@ -72,7 +72,7 @@ compatible. See the [consumer guide](consuming-platform-workloads-outputs.md).
 
 Subscription names default to `budget-${subscription.name}`; new workload names
 default to `${workload}-${environment_tag}-monthly`. Date defaults and explicit
-legacy identity overrides are in configuration. Changing an adopted identity
+identity overrides are in configuration. Changing an existing identity
 requires a reviewed migration, not automatic replacement.
 
 ## Ownership and deployment
@@ -100,10 +100,6 @@ policies. This role includes resource-group reads and the explicitly accepted
 role. No additional Reader role or new deployment delegation is required. IDP
 must not also manage these assignments.
 
-Publish producer outputs before deploying consumers. For existing budgets,
-release the old owner's state with `removed` / `destroy = false`, then follow
-monitoring's adoption runbook to import
-`${scope}/providers/Microsoft.Consumption/budgets/${budget_name}`. Preserve the
-scope, name and start date. Review the complete monitoring plan and adoption
-approval before applying: no deletion, replacement, duplicate budget or scope
-broadening. Deploy IDP consumption only after producer outputs exist.
+Publish producer outputs before deploying monitoring and IDP consumers. Review
+the complete monitoring plan for unintended deletion, replacement, duplicate
+budgets or scope broadening. Preserve configured scope, name and start date.
