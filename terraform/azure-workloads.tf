@@ -189,6 +189,15 @@ resource "github_actions_environment_secret" "nuget_api_key" {
   plaintext_value = data.azurerm_key_vault_secret.nuget_token.value
 }
 
+resource "github_actions_environment_variable" "nuget_user" {
+  for_each = github_repository_environment.nuget
+
+  repository    = each.value.repository
+  environment   = each.value.environment
+  variable_name = "NUGET_USER"
+  value         = "frasermolyneux"
+}
+
 resource "github_actions_secret" "sonar_token" {
   for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_sonarcloud_secrets, false) }
 
