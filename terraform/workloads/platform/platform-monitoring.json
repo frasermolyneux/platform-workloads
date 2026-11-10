@@ -1,7 +1,7 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "rationale": "Reviewable initial GBP 5 monthly alerting allowance for low or unmeasured usage, not a measured recurring baseline or spending limit."
+        "rationale": "Initial allowance for unmeasured usage; review after an ordinary full month."
     },
     "name": "platform-monitoring",
     "github": {
@@ -159,7 +159,7 @@
             "name": "Production",
             "cost_budget": {
                 "monthly_budget": 35,
-                "rationale": "October RG actual GBP 26.45, rounded up with buffer to GBP 35; review after a complete ordinary month."
+                "rationale": "Allowance based on full-month RG usage with buffer."
             },
             "subscription": "sub-platform-management",
             "connect_to_github": true,

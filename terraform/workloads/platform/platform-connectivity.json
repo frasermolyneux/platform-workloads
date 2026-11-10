@@ -1,7 +1,7 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "rationale": "Reviewable initial GBP 5 monthly alerting allowance for low or unmeasured usage, not a measured recurring baseline or spending limit."
+        "rationale": "Initial allowance for unmeasured usage; review after an ordinary full month."
     },
     "name": "platform-connectivity",
     "github": {
@@ -140,7 +140,7 @@
             "name": "Production",
             "cost_budget": {
                 "monthly_budget": 15,
-                "rationale": "October DNS RG actual GBP 8.78, rounded up with buffer to GBP 15; November subscription actuals are a cross-check, not extrapolated."
+                "rationale": "DNS allowance based on full-month usage with buffer."
             },
             "subscription": "sub-platform-connectivity",
             "connect_to_github": true,

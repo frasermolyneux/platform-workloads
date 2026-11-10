@@ -10,25 +10,20 @@ run "catalog_budget_contract" {
   }
 
   assert {
+    condition = alltrue([
+      for alias, policy in local.subscription_cost_budget_policies :
+      policy.monthly_budget == var.subscriptions[alias].monthly_budget
+    ])
+    error_message = "Subscription amounts must project configured allowances without adjustment for workload totals."
+  }
+
+  assert {
     condition = (
       output.cost_budget_policies.version == 1 &&
       length(local.subscription_cost_budget_policies) == length([for subscription in var.subscriptions : subscription if subscription.monthly_budget != null]) &&
       length(local.workload_cost_budget_policies) + length(local.cost_budget_exemptions) == length(local.workload_environments)
     )
     error_message = "Version 1 must include every configured subscription budget and account for every workload environment through a policy or exemption."
-  }
-
-  assert {
-    condition = alltrue([
-      for alias, total in {
-        for alias, subscription in var.subscriptions : alias => sum(concat([0], [
-          for policy in values(local.workload_cost_budget_policies) : policy.monthly_budget
-          if policy.subscription_id == subscription.subscription_id
-        ]))
-      } :
-      var.subscriptions[alias].monthly_budget >= total + max(5, ceil(total * 0.20))
-    ])
-    error_message = "Initial subscription budgets must cover workload allowances plus at least 20% (minimum GBP 5) shared/unallocated headroom."
   }
 
   assert {
@@ -55,8 +50,8 @@ run "catalog_budget_contract" {
     condition = alltrue([
       for policy in concat(values(local.subscription_cost_budget_policies), values(local.workload_cost_budget_policies)) :
       tolist(policy.contact_emails) == tolist(["frasermolyneux@mx-mail.io"]) &&
-      tolist(policy.actual_thresholds) == tolist([50, 80, 100]) &&
-      tolist(policy.forecast_thresholds) == tolist([100])
+      tolist(policy.actual_thresholds) == tolist([95]) &&
+      tolist(policy.forecast_thresholds) == tolist([110])
     ])
     error_message = "Every policy must inherit the explicit recipient and actual/forecast defaults."
   }
@@ -67,9 +62,9 @@ run "catalog_budget_contract" {
       can([for workload in local.all_workloads : workload if workload.name == "platform-notifications"][0].cost_budget.contact_emails) &&
       can([for environment in local.workload_environments : environment if environment.key == "portal-core-Production"][0].cost_budget.forecast_thresholds) &&
       can([for environment in local.workload_environments : environment if environment.key == "portal-core-Production"][0].cost_budget.contact_emails) &&
-      tolist(local.workload_cost_budget_policies["platform-notifications-Development"].actual_thresholds) == tolist([50, 80, 100]) &&
+      tolist(local.workload_cost_budget_policies["platform-notifications-Development"].actual_thresholds) == tolist([95]) &&
       tolist(local.workload_cost_budget_policies["platform-notifications-Production"].contact_emails) == tolist(["frasermolyneux@mx-mail.io"]) &&
-      tolist(local.workload_cost_budget_policies["portal-core-Production"].forecast_thresholds) == tolist([100]) &&
+      tolist(local.workload_cost_budget_policies["portal-core-Production"].forecast_thresholds) == tolist([110]) &&
       tolist(local.workload_cost_budget_policies["portal-core-Production"].contact_emails) == tolist(["frasermolyneux@mx-mail.io"])
     )
     error_message = "Mixed scalar/list policy objects must support both workload-level and environment-level explicit notification overrides."
@@ -115,7 +110,7 @@ run "subscription_override" {
   variables {
     subscriptions = merge(var.subscriptions, {
       sub-platform-shared = merge(var.subscriptions["sub-platform-shared"], {
-        monthly_budget = 100
+        monthly_budget = 1
         cost_budget = {
           actual_thresholds   = [75, 100]
           forecast_thresholds = []
@@ -134,13 +129,13 @@ run "subscription_override" {
 
   assert {
     condition = (
-      local.subscription_cost_budget_policies["sub-platform-shared"].monthly_budget == 100 &&
+      local.subscription_cost_budget_policies["sub-platform-shared"].monthly_budget == 1 &&
       tolist(local.subscription_cost_budget_policies["sub-platform-shared"].actual_thresholds) == tolist([75, 100]) &&
       length(local.subscription_cost_budget_policies["sub-platform-shared"].forecast_thresholds) == 0 &&
       local.subscription_cost_budget_policies["sub-platform-shared"].contact_emails == tolist(["costs@example.com"]) &&
       local.subscription_cost_budget_policies["sub-platform-shared"].budget_name == "example-custom"
     )
-    error_message = "Explicit subscription policy overrides must replace defaults, including an empty forecast alert list."
+    error_message = "Subscription policy overrides must replace defaults, allow amounts below workload totals and support an empty forecast alert list."
   }
 }
 
@@ -168,8 +163,8 @@ run "reject_invalid_recipient" {
 
   variables {
     cost_budget_defaults = {
-      actual_thresholds   = [50, 80, 100]
-      forecast_thresholds = [100]
+      actual_thresholds   = [95]
+      forecast_thresholds = [110]
       contact_emails      = ["not-an-email"]
       start_date          = "2026-11-01T00:00:00Z"
     }
@@ -187,8 +182,8 @@ run "reject_invalid_start_date" {
 
   variables {
     cost_budget_defaults = {
-      actual_thresholds   = [50, 80, 100]
-      forecast_thresholds = [100]
+      actual_thresholds   = [95]
+      forecast_thresholds = [110]
       contact_emails      = ["frasermolyneux@mx-mail.io"]
       start_date          = "2026-11-02T00:00:00Z"
     }

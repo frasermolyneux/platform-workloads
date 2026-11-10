@@ -1,7 +1,7 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "rationale": "Reviewable initial GBP 5 monthly alert allowance; no reliable recurring RG baseline supplied. Not an estimate or spending limit; review after one ordinary full month."
+        "rationale": "Initial allowance for unmeasured usage; review after an ordinary full month."
     },
     "name": "xi-arcade",
     "github": {

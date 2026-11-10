@@ -1,9 +1,9 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "actual_thresholds": [50, 80, 100],
+        "actual_thresholds": [95],
         "contact_emails": ["frasermolyneux@mx-mail.io"],
-        "rationale": "Reviewable initial GBP 5 monthly alerting allowance, not a recurring baseline. October GBP 77.39 RG spend was incident-dominated (GBP 76.71 incident); no reliable normal-month RG evidence supplied. Review after one ordinary full month."
+        "rationale": "Reviewable initial alert allowance, not a recurring baseline derived from the notifications incident."
     },
     "name": "platform-notifications",
     "github": {

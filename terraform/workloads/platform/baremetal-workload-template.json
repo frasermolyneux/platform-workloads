@@ -1,7 +1,7 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "rationale": "Reviewable initial GBP 5 monthly alert allowance for the declared Azure RG; external baremetal charges are excluded. No reliable recurring Azure baseline supplied; review after one ordinary full month."
+        "rationale": "Initial Azure RG allowance; excludes external baremetal charges."
     },
     "name": "baremetal-workload-template",
     "github": {

@@ -80,7 +80,7 @@
                 "scope": "resource-group",
                 "budget_name": "radar-monthly",
                 "start_date": "2026-10-01T00:00:00Z",
-                "rationale": "Preserve the existing GBP 10 alert allowance and budget identity; October RG GBP 4.92 is one sample, not a stable recurring baseline."
+                "rationale": "Retain the alert allowance and budget identity during ownership transfer."
             },
             "subscription": "sub-platform-management",
             "connect_to_github": true,
