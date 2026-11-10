@@ -95,11 +95,12 @@ run "catalog_budget_contract" {
     condition = (
       local.workload_cost_budget_policies["platform-radar-Production"].budget_name == "radar-monthly" &&
       local.workload_cost_budget_policies["platform-radar-Production"].scope == "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-radar-prd-uksouth" &&
+      local.workload_cost_budget_policies["platform-radar-Production"].start_date == "2026-10-01T00:00:00Z" &&
       local.workload_cost_budget_policies["platform-developer-portal-Production"].budget_name == "idp-monthly-notification" &&
       local.workload_cost_budget_policies["platform-developer-portal-Production"].scope == "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b/resourceGroups/rg-platform-developer-portal-prd-uksouth" &&
       local.workload_cost_budget_policies["platform-developer-portal-Production"].start_date == "2026-10-01T00:00:00Z"
     )
-    error_message = "Legacy Radar and IDP budget names, resource-group scopes and start dates must be preserved for adoption."
+    error_message = "Radar and IDP budget names, resource-group scopes and start dates must remain unchanged to avoid replacement."
   }
 
   assert {
@@ -109,7 +110,7 @@ run "catalog_budget_contract" {
       local.subscription_cost_budget_policies["sub-platform-management"].budget_name == "budget-sub-platform-management" &&
       local.subscription_cost_budget_policies["sub-platform-management"].start_date == "2026-04-01T00:00:00Z"
     )
-    error_message = "New workloads must have an explicit RG filter, while legacy subscription identities remain unchanged."
+    error_message = "Workloads must have an explicit RG filter, while existing subscription identities remain unchanged."
   }
 }
 
