@@ -114,8 +114,7 @@
         {
             "name": "Development",
             "cost_budget": {
-                "monthly_budget": 35,
-                "rationale": "Development allowance based on full-month RG usage with buffer."
+                "monthly_budget": 35
             },
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
@@ -175,8 +174,7 @@
             "cost_budget": {
                 "monthly_budget": 85,
                 "forecast_thresholds": [110],
-                "contact_emails": ["frasermolyneux@mx-mail.io"],
-                "rationale": "Production allowance based on full-month RG usage with buffer."
+                "contact_emails": ["frasermolyneux@mx-mail.io"]
             },
             "subscription": "sub-xi-portal-prd",
             "connect_to_github": true,

@@ -62,10 +62,11 @@ locals {
 
   cost_budget_policies_valid = alltrue([
     for policy in concat(values(local.subscription_cost_budget_policies), values(local.workload_cost_budget_policies), [
-      merge(var.cost_budget_defaults, { monthly_budget = 1, subscription_id = var.subscription_id, budget_name = "defaults" })
+      merge(var.cost_budget_defaults, { monthly_budget = 1, subscription_id = var.subscription_id, budget_name = "defaults", rationale = null })
       ]) : try(
       policy.monthly_budget > 0 && policy.monthly_budget == tonumber(policy.monthly_budget) &&
       policy.budget_name == tostring(policy.budget_name) &&
+      (policy.rationale == null ? true : policy.rationale == tostring(policy.rationale)) &&
       can(regex("^[A-Za-z0-9][A-Za-z0-9_-]{0,62}$", policy.budget_name)) &&
       can(regex("^[0-9]{4}-(0[1-9]|1[0-2])-01T00:00:00Z$", policy.start_date)) &&
       can(formatdate("YYYY-MM-DD", policy.start_date)) &&
@@ -94,7 +95,7 @@ resource "terraform_data" "cost_budget_contract" {
     precondition {
       condition = local.cost_budget_declarations_valid && local.cost_budget_policies_valid && alltrue([
         for policy in values(local.workload_cost_budget_policies) :
-        try(policy.rationale == tostring(policy.rationale) && length(trimspace(policy.rationale)) > 0 && length(policy.resource_group_names) > 0 && policy.scope != null, false)
+        try(length(policy.resource_group_names) > 0 && policy.scope != null, false)
         ]) && alltrue([
         for environment in local.workload_environments :
         contains(["subscription", "resource-group"], try(environment.cost_budget.scope, "subscription"))
@@ -102,7 +103,7 @@ resource "terraform_data" "cost_budget_contract" {
           for policy in concat(values(local.subscription_cost_budget_policies), values(local.workload_cost_budget_policies)) :
           try(lower("${policy.scope}/providers/Microsoft.Consumption/budgets/${policy.budget_name}"), null)
       ])) == length(local.subscription_cost_budget_policies) + length(local.workload_cost_budget_policies)
-      error_message = "Cost budgets require supported fields, positive numeric amounts, unique scope/name identities, valid subscriptions, first-of-month UTC start dates, 1-5 unique alerts (0 < percent <= 1000) and 1-5 valid recipients. Workloads require a rationale and non-empty RG filter; resource-group scope requires exactly one RG."
+      error_message = "Cost budgets require supported fields, positive numeric amounts, unique scope/name identities, valid subscriptions, first-of-month UTC start dates, 1-5 unique alerts (0 < percent <= 1000) and 1-5 valid recipients. Optional rationale must be a string. Workloads require a non-empty RG filter; resource-group scope requires exactly one RG."
     }
 
     precondition {

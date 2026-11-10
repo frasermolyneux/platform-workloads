@@ -40,19 +40,16 @@ variable "subscriptions" {
       contact_emails      = optional(list(string))
       budget_name         = optional(string)
       start_date          = optional(string, "2026-04-01T00:00:00Z")
-      rationale           = string
+      rationale           = optional(string)
     }))
   }))
 
   validation {
     condition = alltrue([
       for subscription in var.subscriptions :
-      subscription.monthly_budget == null ? subscription.cost_budget == null : (
-        subscription.monthly_budget > 0 &&
-        (subscription.cost_budget == null ? true : length(trimspace(subscription.cost_budget.rationale)) > 0)
-      )
+      subscription.monthly_budget == null ? subscription.cost_budget == null : subscription.monthly_budget > 0
     ])
-    error_message = "Subscription monthly_budget must be positive; cost_budget requires a monthly_budget and a non-empty rationale."
+    error_message = "Subscription monthly_budget must be positive; cost_budget requires a monthly_budget."
   }
 }
 

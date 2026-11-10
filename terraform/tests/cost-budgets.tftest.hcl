@@ -27,6 +27,15 @@ run "catalog_budget_contract" {
   }
 
   assert {
+    condition = (
+      output.cost_budget_policies.workload_environments["portal-core-Production"].rationale == null &&
+      output.cost_budget_policies.workload_environments["portal-core-Development"].rationale == null &&
+      output.cost_budget_policies.workload_environments["platform-baremetal-Production"].rationale == "Excludes external baremetal charges."
+    )
+    error_message = "Rationale must remain optional and publish null when omitted, while preserving useful explicit context."
+  }
+
+  assert {
     condition = length(distinct(flatten([
       for policy in values(local.workload_cost_budget_policies) : [
         for name in policy.resource_group_names : lower("${policy.subscription_id}/${name}")
@@ -117,7 +126,6 @@ run "subscription_override" {
           contact_emails      = ["costs@example.com"]
           budget_name         = "example-custom"
           start_date          = "2026-11-01T00:00:00Z"
-          rationale           = "Explicit subscription override."
         }
       })
     })
@@ -133,7 +141,8 @@ run "subscription_override" {
       tolist(local.subscription_cost_budget_policies["sub-platform-shared"].actual_thresholds) == tolist([75, 100]) &&
       length(local.subscription_cost_budget_policies["sub-platform-shared"].forecast_thresholds) == 0 &&
       local.subscription_cost_budget_policies["sub-platform-shared"].contact_emails == tolist(["costs@example.com"]) &&
-      local.subscription_cost_budget_policies["sub-platform-shared"].budget_name == "example-custom"
+      local.subscription_cost_budget_policies["sub-platform-shared"].budget_name == "example-custom" &&
+      local.subscription_cost_budget_policies["sub-platform-shared"].rationale == null
     )
     error_message = "Subscription policy overrides must replace defaults, allow amounts below workload totals and support an empty forecast alert list."
   }

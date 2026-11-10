@@ -3,7 +3,7 @@
         "monthly_budget": 5,
         "actual_thresholds": [95],
         "contact_emails": ["frasermolyneux@mx-mail.io"],
-        "rationale": "Reviewable initial alert allowance, not a recurring baseline derived from the notifications incident."
+        "rationale": "Reviewable initial allowance."
     },
     "name": "platform-notifications",
     "github": {

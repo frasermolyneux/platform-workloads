@@ -79,8 +79,7 @@
                 "monthly_budget": 10,
                 "scope": "resource-group",
                 "budget_name": "radar-monthly",
-                "start_date": "2026-10-01T00:00:00Z",
-                "rationale": "Retain the alert allowance and budget identity during ownership transfer."
+                "start_date": "2026-10-01T00:00:00Z"
             },
             "subscription": "sub-platform-management",
             "connect_to_github": true,

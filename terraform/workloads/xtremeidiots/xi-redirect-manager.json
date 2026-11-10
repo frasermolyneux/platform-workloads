@@ -1,7 +1,6 @@
 {
     "cost_budget": {
-        "monthly_budget": 5,
-        "rationale": "Initial allowance for unmeasured usage; review after an ordinary full month."
+        "monthly_budget": 5
     },
     "name": "xi-redirect-manager",
     "github": {

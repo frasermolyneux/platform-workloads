@@ -49,7 +49,7 @@ jobs:
       - name: Validate cost budget policies without provider reads
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/cost-budgets.tftest.hcl
 
-      - name: Validate collector identity lookup with mocked providers
+      - name: Validate collector identity and subscription grants with mocked providers
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/idp-cost-reader.tftest.hcl
 
       - name: Validate baremetal Cloudflare credential contracts without provider reads

@@ -1,7 +1,7 @@
 {
     "cost_budget": {
         "monthly_budget": 5,
-        "rationale": "Initial Azure RG allowance; excludes external baremetal charges."
+        "rationale": "Excludes external baremetal charges."
     },
     "name": "platform-baremetal",
     "github": {

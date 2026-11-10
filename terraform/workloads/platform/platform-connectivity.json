@@ -1,7 +1,6 @@
 {
     "cost_budget": {
-        "monthly_budget": 5,
-        "rationale": "Initial allowance for unmeasured usage; review after an ordinary full month."
+        "monthly_budget": 5
     },
     "name": "platform-connectivity",
     "github": {
@@ -139,8 +138,7 @@
         {
             "name": "Production",
             "cost_budget": {
-                "monthly_budget": 15,
-                "rationale": "DNS allowance based on full-month usage with buffer."
+                "monthly_budget": 15
             },
             "subscription": "sub-platform-connectivity",
             "connect_to_github": true,

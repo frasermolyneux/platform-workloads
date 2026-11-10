@@ -19,25 +19,26 @@ then workload, then shared notification/start-date defaults. Arrays replace
 rather than append. Omit a field to inherit it; null is not a workload override.
 An empty actual or forecast array disables that alert type.
 
-Each environment requires either a budget with a non-empty `rationale`, or a
+Each environment requires either a budget, or a
 non-empty `cost_budget_exemption` reason (environment overrides workload-level
 exemption). Exemptions are not zero-cost estimates. Repository-only definitions
-have no provisioned environment to budget. Keep amounts and concise rationale in
-configuration rather than duplicating them in documentation.
+have no provisioned environment to budget. Keep policy values in configuration
+rather than duplicating them in documentation. Optional `rationale` is for useful
+durable context, not mandatory commentary.
 
 Supported workload fields:
 
 | Field | Usage |
 | --- | --- |
 | `monthly_budget` | Positive numeric monthly allowance |
-| `rationale` | Reason for the allowance; identify reviewable initial allowances rather than inventing recurring baselines |
+| `rationale` | Optional explanatory string; omitted values are published as null |
 | `actual_thresholds`, `forecast_thresholds` | Arrays of percentages; inherit shared defaults when omitted |
 | `contact_emails` | Recipient array; inherit shared defaults when omitted |
 | `scope` | `subscription` by default, or `resource-group` for a single declared RG |
 | `budget_name`, `start_date` | Optional identity overrides for adoption; preserve these during ownership transfers |
 
 Optional subscription `cost_budget` overrides support notification arrays,
-`budget_name`, `start_date` and a required `rationale`. See the typed schema in
+`budget_name`, `start_date` and optional `rationale`. See the typed schema in
 [`variables.tf`](../terraform/variables.tf).
 
 Every budgeted environment must declare resource groups. All its groups across
@@ -60,7 +61,7 @@ validation rather than being ignored.
 
 `monthly_budget`, bare UUID `subscription_id`, full ARM `scope`, `budget_name`,
 `start_date`, `actual_thresholds`, `forecast_thresholds`, `contact_emails`, and
-`rationale` (nullable when no subscription override is declared).
+`rationale` (null when omitted).
 
 `workload_environments["workload-Environment"]` contains these plus `workload`,
 `environment`, `environment_tag`, and sorted distinct `resource_group_names`.
@@ -75,6 +76,29 @@ legacy identity overrides are in configuration. Changing an adopted identity
 requires a reviewed migration, not automatic replacement.
 
 ## Ownership and deployment
+
+`platform-workloads` owns the IDP collector's subscription RBAC using its existing
+Production authority. IDP owns the collector identity and publishes its client ID
+as `IDP_COLLECTOR_CLIENT_ID` in the repository's `Production` GitHub environment.
+The producer checks that variable against the independently resolved, unique
+Entra application `MX.IO IDP CI collector (prd)` in its deployment tenant, then
+resolves the service principal from the checked application. Missing, ambiguous,
+malformed or mismatched identities fail the plan. Changing only the GitHub
+variable cannot redirect grants; Entra registration changes remain a trusted
+directory-administration operation. There is no reverse IDP state dependency or
+copied principal ID.
+
+The locked GitHub provider's plural environment-variable data source persists
+all nonsecret IDP Production variable values in producer state, not only the
+client ID. It does not read Actions secrets. Keep credentials out of variables
+and restrict state access accordingly.
+
+The collector receives built-in **Cost Management Reader** on each distinct
+subscription in the policy contract, including subscriptions with workload-only
+policies. This role includes resource-group reads and the explicitly accepted
+`Microsoft.Support/*` support-ticket permissions; it is not a custom query-only
+role. No additional Reader role or new deployment delegation is required. IDP
+must not also manage these assignments.
 
 Publish producer outputs before deploying consumers. For existing budgets,
 release the old owner's state with `removed` / `destroy = false`, then follow
