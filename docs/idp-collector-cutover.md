@@ -56,9 +56,12 @@ Production deployment principal must perform the central secret grant.
 ## Coordinated production sequence
 
 1. Land and deploy IDP's identity/certificate Terraform changes first, preserving
-   the existing collector client/principal and variable publication. Confirm the
-   exact new display name in Entra before planning this stack. The host worker
-   remains stopped until permissions, certificate and shared-key hydration are ready.
+   the existing collector client/principal and variable publication. This
+   identity/bootstrap preparation retires CI collection and its federation first;
+   the temporary collection outage until host-worker activation is accepted.
+   Confirm the exact new display name in Entra before planning this stack. The
+   host worker remains stopped until permissions, certificate and shared-key
+   hydration are ready.
 2. Select the exact CLI from `terraform/.terraform-version` (`1.17.0`). Run the
    credential-free checks below in this worktree. Mock tests do not read secrets.
 3. In the secured Production deployment context, initialize and review a complete
@@ -77,9 +80,10 @@ Production deployment principal must perform the central secret grant.
    Verify host-side hydration succeeds without logging its contents, restrictive
    file ownership/mode and worker-only mount, then verify GitHub App installation
    authentication and one Azure cost collection with the preserved collector SP.
-   Confirm collection freshness in IDP before retiring CI collection. A rollback
-   of CI federation belongs to the IDP stack; do not recreate or move the cost
-   role assignments or alter budgets.
+   Confirm collection freshness in IDP to close the accepted collection outage;
+   CI collection and federation were already retired in step 1. Any rollback
+   restoring CI collection or federation belongs to the IDP stack and requires
+   coordination; do not recreate or move the cost role assignments or alter budgets.
 
 ```powershell
 terraform -chdir=terraform fmt -check -recursive
