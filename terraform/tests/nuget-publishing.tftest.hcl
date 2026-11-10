@@ -9,7 +9,20 @@ run "project_only_active_nuget_publishers" {
 
   assert {
     condition = (
-      length(github_repository_environment.nuget) == 12 &&
+      toset(keys(github_repository_environment.nuget)) == toset([
+        "api-client-abstractions",
+        "cod-demo-reader",
+        "dotnet-caching",
+        "geo-location",
+        "invision-api-client",
+        "observability-appinsights",
+        "observability-opentelemetry",
+        "platform-notifications",
+        "portal-repository",
+        "portal-server-events",
+        "portal-servers-integration",
+        "xi-redirect-manager",
+      ]) &&
       toset(keys(github_actions_environment_variable.nuget_user)) == toset(keys(github_repository_environment.nuget)) &&
       alltrue([
         for publisher in github_actions_environment_variable.nuget_user :

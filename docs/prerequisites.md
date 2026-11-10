@@ -42,7 +42,6 @@ The following tokens must be stored in the platform-workloads Key Vault. First-t
 
 | Secret Name                            | Purpose                                                                                                         |
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------- |
-| `nuget-token`                          | Transitional NuGet API key injected into workload GitHub environment secrets (for workloads with `add_nuget_environment`); retained until trusted-publishing acceptance |
 | `sonarcloud-token`                     | SonarCloud token injected into workload GitHub secrets (for workloads with `add_sonarcloud_secrets`)             |
 
 Terraform also creates a `github-app-pem` placeholder whose value is managed
