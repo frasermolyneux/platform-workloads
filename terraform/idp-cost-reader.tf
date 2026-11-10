@@ -17,7 +17,7 @@ data "github_actions_environment_variables" "idp_collector" {
 }
 
 data "azuread_application" "idp_collector" {
-  display_name = "MX.IO IDP CI collector (prd)"
+  display_name = "MX.IO IDP host collector (prd)"
 
   lifecycle {
     precondition {
