@@ -31,11 +31,13 @@ jobs:
         with:
           persist-credentials: false
       - uses: frasermolyneux/actions/terraform-setup@594500f81ee7fdb65616bba793f8cdf9025d57b2 # terraform-setup/v1.1.0
+        id: toolchain
         with:
           terraform-folder: terraform
           terraform-version: "1.17.0"
           terraform_wrapper: "false"
       - name: Plan privately, enforce the release policy and apply the exact saved plan
+        id: guard
         run: python3 scripts/guard_idp_cutover.py
         env:
           ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
@@ -47,3 +49,19 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
+      - name: Publish attempted plan execution metadata
+        if: always() && steps.guard.outputs.plan_outcome != ''
+        uses: frasermolyneux/actions/terraform-receipt@027d7e31bb32b734090aaed01b36d74f1d658b61
+        with:
+          context-directory: ${{ steps.toolchain.outputs.directory }}
+          operation: plan
+          outcome: ${{ steps.guard.outputs.plan_outcome }}
+          environment: prd
+      - name: Publish attempted apply execution metadata
+        if: always() && steps.guard.outputs.apply_outcome != ''
+        uses: frasermolyneux/actions/terraform-receipt@027d7e31bb32b734090aaed01b36d74f1d658b61
+        with:
+          context-directory: ${{ steps.toolchain.outputs.directory }}
+          operation: apply
+          outcome: ${{ steps.guard.outputs.apply_outcome }}
+          environment: prd

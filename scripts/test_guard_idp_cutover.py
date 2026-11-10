@@ -22,6 +22,8 @@ def plan():
             "change": {
                 "actions": ["create"], "before": None,
                 "after": {
+                    "condition": None, "delegated_managed_identity_resource_id": None,
+                    "description": None, "timeouts": None,
                     "principal_id": guard.PRINCIPAL, "scope": guard.SCOPE,
                     "role_definition_name": "Key Vault Secrets User",
                     "principal_type": "ServicePrincipal",
@@ -47,13 +49,32 @@ class ReleasePolicyTests(unittest.TestCase):
         empty["output_changes"] = {"existing": {"actions": ["no-op"]}}
         self.assertEqual(guard.validate_plan(empty), 0)
 
-    def test_exact_known_role_definition_id(self):
+    def test_reject_any_extra_known_field_or_changed_optional_value(self):
+        for field, value in [
+            ("description", "unexpected"), ("timeouts", {"create": "10m"}),
+            ("future_provider_field", None), ("future_provider_field", "unexpected"),
+            ("skip_service_principal_aad_check", False), ("name", "unexpected"),
+            ("id", "unexpected"), ("condition_version", None),
+            ("role_definition_id", "/unexpected"),
+        ]:
+            document = plan()
+            document["resource_changes"][0]["change"]["after"][field] = value
+            with self.subTest(field=field), self.assertRaises(guard.PolicyError):
+                guard.validate_plan(document)
         document = plan()
-        document["resource_changes"][0]["change"]["after"]["role_definition_id"] = (
-            "/subscriptions/7760848c-794d-4a19-8cb2-52f71a21ac2b"
-            f"/providers/Microsoft.Authorization/roleDefinitions/{guard.ROLE_ID}"
-        )
-        self.assertEqual(guard.validate_plan(document), 1)
+        del document["resource_changes"][0]["change"]["after"]["description"]
+        with self.assertRaises(guard.PolicyError):
+            guard.validate_plan(document)
+        for field in guard.COMPUTED_FIELDS:
+            for value in (False, None, {}, 1):
+                document = plan()
+                document["resource_changes"][0]["change"]["after_unknown"][field] = value
+                with self.subTest(field=field, value=value), self.assertRaises(guard.PolicyError):
+                    guard.validate_plan(document)
+        document = plan()
+        document["resource_changes"][0]["change"]["after_unknown"]["extra_false"] = False
+        with self.assertRaises(guard.PolicyError):
+            guard.validate_plan(document)
 
     def test_reject_plan_status_drift_outputs_and_checks(self):
         for changes in [
@@ -174,12 +195,13 @@ class ReleasePolicyTests(unittest.TestCase):
 
     def execute(self, document, *, plan_only=False, retirement_preflight=False, fail=None, corrupt=False):
         calls = []
+        self.receipts = []
 
         def fake_command(args, output, accepted=(0,)):
             operation = args[2]
             calls.append(args)
             if fail == operation:
-                raise guard.PolicyError("secret fixture must never be logged")
+                raise guard.PolicyError("COMMAND_FAILED")
             if operation == "version":
                 output.write_text('{"terraform_version":"1.17.0"}')
             elif operation == "plan":
@@ -198,11 +220,12 @@ class ReleasePolicyTests(unittest.TestCase):
             (root / ".terraform-version").write_text("1.17.0")
             with patch.dict(os.environ, {}, clear=True), \
                     patch.object(guard, "command", side_effect=fake_command), \
+                    patch.object(guard, "receipt_outcome", side_effect=lambda *item: self.receipts.append(item)), \
                     contextlib.redirect_stdout(io.StringIO()) as console:
                 try:
                     guard.deploy(root, plan_only=plan_only, retirement_preflight=retirement_preflight)
-                except guard.PolicyError:
-                    pass
+                except guard.PolicyError as error:
+                    guard.report_failure(error)
             self.assertNotIn("secret fixture", console.getvalue())
         return calls, console.getvalue()
 
@@ -226,6 +249,67 @@ class ReleasePolicyTests(unittest.TestCase):
             with self.subTest(options=options):
                 calls, _ = self.execute(document, **options)
                 self.assertNotIn("apply", [call[2] for call in calls])
+
+    def test_fixed_codes_distinguish_every_command_stage(self):
+        for operation in ("version", "init", "validate", "plan", "show", "apply"):
+            with self.subTest(operation=operation):
+                _, console = self.execute(plan(), fail=operation)
+                self.assertIn(f"stage={operation.upper()} reason=COMMAND_FAILED", console)
+        for document, options, code in [
+            (plan() | {"complete": False}, {}, "stage=POLICY reason=PLAN_NOT_COMPLETE"),
+            (plan() | {"resource_drift": [{}]}, {}, "stage=POLICY reason=UNEXPECTED_DRIFT"),
+            (plan(), {"corrupt": True}, "stage=INTEGRITY reason=PLAN_DIGEST_CHANGED"),
+            (plan(), {"retirement_preflight": True}, "stage=POLICY reason=RETIREMENT_NOT_EMPTY"),
+        ]:
+            _, console = self.execute(document, **options)
+            self.assertIn(code, console)
+
+    def test_error_reporting_never_echoes_arbitrary_exception_or_code_values(self):
+        for error in (
+            ValueError("sensitive-fixture"), guard.PolicyError("sensitive-fixture", "sensitive-fixture"),
+        ):
+            with contextlib.redirect_stdout(io.StringIO()) as console:
+                guard.report_failure(error)
+            self.assertIn("stage=RUNNER reason=INTERNAL_FAILURE", console.getvalue())
+            self.assertNotIn("sensitive-fixture", console.getvalue())
+        with self.assertRaises(guard.PolicyError) as error:
+            with guard.stage("SHOW"):
+                raise ValueError("sensitive-fixture")
+        self.assertEqual((error.exception.stage, error.exception.reason), ("SHOW", "INVALID_DATA_OR_IO"))
+        with self.assertRaises(guard.PolicyError) as error:
+            with guard.stage("APPLY"):
+                raise OSError("sensitive-fixture")
+        self.assertEqual((error.exception.stage, error.exception.reason), ("APPLY", "INVALID_DATA_OR_IO"))
+
+    def test_receipts_describe_only_actual_attempts_and_truthful_outcomes(self):
+        cases = [
+            ({}, [("plan", "failure"), ("plan", "success"), ("apply", "failure"), ("apply", "success")]),
+            ({"fail": "init"}, []),
+            ({"fail": "validate"}, []),
+            ({"fail": "plan"}, [("plan", "failure")]),
+            ({"fail": "show"}, [("plan", "failure")]),
+            ({"fail": "apply"}, [("plan", "failure"), ("plan", "success"), ("apply", "failure")]),
+            ({"plan_only": True}, [("plan", "failure"), ("plan", "success")]),
+        ]
+        for options, expected in cases:
+            with self.subTest(options=options):
+                self.execute(plan(), **options)
+                self.assertEqual(self.receipts, expected)
+        self.execute(plan() | {"resource_changes": [], "applyable": False})
+        self.assertEqual(self.receipts, [("plan", "failure"), ("plan", "success")])
+        self.execute(plan() | {"complete": False})
+        self.assertEqual(self.receipts, [("plan", "failure")])
+
+    def test_receipt_outputs_are_bounded_metadata_only(self):
+        with tempfile.TemporaryDirectory() as directory:
+            output = Path(directory) / "outputs"
+            with patch.dict(os.environ, {"GITHUB_OUTPUT": str(output)}):
+                guard.receipt_outcome("plan", "failure")
+                guard.receipt_outcome("plan", "success")
+                guard.receipt_outcome("apply", "failure")
+                with self.assertRaises(guard.PolicyError):
+                    guard.receipt_outcome("arbitrary", "sensitive-value")
+            self.assertEqual(output.read_text(), "plan_outcome=failure\nplan_outcome=success\napply_outcome=failure\n")
 
     def test_retirement_preflight_requires_empty_plan_and_never_retires_or_applies(self):
         empty = plan() | {"resource_changes": [], "applyable": False}
@@ -267,10 +351,17 @@ class ReleasePolicyTests(unittest.TestCase):
             self.assertNotIn("actions/terraform-plan", text)
             self.assertNotIn("upload-artifact", text)
             self.assertNotIn("continue-on-error", text)
+            self.assertIn("terraform-receipt@027d7e31bb32b734090aaed01b36d74f1d658b61", text)
+            self.assertIn("if: always() && steps.guard.outputs.plan_outcome != ''", text)
+            self.assertIn("outcome: ${{ steps.guard.outputs.plan_outcome }}", text)
+            self.assertIn("context-directory: ${{ steps.toolchain.outputs.directory }}", text)
             if name == "deploy-prd.yml":
                 self.assertNotIn("--plan-only", text)
+                self.assertIn("if: always() && steps.guard.outputs.apply_outcome != ''", text)
+                self.assertIn("outcome: ${{ steps.guard.outputs.apply_outcome }}", text)
             else:
                 self.assertIn("scripts/guard_idp_cutover.py --plan-only", text)
+                self.assertNotIn("operation: apply", text)
         pr = (workflows / "pr-verify.yml").read_text()
         self.assertIn("terraform-plan-prd:", pr)
         self.assertIn("if: github.event.pull_request.draft == false", pr)
@@ -285,6 +376,7 @@ class ReleasePolicyTests(unittest.TestCase):
         self.assertEqual(result.returncode, 1)
         self.assertIn(b"release restriction remains active", result.stdout)
         self.assertIn(b"docs/idp-collector-cutover.md", result.stdout)
+        self.assertIn(b"stage=PREFLIGHT reason=UNSAFE_ENVIRONMENT", result.stdout)
         self.assertNotIn(b"sensitive-fixture", result.stdout + result.stderr)
         self.assertEqual(result.stderr, b"")
 

@@ -126,8 +126,13 @@ no-op. A genuinely empty repeat plan succeeds without applying anything.
 Only AzureRM 5.10.0's narrowly enumerated computed unknowns are accepted for the
 new assignment: `id`, `name`, `role_definition_id`, `condition_version` and
 `skip_service_principal_aad_check`. Principal, scope, principal type and
-`role_definition_name` must be known and exact. A known role-definition ID must
-match the built-in Secrets User role. A computed condition version is accepted
+`role_definition_name` must be known and exact. The entire `after_unknown` map
+must match this exact computed-field set with every value `true`; no new unknown
+or known computed-field substitutions are accepted. The entire `after` map must
+match the four exact authorization values plus known-null `condition`,
+`delegated_managed_identity_resource_id`, `description` and `timeouts`. Extra
+known fields, changed optional values and missing fields are rejected, even if a
+future provider would accept them. A computed condition version is accepted
 only while the condition itself is known null. A mock-provider integration test
 generates the actual locked provider's resource-change shape; this is not a
 production-plan fixture or a copy of secret-bearing state.
@@ -144,6 +149,16 @@ printed, uploaded, posted to PRs or handed to another job. Private temporary fil
 are removed on normal success or failure; interrupted hosted runners are
 ephemeral. Logs contain only fixed, nonsecret policy/execution summaries. A
 failure deliberately does not echo provider diagnostics or rejected plan values.
+It emits `IDP_CUTOVER_FAILURE stage=<fixed-code> reason=<fixed-code>`:
+stages distinguish preflight, version, init, validate, plan, show, policy,
+integrity and apply. Command failures use `COMMAND_FAILED`; malformed data/I/O
+uses `INVALID_DATA_OR_IO`. Policy reasons distinguish incomplete plans, drift,
+moves/imports, unexpected managed changes, output changes, grant known/unknown
+shape, retirement non-empty and changed binary digest. Other policy violations
+use `POLICY_REJECTED`. Unexpected runner failures use
+`stage=RUNNER reason=INTERNAL_FAILURE`. Codes never include resource values or
+exception text. Use the stage to identify which secured operation needs
+investigation; do not recover private diagnostics by uploading them.
 Do not enable Terraform debug logging, add artifact uploads or print private files
 to diagnose it. Investigation of a blocked plan belongs in a separately approved
 secured context, without exposing raw plan/state/JSON or secret material.
@@ -157,6 +172,17 @@ nothing. Its result proves that its own commit/state snapshot satisfied policy;
 it is **not** the plan later applied on `main`. The main run creates a fresh
 complete plan and must pass the same policy independently before applying it.
 This does not depend on changing Production environment protections.
+
+All three paths preserve pinned `terraform-receipt` metadata-only evidence for
+the `github-terraform-receipts` pipeline. An attempted plan starts with failure
+status and becomes success only after parsing, policy and integrity checks;
+a command or policy failure therefore records failure. Init/validate failures
+before plan execution do not claim a plan attempt. Apply evidence exists only
+when the saved-plan apply was actually attempted, and records its success/failure;
+an empty repeat or plan-only run never emits an apply receipt. The pinned action
+uploads only bounded execution metadata from the toolchain context, not private
+plan/state/JSON or diagnostics. These receipts are the only uploaded artifacts
+added by the guarded paths; they do not reuse, authorize or expose a saved plan.
 
 This is deliberately a **release-scoped restriction**, not a permanent estate
 deployment policy. It will block subsequent legitimate infrastructure changes
