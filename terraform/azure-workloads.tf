@@ -180,15 +180,6 @@ resource "github_repository_environment" "nuget" {
   repository  = github_repository.workload[each.value.name].name
 }
 
-resource "github_actions_environment_secret" "nuget_api_key" {
-  for_each = { for workload in local.all_workloads : workload.name => workload if try(workload.github.add_nuget_environment, false) }
-
-  repository      = github_repository.workload[each.value.name].name
-  environment     = github_repository_environment.nuget[each.key].environment
-  secret_name     = "NUGET_API_KEY"
-  plaintext_value = data.azurerm_key_vault_secret.nuget_token.value
-}
-
 resource "github_actions_environment_variable" "nuget_user" {
   for_each = github_repository_environment.nuget
 
