@@ -64,7 +64,9 @@ jobs:
       - name: Validate workload Terraform storage containers with mocked providers
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/workload-terraform-storage.tftest.hcl
 
-      - name: Test runtime GitHub App bootstrap
+      - name: Test runtime GitHub App bootstrap and release deployment guard
+        env:
+          CUTOVER_TEST_TERRAFORM: terraform
         run: |
           python3 -m pip install --requirement scripts/requirements-github-apps.txt
           python3 -m unittest discover -s scripts -p 'test_*.py'

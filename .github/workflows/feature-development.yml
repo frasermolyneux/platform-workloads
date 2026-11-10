@@ -23,17 +23,23 @@ jobs:
 
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
-
-      - uses: frasermolyneux/actions/terraform-plan@027d7e31bb32b734090aaed01b36d74f1d658b61 # terraform-plan/v5.0.0
         with:
-          terraform-folder: "terraform"
+          persist-credentials: false
+
+      - uses: frasermolyneux/actions/terraform-setup@594500f81ee7fdb65616bba793f8cdf9025d57b2 # terraform-setup/v1.1.0
+        with:
+          terraform-folder: terraform
           terraform-version: "1.17.0"
-          terraform-var-file: "tfvars/prd.tfvars"
-          terraform-backend-file: "backends/prd.backend.hcl"
-          AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
-          AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
-          AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          terraform_wrapper: "false"
+      - name: Validate the private Production plan without applying
+        run: python3 scripts/guard_idp_cutover.py --plan-only
         env:
+          ARM_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+          ARM_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+          ARM_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          ARM_USE_OIDC: "true"
+          ARM_USE_AZUREAD: "true"
+          TF_IN_AUTOMATION: "true"
           GITHUB_TOKEN: ${{ secrets.TERRAFORM_GITHUB_TOKEN }}
           CLOUDFLARE_API_KEY: ${{ secrets.CLOUDFLARE_API_KEY }}
           CLOUDFLARE_EMAIL: ${{ secrets.CLOUDFLARE_EMAIL }}
