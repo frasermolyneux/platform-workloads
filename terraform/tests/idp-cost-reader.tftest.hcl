@@ -53,7 +53,7 @@ run "resolve_authoritative_collector" {
     condition = (
       data.github_actions_environment_variables.idp_collector.full_name == "frasermolyneux/platform-developer-portal" &&
       data.github_actions_environment_variables.idp_collector.environment == "Production" &&
-      data.azuread_application.idp_collector.display_name == "MX.IO IDP CI collector (prd)" &&
+      data.azuread_application.idp_collector.display_name == "MX.IO IDP host collector (prd)" &&
       data.azuread_application.idp_collector.client_id == "00000000-0000-0000-0000-000000000001" &&
       data.azuread_service_principal.idp_collector.client_id == "00000000-0000-0000-0000-000000000001" &&
       data.azuread_service_principal.idp_collector.object_id == "00000000-0000-0000-0000-000000000002"

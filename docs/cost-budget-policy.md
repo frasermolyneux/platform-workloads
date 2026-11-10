@@ -81,12 +81,19 @@ requires a reviewed migration, not automatic replacement.
 Production authority. IDP owns the collector identity and publishes its client ID
 as `IDP_COLLECTOR_CLIENT_ID` in the repository's `Production` GitHub environment.
 The producer checks that variable against the independently resolved, unique
-Entra application `MX.IO IDP CI collector (prd)` in its deployment tenant, then
+Entra application `MX.IO IDP host collector (prd)` in its deployment tenant, then
 resolves the service principal from the checked application. Missing, ambiguous,
 malformed or mismatched identities fail the plan. Changing only the GitHub
 variable cannot redirect grants; Entra registration changes remain a trusted
 directory-administration operation. There is no reverse IDP state dependency or
 copied principal ID.
+
+The host worker uses the existing collector application and service principal
+with certificate authentication; the display-name change does not replace that
+identity or its subscription assignments. The portal application does not receive
+cost access. Apply the IDP identity rename before planning this stack, retaining
+the `IDP_COLLECTOR_CLIENT_ID` publication. See the
+[collector cutover guide](idp-collector-cutover.md) for ordering and host secret access.
 
 The locked GitHub provider's plural environment-variable data source persists
 all nonsecret IDP Production variable values in producer state, not only the
