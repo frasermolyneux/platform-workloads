@@ -187,6 +187,69 @@ def require(condition, reason="POLICY_REJECTED"):
         raise PolicyError(reason)
 
 
+def validate_token_usage_drift(plan):
+    drift = plan["resource_drift"]
+    changes = plan.get("resource_changes")
+    require(isinstance(drift, list) and len(drift) == 1 and isinstance(changes, list))
+    configured = plan.get("configuration", {}).get("root_module", {}).get("resources", [])
+    require(isinstance(configured, list))
+    declarations = [
+        item for item in configured
+        if isinstance(item, dict) and item.get("address") == "cloudflare_api_token.workload"
+    ]
+    require(len(declarations) == 1 and declarations[0].get("mode") == "managed")
+    require("for_each_expression" in declarations[0])
+    for resource in drift:
+        require(isinstance(resource, dict))
+        address = resource.get("address")
+        require(isinstance(address, str) and address.startswith('cloudflare_api_token.workload["'))
+        require(address.endswith('"]'))
+        index = json.loads(address[len("cloudflare_api_token.workload"):][1:-1])
+        require(isinstance(index, str) and bool(index))
+        require(address == f"cloudflare_api_token.workload[{json.dumps(index, ensure_ascii=False)}]")
+        matches = [item for item in changes if isinstance(item, dict) and item.get("address") == address]
+        require(len(matches) == 1)
+        match = matches[0]
+        for item in (resource, match):
+            require(item.get("mode") == "managed" and item.get("type") == "cloudflare_api_token")
+            require(item.get("name") == "workload" and item.get("index") == index)
+            require(item.get("provider_name") == "registry.terraform.io/cloudflare/cloudflare")
+            require("previous_address" not in item and "deposed" not in item)
+            change = item.get("change")
+            require(isinstance(change, dict) and "importing" not in change)
+            require(set(change) <= {
+                "actions", "before", "after", "after_unknown", "before_sensitive", "after_sensitive",
+            })
+            require(change.get("after_unknown") == {})
+        change = resource["change"]
+        require(change.get("actions") == ["update"])
+        before, after = change.get("before"), change.get("after")
+        require(isinstance(before, dict) and isinstance(after, dict))
+        require(set(before) == set(after) == set(TOKEN_FIELD_CLASSES))
+        require(
+            json.dumps({key: value for key, value in before.items() if key != "last_used_on"}, sort_keys=True)
+            == json.dumps({key: value for key, value in after.items() if key != "last_used_on"}, sort_keys=True)
+        )
+        require(before["last_used_on"] != after["last_used_on"])
+        require(all(value is None or isinstance(value, str) for value in (
+            before["last_used_on"], after["last_used_on"],
+        )))
+        require(all(isinstance(after[field], str) and bool(after[field]) for field in ("id", "name", "value")))
+        require(isinstance(after["policies"], list) and bool(after["policies"]))
+        require(after["condition"] is None or isinstance(after["condition"], dict))
+        require(after["status"] in ("active", "disabled", "expired"))
+        require(all(after[field] is None or isinstance(after[field], str) for field in (
+            "expires_on", "not_before", "issued_on", "modified_on",
+        )))
+        noop = match["change"]
+        require(noop.get("actions") == ["no-op"])
+        require(
+            json.dumps(noop.get("before"), sort_keys=True)
+            == json.dumps(noop.get("after"), sort_keys=True)
+            == json.dumps(after, sort_keys=True)
+        )
+
+
 @contextmanager
 def stage(name):
     try:
@@ -206,11 +269,14 @@ def validate_plan(plan):
     require(isinstance(plan.get("applyable"), bool))
     if plan.get("resource_drift"):
         try:
-            diagnose_drift(plan["resource_drift"])
-            diagnose_drift(plan.get("resource_changes", []), managed_changes=True)
-        except (ValueError, KeyError, TypeError, AttributeError, RecursionError):
-            print("IDP_CUTOVER_DIAGNOSTIC INVALID_SHAPE")
-        raise PolicyError("UNEXPECTED_DRIFT")
+            validate_token_usage_drift(plan)
+        except (PolicyError, ValueError, KeyError, TypeError, AttributeError, RecursionError):
+            try:
+                diagnose_drift(plan["resource_drift"])
+                diagnose_drift(plan.get("resource_changes", []), managed_changes=True)
+            except (ValueError, KeyError, TypeError, AttributeError, RecursionError):
+                print("IDP_CUTOVER_DIAGNOSTIC INVALID_SHAPE")
+            raise PolicyError("UNEXPECTED_DRIFT") from None
     require(not plan.get("deferred_changes"))
     require(not plan.get("action_invocations"))
     require(not plan.get("diagnostics"))
@@ -316,7 +382,9 @@ def deploy(root, plan_only=False, retirement_preflight=False):
         with stage("SHOW"):
             command(terraform + ["show", "-json", str(saved)], document)
         with stage("POLICY"):
-            creates = validate_plan(json.loads(document.read_text()))
+            inspected_plan = json.loads(document.read_text())
+            creates = validate_plan(inspected_plan)
+            require(not retirement_preflight or not inspected_plan.get("resource_drift"), "UNEXPECTED_DRIFT")
             require(not retirement_preflight or creates == 0, "RETIREMENT_NOT_EMPTY")
         with stage("INTEGRITY"):
             require(hashlib.sha256(saved.read_bytes()).digest() == digest, "PLAN_DIGEST_CHANGED")

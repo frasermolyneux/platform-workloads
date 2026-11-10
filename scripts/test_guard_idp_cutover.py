@@ -1,4 +1,5 @@
 import contextlib
+import copy
 import io
 import json
 import os
@@ -39,7 +40,130 @@ def plan():
     }
 
 
+def token_usage_plan():
+    document = plan()
+    before = {
+        "id": "test-token-id", "name": "test-token-name", "value": "private-token-fixture",
+        "policies": [{"effect": "allow", "permission_groups": [{"id": "test-group"}],
+                      "resources": '{"test-account":"*"}'}],
+        "condition": None, "expires_on": None, "not_before": None, "status": "active",
+        "issued_on": "2026-01-01T00:00:00Z", "modified_on": "2026-01-01T00:00:00Z",
+        "last_used_on": None,
+    }
+    after = before | {"last_used_on": "2026-11-10T00:00:00Z"}
+    resource = {
+        "address": 'cloudflare_api_token.workload["test-prd-worker"]',
+        "mode": "managed", "type": "cloudflare_api_token", "name": "workload",
+        "index": "test-prd-worker", "provider_name": "registry.terraform.io/cloudflare/cloudflare",
+        "change": {
+            "actions": ["update"], "before": before, "after": after, "after_unknown": {},
+            "before_sensitive": {"value": True}, "after_sensitive": {"value": True},
+        },
+    }
+    document["resource_drift"] = [resource]
+    noop = copy.deepcopy(resource)
+    noop["change"].update(actions=["no-op"], before=copy.deepcopy(after))
+    document["resource_changes"].append(noop)
+    document["configuration"] = {"root_module": {"resources": [{
+        "address": "cloudflare_api_token.workload", "mode": "managed",
+        "for_each_expression": {"references": ["local.cloudflare_tokens"]},
+    }]}}
+    return document
+
+
 class ReleasePolicyTests(unittest.TestCase):
+    def test_only_token_usage_refresh_with_exact_noop_can_accompany_grant_or_empty_repeat(self):
+        document = token_usage_plan()
+        self.assertEqual(guard.validate_plan(document), 1)
+        document["resource_changes"].pop(0)
+        document["applyable"] = False
+        self.assertEqual(guard.validate_plan(document), 0)
+        document["resource_drift"][0]["change"]["before"]["last_used_on"] = "2026-11-09T00:00:00Z"
+        self.assertEqual(guard.validate_plan(document), 0)
+
+    def test_token_usage_exception_rejects_every_other_field_change(self):
+        for field in guard.TOKEN_FIELD_CLASSES.keys() - {"last_used_on"}:
+            document = token_usage_plan()
+            document["resource_drift"][0]["change"]["before"][field] = "changed-private-fixture"
+            with self.subTest(field=field), contextlib.redirect_stdout(io.StringIO()):
+                with self.assertRaises(guard.PolicyError) as error:
+                    guard.validate_plan(document)
+                self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+
+    def test_token_usage_exception_rejects_identity_shapes_unknowns_and_actions(self):
+        cases = []
+        for collection in ("resource_drift", "resource_changes"):
+            index = 0 if collection == "resource_drift" else 1
+            for key, value in (
+                ("mode", "data"), ("type", "other"), ("name", "other"),
+                ("provider_name", "other"), ("index", "different"),
+                ("address", 'cloudflare_api_token.workload["different"]'),
+                ("previous_address", "other"), ("deposed", "other"),
+            ):
+                document = token_usage_plan()
+                document[collection][index][key] = value
+                cases.append(document)
+            for key, value in (
+                ("actions", ["create"]), ("actions", ["delete"]), ("actions", ["update"]),
+                ("actions", ["delete", "create"]), ("actions", ["create", "delete"]),
+                ("actions", ["read"]), ("actions", [{}]),
+                ("after_unknown", {"last_used_on": True}), ("after_unknown", None),
+                ("after_unknown", {"value": False}), ("importing", {}),
+                ("future_field", "private-fixture"), ("before", []), ("after", None),
+            ):
+                if key == "actions" and value == ["update"] and collection == "resource_drift":
+                    continue
+                document = token_usage_plan()
+                document[collection][index]["change"][key] = value
+                cases.append(document)
+        for change in (
+            lambda doc: doc.pop("configuration"),
+            lambda doc: doc["configuration"]["root_module"]["resources"].clear(),
+            lambda doc: doc["resource_changes"].pop(),
+            lambda doc: doc["resource_changes"].append(copy.deepcopy(doc["resource_changes"][1])),
+            lambda doc: doc["resource_drift"].append(copy.deepcopy(doc["resource_drift"][0])),
+            lambda doc: doc["resource_drift"].append({"address": "other", "change": {}}),
+            lambda doc: doc["resource_drift"][0]["change"]["after"].pop("value"),
+            lambda doc: doc["resource_drift"][0]["change"]["before"].pop("id"),
+            lambda doc: doc["resource_drift"][0]["change"].pop("after_unknown"),
+            lambda doc: doc["resource_changes"][1]["change"].pop("after_unknown"),
+            lambda doc: doc["resource_changes"][1]["change"]["after"].update(value="different"),
+            lambda doc: doc["resource_changes"][1]["change"]["before"].update(id="different"),
+            lambda doc: doc["resource_drift"][0]["change"]["before"].update(last_used_on="2026-11-10T00:00:00Z"),
+            lambda doc: doc["resource_drift"][0]["change"]["after"].update(last_used_on=True),
+            lambda doc: doc["resource_drift"][0]["change"]["before"].update(future_field=None),
+        ):
+            document = token_usage_plan()
+            change(document)
+            cases.append(document)
+        for number, document in enumerate(cases):
+            with self.subTest(case=number), contextlib.redirect_stdout(io.StringIO()) as console:
+                with self.assertRaises(guard.PolicyError) as error:
+                    guard.validate_plan(document)
+                self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+                self.assertNotIn("private-fixture", console.getvalue())
+
+    def test_token_usage_exception_does_not_relax_other_release_gates(self):
+        for change in (
+            lambda doc: doc["resource_changes"][0]["change"]["after"].update(principal_id="other"),
+            lambda doc: doc["resource_changes"][0]["change"]["after_unknown"].update(extra=True),
+            lambda doc: doc["output_changes"].update(other={"actions": ["update"]}),
+            lambda doc: doc["resource_changes"].append({
+                "mode": "managed", "address": "other", "change": {"actions": ["delete"]},
+            }),
+        ):
+            document = token_usage_plan()
+            change(document)
+            with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(guard.PolicyError):
+                guard.validate_plan(document)
+
+    def test_token_usage_comparison_does_not_normalize_nested_types(self):
+        document = token_usage_plan()
+        document["resource_drift"][0]["change"]["before"]["policies"][0]["resources"] = {"test": 1}
+        document["resource_drift"][0]["change"]["after"]["policies"][0]["resources"] = {"test": True}
+        with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(guard.PolicyError):
+            guard.validate_plan(document)
+
     def test_diagnostic_address_literals_cover_every_root_managed_declaration(self):
         root = Path(__file__).resolve().parents[1] / "terraform"
         declarations = set()
@@ -383,6 +507,23 @@ class ReleasePolicyTests(unittest.TestCase):
         self.assertNotIn("-target", " ".join(calls[3]))
         self.assertEqual(calls[4][-1], calls[5][-1])
         self.assertFalse(Path(calls[5][-1]).exists())
+
+    def test_runner_token_usage_drift_applies_only_saved_grant_and_retirement_still_rejects_drift(self):
+        calls, console = self.execute(token_usage_plan())
+        self.assertIn("Approved saved plan applied successfully.", console)
+        self.assertEqual(calls[-1][2], "apply")
+        self.assertEqual(calls[-2][-1], calls[-1][-1])
+        self.assertFalse(Path(calls[-1][-1]).parent.exists())
+        calls, console = self.execute(token_usage_plan(), plan_only=True)
+        self.assertNotIn("apply", [call[2] for call in calls])
+        self.assertIn("Plan-only check", console)
+        document = token_usage_plan()
+        document["resource_changes"].pop(0)
+        document["applyable"] = False
+        calls, console = self.execute(document, retirement_preflight=True)
+        self.assertIn("stage=POLICY reason=UNEXPECTED_DRIFT", console)
+        self.assertNotIn("apply", [call[2] for call in calls])
+        self.assertFalse(Path(calls[-1][-1]).parent.exists())
 
     def test_runner_never_applies_failed_invalid_or_changed_plan(self):
         invalid = plan() | {"complete": False}

@@ -115,7 +115,7 @@ refresh suppression or provider changes.
 
 The runner privately converts that saved binary plan to JSON. It requires a
 complete, error-free Terraform 1.17.0 plan and rejects deferred changes,
-non-passing checks, drift, moves, imports, action invocations and output changes.
+non-passing checks, unexpected drift, moves, imports, action invocations and output changes.
 The only allowed managed change is one create at
 `azurerm_role_assignment.idp_collector_github_app_reader`, with the exact live
 principal, role, principal type and versionless central-secret scope documented
@@ -164,7 +164,7 @@ base addresses, fixed action classifications and allowlisted changed top-level
 field names. Instance keys are always redacted; unknown addresses, actions or
 fields use fixed markers. No before/after values or nested names are emitted,
 and output is capped at 20 entries plus a fixed truncation marker. This diagnostic
-does not relax drift rejection or preserve private plan files.
+does not itself authorize drift or preserve private plan files.
 For Cloudflare API tokens, every top-level field in the locked 5.22.0 schema is
 classified with fixed `REQUIRED`, `OPTIONAL`, `OPTIONAL_COMPUTED`, `COMPUTED` or
 `COMPUTED_SENSITIVE` labels. These describe provider schema capability, not a
@@ -189,6 +189,23 @@ rather than mutated during Read. None of those facts identifies the present
 drift without the private classification. The integration test verifies this
 complete literal field/class map against the installed locked provider schema
 via mock-only Terraform test output, without contacting Cloudflare.
+
+The sole refresh exception is **one** `cloudflare_api_token.workload` string-keyed
+instance with UPDATE drift changing only `last_used_on`. The root configuration
+must still declare that managed `for_each` resource. Both snapshots must contain
+exactly all 11 locked schema fields, with every other value (including identity,
+permissions, status, restrictions and sensitive token value) identical, without
+normalization. A unique managed NO-OP change at the **same exact address/index**
+must have both snapshots equal to the refreshed drift snapshot. Both records
+must match the Cloudflare provider/type/name, have explicitly empty
+`after_unknown`, and contain no move, deposed, import or unknown change fields.
+Missing/duplicate matches, other drift or token mutation still reject. The role
+grant's exact schema gate, unrelated-action/output checks and same-saved-plan
+apply remain authoritative; diagnostic `UNKNOWN_FIELD` grants no permission.
+The retirement preflight continues to reject **all** drift, including this
+metadata exception. No token, catalog, provider or workflow configuration is
+changed by this exception.
+
 Do not enable Terraform debug logging, add artifact uploads or print private files
 to diagnose it. Investigation of a blocked plan belongs in a separately approved
 secured context, without exposing raw plan/state/JSON or secret material.
