@@ -21,6 +21,68 @@ SCOPE = (
 COMPUTED_FIELDS = {
     "id", "name", "role_definition_id", "condition_version", "skip_service_principal_aad_check",
 }
+DIAGNOSTIC_ADDRESSES = frozenset("""
+time_rotating.rotate random_id.environment_id random_id.workload_id
+github_repository.workload github_repository_ruleset.workload github_issue_label.workload
+github_repository_environment.workload github_repository_environment.nuget
+github_actions_environment_variable.nuget_user github_actions_environment_variable.client_id
+github_actions_environment_variable.subscription_id github_actions_environment_variable.tenant_id
+github_actions_variable.repository_analysis github_actions_variable.repository_standards
+github_actions_secret.github_app_pem github_actions_environment_secret.cloudflare_token
+azuread_application.workload azuread_service_principal.workload
+azuread_application.status_monitoring_reader azuread_service_principal.status_monitoring_reader
+azuread_application.status_service azuread_service_principal.status_service
+azuread_application.maps_service azuread_service_principal.maps_service
+azuread_application_federated_identity_credential.github_workload
+azuread_application_federated_identity_credential.github_workload_immutable
+azapi_resource.workload_resource_group azurerm_resource_group.rg
+azurerm_resource_group.workload_terraform azurerm_storage_account.workload
+azurerm_storage_container.workload azurerm_storage_container.workload_tfplan
+azurerm_storage_management_policy.workload_tfplan
+azurerm_role_assignment.workload azurerm_role_assignment.idp_cost_reader
+azurerm_role_assignment.idp_collector_github_app_reader
+azurerm_key_vault.kv azurerm_key_vault_secret.github_app_pem cloudflare_api_token.workload
+""".split())
+DIAGNOSTIC_FIELDS = frozenset("""
+id name display_name description tags location scope principal_id principal_type
+role_definition_id role_definition_name condition condition_version
+rotation_rfc3339 rfc3339 rotation_days day hour minute month second unix year
+visibility topics vulnerability_alerts archived default_branch rules
+enforcement bypass_actors etag output body identity owners app_role
+client_id object_id tenant_id service_principal_names identifier_uris
+value plaintext_value encrypted_value updated_at created_at
+""".split())
+
+
+def diagnose_drift(drift):
+    """Classify privately; emit only source allowlist literals and fixed markers."""
+    for resource in drift[:20]:
+        raw_address = resource.get("address")
+        base = raw_address.split("[", 1)[0] if isinstance(raw_address, str) else None
+        address = base if base in DIAGNOSTIC_ADDRESSES else "UNKNOWN_ADDRESS"
+        instance = "INSTANCE_REDACTED" if isinstance(raw_address, str) and "[" in raw_address else "SINGLETON"
+        change = resource.get("change", {})
+        actions = change.get("actions")
+        action = {
+            ("no-op",): "NO_OP", ("update",): "UPDATE", ("delete",): "DELETE",
+            ("create",): "CREATE", ("delete", "create"): "REPLACE",
+            ("create", "delete"): "REPLACE", ("read",): "READ",
+        }.get(tuple(actions) if isinstance(actions, list) and all(isinstance(item, str) for item in actions) else (), "UNKNOWN_ACTION")
+        before, after = change.get("before"), change.get("after")
+        if isinstance(before, dict) and isinstance(after, dict):
+            fields = {
+                key if key in DIAGNOSTIC_FIELDS else "UNKNOWN_FIELD"
+                for key in before.keys() | after.keys()
+                if key not in before or key not in after or before[key] != after[key]
+            }
+        else:
+            fields = {"NON_OBJECT_CHANGE"}
+        print(
+            f"IDP_CUTOVER_DRIFT address={address} instance={instance} action={action} "
+            f"fields={','.join(sorted(fields)) or 'NO_TOP_LEVEL_CHANGE'}"
+        )
+    if len(drift) > 20:
+        print("IDP_CUTOVER_DRIFT MORE_ENTRIES_REDACTED")
 
 
 class PolicyError(Exception):
@@ -52,7 +114,9 @@ def validate_plan(plan):
     require(plan.get("terraform_version") == "1.17.0")
     require(plan.get("errored") is False and plan.get("complete") is True, "PLAN_NOT_COMPLETE")
     require(isinstance(plan.get("applyable"), bool))
-    require(not plan.get("resource_drift"), "UNEXPECTED_DRIFT")
+    if plan.get("resource_drift"):
+        diagnose_drift(plan["resource_drift"])
+        raise PolicyError("UNEXPECTED_DRIFT")
     require(not plan.get("deferred_changes"))
     require(not plan.get("action_invocations"))
     require(not plan.get("diagnostics"))

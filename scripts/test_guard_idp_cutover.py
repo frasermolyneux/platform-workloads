@@ -39,6 +39,44 @@ def plan():
 
 
 class ReleasePolicyTests(unittest.TestCase):
+    def test_drift_diagnostic_only_emits_allowlisted_literals_and_fixed_markers(self):
+        drift = [
+            {
+                "address": 'github_repository.workload["private-sensitive-fixture"]',
+                "change": {
+                    "actions": ["update"],
+                    "before": {"description": "sensitive-before", "untrusted-sensitive-key": 1},
+                    "after": {"description": "sensitive-after", "untrusted-sensitive-key": 2},
+                },
+            },
+            {
+                "address": "sensitive-unknown-address",
+                "change": {"actions": ["sensitive-unknown-action"], "before": None, "after": None},
+            },
+            {
+                "address": "time_rotating.rotate",
+                "change": {"actions": ["delete"], "before": {"id": "sensitive"}, "after": None},
+            },
+        ]
+        with contextlib.redirect_stdout(io.StringIO()) as console:
+            with self.assertRaises(guard.PolicyError) as error:
+                guard.validate_plan(plan() | {"resource_drift": drift})
+        self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+        self.assertEqual(console.getvalue().splitlines(), [
+            "IDP_CUTOVER_DRIFT address=github_repository.workload instance=INSTANCE_REDACTED action=UPDATE fields=UNKNOWN_FIELD,description",
+            "IDP_CUTOVER_DRIFT address=UNKNOWN_ADDRESS instance=SINGLETON action=UNKNOWN_ACTION fields=NON_OBJECT_CHANGE",
+            "IDP_CUTOVER_DRIFT address=time_rotating.rotate instance=SINGLETON action=DELETE fields=NON_OBJECT_CHANGE",
+        ])
+        self.assertNotIn("sensitive", console.getvalue())
+
+    def test_drift_diagnostic_caps_entries_and_never_relaxes_policy(self):
+        drift = [{"address": "not-allowed", "change": {"actions": ["update"], "before": {}, "after": {}}}] * 21
+        with contextlib.redirect_stdout(io.StringIO()) as console:
+            with self.assertRaises(guard.PolicyError):
+                guard.validate_plan(plan() | {"resource_drift": drift})
+        self.assertEqual(len(console.getvalue().splitlines()), 21)
+        self.assertIn("MORE_ENTRIES_REDACTED", console.getvalue())
+
     def test_exact_create_and_empty_repeat(self):
         self.assertEqual(guard.validate_plan(plan()), 1)
         empty = plan() | {"resource_changes": [], "applyable": False}

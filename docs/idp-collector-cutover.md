@@ -159,6 +159,12 @@ use `POLICY_REJECTED`. Unexpected runner failures use
 `stage=RUNNER reason=INTERNAL_FAILURE`. Codes never include resource values or
 exception text. Use the stage to identify which secured operation needs
 investigation; do not recover private diagnostics by uploading them.
+For blocked drift diagnosis, `IDP_CUTOVER_DRIFT` emits only checked-in resource
+base addresses, fixed action classifications and allowlisted changed top-level
+field names. Instance keys are always redacted; unknown addresses, actions or
+fields use fixed markers. No before/after values or nested names are emitted,
+and output is capped at 20 entries plus a fixed truncation marker. This diagnostic
+does not relax drift rejection or preserve private plan files.
 Do not enable Terraform debug logging, add artifact uploads or print private files
 to diagnose it. Investigation of a blocked plan belongs in a separately approved
 secured context, without exposing raw plan/state/JSON or secret material.
