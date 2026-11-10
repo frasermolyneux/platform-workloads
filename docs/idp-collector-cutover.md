@@ -165,6 +165,30 @@ field names. Instance keys are always redacted; unknown addresses, actions or
 fields use fixed markers. No before/after values or nested names are emitted,
 and output is capped at 20 entries plus a fixed truncation marker. This diagnostic
 does not relax drift rejection or preserve private plan files.
+For Cloudflare API tokens, every top-level field in the locked 5.22.0 schema is
+classified with fixed `REQUIRED`, `OPTIONAL`, `OPTIONAL_COMPUTED`, `COMPUTED` or
+`COMPUTED_SENSITIVE` labels. These describe provider schema capability, not a
+claim that a value was configured or a particular field drifted. On drift rejection,
+`IDP_CUTOVER_CHANGE` also classifies non-no-op managed changes in the same private
+plan, using the same redaction and a separate 20-entry cap; data reads/no-ops are
+omitted. The original drift failure remains authoritative.
+
+Schema evidence: Cloudflare provider tag `v5.22.0`, commit
+`a2efdc5786ae9726d56928dbfe91933bd92404ca`,
+[schema.go](https://github.com/cloudflare/terraform-provider-cloudflare/blob/a2efdc5786ae9726d56928dbfe91933bd92404ca/internal/services/api_token/schema.go)
+and [model.go](https://github.com/cloudflare/terraform-provider-cloudflare/blob/a2efdc5786ae9726d56928dbfe91933bd92404ca/internal/services/api_token/model.go). Required: `name`,
+`policies`; optional: `condition`, `expires_on`, `not_before`; optional/computed:
+`status`; computed: `id`, `issued_on`, `last_used_on`, `modified_on`; computed
+sensitive: `value`. The checked-in `cloudflare_api_token.workload` configures only
+`name` and `policies`; optional/computed capability is not evidence that `status`
+is configured.
+[resource.go](https://github.com/cloudflare/terraform-provider-cloudflare/blob/a2efdc5786ae9726d56928dbfe91933bd92404ca/internal/services/api_token/resource.go)
+refresh uses the token GET endpoint and preserves
+the prior token value; expired/revoked tokens are removed from refreshed state
+rather than mutated during Read. None of those facts identifies the present
+drift without the private classification. The integration test verifies this
+complete literal field/class map against the installed locked provider schema
+via mock-only Terraform test output, without contacting Cloudflare.
 Do not enable Terraform debug logging, add artifact uploads or print private files
 to diagnose it. Investigation of a blocked plan belongs in a separately approved
 secured context, without exposing raw plan/state/JSON or secret material.

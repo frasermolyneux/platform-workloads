@@ -93,16 +93,41 @@ enforcement bypass_actors etag output body identity owners app_role
 client_id object_id tenant_id service_principal_names identifier_uris
 value plaintext_value encrypted_value updated_at created_at
 """.split())
+TOKEN_FIELD_CLASSES = {
+    "name": "REQUIRED",
+    "policies": "REQUIRED",
+    "condition": "OPTIONAL",
+    "expires_on": "OPTIONAL",
+    "not_before": "OPTIONAL",
+    "status": "OPTIONAL_COMPUTED",
+    "id": "COMPUTED",
+    "issued_on": "COMPUTED",
+    "last_used_on": "COMPUTED",
+    "modified_on": "COMPUTED",
+    "value": "COMPUTED_SENSITIVE",
+}
 
 
-def diagnose_drift(drift):
+def diagnose_drift(drift, *, managed_changes=False):
     """Classify privately; emit only source allowlist literals and fixed markers."""
+    prefix = "IDP_CUTOVER_CHANGE" if managed_changes else "IDP_CUTOVER_DRIFT"
     if not isinstance(drift, list):
-        print("IDP_CUTOVER_DRIFT MALFORMED_DRIFT")
+        print(f"{prefix} MALFORMED_DRIFT")
         return
-    for resource in drift[:20]:
+    emitted = 0
+    for resource in drift:
+        if managed_changes and isinstance(resource, dict):
+            change = resource.get("change")
+            if resource.get("mode") == "data" or (
+                isinstance(change, dict) and change.get("actions") == ["no-op"]
+            ):
+                continue
+        if emitted == 20:
+            print(f"{prefix} MORE_ENTRIES_REDACTED")
+            break
+        emitted += 1
         if not isinstance(resource, dict):
-            print("IDP_CUTOVER_DRIFT MALFORMED_ENTRY")
+            print(f"{prefix} MALFORMED_ENTRY")
             continue
         raw_address = resource.get("address")
         base = raw_address.split("[", 1)[0] if isinstance(raw_address, str) else None
@@ -110,7 +135,7 @@ def diagnose_drift(drift):
         instance = "INSTANCE_REDACTED" if isinstance(raw_address, str) and "[" in raw_address else "SINGLETON"
         change = resource.get("change", {})
         if not isinstance(change, dict):
-            print(f"IDP_CUTOVER_DRIFT address={address} instance={instance} MALFORMED_CHANGE")
+            print(f"{prefix} address={address} instance={instance} MALFORMED_CHANGE")
             continue
         actions = change.get("actions")
         action = {
@@ -119,20 +144,35 @@ def diagnose_drift(drift):
             ("create", "delete"): "REPLACE", ("read",): "READ",
         }.get(tuple(actions) if isinstance(actions, list) and all(isinstance(item, str) for item in actions) else (), "UNKNOWN_ACTION")
         before, after = change.get("before"), change.get("after")
-        if isinstance(before, dict) and isinstance(after, dict):
-            fields = {
-                key if key in DIAGNOSTIC_FIELDS else "UNKNOWN_FIELD"
-                for key in before.keys() | after.keys()
+        # A create/delete has one null side; classify fields without emitting values.
+        if (isinstance(before, dict) or before is None) and (isinstance(after, dict) or after is None):
+            before, after = before or {}, after or {}
+            changed = {
+                key for key in before.keys() | after.keys()
                 if key not in before or key not in after or before[key] != after[key]
+            }
+            if managed_changes and isinstance(change.get("after_unknown"), dict):
+                changed.update(key for key, value in change["after_unknown"].items() if value)
+            fields = {
+                key if key in DIAGNOSTIC_FIELDS or (
+                    address == "cloudflare_api_token.workload" and key in TOKEN_FIELD_CLASSES
+                ) else "UNKNOWN_FIELD"
+                for key in changed
             }
         else:
             fields = {"NON_OBJECT_CHANGE"}
+        schema = ""
+        if address == "cloudflare_api_token.workload":
+            schema = " schema=" + (
+                ",".join(
+                    f"{field}:{TOKEN_FIELD_CLASSES.get(field, 'UNKNOWN_CLASS')}"
+                    for field in sorted(fields)
+                ) or "NO_TOP_LEVEL_CHANGE"
+            )
         print(
-            f"IDP_CUTOVER_DRIFT address={address} instance={instance} action={action} "
-            f"fields={','.join(sorted(fields)) or 'NO_TOP_LEVEL_CHANGE'}"
+            f"{prefix} address={address} instance={instance} action={action} "
+            f"fields={','.join(sorted(fields)) or 'NO_TOP_LEVEL_CHANGE'}{schema}"
         )
-    if len(drift) > 20:
-        print("IDP_CUTOVER_DRIFT MORE_ENTRIES_REDACTED")
 
 
 class PolicyError(Exception):
@@ -165,7 +205,11 @@ def validate_plan(plan):
     require(plan.get("errored") is False and plan.get("complete") is True, "PLAN_NOT_COMPLETE")
     require(isinstance(plan.get("applyable"), bool))
     if plan.get("resource_drift"):
-        diagnose_drift(plan["resource_drift"])
+        try:
+            diagnose_drift(plan["resource_drift"])
+            diagnose_drift(plan.get("resource_changes", []), managed_changes=True)
+        except (ValueError, KeyError, TypeError, AttributeError, RecursionError):
+            print("IDP_CUTOVER_DIAGNOSTIC INVALID_SHAPE")
         raise PolicyError("UNEXPECTED_DRIFT")
     require(not plan.get("deferred_changes"))
     require(not plan.get("action_invocations"))

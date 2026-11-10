@@ -61,7 +61,7 @@ class ReleasePolicyTests(unittest.TestCase):
         ):
             with self.subTest(drift=drift), contextlib.redirect_stdout(io.StringIO()) as console:
                 with self.assertRaises(guard.PolicyError) as error:
-                    guard.validate_plan(plan() | {"resource_drift": drift})
+                    guard.validate_plan(plan() | {"resource_drift": drift, "resource_changes": []})
                 self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
                 self.assertNotIn("sensitive-fixture", console.getvalue())
 
@@ -86,12 +86,12 @@ class ReleasePolicyTests(unittest.TestCase):
         ]
         with contextlib.redirect_stdout(io.StringIO()) as console:
             with self.assertRaises(guard.PolicyError) as error:
-                guard.validate_plan(plan() | {"resource_drift": drift})
+                guard.validate_plan(plan() | {"resource_drift": drift, "resource_changes": []})
         self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
         self.assertEqual(console.getvalue().splitlines(), [
             "IDP_CUTOVER_DRIFT address=github_repository.workload instance=INSTANCE_REDACTED action=UPDATE fields=UNKNOWN_FIELD,description",
-            "IDP_CUTOVER_DRIFT address=UNKNOWN_ADDRESS instance=SINGLETON action=UNKNOWN_ACTION fields=NON_OBJECT_CHANGE",
-            "IDP_CUTOVER_DRIFT address=time_rotating.rotate instance=SINGLETON action=DELETE fields=NON_OBJECT_CHANGE",
+            "IDP_CUTOVER_DRIFT address=UNKNOWN_ADDRESS instance=SINGLETON action=UNKNOWN_ACTION fields=NO_TOP_LEVEL_CHANGE",
+            "IDP_CUTOVER_DRIFT address=time_rotating.rotate instance=SINGLETON action=DELETE fields=id",
         ])
         self.assertNotIn("sensitive", console.getvalue())
 
@@ -99,9 +99,74 @@ class ReleasePolicyTests(unittest.TestCase):
         drift = [{"address": "not-allowed", "change": {"actions": ["update"], "before": {}, "after": {}}}] * 21
         with contextlib.redirect_stdout(io.StringIO()) as console:
             with self.assertRaises(guard.PolicyError):
-                guard.validate_plan(plan() | {"resource_drift": drift})
+                guard.validate_plan(plan() | {"resource_drift": drift, "resource_changes": []})
         self.assertEqual(len(console.getvalue().splitlines()), 21)
         self.assertIn("MORE_ENTRIES_REDACTED", console.getvalue())
+
+    def test_all_token_schema_fields_are_classified_without_values_or_nested_names(self):
+        fields = dict.fromkeys(guard.TOKEN_FIELD_CLASSES, "sensitive-fixture")
+        resource = {
+            "address": 'cloudflare_api_token.workload["private-fixture"]',
+            "change": {
+                "actions": ["update"], "before": dict.fromkeys(fields, None),
+                "after": fields | {"policies": [{"secret-map-key": "secret-value"}]},
+            },
+        }
+        with contextlib.redirect_stdout(io.StringIO()) as console:
+            guard.diagnose_drift([resource])
+        text = console.getvalue()
+        for field, classification in guard.TOKEN_FIELD_CLASSES.items():
+            self.assertIn(f"{field}:{classification}", text)
+        for forbidden in ("sensitive-fixture", "private-fixture", "secret-map-key", "secret-value"):
+            self.assertNotIn(forbidden, text)
+        self.assertIn("value:COMPUTED_SENSITIVE", text)
+        self.assertIn("status:OPTIONAL_COMPUTED", text)
+
+    def test_rejected_plan_also_classifies_non_noop_changes_without_accepting_them(self):
+        document = plan() | {"resource_drift": [{"address": "cloudflare_api_token.workload", "change": {
+            "actions": ["update"], "before": {"issued_on": None}, "after": {"issued_on": "secret-date"},
+        }}]}
+        document["resource_changes"] += [
+            {"address": "cloudflare_api_token.workload", "mode": "managed", "change": {
+                "actions": ["update"], "before": {"policies": "secret-before"},
+                "after": {"policies": "secret-after"},
+            }},
+            {"address": "sensitive-address", "mode": "managed", "change": {
+                "actions": ["delete"], "before": {"sensitive-key": "secret"}, "after": None,
+            }},
+            {"address": "sensitive-noop", "mode": "managed", "change": {"actions": ["no-op"]}},
+            {"address": "sensitive-data", "mode": "data", "change": {"actions": ["read"]}},
+        ]
+        with contextlib.redirect_stdout(io.StringIO()) as console:
+            with self.assertRaises(guard.PolicyError) as error:
+                guard.validate_plan(document)
+        self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+        text = console.getvalue()
+        self.assertIn("issued_on:COMPUTED", text)
+        self.assertIn("policies:REQUIRED", text)
+        self.assertIn("IDP_CUTOVER_CHANGE address=azurerm_role_assignment.idp_collector_github_app_reader", text)
+        self.assertIn("IDP_CUTOVER_CHANGE address=UNKNOWN_ADDRESS", text)
+        self.assertNotIn("sensitive-", text)
+        self.assertNotIn("secret", text)
+        self.assertEqual(len(text.splitlines()), 4)
+
+    def test_change_diagnostics_are_bounded_after_skipping_noops_and_data_reads(self):
+        changes = [
+            {"mode": "managed", "change": {"actions": ["no-op"]}},
+            {"mode": "data", "change": {"actions": ["read"]}},
+        ] * 30 + [{
+            "mode": "managed", "address": 'cloudflare_api_token.workload["private-fixture"]',
+            "change": {"actions": ["create"], "before": None, "after": {"name": None},
+                       "after_unknown": {"value": True, "private-key": True}},
+        }] * 21
+        with contextlib.redirect_stdout(io.StringIO()) as console:
+            guard.diagnose_drift(changes, managed_changes=True)
+        lines = console.getvalue().splitlines()
+        self.assertEqual(len(lines), 21)
+        self.assertEqual(lines[-1], "IDP_CUTOVER_CHANGE MORE_ENTRIES_REDACTED")
+        self.assertIn("value:COMPUTED_SENSITIVE", lines[0])
+        self.assertIn("UNKNOWN_FIELD:UNKNOWN_CLASS", lines[0])
+        self.assertNotIn("private-", console.getvalue())
 
     def test_exact_create_and_empty_repeat(self):
         self.assertEqual(guard.validate_plan(plan()), 1)
@@ -222,10 +287,26 @@ class ReleasePolicyTests(unittest.TestCase):
         ], stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
         self.assertEqual(result.returncode, 0, "Mock-only Terraform test failed; output withheld.")
         resources = []
+        token_schema = None
         for line in result.stdout.splitlines():
             event = json.loads(line)
             if event.get("type") == "test_plan":
                 resources.extend(event["test_plan"].get("resource_changes", []))
+                token_schema = event["test_plan"]["provider_schemas"][
+                    "registry.terraform.io/cloudflare/cloudflare"
+                ]["resource_schemas"]["cloudflare_api_token"]["block"]["attributes"]
+        self.assertIsNotNone(token_schema)
+        expected_classes = {}
+        for field, attribute in token_schema.items():
+            classification = (
+                "REQUIRED" if attribute.get("required") else
+                "OPTIONAL_COMPUTED" if attribute.get("optional") and attribute.get("computed") else
+                "OPTIONAL" if attribute.get("optional") else "COMPUTED"
+            )
+            if attribute.get("sensitive"):
+                classification += "_SENSITIVE"
+            expected_classes[field] = classification
+        self.assertEqual(guard.TOKEN_FIELD_CLASSES, expected_classes)
         assignment = next(item for item in resources if item["address"] == guard.ADDRESS)
         assignment["change"]["after"]["principal_id"] = guard.PRINCIPAL
         assignment["change"]["after"]["scope"] = guard.SCOPE
@@ -343,6 +424,30 @@ class ReleasePolicyTests(unittest.TestCase):
             saved = Path(next(arg[5:] for call in calls for arg in call if arg.startswith("-out=")))
             self.assertFalse(saved.exists())
             self.assertFalse(saved.parent.exists())
+
+    def test_runner_malformed_changes_and_diagnostic_failure_keep_original_rejection(self):
+        for changes in (
+            "secret-fixture", {"secret-fixture": True}, [None], ["secret-fixture"],
+            [{"address": "secret-fixture", "change": "secret-fixture"}],
+            [{"change": {"actions": [{}], "before": [], "after": {"secret-fixture": True}}}],
+        ):
+            with self.subTest(changes=changes):
+                calls, console = self.execute(plan() | {
+                    "resource_drift": [{}], "resource_changes": changes,
+                })
+                self.assertIn("stage=POLICY reason=UNEXPECTED_DRIFT", console)
+                self.assertNotIn("secret-fixture", console)
+                self.assertNotIn("apply", [call[2] for call in calls])
+                saved = Path(next(arg[5:] for call in calls for arg in call if arg.startswith("-out=")))
+                self.assertFalse(saved.parent.exists())
+        with patch.object(guard, "diagnose_drift", side_effect=ValueError("secret-fixture")):
+            calls, console = self.execute(plan() | {"resource_drift": [{}]})
+        self.assertIn("IDP_CUTOVER_DIAGNOSTIC INVALID_SHAPE", console)
+        self.assertIn("stage=POLICY reason=UNEXPECTED_DRIFT", console)
+        self.assertNotIn("secret-fixture", console)
+        self.assertNotIn("apply", [call[2] for call in calls])
+        saved = Path(next(arg[5:] for call in calls for arg in call if arg.startswith("-out=")))
+        self.assertFalse(saved.parent.exists())
 
     def test_error_reporting_never_echoes_arbitrary_exception_or_code_values(self):
         for error in (
