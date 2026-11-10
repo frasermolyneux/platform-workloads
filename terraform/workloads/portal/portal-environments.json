@@ -36,7 +36,7 @@
             "identity-management"
         ],
         "add_sonarcloud_secrets": false,
-        "add_nuget_environment": true,
+        "add_nuget_environment": false,
         "visibility": "public",
         "rulesets": [
             {

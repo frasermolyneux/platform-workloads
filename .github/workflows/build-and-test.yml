@@ -50,6 +50,9 @@ jobs:
       - name: Validate cost budget policies without provider reads
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/cost-budgets.tftest.hcl
 
+      - name: Validate NuGet publishing enrollment with mocked GitHub provider
+        run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/nuget-publishing.tftest.hcl
+
       - name: Validate collector identity, subscription grants and host secret access with mocked providers
         run: terraform -chdir=terraform test -var-file=tfvars/prd.tfvars -filter=tests/idp-cost-reader.tftest.hcl -filter=tests/idp-collector-host.tftest.hcl
 

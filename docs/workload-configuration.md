@@ -145,7 +145,7 @@ repository-only definitions have no Azure environment to budget.
 | `auto_init`              | boolean | No       | `false`  | Create an initial README commit for a new repository |
 | `is_template`            | boolean | No       | `false`  | Mark the managed GitHub repository as a template |
 | `add_sonarcloud_secrets` | boolean | No       | `false`  | Project the existing Key Vault-backed Sonar token to Actions and Dependabot, including explicit policy-only opt-ins |
-| `add_nuget_environment`  | boolean | No       | `false`  | Create NuGet publishing environment           |
+| `add_nuget_environment`  | boolean | No       | `false`  | Create the `NuGet` publishing environment with `NUGET_USER=frasermolyneux` for trusted publishing; no API key is distributed |
 | `github_app.enabled`     | boolean | No       | `false`  | Broker the organization-owned GitHub App credentials into the repository |
 | `github_app.app_id`      | string  | When enabled | -     | GitHub App ID exposed as the `GH_APP_ID` repository variable |
 | `github_app.installation_id` | string | When enabled | - | App installation ID exposed as the `GH_APP_INSTALLATION_ID` repository variable |

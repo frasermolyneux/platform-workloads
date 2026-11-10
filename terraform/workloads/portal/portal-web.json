@@ -57,7 +57,7 @@
             "key-vault"
         ],
         "add_sonarcloud_secrets": true,
-        "add_nuget_environment": true,
+        "add_nuget_environment": false,
         "visibility": "public",
         "rulesets": [
             {

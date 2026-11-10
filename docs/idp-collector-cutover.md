@@ -244,13 +244,16 @@ The separately authorized post-cutover retirement procedure is:
    pre-existing workflow files from the exact pre-guard candidate revision:
 
    ```powershell
-   git restore --source=5443059eb9a9cb8ad1635d265a6ef4940ef96eba -- .github/workflows/deploy-prd.yml .github/workflows/pr-verify.yml .github/workflows/feature-development.yml .github/workflows/build-and-test.yml
+   git restore --source=8553be4a894ebd8255d58b15277a37f6492c03f8 -- .github/workflows/deploy-prd.yml .github/workflows/pr-verify.yml .github/workflows/feature-development.yml
    ```
 
    This is an operator procedure for a new isolated retirement branch, **not**
    a command to run in the current candidate. Review the diff: restore only these
    workflow files, preserve intervening unrelated workflow changes if any, and
    retain the guard executable for preflight until step 5 completes. The restored
+   behavior must retain main's NuGet publishing check and the collector contract
+   checks in Build and Test; remove only the release-specific Python integration
+   environment/step wording there, rather than restoring that entire file.
    Build and Test still discovers all Python tests, so in the retirement commit
    deliberately remove the release-only test file after running it on the guarded
    revision; it asserts guard wiring and would otherwise reject intentional
