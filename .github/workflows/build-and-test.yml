@@ -33,6 +33,7 @@ jobs:
         with:
           terraform-folder: terraform
           terraform-version: "1.17.0"
+          terraform_wrapper: "false"
 
       - name: Check Terraform formatting
         run: terraform -chdir=terraform fmt -check -recursive
