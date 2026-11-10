@@ -175,8 +175,9 @@ This does not depend on changing Production environment protections.
 
 All three paths preserve pinned `terraform-receipt` metadata-only evidence for
 the `github-terraform-receipts` pipeline. An attempted plan starts with failure
-status and becomes success only after parsing, policy and integrity checks;
-a command or policy failure therefore records failure. Init/validate failures
+status and becomes success immediately when Terraform returns accepted exit code
+0 or 2. Later parsing, policy or integrity rejection fails the job independently
+without misreporting a successful Terraform plan command as failed. Init/validate failures
 before plan execution do not claim a plan attempt. Apply evidence exists only
 when the saved-plan apply was actually attempted, and records its success/failure;
 an empty repeat or plan-only run never emits an apply receipt. The pinned action

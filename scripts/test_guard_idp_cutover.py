@@ -287,7 +287,7 @@ class ReleasePolicyTests(unittest.TestCase):
             ({"fail": "init"}, []),
             ({"fail": "validate"}, []),
             ({"fail": "plan"}, [("plan", "failure")]),
-            ({"fail": "show"}, [("plan", "failure")]),
+            ({"fail": "show"}, [("plan", "failure"), ("plan", "success")]),
             ({"fail": "apply"}, [("plan", "failure"), ("plan", "success"), ("apply", "failure")]),
             ({"plan_only": True}, [("plan", "failure"), ("plan", "success")]),
         ]
@@ -298,7 +298,9 @@ class ReleasePolicyTests(unittest.TestCase):
         self.execute(plan() | {"resource_changes": [], "applyable": False})
         self.assertEqual(self.receipts, [("plan", "failure"), ("plan", "success")])
         self.execute(plan() | {"complete": False})
-        self.assertEqual(self.receipts, [("plan", "failure")])
+        self.assertEqual(self.receipts, [("plan", "failure"), ("plan", "success")])
+        self.execute(plan(), corrupt=True)
+        self.assertEqual(self.receipts, [("plan", "failure"), ("plan", "success")])
 
     def test_receipt_outputs_are_bounded_metadata_only(self):
         with tempfile.TemporaryDirectory() as directory:

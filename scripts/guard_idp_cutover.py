@@ -152,6 +152,7 @@ def deploy(root, plan_only=False, retirement_preflight=False):
                 "-refresh=true", "-detailed-exitcode", "-var-file=tfvars/prd.tfvars",
                 f"-out={saved}",
             ], log, accepted=(0, 2))
+            receipt_outcome("plan", "success")
             digest = hashlib.sha256(saved.read_bytes()).digest()
         document = private / "plan.json"
         with stage("SHOW"):
@@ -161,7 +162,6 @@ def deploy(root, plan_only=False, retirement_preflight=False):
             require(not retirement_preflight or creates == 0, "RETIREMENT_NOT_EMPTY")
         with stage("INTEGRITY"):
             require(hashlib.sha256(saved.read_bytes()).digest() == digest, "PLAN_DIGEST_CHANGED")
-        receipt_outcome("plan", "success")
         print(f"IDP cutover policy accepted: {creates} approved create(s); no other changes.")
         if retirement_preflight:
             print("Retirement preflight accepted an empty refreshed plan; no apply or policy retirement performed.")
