@@ -42,6 +42,47 @@ azurerm_storage_management_policy.workload_tfplan
 azurerm_role_assignment.workload azurerm_role_assignment.idp_cost_reader
 azurerm_role_assignment.idp_collector_github_app_reader
 azurerm_key_vault.kv azurerm_key_vault_secret.github_app_pem cloudflare_api_token.workload
+azuread_administrative_unit_role_member.workload
+azuread_administrative_unit_role_member.workload_deploy_script
+azuread_administrative_unit.platform azuread_app_role_assignment.status_operator
+azuread_app_role_assignment.status_secure_webhook_sender
+azuread_app_role_assignment.status_traffic_operator azuread_app_role_assignment.workload_graph_api
+azuread_app_role_assignment.workload_graph_api_deploy_script
+azuread_application_federated_identity_credential.poc
+azuread_application_identifier_uri.maps_service azuread_application_identifier_uri.status_service
+azuread_application.poc azuread_directory_role_assignment.workload
+azuread_directory_role_assignment.workload_deploy_script azuread_directory_role.builtin
+azuread_service_principal_delegated_permission_grant.status_operator
+azuread_service_principal.microsoft_graph azuread_service_principal.poc
+azurerm_role_assignment.deploy_principal_kv_role_assignment
+azurerm_role_assignment.poc_keyvault_administrator azurerm_role_assignment.poc_owner
+azurerm_role_assignment.poc_storage_blob_data_owner azurerm_role_assignment.status_monitoring_reader
+azurerm_role_assignment.workload_deploy_script azurerm_role_assignment.workload_managed_identity_operator
+azurerm_role_assignment.workload_platform_workloads_backend_reader
+azurerm_role_assignment.workload_provider_registrator azurerm_role_assignment.workload_rbac_administrator
+azurerm_role_assignment.workload_resource_group azurerm_role_assignment.workload_storage_blob_contributor
+azurerm_role_assignment.workload_storage_blob_key_operator azurerm_role_assignment.workload_storage_reader
+azurerm_role_assignment.workload_terraform_state_reader
+azurerm_role_definition.resource_provider_registrator azurerm_role_definition.workload_secret_synchronizer
+azurerm_user_assigned_identity.workload_deploy_script
+github_actions_environment_secret.workload_deploy_script_identity
+github_actions_environment_variable.cloudflare_account_id
+github_actions_environment_variable.container_registry_name
+github_actions_environment_variable.gcp_project_id github_actions_environment_variable.gcp_service_account
+github_actions_environment_variable.gcp_workload_identity_provider
+github_actions_environment_variable.status_monitoring_reader_client_id
+github_actions_environment_variable.status_monitoring_reader_object_id
+github_actions_environment_variable.status_service_client_id
+github_actions_environment_variable.status_service_object_id
+github_actions_secret.sonar_token github_actions_variable.actions_runner
+github_actions_variable.github_app_id github_actions_variable.github_app_installation_id
+github_actions_variable.repository_standards_catalog github_actions_variable.runtime_github_app
+github_dependabot_secret.sonar_token github_dependabot_secret.workload_deploy_script_identity
+random_uuid.maps_service_role random_uuid.resource_provider_registrator
+random_uuid.status_service_role random_uuid.status_service_scope random_uuid.workload_secret_synchronizer
+terraform_data.actions_runner_contract terraform_data.cost_budget_contract
+terraform_data.repository_analysis_contract terraform_data.repository_standards_contract
+terraform_data.runtime_github_apps_contract
 """.split())
 DIAGNOSTIC_FIELDS = frozenset("""
 id name display_name description tags location scope principal_id principal_type
@@ -56,12 +97,21 @@ value plaintext_value encrypted_value updated_at created_at
 
 def diagnose_drift(drift):
     """Classify privately; emit only source allowlist literals and fixed markers."""
+    if not isinstance(drift, list):
+        print("IDP_CUTOVER_DRIFT MALFORMED_DRIFT")
+        return
     for resource in drift[:20]:
+        if not isinstance(resource, dict):
+            print("IDP_CUTOVER_DRIFT MALFORMED_ENTRY")
+            continue
         raw_address = resource.get("address")
         base = raw_address.split("[", 1)[0] if isinstance(raw_address, str) else None
         address = base if base in DIAGNOSTIC_ADDRESSES else "UNKNOWN_ADDRESS"
         instance = "INSTANCE_REDACTED" if isinstance(raw_address, str) and "[" in raw_address else "SINGLETON"
         change = resource.get("change", {})
+        if not isinstance(change, dict):
+            print(f"IDP_CUTOVER_DRIFT address={address} instance={instance} MALFORMED_CHANGE")
+            continue
         actions = change.get("actions")
         action = {
             ("no-op",): "NO_OP", ("update",): "UPDATE", ("delete",): "DELETE",

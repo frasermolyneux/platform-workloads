@@ -2,6 +2,7 @@ import contextlib
 import io
 import json
 import os
+import re
 from pathlib import Path
 import sys
 import tempfile
@@ -39,6 +40,31 @@ def plan():
 
 
 class ReleasePolicyTests(unittest.TestCase):
+    def test_diagnostic_address_literals_cover_every_root_managed_declaration(self):
+        root = Path(__file__).resolve().parents[1] / "terraform"
+        declarations = set()
+        for source in root.glob("*.tf"):
+            text = source.read_text()
+            self.assertNotRegex(text, r'(?m)^\s*module\s+"', "Add reviewed module handling before diagnostics.")
+            declarations.update(
+                f"{kind}.{name}" for kind, name in re.findall(
+                    r'(?m)^\s*resource\s+"([^"]+)"\s+"([^"]+)"', text,
+                )
+            )
+        self.assertEqual(declarations, guard.DIAGNOSTIC_ADDRESSES)
+
+    def test_malformed_drift_shapes_preserve_policy_rejection(self):
+        for drift in (
+            "sensitive-fixture", {"sensitive-fixture": True}, [None], ["sensitive-fixture"],
+            [{"address": "time_rotating.rotate", "change": "sensitive-fixture"}],
+            [{"address": ["sensitive-fixture"], "change": {"actions": [{}]}}],
+        ):
+            with self.subTest(drift=drift), contextlib.redirect_stdout(io.StringIO()) as console:
+                with self.assertRaises(guard.PolicyError) as error:
+                    guard.validate_plan(plan() | {"resource_drift": drift})
+                self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+                self.assertNotIn("sensitive-fixture", console.getvalue())
+
     def test_drift_diagnostic_only_emits_allowlisted_literals_and_fixed_markers(self):
         drift = [
             {
@@ -301,6 +327,22 @@ class ReleasePolicyTests(unittest.TestCase):
         ]:
             _, console = self.execute(document, **options)
             self.assertIn(code, console)
+
+    def test_runner_drift_output_stays_bounded_and_private_files_are_cleaned(self):
+        for drift in (
+            [{"address": 'github_repository.workload["secret-fixture"]',
+              "change": {"actions": ["update"], "before": {"description": "secret-fixture"},
+                         "after": {"description": "different-secret-fixture"}}}],
+            [{"address": "secret-fixture", "change": None}],
+            "secret-fixture",
+        ):
+            calls, console = self.execute(plan() | {"resource_drift": drift})
+            self.assertIn("stage=POLICY reason=UNEXPECTED_DRIFT", console)
+            self.assertNotIn("secret-fixture", console)
+            self.assertNotIn("apply", [call[2] for call in calls])
+            saved = Path(next(arg[5:] for call in calls for arg in call if arg.startswith("-out=")))
+            self.assertFalse(saved.exists())
+            self.assertFalse(saved.parent.exists())
 
     def test_error_reporting_never_echoes_arbitrary_exception_or_code_values(self):
         for error in (
