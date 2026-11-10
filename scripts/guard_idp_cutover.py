@@ -190,7 +190,7 @@ def require(condition, reason="POLICY_REJECTED"):
 def validate_token_usage_drift(plan):
     drift = plan["resource_drift"]
     changes = plan.get("resource_changes")
-    require(isinstance(drift, list) and len(drift) == 1 and isinstance(changes, list))
+    require(isinstance(drift, list) and bool(drift) and isinstance(changes, list))
     configured = plan.get("configuration", {}).get("root_module", {}).get("resources", [])
     require(isinstance(configured, list))
     declarations = [
@@ -199,6 +199,7 @@ def validate_token_usage_drift(plan):
     ]
     require(len(declarations) == 1 and declarations[0].get("mode") == "managed")
     require("for_each_expression" in declarations[0])
+    seen = set()
     for resource in drift:
         require(isinstance(resource, dict))
         address = resource.get("address")
@@ -207,6 +208,8 @@ def validate_token_usage_drift(plan):
         index = json.loads(address[len("cloudflare_api_token.workload"):][1:-1])
         require(isinstance(index, str) and bool(index))
         require(address == f"cloudflare_api_token.workload[{json.dumps(index, ensure_ascii=False)}]")
+        require(address not in seen)
+        seen.add(address)
         matches = [item for item in changes if isinstance(item, dict) and item.get("address") == address]
         require(len(matches) == 1)
         match = matches[0]

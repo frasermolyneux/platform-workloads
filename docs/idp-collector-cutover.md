@@ -190,8 +190,10 @@ drift without the private classification. The integration test verifies this
 complete literal field/class map against the installed locked provider schema
 via mock-only Terraform test output, without contacting Cloudflare.
 
-The sole refresh exception is **one** `cloudflare_api_token.workload` string-keyed
-instance with UPDATE drift changing only `last_used_on`. The root configuration
+The sole refresh exception is one or more **distinct**
+`cloudflare_api_token.workload` string-keyed instances, each independently having
+UPDATE drift changing only `last_used_on`. Duplicate addresses or any mixed,
+nonconforming drift reject the complete plan. The root configuration
 must still declare that managed `for_each` resource. Both snapshots must contain
 exactly all 11 locked schema fields, with every other value (including identity,
 permissions, status, restrictions and sensitive token value) identical, without

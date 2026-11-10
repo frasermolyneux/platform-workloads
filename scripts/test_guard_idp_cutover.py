@@ -90,6 +90,39 @@ class ReleasePolicyTests(unittest.TestCase):
                     guard.validate_plan(document)
                 self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
 
+    def test_multiple_token_usage_refreshes_each_require_a_unique_exact_noop(self):
+        document = token_usage_plan()
+        second_drift = copy.deepcopy(document["resource_drift"][0])
+        second_noop = copy.deepcopy(document["resource_changes"][1])
+        for resource in (second_drift, second_noop):
+            resource["address"] = 'cloudflare_api_token.workload["test-prd-second"]'
+            resource["index"] = "test-prd-second"
+            for snapshot in ("before", "after"):
+                resource["change"][snapshot]["id"] = "second-token-id"
+                resource["change"][snapshot]["name"] = "second-token-name"
+        document["resource_drift"].append(second_drift)
+        document["resource_changes"].append(second_noop)
+        self.assertEqual(guard.validate_plan(document), 1)
+        for mutate in (
+            lambda doc: doc["resource_changes"].pop(),
+            lambda doc: doc["resource_changes"].append(copy.deepcopy(doc["resource_changes"][-1])),
+            lambda doc: doc["resource_drift"].append(copy.deepcopy(doc["resource_drift"][-1])),
+            lambda doc: doc["resource_drift"][-1]["change"]["before"].update(status="disabled"),
+            lambda doc: doc["resource_changes"][-1]["change"].update(actions=["update"]),
+            lambda doc: doc["resource_changes"][-1]["change"]["after"].update(value="other"),
+            lambda doc: doc["resource_drift"][-1]["change"].update(after_unknown={"id": True}),
+            lambda doc: doc["resource_drift"][-1].update(index="different"),
+            lambda doc: doc["resource_drift"].append({"address": "other", "change": {}}),
+        ):
+            candidate = copy.deepcopy(document)
+            mutate(candidate)
+            with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(guard.PolicyError) as error:
+                guard.validate_plan(candidate)
+            self.assertEqual(error.exception.reason, "UNEXPECTED_DRIFT")
+        document["resource_changes"].pop(0)
+        document["applyable"] = False
+        self.assertEqual(guard.validate_plan(document), 0)
+
     def test_token_usage_exception_rejects_identity_shapes_unknowns_and_actions(self):
         cases = []
         for collection in ("resource_drift", "resource_changes"):
