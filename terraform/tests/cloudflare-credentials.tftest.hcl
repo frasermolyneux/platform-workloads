@@ -84,8 +84,8 @@ run "validate_connectivity_zone_permissions" {
     condition = length(one([
       for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
       if token.name_suffix == "dns"
-    ]).policies) == 2
-    error_message = "The connectivity Production DNS token must have one zone policy and one account policy."
+    ]).policies) == 3
+    error_message = "The connectivity Production DNS token must have one multi-zone policy, one Bot Management zone policy and one account policy."
   }
 
   assert {
@@ -94,8 +94,8 @@ run "validate_connectivity_zone_permissions" {
         for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
         if token.name_suffix == "dns"
       ]).policies : policy if can(policy.zones)
-    ]) == 1
-    error_message = "The connectivity Production DNS token must have exactly one multi-zone policy."
+    ]) == 2
+    error_message = "The connectivity Production DNS token must have exactly two zone policies."
   }
 
   assert {
@@ -103,9 +103,22 @@ run "validate_connectivity_zone_permissions" {
       for policy in one([
         for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
         if token.name_suffix == "dns"
-      ]).policies : policy if can(policy.zones)
+      ]).policies : policy if try(length(policy.zones), 0) > 1
     ]).permission_groups) == toset(["DNS Write", "Cache Settings Write", "Config Settings Write", "Dynamic URL Redirects Write", "Page Rules Write", "Zone Read", "Zone Settings Write", "Zone WAF Write", "Zone Write"])
     error_message = "The connectivity Production DNS token must grant the required zone permissions consistently."
+  }
+
+  assert {
+    condition = one([
+      for policy in one([
+        for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+        if token.name_suffix == "dns"
+      ]).policies : policy if try(length(policy.zones), 0) == 1
+      ]) == {
+      permission_groups = ["Bot Management Read", "Bot Management Write"]
+      zones             = ["xtremeidiots.com"]
+    }
+    error_message = "Bot Management Read and Write must be isolated to xtremeidiots.com on the connectivity Production DNS token."
   }
 
   assert {
@@ -129,12 +142,31 @@ run "validate_connectivity_zone_permissions" {
   }
 
   assert {
-    condition = contains(one([
+    condition = toset(one([
       for policy in one([
         for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
         if token.name_suffix == "dns"
-      ]).policies : policy if can(policy.zones)
-    ]).zones, "mxstatus.io")
-    error_message = "The connectivity Production DNS token must include the mxstatus.io zone."
+      ]).policies : policy if try(length(policy.zones), 0) > 1
+      ]).zones) == toset([
+      "bishopsbees.co.uk",
+      "bqba.co.uk",
+      "buckfastqueen.co.uk",
+      "dm-electricalservices.co.uk",
+      "midlr.com",
+      "moanclub.com",
+      "molyfra.uk",
+      "mx-mail.io",
+      "mxstatus.io",
+      "queensforsale.co.uk",
+      "talkwithtiles.com",
+      "tripsidekick.app",
+      "tripsidekick.net",
+      "travellingkermit.com",
+      "xiredirect.com",
+      "xtre.co.uk",
+      "xtremeidiots.com",
+      "xtremeidiots.net"
+    ])
+    error_message = "The connectivity Production DNS token must preserve its existing multi-zone scope."
   }
 }

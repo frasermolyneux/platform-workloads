@@ -208,6 +208,15 @@
                         },
                         {
                             "permission_groups": [
+                                "Bot Management Read",
+                                "Bot Management Write"
+                            ],
+                            "zones": [
+                                "xtremeidiots.com"
+                            ]
+                        },
+                        {
+                            "permission_groups": [
                                 "Workers Scripts Write"
                             ],
                             "account_from_zone": "xtremeidiots.com"

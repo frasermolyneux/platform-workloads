@@ -434,9 +434,10 @@ and `Config Settings Write` cover the respective rules). This broadens the
 impact of a compromised token to those capabilities on every listed zone;
 permission does not establish resource ownership. Configuration must still
 respect other stacks' DNS records, status-edge configuration rules, and
-runtime-owned Workers routes. Its Workers Scripts permission remains
-account-scoped; account-level products and new Cloudflare capabilities require
-separate review.
+runtime-owned Workers routes. A separate zone policy grants `Bot Management Read`
+and `Bot Management Write` only on `xtremeidiots.com`, not the other listed zones.
+Its Workers Scripts permission remains account-scoped; account-level products and
+new Cloudflare capabilities require separate review.
 
 The platform-baremetal Production environment uses `CLOUDFLARE_ACME_DNS_API_TOKEN`
 for ACME DNS challenges on `xtremeidiots.com`, `xtremeidiots.net`, and
