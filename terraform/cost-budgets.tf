@@ -31,10 +31,13 @@ locals {
       monthly_budget  = try(environment.cost_budget.monthly_budget, null)
       subscription_id = try(var.subscriptions[environment.subscription].subscription_id, null)
       scope = try(environment.cost_budget.scope, "subscription") == "resource-group" ? try(
-        "/subscriptions/${var.subscriptions[environment.subscription].subscription_id}/resourceGroups/${one([
-          for resource_group in local.workload_environment_resource_groups :
-          resource_group.name if resource_group.workload_environment_key == environment.key
-        ])}", null
+        format("/subscriptions/%s/resourceGroups/%s",
+          var.subscriptions[environment.subscription].subscription_id,
+          one([
+            for resource_group in local.workload_environment_resource_groups :
+            resource_group.name if resource_group.workload_environment_key == environment.key
+          ])
+        ), null
       ) : try("/subscriptions/${var.subscriptions[environment.subscription].subscription_id}", null)
       budget_name         = try(environment.cost_budget.budget_name, "${environment.workload_name}-${environment.environment_tag}-monthly")
       start_date          = try(environment.cost_budget.start_date, var.cost_budget_defaults.start_date)
