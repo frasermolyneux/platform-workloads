@@ -177,8 +177,11 @@ Copilot review also receive the legacy purpose-specific alias.
 `platform-baremetal` consumes the resulting remote-state output and owns the
 isolated virtual machine, Kubernetes runtime, resource limits, credentials,
 Docker-in-Docker mode, and network controls. The catalog never contains the
-fine-grained GitHub token. Bare-metal control repositories are deliberately not
-enrolled, preserving an independent recovery and deployment path.
+fine-grained GitHub token. `platform-baremetal-ns512615` remains deliberately
+unenrolled, preserving an independent recovery and deployment path. The
+`COPILOT_CODE_REVIEW_RUNNER` variable only publishes the review runner label;
+the central repository ruleset independently governs whether Copilot code
+review runs.
 
 The public `actions` policy entry opts into the existing Sonar token broker as a
 prerequisite for its repository-owned CI analysis replacement. This does not create

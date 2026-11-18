@@ -13,6 +13,7 @@ run "validate_actions_runner_projection" {
       "bishops-bees-staging",
       "bqba",
       "dm-electrical-services",
+      "platform-baremetal",
       "platform-developer-portal",
       "platform-radar",
       "xi-arcade",
@@ -28,7 +29,7 @@ run "validate_actions_runner_projection" {
       "xi-redirect-manager",
       "xi-teamspeak",
     ])
-    error_message = "ARC enrollment must contain every active private repository except the bare-metal control repositories."
+    error_message = "Every active private repository must be enrolled except the independent platform-baremetal-ns512615 control repository."
   }
 
   assert {
@@ -43,7 +44,7 @@ run "validate_actions_runner_projection" {
 
   assert {
     condition = (
-      length(local.actions_runner_variables) == 39 &&
+      length(local.actions_runner_variables) == 41 &&
       alltrue([
         for name in keys(local.actions_runner_enrollments) :
         local.actions_runner_variables["${name}:actions"].name == "ACTIONS_RUNNER" &&
