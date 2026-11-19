@@ -1,0 +1,26 @@
+{
+    "name": "portal-invision",
+    "github": {
+        "description": "Invision Community integration for the XtremeIdiots portal.",
+        "topics": [
+            "invision-community",
+            "portal"
+        ],
+        "visibility": "private",
+        "auto_init": true,
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "empty",
+                    "reason": "Repository has no committed source",
+                    "reevaluate": "Initial executable source or workflows are committed"
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        }
+    }
+}
