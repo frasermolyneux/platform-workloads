@@ -138,6 +138,17 @@
             "subscription": "sub-molyneux-me-dev",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "molyneux.me"
+                        }
+                    ]
+                }
+            ],
             "locations": [
                 "westeurope"
             ],
@@ -171,6 +182,17 @@
             "subscription": "sub-molyneux-me-prd",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "molyneux.me"
+                        }
+                    ]
+                }
+            ],
             "locations": [
                 "westeurope"
             ],

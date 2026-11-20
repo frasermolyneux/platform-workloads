@@ -149,24 +149,78 @@ run "validate_connectivity_zone_permissions" {
       ]).policies : policy if try(length(policy.zones), 0) > 1
       ]).zones) == toset([
       "bishopsbees.co.uk",
+      "blogformyparents.co.uk",
       "bqba.co.uk",
       "buckfastqueen.co.uk",
+      "craftpledge.org",
       "dm-electricalservices.co.uk",
+      "geo-location.net",
       "midlr.com",
+      "midlr.co.uk",
       "moanclub.com",
       "molyfra.uk",
+      "molyneux-consulting.co.uk",
+      "molyneux.dev",
+      "molyneux.io",
+      "molyneux.me",
+      "mx-consulting.co.uk",
       "mx-mail.io",
       "mxstatus.io",
+      "osotnoc.co.uk",
+      "qrquest.io",
       "queensforsale.co.uk",
+      "ratemysteak.co.uk",
       "talkwithtiles.com",
+      "tidelife.co.uk",
       "tripsidekick.app",
       "tripsidekick.net",
       "travellingkermit.com",
       "xiredirect.com",
       "xtre.co.uk",
       "xtremeidiots.com",
+      "xtremeidiots.dev",
       "xtremeidiots.net"
     ])
-    error_message = "The connectivity Production DNS token must preserve its existing multi-zone scope."
+    error_message = "The connectivity Production DNS token must cover all catalog zones."
+  }
+}
+
+run "validate_migrating_workload_dns_permissions" {
+  command = plan
+
+  plan_options {
+    target = [terraform_data.repository_analysis_contract]
+  }
+
+  assert {
+    condition = alltrue(flatten([
+      for file_path, zone in {
+        "workloads/geo-location/geo-location.json" = "geo-location.net"
+        "workloads/misc/craftpledge.json"          = "craftpledge.org"
+        "workloads/molyneux-me/molyneux-me.json"   = "molyneux.me"
+        "workloads/molyneux-me/twenty-one.json"    = "molyneux.me"
+        } : [
+        for env in ["Development", "Production"] :
+        one([for e in jsondecode(file("${path.module}/${file_path}")).environments : e if e.name == env]).cloudflare_tokens == [{
+          name_suffix = "dns"
+          policies = [{
+            permission_groups = ["DNS Write", "Zone Read"]
+            zone              = zone
+          }]
+        }]
+      ]
+    ]))
+    error_message = "Each migrating workload environment must have a DNS token scoped to its own zone."
+  }
+
+  assert {
+    condition = one([
+      for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-notifications.json")).environments : env if env.name == "Production"]).cloudflare_tokens : token
+      if token.name_suffix == "acs-dns"
+      ]).policies == [{
+      permission_groups = ["DNS Write", "Zone Read"]
+      zones             = ["craftpledge.org", "geo-location.net", "molyneux.dev", "molyneux.io", "molyneux.me", "xtremeidiots.com"]
+    }]
+    error_message = "The Production ACS token must cover only its sending-domain zones."
   }
 }
