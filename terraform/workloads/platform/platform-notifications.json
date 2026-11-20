@@ -222,6 +222,23 @@
                             "zone": "xtremeidiots.com"
                         }
                     ]
+                },
+                {
+                    "name_suffix": "dependabot-dns",
+                    "dependabot_only": true,
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Read", "Zone Read"],
+                            "zones": [
+                                "craftpledge.org",
+                                "geo-location.net",
+                                "molyneux.dev",
+                                "molyneux.io",
+                                "molyneux.me",
+                                "xtremeidiots.com"
+                            ]
+                        }
+                    ]
                 }
             ]
         },

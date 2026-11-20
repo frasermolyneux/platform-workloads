@@ -243,4 +243,19 @@ run "validate_migrating_workload_dns_permissions" {
     }]
     error_message = "The Production ACS token must cover only its sending-domain zones."
   }
+
+  assert {
+    condition = one([
+      for token in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-notifications.json")).environments : env if env.name == "Development"]).cloudflare_tokens : token
+      if token.name_suffix == "dependabot-dns"
+      ]) == {
+      name_suffix     = "dependabot-dns"
+      dependabot_only = true
+      policies = [{
+        permission_groups = ["DNS Read", "Zone Read"]
+        zones             = ["craftpledge.org", "geo-location.net", "molyneux.dev", "molyneux.io", "molyneux.me", "xtremeidiots.com"]
+      }]
+    }
+    error_message = "The notifications Dependabot token must be read-only and cover its Production sending domains."
+  }
 }

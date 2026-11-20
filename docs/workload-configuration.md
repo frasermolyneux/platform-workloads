@@ -428,7 +428,7 @@ credential or overwriting it:
 - Load balancers require a zone-scoped `Load Balancers Write` policy; their monitors and pools require a separate account-scoped `Load Balancing: Monitors and Pools Write` policy. These are not billing permissions, and provisioning a token does not activate a subscription or change DNS. Account scope covers all monitors and pools in that account, so do not combine unrelated account permissions into the policy.
 - All policies use `allow` effect by convention.
 - The environment must have `connect_to_github: true` for the secret to be injected.
-- A Development token with `dependabot_only: true` is published as a repository Dependabot secret instead of an Actions environment secret. Give Dependabot plan tokens only the read permissions and zones needed by the Development plan; their secret names must be unique within the repository.
+- A Development token with `dependabot_only: true` is published as a repository Dependabot secret instead of an Actions environment secret. The repository-level secret is available to Dependabot plans in either environment; grant only the read permissions and zones those plans need. Secret names must be unique within the repository.
 - Requires `CLOUDFLARE_API_KEY` and `CLOUDFLARE_EMAIL` GitHub environment secrets on platform-workloads (see [prerequisites](prerequisites.md)).
 
 The platform-connectivity Production deployment token grants DNS, zone settings,
