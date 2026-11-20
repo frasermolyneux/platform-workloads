@@ -175,6 +175,17 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "geo-location.net"
+                        }
+                    ]
+                }
+            ],
             "gcp": {
                 "enabled": true
             },
@@ -240,6 +251,17 @@
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "geo-location.net"
+                        }
+                    ]
+                }
+            ],
             "gcp": {
                 "enabled": true
             },

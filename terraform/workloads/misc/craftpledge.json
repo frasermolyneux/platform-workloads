@@ -145,6 +145,17 @@
             "subscription": "sub-visualstudio-enterprise",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "craftpledge.org"
+                        }
+                    ]
+                }
+            ],
             "requires_terraform_state_access": [
                 "platform-hosting",
                 "platform-monitoring"
@@ -188,6 +199,17 @@
             "subscription": "sub-platform-shared",
             "connect_to_github": true,
             "configure_for_terraform": true,
+            "cloudflare_tokens": [
+                {
+                    "name_suffix": "dns",
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Write", "Zone Read"],
+                            "zone": "craftpledge.org"
+                        }
+                    ]
+                }
+            ],
             "requires_terraform_state_access": [
                 "platform-hosting",
                 "platform-monitoring"

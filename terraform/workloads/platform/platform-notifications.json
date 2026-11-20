@@ -292,7 +292,14 @@
                                 "DNS Write",
                                 "Zone Read"
                             ],
-                            "zone": "xtremeidiots.com"
+                            "zones": [
+                                "craftpledge.org",
+                                "geo-location.net",
+                                "molyneux.dev",
+                                "molyneux.io",
+                                "molyneux.me",
+                                "xtremeidiots.com"
+                            ]
                         }
                     ]
                 }
