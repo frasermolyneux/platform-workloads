@@ -9,6 +9,7 @@ locals {
           environment_key  = format("%s-%s", workload.name, environment.name)
           token_name       = format("spn-%s-%s-%s", workload.name, lookup(var.environment_map, environment.name, lower(environment.name)), token.name_suffix)
           secret_name      = upper(try(token.secret_name, "CLOUDFLARE_API_KEY"))
+          dependabot_only  = try(token.dependabot_only, false)
           policies         = token.policies
         }
       ]
@@ -46,6 +47,7 @@ locals {
     for env_key, tokens in { for t in local.cloudflare_tokens : t.environment_key => t... } :
     env_key => tokens[0]
   }
+
 }
 
 data "cloudflare_api_token_permission_groups_list" "lookup" {
@@ -102,7 +104,7 @@ resource "cloudflare_api_token" "workload" {
 }
 
 resource "github_actions_environment_secret" "cloudflare_token" {
-  for_each = { for token in local.cloudflare_tokens : token.key => token }
+  for_each = { for token in local.cloudflare_tokens : token.key => token if !token.dependabot_only }
 
   repository      = github_repository.workload[each.value.workload_name].name
   environment     = github_repository_environment.workload[each.value.environment_key].environment
@@ -112,9 +114,31 @@ resource "github_actions_environment_secret" "cloudflare_token" {
     precondition {
       condition = length([
         for token in local.cloudflare_tokens : token.key
-        if token.environment_key == each.value.environment_key && token.secret_name == each.value.secret_name
+        if !token.dependabot_only && token.environment_key == each.value.environment_key && token.secret_name == each.value.secret_name
       ]) == 1
       error_message = "Cloudflare tokens in one workload environment must use distinct GitHub secret names."
+    }
+  }
+}
+
+resource "github_dependabot_secret" "cloudflare_token" {
+  for_each = { for token in local.cloudflare_tokens : token.key => token if token.dependabot_only }
+
+  repository      = github_repository.workload[each.value.workload_name].name
+  secret_name     = each.value.secret_name
+  plaintext_value = cloudflare_api_token.workload[each.key].value
+
+  lifecycle {
+    precondition {
+      condition     = each.value.environment_name == "Development"
+      error_message = "Dependabot Cloudflare tokens must belong to the Development environment."
+    }
+    precondition {
+      condition = length([
+        for token in local.cloudflare_tokens : token.key
+        if token.dependabot_only && token.workload_name == each.value.workload_name && token.secret_name == each.value.secret_name
+      ]) == 1
+      error_message = "Dependabot Cloudflare tokens in one repository must use distinct secret names."
     }
   }
 }

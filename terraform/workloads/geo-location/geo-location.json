@@ -184,6 +184,16 @@
                             "zone": "geo-location.net"
                         }
                     ]
+                },
+                {
+                    "name_suffix": "dependabot-dns",
+                    "dependabot_only": true,
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Read", "Zone Read"],
+                            "zone": "geo-location.net"
+                        }
+                    ]
                 }
             ],
             "gcp": {

@@ -133,6 +133,16 @@
                             "zone": "molyneux.me"
                         }
                     ]
+                },
+                {
+                    "name_suffix": "dependabot-dns",
+                    "dependabot_only": true,
+                    "policies": [
+                        {
+                            "permission_groups": ["DNS Read", "Zone Read"],
+                            "zone": "molyneux.me"
+                        }
+                    ]
                 }
             ],
             "requires_terraform_state_access": [

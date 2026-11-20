@@ -201,16 +201,36 @@ run "validate_migrating_workload_dns_permissions" {
         "workloads/molyneux-me/twenty-one.json"    = "molyneux.me"
         } : [
         for env in ["Development", "Production"] :
-        one([for e in jsondecode(file("${path.module}/${file_path}")).environments : e if e.name == env]).cloudflare_tokens == [{
+        one([for token in one([for e in jsondecode(file("${path.module}/${file_path}")).environments : e if e.name == env]).cloudflare_tokens : token if token.name_suffix == "dns"]) == {
           name_suffix = "dns"
           policies = [{
             permission_groups = ["DNS Write", "Zone Read"]
             zone              = zone
           }]
-        }]
+        }
       ]
     ]))
     error_message = "Each migrating workload environment must have a DNS token scoped to its own zone."
+  }
+
+  assert {
+    condition = alltrue([
+      for file_path, zone in {
+        "workloads/geo-location/geo-location.json" = "geo-location.net"
+        "workloads/misc/craftpledge.json"          = "craftpledge.org"
+        "workloads/molyneux-me/molyneux-me.json"   = "molyneux.me"
+        "workloads/molyneux-me/twenty-one.json"    = "molyneux.me"
+      } :
+      one([for token in one([for e in jsondecode(file("${path.module}/${file_path}")).environments : e if e.name == "Development"]).cloudflare_tokens : token if token.name_suffix == "dependabot-dns"]) == {
+        name_suffix     = "dependabot-dns"
+        dependabot_only = true
+        policies = [{
+          permission_groups = ["DNS Read", "Zone Read"]
+          zone              = zone
+        }]
+      }
+    ])
+    error_message = "Each migrating workload must have a read-only Dependabot token scoped to its own zone."
   }
 
   assert {
