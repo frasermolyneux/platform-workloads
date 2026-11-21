@@ -41,10 +41,9 @@ locals {
     ])
   }
 
-  # One entry per workload-environment that has a Cloudflare token (all tokens in
-  # an environment share the account); drives the CLOUDFLARE_ACCOUNT_ID variable.
+  # Actions tokens share an account within an environment.
   cloudflare_token_environments = {
-    for env_key, tokens in { for t in local.cloudflare_tokens : t.environment_key => t... } :
+    for env_key, tokens in { for t in local.cloudflare_tokens : t.environment_key => t... if !t.dependabot_only } :
     env_key => tokens[0]
   }
 

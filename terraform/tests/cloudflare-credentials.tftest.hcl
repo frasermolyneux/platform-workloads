@@ -183,6 +183,22 @@ run "validate_connectivity_zone_permissions" {
     ])
     error_message = "The connectivity Production DNS token must cover all catalog zones."
   }
+
+  assert {
+    condition = (
+      one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Development"]).cloudflare_tokens[0].dependabot_only &&
+      alltrue(flatten([
+        for policy in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Development"]).cloudflare_tokens[0].policies : [
+          for permission in policy.permission_groups : endswith(permission, " Read")
+        ]
+      ])) &&
+      toset(one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Development"]).cloudflare_tokens[0].policies[0].zones) == toset(one([
+        for policy in one([for env in jsondecode(file("${path.module}/workloads/platform/platform-connectivity.json")).environments : env if env.name == "Production"]).cloudflare_tokens[0].policies : policy
+        if try(length(policy.zones), 0) > 1
+      ]).zones)
+    )
+    error_message = "Connectivity Dependabot access must be read-only and cover the production DNS zones."
+  }
 }
 
 run "validate_migrating_workload_dns_permissions" {
