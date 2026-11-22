@@ -20,11 +20,59 @@ run "catalog_and_projections" {
       output.target.hosts["test.xtremeidiots.com"].current.public_mode == "tailscale-address" &&
       output.target.hosts["test.xtremeidiots.com"].target.public_mode == "private-only" &&
       output.target.hosts["www.bishopsbees.co.uk"].current.status &&
+      output.target.hosts["www.bishopsbees.co.uk"].target.alias_to == "bishopsbees.co.uk" &&
       output.target.hosts["xtremeidiots.com"].target.alias_to == "www.xtremeidiots.com" &&
+      output.target.hosts["www.xtremeidiots.com"].target.status_brand == "xi" &&
       output.catalog.protocol_exceptions[0].hostname == "ts.xtremeidiots.com" &&
       output.catalog.protocol_exceptions[0].port == 10080
     )
     error_message = "The target projection must retain independent canonical services, omit status aliases, and route private hosts to their correct server."
+  }
+
+  assert {
+    condition = (
+      output.target.private_routes["idp.molyneux.io"].server == "ns346663" &&
+      output.target.private_routes["idp.molyneux.io"].profile == "shared" &&
+      output.target.private_routes["idp.molyneux.io"].proxy == "platform-private-caddy" &&
+      output.target.private_routes["idp.molyneux.io"].network == "platform-ingress" &&
+      output.target.private_routes["idp.molyneux.io"].listener.bind == "tailscale" &&
+      output.target.private_routes["idp.molyneux.io"].listener.routing == "hostname" &&
+      output.target.private_routes["idp.molyneux.io"].listener.port == 443 &&
+      output.target.private_routes["idp.molyneux.io"].upstream == "platform-developer-portal:8080" &&
+      output.target.private_routes["idp.molyneux.io"].trusted_proxy.network == "platform-ingress" &&
+      output.target.private_routes["radar.molyneux.io"].trusted_proxy.proxy == "platform-private-caddy" &&
+      length(output.target.private_routes) == 2
+    )
+    error_message = "IDP and Radar must project through one shared Tailscale Caddy listener and trusted upstream network."
+  }
+
+  assert {
+    condition = (
+      output.target.maintenance_path_policy.when_enabled == "apply-except-listed-paths" &&
+      contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "radar.molyneux.io/auth/github/callback") &&
+      contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "radar.molyneux.io/api/collector/inventory/") &&
+      contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "idp.molyneux.io/api/inventory/runtime") &&
+      alltrue([for rule in output.target.maintenance_path_policy.bypass :
+        contains(["oauth-callback", "authenticated-service-api"], rule.purpose) &&
+        length(rule.authentication) > 0
+      ])
+    )
+    error_message = "Maintenance path bypasses must explicitly preserve OAuth callbacks and app-authenticated service APIs."
+  }
+
+  assert {
+    condition = (
+      length(output.target.public_record_removals) == 1 &&
+      output.target.public_record_removals[0] == "test.xtremeidiots.com" &&
+      output.target.hosts["test.xtremeidiots.com"].target.remove_public_dns_record &&
+      output.target.hosts["www.bishopsbees.co.uk"].target.alias_to == "bishopsbees.co.uk" &&
+      output.target.hosts["www.xtremeidiots.com"].target.status_brand == "xi" &&
+      output.target.hosts["www.xtremeidiots.com"].target.private
+    )
+    error_message = "Only XI Test may declare public DNS removal; existing Bishops Bees and XI Forums values remain unchanged."
   }
 }
 
@@ -103,6 +151,44 @@ run "reject_invalid_resolver_address" {
       private_dns = merge(var.catalog.private_dns, {
         resolvers = ["not-an-ip", "100.87.229.111"]
         servers   = merge(var.catalog.private_dns.servers, { ns346663 = "not-an-ip" })
+      })
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_missing_idp_private_proxy" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : h.hostname == "idp.molyneux.io" ? merge(h, {
+        target = merge(h.target, { private_ingress = merge(h.target.private_ingress, { proxy = "platform-caddy" }) })
+      }) : h]
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_missing_test_public_removal_flag" {
+  command = plan
+  variables {
+    catalog = jsondecode(jsonencode(merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : merge(h, {
+        target = merge(h.target, {
+          remove_public_dns_record = h.hostname == "test.xtremeidiots.com" ? false : try(h.target.remove_public_dns_record, false)
+        })
+      })]
+    })))
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_invalid_maintenance_bypass_path" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      maintenance_path_policy = merge(var.catalog.maintenance_path_policy, {
+        bypass = [for rule in var.catalog.maintenance_path_policy.bypass : rule.hostname == "radar.molyneux.io" && rule.path == "/auth/github/callback" ? merge(rule, { path = "auth/github/callback" }) : rule]
       })
     })
   }
