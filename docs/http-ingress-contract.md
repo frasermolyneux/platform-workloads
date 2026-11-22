@@ -62,8 +62,11 @@ The existing baremetal v1 catalog filter ignores additive `target` fields when
 merging its current locally declared routes. The new `private_routes` and
 `maintenance_path_policy` outputs expose the added intent for downstream
 consumer updates; those consumers must explicitly consume and verify this
-revision before any cutover. The schema remains v1 because all additions are
-optional and prior host fields and projections remain unchanged.
+revision before any cutover. These fields do not change existing host fields
+or projection shapes, so the schema remains v1; however, this module revision
+requires the new catalog metadata and older v1 catalogs without it will fail
+validation. Existing consumers may ignore added projections until they
+explicitly adopt them.
 
 `redirect_policy` requires preserving both path and query for hostname
 redirects. `proxied_origin_access` is the target Cloudflare-only public-origin
