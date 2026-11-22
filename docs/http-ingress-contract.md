@@ -58,15 +58,16 @@ declared collector, inventory, evaluator and signed-webhook endpoints; they do
 not exempt interactive API paths generally. Authentication labels document
 the app-level protection that remains responsible for authorization.
 
-The existing baremetal v1 catalog filter ignores additive `target` fields when
-merging its current locally declared routes. The new `private_routes` and
-`maintenance_path_policy` outputs expose the added intent for downstream
-consumer updates; those consumers must explicitly consume and verify this
-revision before any cutover. These fields do not change existing host fields
-or projection shapes, so the schema remains v1; however, this module revision
-requires the new catalog metadata and older v1 catalogs without it will fail
-validation. Existing consumers may ignore added projections until they
-explicitly adopt them.
+The existing baremetal v1 [catalog filter](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/playbooks/filter_plugins/http_ingress_catalog.py)
+ignores these added fields while validating catalog hosts and merging its
+currently declared local routes. Its [catalog role](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/roles/http_ingress_catalog/tasks/main.yml)
+computes current and target projections separately without applying target
+intent; its [shared-ingress role](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/roles/shared_ingress/tasks/main.yml)
+still merges only locally declared route lists. The schema remains v1 because
+the additions preserve existing host fields and projection shapes, but this
+Terraform module revision requires the new metadata and older v1 catalogs
+without it fail validation. Consumers must pin and explicitly adopt this
+revision before any cutover.
 
 `redirect_policy` requires preserving both path and query for hostname
 redirects. `proxied_origin_access` is the target Cloudflare-only public-origin
