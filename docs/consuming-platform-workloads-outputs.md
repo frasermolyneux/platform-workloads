@@ -12,6 +12,11 @@ This guide shows how a downstream workload reads platform-workloads state to reu
   explicit ARM scope and complete resource-group filter. See
   [cost budget policy](cost-budget-policy.md) for the fields, configuration
   inheritance and deployment requirements.
+- `http_ingress_catalog` and `http_ingress_target`: versioned non-secret
+  baremetal ingress observations and target projections. Consumers without
+  existing state access can pin the catalog source instead; see the
+  [HTTP ingress contract](http-ingress-contract.md). Publication does not
+  activate target settings.
 
 `env_tag` is the environment alias from [`var.environment_map`](../terraform/variables.tf), falling back to the lowercase environment name. Index with the tag, not the display name.
 
