@@ -52,9 +52,15 @@ run "catalog_and_projections" {
       contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
       "radar.molyneux.io/auth/github/callback") &&
       contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
-      "radar.molyneux.io/api/collector/inventory/") &&
+      "radar.molyneux.io/api/evaluations/") &&
       contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
       "idp.molyneux.io/api/inventory/runtime") &&
+      contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "radar.molyneux.io/api/inventory/events") &&
+      !contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "radar.molyneux.io/api/collector/inventory/") &&
+      !contains([for rule in output.target.maintenance_path_policy.bypass : "${rule.hostname}${rule.path}"],
+      "radar.molyneux.io/api/inventory/v1/") &&
       alltrue([for rule in output.target.maintenance_path_policy.bypass :
         contains(["oauth-callback", "authenticated-service-api"], rule.purpose) &&
         length(rule.authentication) > 0

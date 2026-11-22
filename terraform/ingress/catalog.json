@@ -20,10 +20,8 @@
       {"hostname":"radar.molyneux.io","path":"/signout-callback-oidc","match":"exact","methods":["GET"],"purpose":"oauth-callback","authentication":"entra-oidc"},
       {"hostname":"radar.molyneux.io","path":"/auth/github/callback","match":"exact","methods":["GET"],"purpose":"oauth-callback","authentication":"entra-user-session"},
       {"hostname":"radar.molyneux.io","path":"/api/collector/cyclonedx","match":"exact","methods":["POST"],"purpose":"authenticated-service-api","authentication":"entra-bearer-collector"},
-      {"hostname":"radar.molyneux.io","path":"/api/collector/inventory/","match":"prefix","methods":["GET"],"purpose":"authenticated-service-api","authentication":"entra-bearer-collector"},
       {"hostname":"radar.molyneux.io","path":"/api/evaluations","match":"exact","methods":["GET","POST"],"purpose":"authenticated-service-api","authentication":"entra-bearer-evaluator"},
       {"hostname":"radar.molyneux.io","path":"/api/evaluations/","match":"prefix","methods":["GET"],"purpose":"authenticated-service-api","authentication":"entra-bearer-evaluator"},
-      {"hostname":"radar.molyneux.io","path":"/api/inventory/v1/","match":"prefix","methods":["GET"],"purpose":"authenticated-service-api","authentication":"entra-bearer-inventory-reader"},
       {"hostname":"radar.molyneux.io","path":"/api/inventory/events","match":"exact","methods":["POST"],"purpose":"authenticated-service-api","authentication":"hmac-signed-webhook"}
     ]
   },

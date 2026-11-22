@@ -146,11 +146,12 @@ Radar's collector calls IDP. Verify their deployed callbacks and integration
 paths before any edge or maintenance cutover. Verify live DNS, public and
 private routing, certificates, status load-balancer probes, and TeamSpeak
 WebQuery consumers without collecting credentials before downstream changes.
-The bypass paths are sourced from the current IDP
-[endpoint registrations](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Program.cs)
-and [inventory endpoints](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Inventory/InventoryEndpoints.cs),
-and Radar's [endpoint registrations](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/Program.cs)
-and [OAuth callback](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/GitHubOAuth.cs).
+The IDP bypass paths are sourced from its current [endpoint registrations](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Program.cs),
+[feed endpoints](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/FeedEndpoints.cs),
+and [inventory endpoints](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Inventory/InventoryEndpoints.cs).
+Radar paths are sourced from its [endpoint registrations](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/Program.cs),
+[OAuth callback](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/GitHubOAuth.cs),
+and [signed inventory webhook](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/EstateInventory.cs).
 TeamSpeak port/access remains unchanged; consumer use has not been established.
 Test's public Tailscale-address record must remain until private DNS and
 certificate-renewal independence are proven. XI forums and Bishops Bees,
