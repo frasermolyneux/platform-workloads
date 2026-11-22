@@ -23,6 +23,8 @@ catalog on individual requests. Use the same commit for all projections.
 the complete host object keyed by exact lowercase hostname.
 `http_ingress_target.version`, `redirect_policy`, and `proxied_origin_access`
 repeat the catalog's version and target-wide policy.
+`http_ingress_target.maintenance_path_policy` carries method-aware exact or
+segment-prefix bypass rules for only the declared hosts and paths.
 `http_ingress_target.maintenance` is keyed by canonical target hostname with
 `zone` and `site`; merge it only with the existing canary and non-migrated
 entries when their owner implements the migration. `http_ingress_target.private_dns`
@@ -34,6 +36,38 @@ For Git-based consumers, these projections are the corresponding filters over
 Preserve TTL 0 and identity authorization. Restricted
 domains are a separate Tailscale-owned concern; do not infer that unrelated DNS
 entries or policy may be removed.
+
+`http_ingress_target.private_routes` contains the explicit `target.private_ingress`
+metadata for IDP and Radar: server, profile, private proxy container, upstream
+network, hostname-routing Tailscale listener on port 443, upstream and
+trusted-proxy container/network identity. The private Caddy network address
+remains host-local materialization; baremetal must allocate it on
+`platform-ingress` and use that resolved address in the applications'
+trusted-proxy configuration. This declaration alone does not add the
+container to that network or change the runtime `TrustedProxies` settings.
+`http_ingress_target.public_record_removals` names records intended
+for eventual removal, presently only XI Test. It is not permission to remove
+that record before the private DNS and certificate-renewal checks are complete.
+
+The maintenance bypass policy defaults to applying maintenance except for
+listed methods and paths. `match: "exact"` compares the full path; `match:
+"prefix"` uses a path-segment prefix and the catalog path ends in `/`.
+`oauth-callback` rules cover IDP/Radar Entra callbacks and Radar's GitHub OAuth
+callback. `authenticated-service-api` rules are limited to the currently
+declared collector, inventory, evaluator and signed-webhook endpoints; they do
+not exempt interactive API paths generally. Authentication labels document
+the app-level protection that remains responsible for authorization.
+
+The existing baremetal v1 [catalog filter](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/playbooks/filter_plugins/http_ingress_catalog.py)
+ignores these added fields while validating catalog hosts and merging its
+currently declared local routes. Its [catalog role](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/roles/http_ingress_catalog/tasks/main.yml)
+computes current and target projections separately without applying target
+intent; its [shared-ingress role](https://github.com/frasermolyneux/platform-baremetal/blob/main/ansible/roles/shared_ingress/tasks/main.yml)
+still merges only locally declared route lists. The schema remains v1 because
+the additions preserve existing host fields and projection shapes, but this
+Terraform module revision requires the new metadata and older v1 catalogs
+without it fail validation. Consumers must pin and explicitly adopt this
+revision before any cutover.
 
 `redirect_policy` requires preserving both path and query for hostname
 redirects. `proxied_origin_access` is the target Cloudflare-only public-origin
@@ -64,7 +98,9 @@ inventories nonstandard HTTP endpoints without converting them into web routes.
 Validation rejects duplicate or malformed names, missing or chained alias
 targets, public aliases to private-only hosts, status on aliases or non-proxied
 hosts, invalid Tailscale resolver addresses, missing private route metadata,
-and changes to the required resolver/TTL/authorization baseline. Catalog
+invalid method/path bypass rules, mismatched private proxy metadata for IDP or
+Radar, and any XI Test removal intent outside private-only mode. It also
+prevents changes to the required resolver/TTL/authorization baseline. Catalog
 changes must pass the module's Terraform contract tests. A schema-breaking
 change requires a version change and coordinated consumer migration.
 
@@ -111,6 +147,12 @@ Radar's collector calls IDP. Verify their deployed callbacks and integration
 paths before any edge or maintenance cutover. Verify live DNS, public and
 private routing, certificates, status load-balancer probes, and TeamSpeak
 WebQuery consumers without collecting credentials before downstream changes.
+The IDP bypass paths are sourced from its current [endpoint registrations](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Program.cs),
+[feed endpoints](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/FeedEndpoints.cs),
+and [inventory endpoints](https://github.com/frasermolyneux/platform-developer-portal/blob/main/src/Portal.Api/Inventory/InventoryEndpoints.cs).
+Radar paths are sourced from its [endpoint registrations](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/Program.cs),
+[OAuth callback](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/GitHubOAuth.cs),
+and [signed inventory webhook](https://github.com/frasermolyneux/platform-radar/blob/main/src/Radar.Api/EstateInventory.cs).
 TeamSpeak port/access remains unchanged; consumer use has not been established.
 Test's public Tailscale-address record must remain until private DNS and
 certificate-renewal independence are proven. XI forums and Bishops Bees,
