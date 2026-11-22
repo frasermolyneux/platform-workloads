@@ -95,7 +95,12 @@ Inspect `.github/workflows` for current triggers and required Production environ
 - An orphaned Terraform state lock requires explicit operator approval after confirming its exact ID and that the owning job and other state writers have stopped. Do not disable locking or force-unlock an active operation.
 - Permission failures: confirm the platform service principal is Owner at / (`az role assignment list --assignee <spn-object-id> --scope /`).
 - Scope resolution errors: ensure the alias exists in tfvars/prd.tfvars or supply a full ARM ID.
-- OIDC federation: GitHub uses repo:frasermolyneux/{repo}:environment:{Environment}.
+- OIDC federation: Terraform registers both the legacy
+  `repo:frasermolyneux/{repo}:environment:{Environment}` and immutable
+  `repo:frasermolyneux@{owner_id}/{repo}@{repo_id}:environment:{Environment}`
+  subject formats because GitHub selects the format based on repository creation
+  and OIDC configuration. See
+  [`azure-workloads.if-github.tf`](../terraform/azure-workloads.if-github.tf).
 - Terraform state storage access: workload principals need Storage Account Key Operator Service Role, Storage Blob Data Contributor, and Reader on the storage account created per workload when configure_for_terraform is true.
 - Each Terraform-enabled workload environment has private `tfstate` and `tfplan` containers in its storage account. Account-scoped blob grants also apply to both containers.
 - Workload storage accounts enable blob versioning and account-level blob soft delete, covering both containers and other blobs in the account. This stack does not manage the separately bootstrapped platform-workloads backend's blob settings.
