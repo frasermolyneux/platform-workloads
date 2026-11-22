@@ -62,7 +62,8 @@ private aliases retain the necessary private redirect. `protocol_exceptions`
 inventories nonstandard HTTP endpoints without converting them into web routes.
 
 Validation rejects duplicate or malformed names, missing or chained alias
-targets, status on aliases or non-proxied hosts, missing private route metadata,
+targets, public aliases to private-only hosts, status on aliases or non-proxied
+hosts, invalid Tailscale resolver addresses, missing private route metadata,
 and changes to the required resolver/TTL/authorization baseline. Catalog
 changes must pass the module's Terraform contract tests. A schema-breaking
 change requires a version change and coordinated consumer migration.

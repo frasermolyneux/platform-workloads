@@ -25,6 +25,10 @@ resource "terraform_data" "contract" {
         local.catalog.proxied_origin_access == "cloudflare-only" &&
         toset(keys(local.servers)) == toset(["ns346663", "ns5019527"]) &&
         length(distinct(values(local.servers))) == 2 &&
+        alltrue([for address in values(local.servers) :
+          can(regex("^100\\.(6[4-9]|[7-9][0-9]|1[01][0-9]|12[0-7])\\.[0-9]{1,3}\\.[0-9]{1,3}$", address)) &&
+          can(cidrhost("${address}/32", 0))
+        ]) &&
         toset(local.catalog.private_dns.resolvers) == toset(values(local.servers)) &&
         local.catalog.private_dns.ttl == 0 &&
         local.catalog.private_dns.authorization == "tailscale-identity" &&
@@ -32,6 +36,8 @@ resource "terraform_data" "contract" {
         length(distinct(local.hostnames)) == length(local.hostnames) &&
         alltrue([for host in local.catalog.hosts :
           can(regex("^[a-z0-9]([a-z0-9-]*[a-z0-9])?(\\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)+$", host.hostname)) &&
+          length(host.hostname) <= 253 &&
+          alltrue([for label in split(".", host.hostname) : length(label) <= 63]) &&
           (host.hostname == host.zone || endswith(host.hostname, ".${host.zone}")) &&
           length(trimspace(host.workload)) > 0 &&
           contains(["proxied", "dns-only", "private-only"], host.target.public_mode) &&
@@ -55,6 +61,7 @@ resource "terraform_data" "contract" {
             length(local.hosts_by_name[host.target.alias_to]) == 1 &&
             local.hosts_by_name[host.target.alias_to][0].target.alias_to == null &&
             local.hosts_by_name[host.target.alias_to][0].workload == host.workload &&
+            (host.target.public_mode == "private-only" || local.hosts_by_name[host.target.alias_to][0].target.public_mode != "private-only") &&
             (!host.target.private || local.hosts_by_name[host.target.alias_to][0].target.private),
             false
           ))

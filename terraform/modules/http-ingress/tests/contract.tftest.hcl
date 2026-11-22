@@ -96,6 +96,49 @@ run "reject_unknown_private_server" {
   expect_failures = [terraform_data.contract]
 }
 
+run "reject_invalid_resolver_address" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      private_dns = merge(var.catalog.private_dns, {
+        resolvers = ["not-an-ip", "100.87.229.111"]
+        servers   = merge(var.catalog.private_dns.servers, { ns346663 = "not-an-ip" })
+      })
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_long_hostname_label" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : h.hostname == "radar.molyneux.io" ? merge(h, { hostname = "${join("", [for i in range(64) : "a"])}.molyneux.io" }) : h]
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_long_hostname" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : h.hostname == "radar.molyneux.io" ? merge(h, { hostname = "${join(".", [for i in range(4) : join("", [for j in range(63) : "a"])])}.molyneux.io" }) : h]
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_public_alias_to_private_host" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : h.hostname == "bqba.co.uk" ? merge(h, { target = merge(h.target, { public_mode = "private-only", status_brand = null }) }) : h]
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
 run "reject_redirect_query_loss" {
   command = plan
   variables {
