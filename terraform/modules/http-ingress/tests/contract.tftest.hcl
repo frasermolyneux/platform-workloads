@@ -33,14 +33,16 @@ run "catalog_and_projections" {
     condition = (
       output.target.private_routes["idp.molyneux.io"].server == "ns346663" &&
       output.target.private_routes["idp.molyneux.io"].profile == "shared" &&
-      output.target.private_routes["idp.molyneux.io"].proxy == "platform-private-caddy" &&
+      output.target.private_routes["idp.molyneux.io"].proxy == "platform-caddy" &&
       output.target.private_routes["idp.molyneux.io"].network == "platform-ingress" &&
       output.target.private_routes["idp.molyneux.io"].listener.bind == "tailscale" &&
       output.target.private_routes["idp.molyneux.io"].listener.routing == "hostname" &&
       output.target.private_routes["idp.molyneux.io"].listener.port == 443 &&
       output.target.private_routes["idp.molyneux.io"].upstream == "platform-developer-portal:8080" &&
+      output.target.private_routes["idp.molyneux.io"].trusted_proxy.proxy == "platform-caddy" &&
       output.target.private_routes["idp.molyneux.io"].trusted_proxy.network == "platform-ingress" &&
-      output.target.private_routes["radar.molyneux.io"].trusted_proxy.proxy == "platform-private-caddy" &&
+      output.target.private_routes["radar.molyneux.io"].proxy == "platform-caddy" &&
+      output.target.private_routes["radar.molyneux.io"].trusted_proxy.proxy == "platform-caddy" &&
       length(output.target.private_routes) == 2
     )
     error_message = "IDP and Radar must project through one shared Tailscale Caddy listener and trusted upstream network."
@@ -163,12 +165,26 @@ run "reject_invalid_resolver_address" {
   expect_failures = [terraform_data.contract]
 }
 
-run "reject_missing_idp_private_proxy" {
+run "reject_incorrect_idp_private_proxy" {
   command = plan
   variables {
     catalog = merge(var.catalog, {
       hosts = [for h in var.catalog.hosts : h.hostname == "idp.molyneux.io" ? merge(h, {
-        target = merge(h.target, { private_ingress = merge(h.target.private_ingress, { proxy = "platform-caddy" }) })
+        target = merge(h.target, { private_ingress = merge(h.target.private_ingress, { proxy = "platform-private-caddy" }) })
+      }) : h]
+    })
+  }
+  expect_failures = [terraform_data.contract]
+}
+
+run "reject_incorrect_radar_trusted_proxy" {
+  command = plan
+  variables {
+    catalog = merge(var.catalog, {
+      hosts = [for h in var.catalog.hosts : h.hostname == "radar.molyneux.io" ? merge(h, {
+        target = merge(h.target, { private_ingress = merge(h.target.private_ingress, {
+          trusted_proxy = merge(h.target.private_ingress.trusted_proxy, { proxy = "platform-private-caddy" })
+        }) })
       }) : h]
     })
   }
