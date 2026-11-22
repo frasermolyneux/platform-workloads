@@ -16,6 +16,7 @@ run "validate_actions_runner_projection" {
       "platform-baremetal",
       "platform-developer-portal",
       "platform-radar",
+      "platform-tailscale",
       "xi-arcade",
       "xi-bank",
       "xi-casino",
@@ -44,7 +45,7 @@ run "validate_actions_runner_projection" {
 
   assert {
     condition = (
-      length(local.actions_runner_variables) == 41 &&
+      length(local.actions_runner_variables) == 43 &&
       alltrue([
         for name in keys(local.actions_runner_enrollments) :
         local.actions_runner_variables["${name}:actions"].name == "ACTIONS_RUNNER" &&

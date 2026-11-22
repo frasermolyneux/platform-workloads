@@ -1,0 +1,95 @@
+{
+    "name": "platform-tailscale",
+    "github": {
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [
+                    "actions",
+                    "terraform"
+                ],
+                "sonar": false
+            },
+            "sonar": null,
+            "cadence": {
+                "dailyFreshness": true,
+                "fullRescanMaximumHours": 168,
+                "defaultBranchCancellation": false,
+                "dispatch": {
+                    "expectedRevision": true,
+                    "force": true,
+                    "defaultBranchOnly": true
+                }
+            }
+        },
+        "description": "Tailnet-wide Tailscale access policy and DNS configuration, managed with Terraform and GitHub Actions.",
+        "topics": [
+            "tailscale",
+            "terraform",
+            "github-actions",
+            "dns",
+            "networking",
+            "infrastructure-as-code"
+        ],
+        "visibility": "private",
+        "auto_init": true,
+        "actions_runner": {
+            "enabled": true,
+            "host": "ns346663",
+            "scale_set_name": "arc-platform-tailscale",
+            "copilot_code_review": true
+        },
+        "rulesets": [
+            {
+                "name": "main-protection",
+                "target": "branch",
+                "enforcement": "active",
+                "includes": [
+                    "refs/heads/main"
+                ],
+                "excludes": [],
+                "bypass_actors": [
+                    {
+                        "bypass_mode": "always",
+                        "actor_id": 5,
+                        "actor_type": "RepositoryRole"
+                    }
+                ],
+                "rules": {
+                    "required_status_checks": [
+                        {
+                            "context": "terraform-plan-prd",
+                            "integration_id": 15368
+                        }
+                    ],
+                    "strict_required_status_checks_policy": true,
+                    "do_not_enforce_on_create": false,
+                    "pull_request": {
+                        "allowed_merge_methods": [
+                            "merge",
+                            "rebase",
+                            "squash"
+                        ],
+                        "required_approving_review_count": 0,
+                        "dismiss_stale_reviews_on_push": true,
+                        "require_code_owner_review": false,
+                        "required_review_thread_resolution": true
+                    },
+                    "required_code_scanning": [],
+                    "required_signatures": false,
+                    "required_linear_history": true,
+                    "non_fast_forward": true
+                }
+            }
+        ]
+    },
+    "environments": [
+        {
+            "name": "Production",
+            "subscription": "sub-platform-management",
+            "connect_to_github": true,
+            "configure_for_terraform": true,
+            "cost_budget_exemption": "Only Terraform backend storage is provisioned in Azure, covered by the platform-management subscription budget. Tailnet resources are external."
+        }
+    ]
+}

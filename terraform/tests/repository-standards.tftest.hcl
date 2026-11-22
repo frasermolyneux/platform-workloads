@@ -6,13 +6,13 @@ run "validate_repository_standards_projection" {
   }
 
   assert {
-    condition     = length(local.repository_standards_variables) == 44
-    error_message = "All 44 applicable non-xi repository analysis profiles must receive repository standards."
+    condition     = length(local.repository_standards_variables) == 45
+    error_message = "All 45 applicable non-xi repository analysis profiles must receive repository standards."
   }
 
   assert {
     condition = (
-      length(local.repository_standards_catalog) == 44 &&
+      length(local.repository_standards_catalog) == 45 &&
       jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_workloads))) &&
       jsonencode(sort(keys(local.repository_standards_catalog))) == jsonencode(sort(keys(local.repository_standards_documents)))
     )
@@ -28,7 +28,7 @@ run "validate_repository_standards_projection" {
       length([
         for name in keys(local.repository_standards_workloads) : name
         if local.repository_standards_workloads[name].github.visibility == "private"
-      ]) == 9
+      ]) == 10
     )
     error_message = "Repository standards applicability must include the expected public and private catalog rows."
   }
