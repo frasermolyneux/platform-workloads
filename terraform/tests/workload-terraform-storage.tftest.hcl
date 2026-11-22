@@ -54,6 +54,26 @@ run "terraform_enabled_environments_have_private_storage_containers" {
 
   assert {
     condition = (
+      toset([
+        for environment in local.workload_environments : environment.key
+        if environment.workload_name == "platform-tailscale"
+      ]) == toset(["platform-tailscale-Production"]) &&
+      one([
+        for environment in local.workload_environments : environment
+        if environment.workload_name == "platform-tailscale"
+      ]).connect_to_github &&
+      azurerm_storage_container.workload["platform-tailscale-Production"].container_access_type == "private" &&
+      azurerm_storage_container.workload_tfplan["platform-tailscale-Production"].container_access_type == "private" &&
+      one([
+        for environment in local.workload_environments : environment
+        if environment.workload_name == "platform-tailscale"
+      ]).resource_groups == null
+    )
+    error_message = "Tailscale must have only its OIDC-enabled Production backend with private state/plan storage, not Azure workload resource groups."
+  }
+
+  assert {
+    condition = (
       length(azurerm_storage_container.workload_tfplan) > 0 &&
       toset(keys(azurerm_storage_container.workload_tfplan)) == toset([
         for environment in local.workload_environments : environment.key
