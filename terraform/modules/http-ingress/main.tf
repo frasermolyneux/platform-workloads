@@ -82,7 +82,7 @@ resource "terraform_data" "contract" {
             host.target.status_brand == "mx" &&
             host.target.private_ingress.server == host.route.server &&
             host.target.private_ingress.profile == host.route.profile &&
-            host.target.private_ingress.proxy == "platform-private-caddy" &&
+            host.target.private_ingress.proxy == "platform-caddy" &&
             host.target.private_ingress.network == "platform-ingress" &&
             host.target.private_ingress.listener.bind == "tailscale" &&
             host.target.private_ingress.listener.routing == "hostname" &&

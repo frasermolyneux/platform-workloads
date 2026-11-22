@@ -40,11 +40,12 @@ entries or policy may be removed.
 `http_ingress_target.private_routes` contains the explicit `target.private_ingress`
 metadata for IDP and Radar: server, profile, private proxy container, upstream
 network, hostname-routing Tailscale listener on port 443, upstream and
-trusted-proxy container/network identity. The private Caddy network address
-remains host-local materialization; baremetal must allocate it on
-`platform-ingress` and use that resolved address in the applications'
-trusted-proxy configuration. This declaration alone does not add the
-container to that network or change the runtime `TrustedProxies` settings.
+trusted-proxy container/network identity. On `ns346663` the existing shared
+`platform-caddy` listener receives Tailscale port 443 traffic on its
+`platform-wordpress-private` interface at port 8443, authenticates the peer,
+and forwards to applications from its `platform-ingress` address. Baremetal
+owns the network addresses and materializes the trusted-proxy configuration;
+this declaration does not alter networking or runtime `TrustedProxies`.
 `http_ingress_target.public_record_removals` names records intended
 for eventual removal, presently only XI Test. It is not permission to remove
 that record before the private DNS and certificate-renewal checks are complete.
