@@ -53,7 +53,14 @@ as their key; individual resources may use more specific keys. See
 
 ### OIDC Federation Subjects
 
-**GitHub**: `repo:frasermolyneux/{repo}:environment:{Environment}`
+**GitHub**: Terraform registers both supported subject formats for each workload
+environment:
+
+- Legacy: `repo:frasermolyneux/{repo}:environment:{Environment}`
+- Immutable: `repo:frasermolyneux@{owner_id}/{repo}@{repo_id}:environment:{Environment}`
+
+GitHub selects the format based on repository creation and OIDC configuration.
+See [`azure-workloads.if-github.tf`](../terraform/azure-workloads.if-github.tf).
 
 ### Role Assignment Scope Resolution
 
