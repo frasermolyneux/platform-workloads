@@ -45,8 +45,12 @@ run "validate_baremetal_cloudflare_credentials" {
           "buckfastqueen.co.uk",
           "dm-electricalservices.co.uk",
           "moanclub.com",
+          "molyneux.io",
           "mx-mail.io",
           "queensforsale.co.uk",
+          "talkwithtiles.com",
+          "tripsidekick.app",
+          "tripsidekick.net",
           "xtremeidiots.com",
           "xtremeidiots.net"
         ]

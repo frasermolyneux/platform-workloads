@@ -446,7 +446,9 @@ new Cloudflare capabilities require separate review.
 The platform-baremetal Production environment uses `CLOUDFLARE_ACME_DNS_API_TOKEN`
 for ACME DNS challenges on `xtremeidiots.com`, `xtremeidiots.net`, and
 `mxstatus.io`. `CLOUDFLARE_MAINTENANCE_TRAFFIC_API_TOKEN` is a separate token
-for maintenance routes and account analytics. These are distinct from the
+for maintenance routes and account analytics, scoped to the configured traffic
+zones, including `molyneux.io`, `talkwithtiles.com`, `tripsidekick.app`, and
+`tripsidekick.net`. These are distinct from the
 platform-workloads provider's Global API Key and platform-status-web's edge token.
 
 ## Examples
