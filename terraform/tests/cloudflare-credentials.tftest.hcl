@@ -152,6 +152,11 @@ run "validate_connectivity_zone_permissions" {
         if token.name_suffix == "dns"
       ]).policies : policy if try(length(policy.zones), 0) > 1
       ]).zones) == toset([
+      "beeops.app",
+      "beeops.co.uk",
+      "beeops.dev",
+      "beeops.org",
+      "beeops.uk",
       "bishopsbees.co.uk",
       "blogformyparents.co.uk",
       "bqba.co.uk",
