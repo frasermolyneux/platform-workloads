@@ -1,0 +1,28 @@
+{
+    "name": "beeops",
+    "github": {
+        "description": "BeeOps - a planned product for UK beekeepers and queen breeders.",
+        "topics": [
+            "beekeeping",
+            "queen-breeding",
+            "research",
+            "documentation"
+        ],
+        "visibility": "private",
+        "auto_init": true,
+        "repository_analysis": {
+            "profile": {
+                "version": "repository-analysis-v1",
+                "languages": [],
+                "sonar": false,
+                "exemption": {
+                    "kind": "documentation-only",
+                    "reason": "Repository is initially intended for research and documentation.",
+                    "reevaluate": "Executable source or workflows are added."
+                }
+            },
+            "sonar": null,
+            "cadence": null
+        }
+    }
+}

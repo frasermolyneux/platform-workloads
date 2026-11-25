@@ -6,8 +6,18 @@ run "validate_complete_scoped_catalog" {
   }
 
   assert {
-    condition     = length(local.repository_analysis_policies) == 48 && alltrue(values(local.repository_analysis_valid))
-    error_message = "All 48 scoped catalog rows must carry valid source profiles or explicit exemptions."
+    condition     = length(local.repository_analysis_policies) == 49 && alltrue(values(local.repository_analysis_valid))
+    error_message = "All 49 scoped catalog rows must carry valid source profiles or explicit exemptions."
+  }
+
+  assert {
+    condition = (
+      local.analysis_scoped_workloads["beeops"].github.visibility == "private" &&
+      local.analysis_scoped_workloads["beeops"].github.auto_init == true &&
+      !can(local.analysis_scoped_workloads["beeops"].environments) &&
+      local.repository_analysis_policies["beeops"].profile.exemption.kind == "documentation-only"
+    )
+    error_message = "BeeOps must be an initialized private repository-only workload with a documentation exemption."
   }
 
   assert {

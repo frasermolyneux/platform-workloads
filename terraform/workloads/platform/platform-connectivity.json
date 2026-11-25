@@ -116,6 +116,11 @@
                         {
                             "permission_groups": ["DNS Read", "Zone Read"],
                             "zones": [
+                                "beeops.app",
+                                "beeops.co.uk",
+                                "beeops.dev",
+                                "beeops.org",
+                                "beeops.uk",
                                 "bishopsbees.co.uk",
                                 "blogformyparents.co.uk",
                                 "bqba.co.uk",
@@ -287,6 +292,11 @@
                                 "Zone Write"
                             ],
                             "zones": [
+                                "beeops.app",
+                                "beeops.co.uk",
+                                "beeops.dev",
+                                "beeops.org",
+                                "beeops.uk",
                                 "bishopsbees.co.uk",
                                 "blogformyparents.co.uk",
                                 "bqba.co.uk",
